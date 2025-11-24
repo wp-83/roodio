@@ -1,163 +1,185 @@
 import streamlit as st
 import os
 import numpy as np
+import pandas as pd
 import librosa
 import matplotlib.pyplot as plt
 import tensorflow as tf
 from tensorflow.keras.models import load_model
-import config as cfg # Import langsung karena satu folder
+
+# Import modul lokal
+import config as cfg
+from lyrics_analyzer import NRCLexiconAnalyzer
 
 # --- SETUP HALAMAN ---
-st.set_page_config(page_title="Moodio AI", page_icon="🎵", layout="wide")
+st.set_page_config(page_title="Moodio Multimodal", page_icon="🎹", layout="wide")
 
-# --- FUNGSI HELPER ---
+# --- LOAD MODELS ---
 @st.cache_resource
-def load_audio_model():
-    model_path = os.path.join(cfg.BASE_DIR, "models", "model_emosi_cnn.keras")
-    return load_model(model_path)
+def load_models():
+    # 1. Audio Model
+    audio_path = os.path.join(cfg.MODELS_DIR, "model_emosi_cnn.keras")
+    if not os.path.exists(audio_path): return None, None
+    audio_model = load_model(audio_path)
+    
+    # 2. Lyrics Model
+    lyrics_model = NRCLexiconAnalyzer() 
+    
+    return audio_model, lyrics_model
 
-def normalize_audio(val):
-    # Kalibrasi output audio ke skala 0-1
-    return np.clip((val + 1) / 2, 0.0, 1.0)
+audio_model, lyrics_model = load_models()
+
+if audio_model is None:
+    st.error("Model Audio tidak ditemukan! Pastikan file 'models/model_emosi_cnn.keras' ada.")
+    st.stop()
+
+# --- FUNGSI UTAMA ---
+def normalize_value(val):
+    """
+    Normalisasi output Audio (Range -0.8 s.d 0.8) ke skala 0.0 - 1.0.
+    Menggunakan range kalibrasi 0.05 s.d 0.45 agar sensitif terhadap perubahan kecil.
+    """
+    MIN_VAL = 0.05
+    MAX_VAL = 0.45
+    norm = (val - MIN_VAL) / (MAX_VAL - MIN_VAL)
+    return np.clip(norm, 0.0, 1.0)
 
 def preprocess_spectrogram(y):
     S = librosa.feature.melspectrogram(y=y, sr=cfg.SAMPLE_RATE, n_mels=cfg.N_MELS, 
                                       n_fft=cfg.N_FFT, hop_length=cfg.HOP_LENGTH, fmax=cfg.FMAX)
     S_dB = librosa.power_to_db(S, ref=np.max)
     min_val, max_val = S_dB.min(), S_dB.max()
-    if max_val - min_val == 0: return np.zeros_like(S_dB)
-    S_norm = (S_dB - min_val) / (max_val - min_val)
+    if max_val - min_val == 0: S_norm = np.zeros_like(S_dB)
+    else: S_norm = (S_dB - min_val) / (max_val - min_val)
     
     if S_norm.shape[1] < 128:
         pad = 128 - S_norm.shape[1]
         S_norm = np.pad(S_norm, ((0,0), (0,pad)))
     else:
         S_norm = S_norm[:, :128]
-        
     return S_norm[np.newaxis, ..., np.newaxis]
 
 def get_mood_label(v, a):
-    # Threshold di 0.5
     if a >= 0.5:
         return ("Happy / Energetic", "orange") if v >= 0.5 else ("Angry / Tense", "red")
     else:
         return ("Calm / Peaceful", "green") if v >= 0.5 else ("Sad / Melancholy", "blue")
 
-# --- VISUALISASI 1: KUADRAN (RATA-RATA) ---
-def plot_quadrant(valence, arousal):
-    fig, ax = plt.subplots(figsize=(5, 5))
+def plot_quadrant(v_final, a_final, v_audio, a_audio, v_lyrics, a_lyrics):
+    fig, ax = plt.subplots(figsize=(6, 6))
     ax.axhline(0.5, color='gray', linestyle='--', alpha=0.5)
     ax.axvline(0.5, color='gray', linestyle='--', alpha=0.5)
-    ax.set_xlim(0, 1)
-    ax.set_ylim(0, 1)
+    ax.set_xlim(0, 1); ax.set_ylim(0, 1)
     
-    # Label
-    ax.text(0.95, 0.95, "HAPPY", color='orange', ha='right', weight='bold')
-    ax.text(0.05, 0.95, "ANGRY", color='red', ha='left', weight='bold')
-    ax.text(0.05, 0.05, "SAD", color='blue', ha='left', weight='bold')
-    ax.text(0.95, 0.05, "CALM", color='green', ha='right', weight='bold')
+    # Label Kuadran
+    ax.text(0.95, 0.95, "HAPPY", color='orange', ha='right', weight='bold', alpha=0.5)
+    ax.text(0.05, 0.95, "ANGRY", color='red', ha='left', weight='bold', alpha=0.5)
+    ax.text(0.05, 0.05, "SAD", color='blue', ha='left', weight='bold', alpha=0.5)
+    ax.text(0.95, 0.05, "CALM", color='green', ha='right', weight='bold', alpha=0.5)
     
-    # Titik
-    ax.scatter(valence, arousal, color='purple', s=200, zorder=5, edgecolors='white')
-    ax.set_title("Rata-rata Emosi Lagu")
+    # Plot Points
+    ax.scatter(v_audio, a_audio, c='blue', marker='s', s=100, label='Audio', alpha=0.6)
+    ax.scatter(v_lyrics, a_lyrics, c='green', marker='^', s=100, label='Lirik', alpha=0.6)
+    ax.scatter(v_final, a_final, c='purple', s=300, label='Final', edgecolors='black', zorder=10)
+    
+    # Garis Konektor
+    ax.plot([v_audio, v_final], [a_audio, a_final], 'k--', alpha=0.2)
+    ax.plot([v_lyrics, v_final], [a_lyrics, a_final], 'k--', alpha=0.2)
+    
+    ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05), ncol=3)
+    ax.set_title("Peta Emosi Multimodal")
     return fig
 
-# --- VISUALISASI 2: TIMELINE (EMOSI SEPANJANG LAGU) ---
-def plot_timeline(v_list, a_list):
-    fig, ax = plt.subplots(figsize=(10, 3))
-    time_axis = np.arange(len(v_list)) * 3  # Dikali 3 karena per segmen 3 detik
+# --- UI STREAMLIT ---
+st.title("🎹 Moodio: Multimodal Emotion AI")
+st.markdown("Analisis emosi lagu menggunakan gabungan **Audio (CNN)** dan **Lirik (Lexicon)** dengan pembobotan dinamis.")
+
+# --- SIDEBAR: KONFIGURASI BOBOT (DYNAMIC WEIGHTING) ---
+with st.sidebar:
+    st.header("⚙️ Konfigurasi Fusion")
+    st.info("Bobot (Weight) menentukan seberapa besar pengaruh Audio vs Lirik terhadap hasil akhir.")
     
-    ax.plot(time_axis, v_list, label='Valence (Positivity)', color='blue', linewidth=2)
-    ax.plot(time_axis, a_list, label='Arousal (Energy)', color='orange', linewidth=2)
+    st.subheader("1. Bobot Valence (Positif/Negatif)")
+    st.caption("Disarankan Lirik lebih dominan untuk menentukan Happy/Sad.")
+    w_val_audio = st.slider("Audio Valence Weight", 0.0, 1.0, 0.4, step=0.1)
+    w_val_lyrics = 1.0 - w_val_audio
+    st.text(f"Audio: {w_val_audio:.1f} | Lirik: {w_val_lyrics:.1f}")
     
-    ax.axhline(0.5, color='gray', linestyle='--', alpha=0.3)
-    ax.set_ylim(0, 1)
-    ax.set_xlabel("Waktu (Detik)")
-    ax.set_title("Perubahan Emosi Sepanjang Lagu")
-    ax.legend()
-    ax.grid(True, alpha=0.2)
-    return fig
-
-# --- UI UTAMA ---
-st.title("🎵 Moodio: AI Music Emotion Recognition")
-st.markdown("Upload lagu, dan AI akan menganalisis **setiap detik** dari lagu tersebut.")
-
-try:
-    model = load_audio_model()
-except:
-    st.error("Model tidak ditemukan!")
-    st.stop()
-
-uploaded_file = st.file_uploader("Upload MP3/WAV", type=["mp3", "wav"])
-
-if uploaded_file is not None:
-    st.audio(uploaded_file)
+    st.divider()
     
-    if st.button("Analisis Full Lagu"):
-        with st.spinner('Sedang memproses seluruh lagu... (Mohon tunggu)'):
+    st.subheader("2. Bobot Arousal (Energi)")
+    st.caption("Disarankan Audio lebih dominan untuk menentukan Energi.")
+    w_aro_audio = st.slider("Audio Arousal Weight", 0.0, 1.0, 0.7, step=0.1)
+    w_aro_lyrics = 1.0 - w_aro_audio
+    st.text(f"Audio: {w_aro_audio:.1f} | Lirik: {w_aro_lyrics:.1f}")
+
+# --- MAIN CONTENT ---
+c1, c2 = st.columns(2)
+with c1:
+    uploaded_file = st.file_uploader("1. Upload Audio (MP3/WAV)", type=["mp3", "wav"])
+with c2:
+    lyrics_input = st.text_area("2. Masukkan Lirik (Inggris)", height=100, placeholder="Paste lyrics here...")
+
+if st.button("🔍 Analisis Emosi", type="primary"):
+    if not uploaded_file or not lyrics_input.strip():
+        st.warning("Mohon lengkapi Audio dan Lirik.")
+    else:
+        with st.spinner("Sedang menganalisis..."):
+            # --- 1. AUDIO PROCESS ---
+            with open("temp.mp3", "wb") as f: f.write(uploaded_file.getbuffer())
+            y, sr = librosa.load("temp.mp3", sr=cfg.SAMPLE_RATE, mono=True)
             
-            # 1. Save Temp
-            with open("temp_audio.mp3", "wb") as f:
-                f.write(uploaded_file.getbuffer())
+            # Sampling Audio
+            total_segs = len(y) // (3 * cfg.SAMPLE_RATE)
+            indices = np.linspace(0, total_segs-1, num=min(30, total_segs), dtype=int)
             
-            # 2. Load
-            y, sr = librosa.load("temp_audio.mp3", sr=cfg.SAMPLE_RATE, mono=True)
+            v_list, a_list = [], []
+            for i in indices:
+                start = i * 3 * cfg.SAMPLE_RATE
+                segment = y[start : start + (3 * cfg.SAMPLE_RATE)]
+                try:
+                    spec = preprocess_spectrogram(segment)
+                    pred = audio_model.predict(spec, verbose=0)
+                    v_list.append(pred[0][0]); a_list.append(pred[0][1])
+                except: pass
             
-            # 3. Full Loop (Tanpa Limit)
-            samples_per_segment = 3 * cfg.SAMPLE_RATE
-            total_segments = len(y) // samples_per_segment
+            # Normalize Audio
+            v_aud_norm = normalize_value(np.mean(v_list))
+            a_aud_norm = normalize_value(np.mean(a_list))
             
-            v_scores, a_scores = [], []
-            progress_bar = st.progress(0)
+            # --- 2. LYRICS PROCESS ---
+            # (Sudah 0-1 dari lyrics_analyzer)
+            v_lyr_norm, a_lyr_norm, info = lyrics_model.predict(lyrics_input)
             
-            # Loop SEMUA segmen
-            for i in range(total_segments):
-                start = i * samples_per_segment
-                end = start + samples_per_segment
-                segment = y[start:end]
-                
-                spec = preprocess_spectrogram(segment)
-                pred = model.predict(spec, verbose=0)
-                
-                v_scores.append(normalize_audio(pred[0][0]))
-                a_scores.append(normalize_audio(pred[0][1]))
-                
-                # Update progress setiap 10% agar tidak memperlambat UI
-                if i % max(1, int(total_segments/10)) == 0:
-                    progress_bar.progress((i + 1) / total_segments)
+            # --- 3. FUSION (DYNAMIC) ---
+            # Menggunakan bobot terpisah untuk Valence dan Arousal
+            final_v = (v_aud_norm * w_val_audio) + (v_lyr_norm * w_val_lyrics)
+            final_a = (a_aud_norm * w_aro_audio) + (a_lyr_norm * w_aro_lyrics)
             
-            progress_bar.progress(1.0) # Selesai
+            mood_label, mood_color = get_mood_label(final_v, final_a)
             
-            # 4. Hasil Rata-rata
-            avg_v = np.mean(v_scores)
-            avg_a = np.mean(a_scores)
-            label, color = get_mood_label(avg_v, avg_a)
-            
-            # --- TAMPILAN HASIL ---
+            # --- 4. DISPLAY ---
             st.divider()
+            r1, r2 = st.columns([1.3, 1])
             
-            # Bagian Atas: Metrik & Kuadran
-            col1, col2 = st.columns([2, 1])
-            
-            with col1:
-                st.subheader("Hasil Analisis")
-                st.markdown(f"### Mood Dominan: :{color}[{label}]")
+            with r1:
+                st.markdown(f"### Prediksi: :{mood_color}[{mood_label}]")
                 
-                c1, c2 = st.columns(2)
-                c1.metric("Rata-rata Valence", f"{avg_v:.2f}")
-                c2.metric("Rata-rata Arousal", f"{avg_a:.2f}")
+                if info['keywords']:
+                    st.success(f"Kata Kunci Lirik: {', '.join(info['keywords'])}")
+                else:
+                    st.warning("Tidak ada kata emosi spesifik di lirik.")
                 
-                st.info(f"Total durasi yang dianalisis: {total_segments * 3} detik ({total_segments} segmen).")
-
-            with col2:
-                fig_quad = plot_quadrant(avg_v, avg_a)
-                st.pyplot(fig_quad)
+                # Tabel Hasil Detail
+                results_data = {
+                    'Valence (Positif)': [f"{v_aud_norm:.2f}", f"{v_lyr_norm:.2f}", f"**{final_v:.2f}**"],
+                    'Arousal (Energi)': [f"{a_aud_norm:.2f}", f"{a_lyr_norm:.2f}", f"**{final_a:.2f}**"],
+                    'Bobot (V | A)': [f"{w_val_audio:.1f} | {w_aro_audio:.1f}", f"{w_val_lyrics:.1f} | {w_aro_lyrics:.1f}", "-"]
+                }
+                df_res = pd.DataFrame(results_data, index=['Audio (CNN)', 'Lirik (NRC)', 'FINAL FUSION'])
+                st.table(df_res)
+                
+            with r2:
+                st.pyplot(plot_quadrant(final_v, final_a, v_aud_norm, a_aud_norm, v_lyr_norm, a_lyr_norm))
             
-            # Bagian Bawah: Grafik Timeline (Fitur Baru!)
-            st.subheader("Grafik Detik-ke-Detik")
-            fig_time = plot_timeline(v_scores, a_scores)
-            st.pyplot(fig_time)
-            
-            # Cleanup
-            if os.path.exists("temp_audio.mp3"):
-                os.remove("temp_audio.mp3")
+            if os.path.exists("temp.mp3"): os.remove("temp.mp3")
