@@ -7,5 +7,5 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::get('/', function () {
-    return view('503-error');
+    return view('503error');
 });
