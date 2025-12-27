@@ -3,7 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MoodController;
 use App\Http\Controllers\SongController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ThreadController;
 
 Route::get('/', function () {
     return view('errors/503');
@@ -12,7 +12,7 @@ Route::get('/', function () {
 Route::get('/songs/create', [SongController::class, 'create'])->name('songs.create');
 
 // Auth Route
-Route::get('/login', [AuthController::class, 'loginView'])->name('auth.loginView');
+Route::get('/login', [AuthController::class, 'loginView'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
 
 // Mood Route
@@ -23,7 +23,13 @@ Route::get('/moods/{mood}/edit', [MoodController::class, 'edit'])->name('moods.e
 Route::put('/moods/{mood}', [MoodController::class, 'update'])->name('moods.update');
 Route::delete('/moods/{mood}', [MoodController::class, 'destroy'])->name('moods.destroy');
 
-Route::get('/sign-up', function () {    
+// Thread Route
+Route::get('/threads', [ThreadController::class, 'index'])->name('thread.index');
+Route::get('/threads/{thread}/detail', [ThreadController::class, 'show'])->name('thread.show');
+Route::get('/threads/create', [ThreadController::class, 'create'])->middleware('auth')->name('thread.create');
+Route::post('/threads', [ThreadController::class, 'store'])->middleware('auth')->name('thread.store');
+
+Route::get('/sign-up', function () {
     return view('auth/register');
 });
 
