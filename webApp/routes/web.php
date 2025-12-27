@@ -6,8 +6,8 @@ use App\Http\Controllers\SongController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('error/503');
-});
+    return view('welcome');
+})->name('welcome');
 
 Route::get('/songs/create', [SongController::class, 'create'])->name('songs.create');
 
