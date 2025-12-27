@@ -7,6 +7,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
+    <a href="{{ route('thread.index') }}">Back</a>
     <form action="{{ route('thread.store') }}" method="POST">
         @csrf
         <div class="mb-3">

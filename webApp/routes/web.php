@@ -25,6 +25,7 @@ Route::delete('/moods/{mood}', [MoodController::class, 'destroy'])->name('moods.
 
 // Thread Route
 Route::get('/threads', [ThreadController::class, 'index'])->name('thread.index');
+Route::get('/threads/{thread}/detail', [ThreadController::class, 'show'])->name('thread.show');
 Route::get('/threads/create', [ThreadController::class, 'create'])->middleware('auth')->name('thread.create');
 Route::post('/threads', [ThreadController::class, 'store'])->middleware('auth')->name('thread.store');
 

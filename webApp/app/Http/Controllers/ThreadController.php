@@ -13,7 +13,8 @@ class ThreadController extends Controller
      */
     public function index()
     {
-        return view('threads.index');
+        $threads = Thread::orderByDesc('created_at')->paginate(5);
+        return view('threads.index', compact('threads'));
     }
 
     /**
@@ -45,9 +46,9 @@ class ThreadController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Thread $thread)
     {
-        //
+        return view('threads.detail', compact('thread'));
     }
 
     /**
