@@ -18,7 +18,7 @@
 
 
 @section('description')
-    <span>Thank you for signing up on ROODIO! We have sent you the 6-digit code <b>to your email. Please enter the code to continue this signing up process.</b></span>
+    <span>Thank you for signing up with ROODIO! We have sent you the 6-digit code <b>to your email. Please enter the code to continue this signing up process.</b></span>
 @endsection
 
 
