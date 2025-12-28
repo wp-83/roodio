@@ -18,17 +18,17 @@
                 <img src="{{ asset('assets/logo-with-text.png') }}" alt="logo" class='w-24 drop-shadow-sm drop-shadow-primary-50'>
                 <img src="{{ asset('assets/icons/otp.svg') }}" alt="logo" class='w-24 hidden'>
                 <p class='font-primary text-subtitle font-bold text-primary-85'>
-                    <span class='tracking-widest hidden'>SIGN UP</span>
+                    <span class='tracking-widest'>SIGN UP</span>
                     <span class='hidden'>OTP VERIFICATION</span>
-                    <span class='tracking-wider'>USER ACCOUNT</span>
+                    <span class='tracking-wider hidden'>USER ACCOUNT</span>
                 </p>
                 <p class='text-center text-primary-50 text-small mb-4'>
-                    <span class='-mt-1.5 hidden'>Let's join for amazing experience!</span>
+                    <span class='-mt-1.5'>Let's join for amazing experience!</span>
                     <span class='mt-6 hidden'>Thank you for signing up on ROODIO! We have sent you the 6-digit code <b>to your email</b>. Please enter the code to continue this signing up process.</span>
-                    <span class='-mt-1.5'>Awesome! One step left with ROODIO!</span>
+                    <span class='-mt-1.5 hidden'>Awesome! One step left with ROODIO!</span>
                 </p>
             </div>
-            <div class='hidden'>
+            <div class=''>
                 <form action="" method="POST" id='identity'>
                     <div class='flex flex-col mb-9'>
                         <label for="fullname" class='text-body-size flex flex-row mb-2'>
@@ -70,7 +70,7 @@
                                 <img src="{{ asset('assets/icons/country.svg') }}" alt="country" class='w-6 mr-1'>
                                 <p class='text-primary-85'>Country<span class='text-danger'>*</span></p>
                         </label>
-                        <select autocomplete="country" id="country" name="country" autocomplete="off" class="country-select w-full mt-0.5 text-small outline-none border-b rounded-md px-1.5 py-0.5 border-shadedOfGray-50 text-shadedOfGray-60 italic focus:border-secondary-happy-100 focus:border-b-2 ease-in-out duration-150 hover:bg-shadedOfGray-20/90 md:text-body md:h-8">
+                        <select autocomplete="country" id="country" name="country" autocomplete="off" class="gender-select text-small outline-none border-b rounded-md px-1.5 py-1 border-shadedOfGray-50 text-shadedOfGray-60 italic focus:border-secondary-happy-100 focus:border-b-2 ease-in-out duration-150 hover:bg-shadedOfGray-20/90 md:text-body-size md:h-8">
                             <option value="" disabled hidden selected>Select your country...</option>
                             <option value="AF">Afghanistan</option>
                             <option value="AX">Åland Islands</option>
@@ -347,7 +347,7 @@
                 </form>
             </div>
 
-            <div class=''>
+            <div class='hidden'>
                 <form action="" method="POST" id='account'>
                     <div class='flex flex-col mb-9'>
                         <label for="username" class='text-body-size flex flex-row mb-1'>
