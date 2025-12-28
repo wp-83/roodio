@@ -16,20 +16,20 @@
         <div id="particle-canvas" class='h-screen md:h-[130%] xl:h-[100%]'></div>
         <div class='absolute z-10 border-primary-30 border-4 rounded-4xl bg-secondary-happy-10/85 w-sm h-max top-[50%] -translate-y-[50%] p-8 pt-5 font-secondaryAndButton rounded-3xl shadow-xl shadow-primary-20/40 lg:w-md'>
             <div class='flex flex-col items-center gap-1'>
-                <img src="{{ asset('assets/logo-with-text.png') }}" alt="logo" class='w-24 drop-shadow-sm drop-shadow-primary-50'>
-                <img src="{{ asset('assets/icons/otp.svg') }}" alt="logo" class='w-24 hidden'>
+                <img src="{{ asset('assets/logo-with-text.png') }}" alt="logo" class='w-24 drop-shadow-sm drop-shadow-primary-50 identity-section account-section logo'>
+                <img src="{{ asset('assets/icons/otp.svg') }}" alt="logo" class='w-24 otp-section hidden'>
                 <p class='font-primary text-subtitle font-bold text-primary-85'>
-                    <span class='tracking-widest'>SIGN UP</span>
-                    <span class='hidden'>OTP VERIFICATION</span>
-                    <span class='tracking-wider hidden'>USER ACCOUNT</span>
+                    <span class='tracking-widest identity-section'>SIGN UP</span>
+                    <span class='otp-section hidden'>OTP VERIFICATION</span>
+                    <span class='tracking-wider account-section hidden'>USER ACCOUNT</span>
                 </p>
                 <p class='text-center text-primary-50 text-small mb-4'>
-                    <span class='-mt-1.5'>Let's join for amazing experience!</span>
-                    <span class='mt-6 hidden'>Thank you for signing up on ROODIO! We have sent you the 6-digit code <b>to your email. Please enter the code to continue this signing up process.</b></span>
-                    <span class='-mt-1.5 hidden'>Awesome! One step left with ROODIO!</span>
+                    <span class='-mt-1.5 identity-section'>Let's join for amazing experience!</span>
+                    <span class='mt-6 otp-section hidden'>Thank you for signing up on ROODIO! We have sent you the 6-digit code <b>to your email. Please enter the code to continue this signing up process.</b></span>
+                    <span class='-mt-1.5 account-section hidden'>Awesome! One step left with ROODIO!</span>
                 </p>
             </div>
-            <div class=''>
+            <div class='identity-section'>
                 <form action="" method="POST" id='identity'>
                     <div class='flex flex-col mb-6'>
                         <label for="fullname" class='text-body-size flex flex-row mb-2'>
@@ -353,13 +353,13 @@
                         </div>
                     </div>
                     <div>
-                        <button type="submit" class='text-smallBtn font-bold w-full font-secondaryAndButton bg-primary-10 text-primary-100 rounded-2xl py-1 mb-2 cursor-pointer hover:bg-primary-50 hover:text-white ease-in-out duration-150' form='identity'>Sign Up</button>
+                        <button type="button" id='identityBtn' class='text-smallBtn font-bold w-full font-secondaryAndButton bg-primary-10 text-primary-100 rounded-2xl py-1 mb-2 cursor-pointer hover:bg-primary-50 hover:text-white ease-in-out duration-150' form='identity'>Sign Up</button>
                         <p class='text-micro text-center md:text-small'>Already have account? <a href="/login" class='font-bold text-secondary-sad-100 hover:text-primary-50'>Let's Login!</a></p>
                     </div>
                 </form>
             </div>
 
-            <div class='hidden'>
+            <div class='otp-section hidden'>
                 <form action="" method="POST" id='otp'>
                     <div class='flex flex-col mt-4 mb-8'>
                         <div class='flex flex-row justify-center gap-4 items-center'>
@@ -384,7 +384,7 @@
                 </form>
             </div>
 
-            <div class='hidden'>
+            <div class='account-section hidden'>
                 <form action="" method="POST" id='account'>
                     <div class='flex flex-col mb-6'>
                         <label for="username" class='text-body-size flex flex-row mb-1'>
