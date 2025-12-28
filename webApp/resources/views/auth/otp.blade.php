@@ -1,1 +1,48 @@
-@extends('../layouts/register.blade.php')
+@extends('layouts/register')
+
+
+@section('title', 'ROODIO - OTP Authentication')
+
+
+@push('script')
+    <script src="{{ asset('js/auth/otp.js') }}" defer></script>
+@endpush
+
+
+@section('mainImage')
+    <img src="{{ asset('assets/icons/otp.svg') }}" alt="logo" class='w-24 otp-section hidden'>
+@endsection
+
+
+@section('mainTitle', 'OTP VERIFICATION')
+
+
+@section('description')
+    <span>Thank you for signing up on ROODIO! We have sent you the 6-digit code <b>to your email. Please enter the code to continue this signing up process.</b></span>
+@endsection
+
+
+@section('content')
+    <form action="" method="POST" id='otp'>
+        <div class='flex flex-col mt-4 mb-8'>
+            <div class='flex flex-row justify-center gap-4 items-center'>
+                <input type="text" maxlength="1" inputmode="numeric" name="otp-1" id="otp-1 otp" autocomplete="off" placeholder="*" class='not-placeholder-shown:bg-white bg-shadedOfGray-20 text-center text-paragraph outline-none border-2 font-bold rounded-md px-1.5 py-0.5 w-10 h-12 border-primary-30 placeholder:text-paragraph focus:border-secondary-happy-100 focus:bg-secondary-happy-20/50 ease-in-out duration-150'>
+                <input type="text" maxlength="1" inputmode="numeric" name="otp-2" id="otp-2 otp" autocomplete="off" placeholder="*" class='not-placeholder-shown:bg-white bg-shadedOfGray-20 text-center text-paragraph outline-none border-2 font-bold rounded-md px-1.5 py-0.5 w-10 h-12 border-primary-30 placeholder:text-paragraph focus:border-secondary-happy-100 focus:bg-secondary-happy-20/50 ease-in-out duration-150'>
+                <input type="text" maxlength="1" inputmode="numeric" name="otp-3" id="otp-3 otp" autocomplete="off" placeholder="*" class='not-placeholder-shown:bg-white bg-shadedOfGray-20 text-center text-paragraph outline-none border-2 font-bold rounded-md px-1.5 py-0.5 w-10 h-12 border-primary-30 placeholder:text-paragraph focus:border-secondary-happy-100 focus:bg-secondary-happy-20/50 ease-in-out duration-150'>
+                <input type="text" maxlength="1" inputmode="numeric" name="otp-4" id="otp-4 otp" autocomplete="off" placeholder="*" class='not-placeholder-shown:bg-white bg-shadedOfGray-20 text-center text-paragraph outline-none border-2 font-bold rounded-md px-1.5 py-0.5 w-10 h-12 border-primary-30 placeholder:text-paragraph focus:border-secondary-happy-100 focus:bg-secondary-happy-20/50 ease-in-out duration-150'>
+                <input type="text" maxlength="1" inputmode="numeric" name="otp-5" id="otp-5 otp" autocomplete="off" placeholder="*" class='not-placeholder-shown:bg-white bg-shadedOfGray-20 text-center text-paragraph outline-none border-2 font-bold rounded-md px-1.5 py-0.5 w-10 h-12 border-primary-30 placeholder:text-paragraph focus:border-secondary-happy-100 focus:bg-secondary-happy-20/50 ease-in-out duration-150'>
+                <input type="text" maxlength="1" inputmode="numeric" name="otp-6" id="otp-6 otp" autocomplete="off" placeholder="*" class='not-placeholder-shown:bg-white bg-shadedOfGray-20 text-center text-paragraph outline-none border-2 font-bold rounded-md px-1.5 py-0.5 w-10 h-12 border-primary-30 placeholder:text-paragraph focus:border-secondary-happy-100 focus:bg-secondary-happy-20/50 ease-in-out duration-150'>
+            </div>
+            <div class="text-error-moderate h-3.5 pt-0.5 mt-2 text-micro md:text-small text-center">
+                @error('otp')
+                    {{ $message }}
+                @enderror
+            </div>
+        </div>
+        <button type='submit' form='otp' class='text-smallBtn font-bold w-full font-secondaryAndButton bg-primary-10 text-primary-100 rounded-2xl py-1 mb-2 cursor-pointer hover:bg-primary-50 hover:text-white ease-in-out duration-150'>Verify Account</button>
+        <p class='text-micro text-center md:text-small'>
+            Don't get the code?
+            <button class='font-bold text-secondary-sad-100 hover:text-primary-50'> Resend The Code.</button>
+        </p>
+    </form>
+@endsection

@@ -1,5 +1,3 @@
-const sectionClass = ['identity-section', 'otp-section', 'account-section'];
-
 document.addEventListener('DOMContentLoaded', () => {
   //change style for field dob, gender, and country when they have been filled
   const setupSelect = (id) => {
