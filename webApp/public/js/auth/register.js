@@ -31,24 +31,3 @@ document.addEventListener('DOMContentLoaded', () => {
     autohide: true,
   });
 });
-
-// identity form validation
-const identityFormElement = document.querySelector("#identity").querySelectorAll("input, select");
-const identityBtn = document.getElementById('identityBtn');
-
-identityBtn.addEventListener('click', () => {
-  // check whether the value of each element is null
-  // for (element of identityFormElement){
-  //   if (element.value == ""){
-  //     return false;
-  //   }
-  // }
-
-  document.querySelectorAll(`.${sectionClass[0]}`).forEach(element => {
-    element.classList.add('hidden');
-  });
-
-  document.querySelectorAll(`.${sectionClass[1]}`).forEach(element => {
-    element.classList.remove('hidden');
-  })
-});
