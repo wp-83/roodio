@@ -1,4 +1,4 @@
-@extends('layouts/register')
+@extends('layouts/signUp')
 
 
 @section('title', 'ROODIO - Register')

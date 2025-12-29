@@ -1,16 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>ROODIO - Login</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+@extends('layouts/master')
+
+
+@section('title', 'ROODIO - Login')
+
+
+@push('script')
     <script type="text/javascript" src="{{ asset('js/design/login-bg.js') }}" defer></script>
     <script type="text/javascript" src="{{ asset('js/design/particle-network.js') }}" defer></script>
     <script type="text/javascript" src="{{ asset('js/auth/password.js') }}" defer></script>
-</head>
-<body>
+@endpush
+
+
+@section('bodyContent')
     <div class='grid w-screen h-screen bg-primary-100 overflow-hidden justify-items-center items-center mx-auto'>
         <div id="particle-canvas"></div>
         <div class='w-xs h-[26rem] border-secondary-happy-50 border-3 bg-white/75 hover:bg-white/85 transition-colors active:bg-white/85 ease-linear duration-150 rounded-4xl col-start-1 row-start-1 z-10 flex flex-col items-center justify-around shadow-xl shadow-secondary-happy-50/40 md:w-md md:h-[32rem]'>
@@ -68,5 +69,4 @@
             </div>
         </div>
     </div>
-</body>
-</html>
+@endsection
