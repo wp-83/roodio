@@ -1,12 +1,13 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MoodController;
 use App\Http\Controllers\SongController;
 use App\Http\Controllers\ThreadController;
 
 Route::get('/', function () {
-    return view('errors/503');
+    return view('errors.503');
 })->name('welcome');
 
 Route::get('/songs/create', [SongController::class, 'create'])->name('songs.create');
@@ -14,6 +15,12 @@ Route::get('/songs/create', [SongController::class, 'create'])->name('songs.crea
 // Auth Route
 Route::get('/login', [AuthController::class, 'loginView'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
+Route::get('/sign-up', [AuthController::class, 'registerView'])->name('register');
+Route::post('/sign-up', [AuthController::class, 'register'])->name('auth.register');
+Route::get('/otp-authentication', [AuthController::class, 'otpView'])->name('otp');
+Route::post('/otp-authentication', [AuthController::class, 'otp'])->name('auth.otp');
+Route::get('/create-account', [AuthController::class, 'accountView'])->name('account');
+Route::post('/create-account', [AuthController::class, 'account'])->name('auth.account');
 
 // Mood Route
 Route::get('/moods', [MoodController::class, 'index'])->name('moods.index');
@@ -25,11 +32,10 @@ Route::delete('/moods/{mood}', [MoodController::class, 'destroy'])->name('moods.
 
 // Thread Route
 Route::get('/threads', [ThreadController::class, 'index'])->name('thread.index');
-Route::get('/threads/{thread}/detail', [ThreadController::class, 'show'])->name('thread.show');
 Route::get('/threads/create', [ThreadController::class, 'create'])->middleware('auth')->name('thread.create');
 Route::post('/threads', [ThreadController::class, 'store'])->middleware('auth')->name('thread.store');
-// Thread Reply Route
 Route::post('/threads/{thread}/reply', [ThreadController::class, 'reply'])->middleware('auth')->name('thread.reply');
+Route::post('/threads/{threadId}/reaction', [ThreadController::class, 'react'])->middleware('auth')->name('thread.react');
 
 Route::get('/sign-up', function () {
     return view('auth/register');

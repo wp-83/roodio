@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Models\Reactions;
 use App\Models\Reply;
 use App\Models\Thread;
 use function Symfony\Component\Clock\now;
@@ -14,7 +15,7 @@ class ThreadController extends Controller
      */
     public function index()
     {
-        $threads = Thread::orderByDesc('created_at')->paginate(5);
+        $threads = Thread::withCount('reactions')->orderByDesc('created_at')->paginate(5);
         return view('threads.index', compact('threads'));
     }
 
@@ -42,14 +43,6 @@ class ThreadController extends Controller
 
         Thread::create($threadData);
         return redirect()->route('thread.index')->with('success', 'Thread added successfully!');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Thread $thread)
-    {
-        return view('threads.detail', compact('thread'));
     }
 
     /**
@@ -90,6 +83,41 @@ class ThreadController extends Controller
         $reply['threadId'] = $thread->id;
 
         Reply::create($reply);
-        return redirect()->route('thread.show', $thread)->with('succes', 'berhasil membuat reply');
+        return redirect()->route('thread.index', $thread)->with('succes', 'berhasil membuat reply');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function react(string $threadId)
+    {
+        $userId = Auth::id();
+
+        $thread = Thread::where('id', $threadId)->first();
+
+        if (! $thread) {
+            return response()->json([
+                'message' => 'Thread not found',
+            ], 404);
+        }
+
+        $reaction = Reactions::where('userId', $userId)
+            ->where('threadId', $threadId)
+            ->first();
+
+        if ($reaction) {
+            $reaction->delete();
+        } else {
+            Reactions::create([
+                'userId'   => $userId,
+                'threadId' => $threadId,
+            ]);
+        }
+
+        $count = Reactions::where('threadId', $threadId)->count();
+
+        return response()->json([
+            'count' => $count,
+        ]);
     }
 }
