@@ -40,3 +40,7 @@ Route::post('/threads/{thread}/reply', [ThreadController::class, 'reply'])->midd
 Route::get('/forget-password', function () {
     return view('auth/forgetPass');
 });
+
+Route::get('/develop', function () {
+    return view('components.input');
+});

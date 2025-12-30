@@ -48,7 +48,7 @@
                     <span class='absolute invisible' id='eye-open'>&#128065;</span>
                 </button>
             </div>
-            <div class="text-error-moderate h-3 pt-0.5 text-micro md:text-small">
+            <div class="error-message">
                 @error('password')
                     {{ $message }}
                 @enderror
@@ -66,7 +66,7 @@
                     <span class='absolute invisible' id='eye-open-pass-confirm'>&#128065;</span>
                 </button>
             </div>
-            <div class="text-error-moderate h-3 pt-0.5 text-micro md:text-small">
+            <div class="error-message">
                 @error('password_confirmation')
                     {{ $message }}
                 @enderror

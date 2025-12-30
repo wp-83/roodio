@@ -14,5 +14,27 @@ inputs.forEach((input, idx) => {
         if (e.key === 'Backspace' && e.target.value == "" && idx > 0){
             inputs[idx - 1].focus();
         }
-    })
+    });
+
+    // only accept number between 0 until 9
+    input.addEventListener('keypress', (e) => {
+        if (!/[0-9]/.test(e.key)) {
+            e.preventDefault();
+        }
+    });
+
+    // disable cut
+    input.addEventListener('cut', (e) => {
+        e.preventDefault();
+    });
+
+    // disable copy
+    input.addEventListener('copy', (e) => {
+        e.preventDefault();
+    });
+
+    // disable paste
+    input.addEventListener('paste', (e) => {
+        e.preventDefault();
+    });
 })

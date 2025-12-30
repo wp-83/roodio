@@ -8,15 +8,15 @@
 
 
 @section('bodyContent')
-    <div class='relative w-screen min-h-screen justify-items-center items-center'>
-        <div id="particle-canvas" class='h-screen md:h-[130%] xl:h-full'></div>
-        <div class='absolute z-10 border-primary-30 border-4 rounded-4xl bg-secondary-happy-10/85 w-sm h-max top-1/2 -translate-y-1/2 p-8 pt-5 font-secondaryAndButton shadow-xl shadow-primary-20/40 lg:w-md'>
+    <div id="particle-canvas" class='min-h-lvh h-fit'></div>
+    <div class='absolute z-10 w-full h-fit flex justify-center items-center top-0 pb-52'>
+        <div class='border-primary-30 border-4 rounded-4xl bg-secondary-happy-10/85 w-sm h-max p-5 pt-5 font-secondaryAndButton shadow-xl shadow-primary-20/40 md:w-md lg:w-[30rem]'>
             <div class='flex flex-col items-center gap-1'>
-                @yield('mainImage')
+                 @yield('mainImage')
                 <p class='font-primary text-subtitle font-bold text-primary-85'>
                     @yield('mainTitle')
                 </p>
-                <p class='text-center text-primary-50 text-small mb-4'>
+                <p class='text-center text-primary-50 text-small mb-3'>
                     @yield('description')
                 </p>
             </div>
