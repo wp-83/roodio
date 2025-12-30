@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Threads</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body>
     <a href="{{ route('thread.create') }}">Add thread</a>
@@ -15,7 +16,33 @@
             <p>{{ $thread->content }}</p>
         </div>
         <div class="">
-            <a href="{{route('thread.show', $thread->id)}}">View Detail</a>
+            @session('succes')
+            <strong>Success! {{ $value }}</strong>
+            @endsession
+            @forelse($thread->replies as $reply)
+                <p>{{ $reply->content }}</p>
+            @empty
+            @endforelse
+            <div class="">
+                <form action="{{ route('thread.reply', $thread->id) }}" method="POST">
+                    @csrf
+                    <label for="content">Reply:</label>
+                    <textarea name="content" class="border"></textarea>
+                    <button type="submit">send</button>
+                </form>
+                @error('content')
+                    {{ $message }}
+                @enderror
+            </div>
+
+            <div class="">
+                <button
+                    class="reaction-btn"
+                    data-thread-id="{{ $thread->id }}"
+                >
+                ❤️ <span class="count">{{ $thread->reactions_count }}</span>
+                </button>
+            </div>
         </div>
     </div>
     @empty
