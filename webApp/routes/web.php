@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MoodController;
 use App\Http\Controllers\SongController;
 use App\Http\Controllers\ThreadController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('errors.503');
@@ -35,7 +35,7 @@ Route::get('/threads', [ThreadController::class, 'index'])->name('thread.index')
 Route::get('/threads/create', [ThreadController::class, 'create'])->middleware('auth')->name('thread.create');
 Route::post('/threads', [ThreadController::class, 'store'])->middleware('auth')->name('thread.store');
 Route::post('/threads/{thread}/reply', [ThreadController::class, 'reply'])->middleware('auth')->name('thread.reply');
-Route::post('/threads/{threadId}/reaction', [ThreadController::class, 'react'])->middleware('auth')->name('thread.react');
+// Route::post('/threads/{threadId}/reaction', [ThreadController::class, 'react'])->middleware('auth')->name('thread.react');
 
 Route::get('/sign-up', function () {
     return view('auth/register');
