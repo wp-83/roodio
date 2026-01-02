@@ -1,4 +1,4 @@
-@vite(['resources/css/app.css', 'resources/js/app.js'])
+{{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
 
 @props([
   'behaviour' => 'action', //action OR navigation
@@ -27,7 +27,7 @@
       'sad' => 'text-secondary-sad-30 hover:text-secondary-sad-70',
       'relaxed' => 'text-secondary-relaxed-30 hover:text-secondary-relaxed-70',
       'angry' => 'text-secondary-angry-30 hover:text-secondary-angry-70',
-      'default' => 'text-accent-60 hover:text-accent-85'
+      'default' => 'text-primary-60 hover:text-primary-30'
     ];
 @endphp
   
@@ -39,7 +39,7 @@
       <span class='relative z-5'>{{ $content }}</span>
     </button>
 @else
-    <a href="{{ $navLink }}">
+    <a href="{{ $navLink }}" class='inline'>
       @if ($navType == 'text')
         <p {{ $attributes->merge(['class' => 'w-fit font-bold text-micro md:text-small ' . (($mood) ? $moodNavStyle[$mood] : $moodNavStyle['default'])]) }}>
           {{ $content }}

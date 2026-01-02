@@ -47,7 +47,10 @@
         </x-inputSelect>
         <div>
             <x-button behaviour='action' actionType='submit' form='identity' content='Sign Up' class='min-w-full'></x-button>
-            <p class='text-micro text-center md:text-small'>Already have account? <a href="/login" class='font-bold text-secondary-sad-100 hover:text-primary-50'>Let's Login!</a></p>
+            <div class='flex flex-row justify-center gap-1'>
+                <p class='text-micro text-center md:text-small'>Already have account?</p>
+                <x-button behaviour='navigation' navType='text' :navLink="route('login')" content="Let's Login!"></x-button>
+            </div>
         </div>
     </form>
 @endsection
