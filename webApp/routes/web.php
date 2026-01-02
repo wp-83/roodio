@@ -44,5 +44,5 @@ Route::post('/threads/{thread}/reply', [ThreadController::class, 'reply'])->midd
 
 // Dev Route Preview
 Route::get('/pageDevelop', function () {
-    return view('auth.login');
+    return view('errors.403');
 });
