@@ -3,15 +3,15 @@
 @props([
   'behaviour' => 'navigation', //action OR navigation
   'actionType' => 'button',
-  'navLink' => "{{ route('welcome') }}",
+  'navLink' => null,
   'content' => 'hallo ini button',
   'mood' => null //happy, sad, relaxed, angry
 ])
 
 @php
+    $navLink ??= route('welcome');
+
     $baseStyle = 'relative overflow-hidden w-max px-4 py-1 font-secondaryAndButton rounded-3xl cursor-pointer text-md text-center font-bold before:absolute before:inset-0 before:-translate-x-full before:transition-transform before:duration-300 hover:before:translate-x-0 md:text-smallBtn md:px-5 md:py-1.5';
-    
-    // 100, 85, 70, 60, 50, 30, 20, 10
 
     $defaultStyle = 'bg-primary-10 text-primary-85 before:bg-primary-50 hover:text-white';
     $happyMood = 'bg-secondary-happy-20 text-secondary-happy-100 before:bg-secondary-happy-85 hover:text-secondary-happy-10';
@@ -39,26 +39,23 @@
       default:
         $conditionalStyle = $defaultStyle;
         break;
-    }
-
+    };
 @endphp
-
-<body class='bg-primary-100'>
   
-  @if ($behaviour == 'action')
-      <button 
-        type='{{ $actionType }}' 
-        {{ $attributes->merge([
-          'class' => $baseStyle . ' ' . $conditionalStyle
-        ]) }}
-      >
+
+@if ($behaviour == 'action')
+    <button 
+      type='{{ $actionType }}' 
+      {{ $attributes->merge([
+        'class' => $baseStyle . ' ' . $conditionalStyle
+      ]) }}
+    >
+      <span class='relative z-5'>{{ $content }}</span>
+    </button>
+@else
+    <a href="{{ $navLink }}">
+      <div {{ $attributes->merge(['class' => $baseStyle . ' ' . $conditionalStyle]) }}>
         <span class='relative z-5'>{{ $content }}</span>
-      </button>
-  @else
-      <a href="{{ $navLink }}">
-        <div {{ $attributes->merge(['class' => $baseStyle . ' ' . $conditionalStyle]) }}>
-          <span class='relative z-5'>{{ $content }}</span>
-        </div>
-      </a>
-  @endif
-</body>
+      </div>
+    </a>
+@endif
