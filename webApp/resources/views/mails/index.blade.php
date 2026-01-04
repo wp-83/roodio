@@ -1,14 +1,9 @@
 <style>
-    @font-face {
-        font-family: 'aeonik';
-        src: url('../../../resources/fonts/aeonik.ttf');
-    }
-
     * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-        font-family: aeonik;
+        font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     }
     .container {
         height: max-content;
@@ -47,7 +42,6 @@
         margin: 1.5rem 0;
         width: 90%;
         height: max-content;
-        /* background-color: #FFE9D3; */
         font-size: 1rem;
         text-align: justify;
         border: 1px dashed #142C80;
@@ -174,6 +168,5 @@
         <br><hr>
         <p class='gray-text'>This email was sent automatically for security purposes.</p>
         <p><b class='dark-bold gray-text'>Please do not reply to this message.</b></p>
-
     </div>
 </div>
