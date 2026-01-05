@@ -1,6 +1,5 @@
 @import 'tailwindcss';
 @import "flowbite/src/themes/default";
-@import "../css/navigation.css";
 
 @config "../../tailwind.config.js";
 
