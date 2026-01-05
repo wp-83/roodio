@@ -65,4 +65,4 @@ Route::get('/components', function () {
 
 Route::get('/pageDevelop', function () {
     return view('components.sidebar');
-})->name('123');
+})->name('awokwok');
