@@ -23,3 +23,11 @@ joblib==1.4.2
 # ========== OPTIONAL (RECOMMENDED) ==========
 # For saving & loading results
 openpyxl==3.1.5
+
+# ========== API ==========
+fastapi
+uvicorn
+python-multipart
+tensorflow-cpu
+requests
+h5py
