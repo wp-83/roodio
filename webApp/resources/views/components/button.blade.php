@@ -12,7 +12,7 @@
 @php
     $navLink ??= route('welcome');
 
-    $baseStyle = 'relative overflow-hidden w-max px-4 py-1 my-1 font-secondaryAndButton rounded-3xl cursor-pointer text-md text-center font-bold before:absolute before:inset-0 before:-translate-x-full before:transition-transform before:duration-400 hover:before:translate-x-0 md:text-smallBtn md:px-5 md:py-1.5';
+    $baseStyle = 'relative overflow-hidden w-max px-4 py-1 my-1 font-secondaryAndButton rounded-3xl cursor-pointer text-mediumBtn text-center font-bold before:absolute before:inset-0 before:-translate-x-full before:transition-transform before:duration-400 hover:before:translate-x-0 md:text-largeBtn md:px-5 md:py-1.5';
 
     $moodStyle = [
       'happy' => 'bg-secondary-happy-20 text-secondary-happy-100 before:bg-secondary-happy-85 hover:text-secondary-happy-10',
@@ -41,7 +41,7 @@
 @else
     <a href="{{ $navLink }}" class='inline'>
       @if ($navType == 'text')
-        <p {{ $attributes->merge(['class' => 'w-fit font-bold text-micro md:text-small ' . (($mood) ? $moodNavStyle[$mood] : $moodNavStyle['default'])]) }}>
+        <p {{ $attributes->merge(['class' => 'w-fit font-bold text-smallBtn ' . (($mood) ? $moodNavStyle[$mood] : $moodNavStyle['default'])]) }}>
           {{ $content }}
         </p>
       @else
