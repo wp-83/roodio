@@ -60,3 +60,55 @@ button:focus {
     @apply text-error-moderate w-[inherit] h-3 pt-0.5 text-micro md:text-small;
   }
 }
+
+@layer utilities {
+  @keyframes changingWidth {
+    0% {
+      width: 2rem;        
+      opacity: 1;
+      transform: scaleY(1);
+    }
+
+    100% {
+      width: 4rem;   
+      opacity: 0.75;
+      transform: scaleY(0.5);
+    }
+  }
+
+  .expandWidth {
+    animation: changingWidth .5s linear forwards;
+  }
+
+  .collapseWidth {
+    animation: changingWidth .5s linear reverse;
+  }
+
+  /* top-1/2 left-1/10 w-7 h-7 -translate-y-1/2 */
+  @keyframes bouncyMusicNot {
+    0% {
+      top: -40%;
+      left: 0%;
+    }
+
+    35% {
+      top: 30%;
+      left: 10%;
+      translate: 0% 0%;
+    }
+
+    70% {
+      top: 7%;
+      left: 20%;
+    }
+
+    100% {
+      top: 15%;
+      left: 35%;
+    }
+  }
+
+  .bouncyNote {
+    animation: bouncyMusicNot 1s linear forwards;
+  }
+}
