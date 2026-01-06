@@ -60,7 +60,7 @@ Route::prefix('threads')->middleware('auth')->group(function () {
 
 // Dev Route Preview
 Route::get('/components', function () {
-    return view('components.sidebarButton');
+    return view('components.modal');
 })->name('awikwok');
 
 Route::get('/pageDevelop', function () {
