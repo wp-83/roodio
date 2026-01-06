@@ -1,26 +1,20 @@
-<p>Salmon Teriyaki</p>
-<h1>Chitato</h1>
+@vite(['resources/css/app.css', 'resources/js/app.js'])
+
+
+@props([
+    
+])
+
+
+{{-- <div class='relative z-100 inline-block w-full h-full bg-shadedOfGray-20'>
+    <div class='w-64 h-36 bg-primary-20'>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+</div> --}}
+
 <div>
-    <p>Ini test<p>
-        
-</div>
-    <!-- Simplicity is the essence of happiness. - Cedric Bledsoe -->
+    
 </div>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ANES</title>
-</head>
-<body>
-    <ul>
-        <li>Homw</li>
-        <li>INJCA</li>
-        <li></li>
-        <li></li>
-        <li></li>
-    </ul>
-</body>
-</html>

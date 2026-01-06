@@ -59,10 +59,10 @@ Route::prefix('threads')->middleware('auth')->group(function () {
 // Route::post('/{threadId}/reaction', [ThreadController::class, 'react'])->name('thread.react');
 
 // Dev Route Preview
-Route::get('/components', function () {
-    return view('components.sidebarButton');
+Route::get('/awikwok', function () {
+    return view('components.iconButton');
 })->name('awikwok');
 
-Route::get('/pageDevelop', function () {
-    return view('components.sidebar');
-})->name('awokwok');
+// Route::get('/pageDevelop', function () {
+//     return view('components.sidebar');
+// })->name('awokwok');

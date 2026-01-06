@@ -133,16 +133,16 @@ export default {
           lineHeight: '1.25rem',
         }],
 
-        'smallBtn': ['1.333rem', {
-          lineHeight: '2rem',
+        'smallBtn': ['1rem', {
+          lineHeight: '1.5rem',
         }],
 
-        'mediumBtn': ['1.5rem', {
+        'mediumBtn': ['1.167rem', {
+          lineHeight: '1.75rem',
+        }],
+
+        'largeBtn': ['1.5rem', {
           lineHeight: '2.25rem',
-        }],
-
-        'largeBtn': ['1.667rem', {
-          lineHeight: '2.5rem',
         }],
       },
     },
