@@ -1,10 +1,10 @@
-@vite(['resources/css/app.css', 'resources/js/app.js'])
+{{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
 
 @props([
     'mood' => 'happy',
     'type' => 'hamburger',
     'arrowOrientation' => 'left',
-    'isActive' => true
+    'isActive' => false
 ])
 
 
@@ -70,7 +70,7 @@
             @endfor
         </div>
     @elseif ($type === $iconTypes[3])
-        <div class='flex flex-col items-center justify-center gap-2 py-1 w-fit h-max relative bg-primary-100'>
+        <div class='flex flex-col items-center justify-center gap-2 py-1 w-max h-max relative'>
             @for($i = 0; $i < 3; $i++)
                 <div {{ $attributes->merge(["class" =>  $elementColor[$mood] . ' w-8 h-1 rounded-md ' . (($isActive) ? 'expandWidth' : 'collapseWidth') . ' ']) }}></div>
             @endfor
