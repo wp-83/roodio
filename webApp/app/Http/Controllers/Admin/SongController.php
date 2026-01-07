@@ -3,6 +3,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Songs;
+use getID3;
+use Http;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -25,6 +27,14 @@ class SongController extends Controller
         return view('admin.songs.create');
     }
 
+    protected function getAudioDuration($filePath)
+    {
+        $getID3          = new getID3();
+        $fileInfo        = $getID3->analyze($filePath);
+        $durationSeconds = $fileInfo['playtime_seconds'] ?? 0;
+        return $durationSeconds;
+    }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -41,18 +51,38 @@ class SongController extends Controller
         ]);
 
         $song = $request->file('song');
+
+        try {
+            $path = Storage::disk('azure')->putFile('songs', $song);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()]); // Ini akan memunculkan alasan asli dari Azure
+        }
+
         $path = Storage::disk('azure')->put(
             'songs',
             $song
         );
 
+        $response = Http::attach(
+            'audio_file',
+            file_get_contents($song),
+            $song->getFilename()
+        )->post('https://xullfikar-roodio-analyzer.hf.space/analyze', [
+            'lyrics' => $validated['lyrics'],
+        ]);
+
+        if ($response->failed()) {
+            return back()->withErrors(['api' => 'Failed to send song to API']);
+        } else {
+            $prediction = $response->json();
+        }
+
         $datas             = $validated;
-        $datas['duration'] = 120;
+        $datas['duration'] = $this->getAudioDuration($song->getPathname());
         $datas['songPath'] = $path;
         $datas['userId']   = Auth::id();
-        $datas['moodId']   = 'MD-0000001';
+        $datas['moodId']   = $prediction['mood'];
         unset($datas['song']);
-
         Songs::create($datas);
         return redirect()->route('admin.songs.index')->with('succes', 'Successfully added song');
     }
