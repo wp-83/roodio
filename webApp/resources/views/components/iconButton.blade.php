@@ -1,10 +1,9 @@
-{{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
+@vite(['resources/css/app.css', 'resources/js/app.js'])
 
 @props([
     'mood' => 'happy',
     'type',
-    'arrowOrientation' => 'left',
-    'isActive' => false
+    'arrowOrientation' => 'left'
 ])
 
 
@@ -43,7 +42,7 @@
 @endphp
 
 
-<div class='w-full h-full'>
+<div class='w-max h-max'>
     @if ($type === $iconTypes[0])
         <div {{ $attributes->merge(["class" => 'flex flex-col gap-5 w-8 h-8 group rounded-full relative '. $backgroundHover[$mood] . ' ']) }}>
             <div {{ $attributes->merge(["class" => 'w-5 h-0.5 absolute top-1/2 left-1/2 -translate-1/2 rotate-45 rounded-2xl '. $elementColor[$mood] . ' ']) }}></div>
@@ -70,15 +69,13 @@
             @endfor
         </div>
     @elseif ($type === $iconTypes[3])
-        <div class='flex flex-col items-center justify-center gap-2 py-1 w-max h-max relative'>
+        <div class='flex flex-col items-center justify-center gap-2 py-1 w-max h-max relative cursor-pointer ' x-data="{ active: false }" x-on:click="active = !active">
             @for($i = 0; $i < 3; $i++)
-                <div {{ $attributes->merge(["class" =>  $elementColor[$mood] . ' w-8 h-1 rounded-md ' . (($isActive) ? 'expandWidth' : 'collapseWidth') . ' ']) }}></div>
+                <div {{ $attributes->merge(["class" =>  $elementColor[$mood] . ' w-8 h-1 rounded-md hamburger-line ']) }} :class="active ? 'expandWidth' : 'collapseWidth'"></div>
             @endfor
-            @if ($isActive)
-                <div {{ $attributes->merge(["class" => 'absolute w-7 h-7 ' . (($isActive) ? 'bouncyNote' : '') . ' ']) }}>
-                    <img src="{{ asset('assets/icons/music-notes.svg') }}" alt="music-notes">
-                </div>
-            @endif
+            <div {{ $attributes->merge(["class" => 'absolute w-7 h-7 ']) }} :class="active ? 'bouncyNote' : 'invisible'">
+                <img src="{{ asset('assets/icons/music-notes.svg') }}" alt="music-notes">
+            </div>
         </div>
     @endif
 </div>

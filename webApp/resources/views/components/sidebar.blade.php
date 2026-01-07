@@ -9,7 +9,7 @@
 <div
 {{ 
     $attributes->merge([
-        'class' => 'flex flex-col gap-5 w-fit bg-primary-85 h-full ' . (($isToggle) ? ' px-4 ' : ' ')
+        'class' => 'flex flex-col gap-5 w-fit bg-primary-85 h-screen ' . (($isToggle) ? ' px-4 ' : ' ')
     ])
 }}
 >

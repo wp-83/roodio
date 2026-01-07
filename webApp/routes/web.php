@@ -63,7 +63,7 @@ Route::prefix('threads')->middleware('auth')->group(function () {
 
 // Dev Route Preview
 Route::get('/awikwok', function () {
-    return view('components.iconButton');
+    return view('components.navbar');
 })->name('awikwok');
 
 // Route::get('/pageDevelop', function () {
