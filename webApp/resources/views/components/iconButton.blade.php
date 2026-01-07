@@ -2,7 +2,7 @@
 
 @props([
     'mood' => 'happy',
-    'type' => 'hamburger',
+    'type',
     'arrowOrientation' => 'left',
     'isActive' => false
 ])
