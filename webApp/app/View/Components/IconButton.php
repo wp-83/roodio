@@ -21,6 +21,6 @@ class IconButton extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.icon-button');
+        return view('components.iconButton');
     }
 }

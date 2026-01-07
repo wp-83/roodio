@@ -62,29 +62,25 @@ button:focus {
 }
 
 @layer utilities {
-  @keyframes changingWidth {
-    0% {
-      width: 2rem;        
-      opacity: 1;
-      transform: scaleY(1);
-    }
-
-    100% {
-      width: 4rem;   
-      opacity: 0.75;
-      transform: scaleY(0.5);
-    }
-  }
-
   .expandWidth {
-    animation: changingWidth .5s linear forwards;
+    width: 4rem;
+    opacity: 0.75;
+    transform: scaleY(0.5);
   }
 
   .collapseWidth {
-    animation: changingWidth .5s linear reverse;
+    width: 2rem;
+    opacity: 1;
+    transform: scaleY(1);
   }
 
-  /* top-1/2 left-1/10 w-7 h-7 -translate-y-1/2 */
+  .hamburger-line {
+    transition:
+      width .35s linear,
+      opacity .35s linear,
+      transform .35s linear;
+  }
+
   @keyframes bouncyMusicNot {
     0% {
       top: -40%;
@@ -109,6 +105,6 @@ button:focus {
   }
 
   .bouncyNote {
-    animation: bouncyMusicNot 1s linear forwards;
+    animation: bouncyMusicNot .75s linear forwards;
   }
 }

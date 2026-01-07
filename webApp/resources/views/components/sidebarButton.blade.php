@@ -115,7 +115,7 @@
                 ])
             }}
             >
-                <img src="{{ asset('assets/logo-no-text.png') }}" alt="logo" class='w-9 p-1 bg-primary-70 rounded-full lg:w-10'>
+                <img src="{{ asset('assets/logo/logo-no-text.png') }}" alt="logo" class='w-9 p-1 bg-primary-70 rounded-full lg:w-10'>
             </div>
             <div 
             {{ 
@@ -162,7 +162,7 @@
                 ])
             }}
             >
-                <img src="{{ asset('assets/logo-no-text.png') }}" alt="logo" class='w-6 p-1 bg-primary-70 rounded-full'>
+                <img src="{{ asset('assets/logo/logo-no-text.png') }}" alt="logo" class='w-6 p-1 bg-primary-70 rounded-full'>
             </div>
         </div>
     @endif

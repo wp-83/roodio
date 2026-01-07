@@ -10,7 +10,7 @@
 
 
 @section('mainImage')
-    <img src="{{ asset('assets/logo-with-text.png') }}" alt="logo" class='w-20 drop-shadow-sm drop-shadow-primary-50'>
+    <img src="{{ asset('assets/logo/logo-with-text.png') }}" alt="logo" class='w-20 drop-shadow-sm drop-shadow-primary-50'>
 @endsection
 
 
