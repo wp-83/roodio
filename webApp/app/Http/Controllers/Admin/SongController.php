@@ -16,7 +16,10 @@ class SongController extends Controller
      */
     public function index()
     {
-        return view('admin.songs.index');
+        $songs = Songs::with('user.userDetail')
+            ->orderByDesc('created_at')
+            ->get();
+        return view('admin.songs.index', compact('songs'));
     }
 
     /**
@@ -51,12 +54,6 @@ class SongController extends Controller
         ]);
 
         $song = $request->file('song');
-
-        try {
-            $path = Storage::disk('azure')->putFile('songs', $song);
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()]); // Ini akan memunculkan alasan asli dari Azure
-        }
 
         $path = Storage::disk('azure')->put(
             'songs',
@@ -98,24 +95,36 @@ class SongController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Songs $song)
     {
-        //
+        return view('admin.songs.edit', compact('song'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Songs $song)
     {
-        //
+        $validated = $request->validate([
+            'title'         => 'required|max:255',
+            'lyrics'        => 'required',
+            'artist'        => 'required|max:255',
+            'genre'         => 'required|max:255',
+            'publisher'     => 'required|max:255',
+            'datePublished' => 'required|date',
+        ]);
+
+        $validated['userId'] = Auth::id();
+        Songs::update($validated);
+        return redirect()->route('admin.songs.index')->with('success', 'Song updated successfully');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Songs $song)
     {
-        //
+        $song->delete();
+        return redirect()->route('admin.songs.index')->with('success', 'Song deleted successfully');
     }
 }

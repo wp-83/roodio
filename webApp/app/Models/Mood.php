@@ -3,12 +3,18 @@ namespace App\Models;
 
 use DB;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Mood extends Model
 {
     protected $fillable  = ['type'];
     public $incrementing = false;
     protected $keyType   = 'string';
+
+    public function songs(): HasOne
+    {
+        return $this->hasOne(Songs::class);
+    }
 
     protected static function booted()
     {
