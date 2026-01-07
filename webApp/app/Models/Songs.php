@@ -25,12 +25,12 @@ class Songs extends Model
 
     public function mood(): BelongsTo
     {
-        return $this->belongsTo(Mood::class);
+        return $this->belongsTo(Mood::class, );
     }
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'userId', 'id');
     }
 
     protected static function booted()
