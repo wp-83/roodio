@@ -24,6 +24,7 @@ Route::prefix('admin/songs')->middleware(['auth', 'role:1'])->group(function () 
 Route::prefix('auth')->group(function () {
     Route::get('/login', [AuthController::class, 'loginView'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 
     Route::get('/user-verification', [AuthController::class, 'userVerificationView'])->name('user.verification');
     Route::post('/user-verification', [AuthController::class, 'userVerification'])->name('auth.user.verification');

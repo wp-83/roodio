@@ -32,5 +32,12 @@
     @empty
     <div class="">Yeay santai dulu lagi kosong</div>
     @endforelse
+
+    <form action="{{ route('auth.logout') }}" method="post">
+        @csrf
+        <button type="submit" class="nav-link w-100 text-start">
+            <i class="bi bi-door-open"></i> Logout
+        </button>
+    </form>
 </body>
 </html>
