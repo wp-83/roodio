@@ -29,7 +29,7 @@ class AuthController extends Controller
             return redirect()->route('welcome');
         }
 
-        return back()->with('failed', 'Failed to login!');
+        return back()->with('failed', 'username or password incorrect!');
     }
 
     public function userVerificationView()
