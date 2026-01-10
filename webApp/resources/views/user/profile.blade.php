@@ -20,7 +20,7 @@
                 <!-- Image for mobile view-->
                 <div class="block lg:hidden rounded-full shadow-xl mx-auto -mt-16 h-48 w-48 bg-cover bg-center"
                     style="background-image: url('{{ asset('assets/defaults/user.png') }}')"></div>
-                <h1 class="text-3xl font-bold pt-8 lg:pt-0">Your Name</h1>
+                <h1 class="text-3xl font-bold pt-8 lg:pt-0">{{ $user->userDetail->fullname }}</h1>
                 <div class="mx-auto lg:mx-0 w-4/5 pt-3 border-b-2 border-green-500 opacity-25"></div>
                 <p class="pt-4 text-base font-bold flex items-center justify-center lg:justify-start">
                     <svg class="h-4 fill-current text-green-700 pr-4" xmlns="http://www.w3.org/2000/svg"

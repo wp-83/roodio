@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 class userDetails extends Model
 {
-    protected $fillable  = ['fullname', 'email', 'dateOfBirth', 'country', 'gender', 'userId'];
+    protected $fillable  = ['fullname', 'email', 'dateOfBirth', 'countryId', 'gender', 'userId'];
     public $incrementing = false;
     protected $keyType   = 'string';
 
