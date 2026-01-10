@@ -4,20 +4,28 @@ use App\Http\Controllers\Admin\SongController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MoodController;
 use App\Http\Controllers\ThreadController;
+use App\Http\Controllers\User\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('errors.503');
 })->name('welcome');
 
-// Song Route
-Route::prefix('admin/songs')->middleware(['auth', 'role:1'])->group(function () {
-    Route::get('', [SongController::class, 'index'])->name('admin.songs.index');
-    Route::get('/create', [SongController::class, 'create'])->name('admin.songs.create');
-    Route::post('/create', [SongController::class, 'store'])->name('admin.songs.store');
-    Route::get('/{song}/edit', [SongController::class, 'edit'])->name('admin.songs.edit');
-    Route::post('/{song}', [SongController::class, 'update'])->name('admin.songs.update');
-    Route::delete('/{song}', [SongController::class, 'destroy'])->name('admin.songs.destroy');
+// Admin Route
+Route::prefix('admin')->middleware(['auth', 'role:1'])->group(function () {
+    Route::prefix('songs')->group(function () {
+        Route::get('', [SongController::class, 'index'])->name('admin.songs.index');
+        Route::get('/create', [SongController::class, 'create'])->name('admin.songs.create');
+        Route::post('/create', [SongController::class, 'store'])->name('admin.songs.store');
+        Route::get('/{song}/edit', [SongController::class, 'edit'])->name('admin.songs.edit');
+        Route::post('/{song}', [SongController::class, 'update'])->name('admin.songs.update');
+        Route::delete('/{song}', [SongController::class, 'destroy'])->name('admin.songs.destroy');
+    });
+});
+
+// User Route
+Route::prefix('user')->middleware(['auth', 'role:0'])->group(function () {
+    Route::get('profile', [ProfileController::class, 'index'])->name('user.profile');
 });
 
 // Auth Route
