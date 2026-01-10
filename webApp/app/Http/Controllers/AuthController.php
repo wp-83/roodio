@@ -140,11 +140,13 @@ class AuthController extends Controller
 
         $datas                = session('register.step1');
         $datas['dateOfBirth'] = $datas['dob'];
+        $datas['countryId']   = $datas['country'];
         $datas['dateOfBirth'] = Carbon::createFromFormat(
             'm/d/Y',
             $datas['dateOfBirth']
         )->format('Y-m-d');
         unset($datas['dob']);
+        unset($datas['country']);
         $datas['userId'] = $user->id;
 
         userDetails::create($datas);
