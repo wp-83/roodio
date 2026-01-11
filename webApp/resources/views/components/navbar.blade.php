@@ -2,9 +2,9 @@
 
 {{-- <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script> --}}
 
-{{-- @props([
+@props([
 
-]) --}}
+])
 
 <html>
 <head>
@@ -47,7 +47,7 @@
                     </div>
                 </div>
                 <div class='flex flex-row gap-1.75 items-center justify-between w-max'>
-                    <div class='flex-col text-white hidden lg:flex'>
+                    <div class='flex-col text-white hidden md:flex'>
                         <p class='text-small'>{{ Str::limit('Andi Zulfikar', 12) }}</p>
                         <p class='text-micro'>{{ '@' . Str::limit('andikecebadai999', 9) }}</p>
                     </div>
