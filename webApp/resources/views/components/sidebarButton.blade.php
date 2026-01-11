@@ -1,7 +1,7 @@
 @props([
     'route' => 'welcome',
     'icon' => 'home',
-    'isToggle' => true,
+    'isToggle' => false,
     'mood' => 'happy',
     'isActive' => false,
     'label' => 'label',
@@ -120,7 +120,7 @@
             <div 
             {{ 
                 $attributes->merge([
-                    'class' => 'bg-linear-to-r w-max h-max rounded-md pl-29 px-3 py-1 absolute z-3 top-1/2 left-0 -translate-x-full -translate-y-1/2 transition-transform duration-350 group-hover:translate-x-0 lg:pl-33 ' . $contentStyle[$mood] . ' '
+                    'class' => 'bg-linear-to-r w-max h-max rounded-md pl-29 px-3 py-1 absolute z-3 top-1/2 left-0 -translate-x-full -translate-y-1/2 transition-transform duration-350 group-hover:translate-x-0 lg:pl-33 invisible group-hover:visible ' . $contentStyle[$mood] . ' '
                 ])
             }}
             >
