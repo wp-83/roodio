@@ -44,12 +44,12 @@
 
 <div class='w-max h-max'>
     @if ($type === $iconTypes[0])
-        <div {{ $attributes->merge(["class" => 'flex flex-col gap-5 w-8 h-8 group rounded-full relative '. $backgroundHover[$mood] . ' ']) }}>
+        <div {{ $attributes->merge(["class" => 'flex flex-col gap-5 w-8 h-8 group rounded-full relative border border-primary-50 '. $backgroundHover[$mood] . ' ']) }}>
             <div {{ $attributes->merge(["class" => 'w-5 h-0.5 absolute top-1/2 left-1/2 -translate-1/2 rotate-45 rounded-2xl '. $elementColor[$mood] . ' ']) }}></div>
             <div {{ $attributes->merge(["class" => 'w-5 h-0.5 absolute top-1/2 left-1/2 -translate-1/2 -rotate-45 rounded-2xl '. $elementColor[$mood] . ' ']) }}></div>
         </div>
     @elseif ($type === $iconTypes[1])
-        <div {{ $attributes->merge(["class" => 'flex flex-col justify-center items-center gap-5 w-8 h-8 bg-secondary-happy-20 rounded-full relative ' . $backgroundHover[$mood] . ' ' . $arrowRotate[$arrowOrientation] . ' ']) }}>
+        <div {{ $attributes->merge(["class" => 'flex flex-col justify-center items-center gap-5 w-8 h-8 rounded-full relative ' . $backgroundHover[$mood] . ' ' . $elementColor[$mood] . ' ' . $arrowRotate[$arrowOrientation] . ' ']) }}>
             <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">        
             <!-- Uploaded to: SVG Repo, www.svgrepo.com, Transformed by: SVG Repo Mixer Tools -->
             <svg width="1.25rem" height="2.5rem" viewBox="0 -6.5 38 38" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="{{ $elementCodeColor[$mood] }}">
@@ -69,7 +69,7 @@
             @endfor
         </div>
     @elseif ($type === $iconTypes[3])
-        <div class='flex flex-col items-center justify-center gap-2 py-1 w-max h-max relative cursor-pointer ' x-data="{ active: false }" x-on:click="active = !active">
+        <div class='flex flex-col items-center justify-center gap-2 py-1 w-max h-max relative cursor-pointer z-10 ' x-data="{ active: false }" x-on:click="active = !active">
             @for($i = 0; $i < 3; $i++)
                 <div {{ $attributes->merge(["class" =>  $elementColor[$mood] . ' w-8 h-1 rounded-md hamburger-line ']) }} :class="active ? 'expandWidth' : 'collapseWidth'"></div>
             @endfor

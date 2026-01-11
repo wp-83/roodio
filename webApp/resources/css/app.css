@@ -46,7 +46,7 @@ button:focus {
     max-width: 2560px;
     min-height: 100dvh;
     overflow-x: hidden;
-    @apply bg-primary-100;
+    @apply bg-primary-100 mx-auto;
   }
 
   .datepicker-picker {
