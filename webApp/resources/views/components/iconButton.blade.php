@@ -1,13 +1,13 @@
-@vite(['resources/css/app.css', 'resources/js/app.js'])
-
 @props([
-    'mood' => 'happy',
     'type',
     'arrowOrientation' => 'left'
 ])
 
 
 @php
+    // this part must be removed when page is ready
+    $mood = 'relaxed';
+
     $iconTypes = [
         'cross', 'arrow', 'kebab', 'hamburger'
     ];
@@ -42,7 +42,7 @@
 @endphp
 
 
-<div class='w-max h-max'>
+<div class='w-max h-max cursor-pointer'>
     @if ($type === $iconTypes[0])
         <div {{ $attributes->merge(["class" => 'flex flex-col gap-5 w-8 h-8 group rounded-full relative border border-primary-50 '. $backgroundHover[$mood] . ' ']) }}>
             <div {{ $attributes->merge(["class" => 'w-5 h-0.5 absolute top-1/2 left-1/2 -translate-1/2 rotate-45 rounded-2xl '. $elementColor[$mood] . ' ']) }}></div>
