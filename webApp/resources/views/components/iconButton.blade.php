@@ -69,11 +69,11 @@
             @endfor
         </div>
     @elseif ($type === $iconTypes[3])
-        <div class='flex flex-col items-center justify-center gap-2 py-1 w-max h-max relative cursor-pointer z-10' id='hamburgerIcon'>
+        <div class='flex flex-col items-center justify-center gap-2 py-1 w-max h-max relative cursor-pointer z-10' id='hamburgerBtn'>
             @for($i = 0; $i < 3; $i++)
-                <div {{ $attributes->merge(["class" =>  $elementColor[$mood] . ' w-8 h-1 rounded-md hamburger-line ']) }}></div>
+                <div {{ $attributes->merge(["class" =>  $elementColor[$mood] . ' w-8 h-1 rounded-md hamburger-line ']) }} id='hamburgerLine'></div>
             @endfor
-            <div {{ $attributes->merge(["class" => 'absolute w-7 h-7 ']) }}>
+            <div {{ $attributes->merge(["class" => 'absolute w-7 h-7 ']) }} id='musicNote'>
                 <img src="{{ asset('assets/icons/music-notes.svg') }}" alt="music-notes">
             </div>
         </div>
