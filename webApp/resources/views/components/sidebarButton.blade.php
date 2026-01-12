@@ -89,7 +89,7 @@
     <div class="relative font-secondaryAndButton" id='notToggleSidebar'>
         <div
             {{ $attributes->merge([
-                'class' => 'w-18 h-18 p-3 relative z-10 flex flex-col items-center justify-center group-hover:border-y-2 duration-100 lg:w-20 lg:h-20 ' . $iconContainerStyle[$mood] . ' ' . (($isActive) ? $iconContainerActiveStyle[$mood] . ' border-r-4' : ' bg-primary-85')
+                'class' => 'w-18 h-18 p-3 relative z-10 flex flex-col items-center justify-center group-hover:border-y-2 duration-100 lg:w-20 lg:h-20 ' . $iconContainerStyle[$mood] . ' ' . (($isActive) ? $iconContainerActiveStyle[$mood] . ' border-r-4' : ' bg-primary-70')
             ]) }}
         >
             <div 
