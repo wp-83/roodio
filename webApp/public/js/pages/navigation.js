@@ -38,3 +38,83 @@ deleteSearchIcon.addEventListener('mousedown', (e) => {
         searchBar.focus();
     }, 0);
 });
+
+// Hamburger and Sidebar functionality
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+const hamburgerLine = hamburgerBtn.querySelectorAll('#hamburgerLine');
+const musicNote = hamburgerBtn.querySelector('#musicNote');
+const sidebar = document.querySelector('#sidebar');
+const notToggleSidebarBtn = sidebar.querySelectorAll('#notToggleSidebar');
+const toggleSidebarBtn = sidebar.querySelectorAll('#toggleSidebar');
+
+// console.log(toggleSidebarBtn);
+
+// set music note invisible
+document.addEventListener('DOMContentLoaded', (e) => {
+    e.preventDefault();
+    musicNote.classList.add('invisible');
+})
+
+// hamburger button interaction
+hamburgerBtn.addEventListener('click', (e) => {
+    //prevent default browser behaviour
+    e.preventDefault();
+
+    // hamburger animation
+    hamburgerLine.forEach(h => {
+        if (h.classList.contains('expandWidth')) {
+            h.classList.add('collapseWidth');
+            h.classList.remove('expandWidth');
+        } else {
+            h.classList.add('expandWidth');
+            h.classList.remove('collapseWidth');
+        }
+    });
+
+    // visibility animation of music note
+    if (musicNote.classList.contains('invisible')){
+        musicNote.classList.remove('invisible');
+    } else {
+        musicNote.classList.add('invisible');
+    }
+    
+    // music note animation
+    musicNote.classList.toggle('bouncyNote');
+
+    // open sidebar when hamburger expand
+    toggleSidebarBtn.forEach(btn => {
+        btn.classList.toggle('hidden');
+    });
+
+    // close sidebar shortcut icon when hamburger shrink
+    notToggleSidebarBtn.forEach(btn => {
+        btn.classList.toggle('hidden');
+    });
+
+    // give special style for sidebar container
+    if (!toggleSidebarBtn[0].classList.contains('hidden')){
+        sidebar.classList.add('pt-5', 'px-3');
+    } else {
+        sidebar.classList.remove('pt-5', 'px-3');
+    }
+});
+
+
+        // <div class='flex flex-col items-center justify-center gap-2 py-1 w-max h-max relative cursor-pointer z-10 ' x-data="{ active: false }" x-on:click="active = !active">
+        //     @for($i = 0; $i < 3; $i++)
+        //         <div {{ $attributes->merge(["class" =>  $elementColor[$mood] . ' w-8 h-1 rounded-md hamburger-line ']) }} :class="active ? 'expandWidth' : 'collapseWidth'"></div>
+        //     @endfor
+        //     <div {{ $attributes->merge(["class" => 'absolute w-7 h-7 ']) }} :class="active ? 'bouncyNote' : 'invisible'">
+        //         <img src="{{ asset('assets/icons/music-notes.svg') }}" alt="music-notes">
+        //     </div>
+        // </div>
+
+
+
+        // sidebar
+        // <div
+// {{ 
+//     $attributes->merge([
+//         'class' => 'flex flex-col gap-5 w-fit bg-primary-85 h-full pt-2 ' . (($isToggle) ? ' px-4 ' : ' ')
+//     ])
+// }}
