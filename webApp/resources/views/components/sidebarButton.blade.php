@@ -127,7 +127,7 @@
             <p>{{ $content }}</p>
         </div>
     </div>
-    <div class='relative w-max font-secondaryAndButton hidden' id='notToggleSidebar'>
+    <div class='relative w-max font-secondaryAndButton hidden' id='toggleSidebar'>
         <div class='h-max flex flex-row relative'>
             <div
             {{ 
