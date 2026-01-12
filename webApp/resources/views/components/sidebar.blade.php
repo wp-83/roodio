@@ -11,7 +11,7 @@
     $attributes->merge([
         'class' => 'flex flex-col gap-5 w-fit bg-primary-70 h-full pt-2 '
     ])
-}} id='sidebarBtn'
+}} id='sidebar'
 >
     <x-sidebarButton mood="{{ $mood }}" icon='home' label='Home' content="Let's play the music!"></x-sidebarButton>
     <x-sidebarButton mood="{{ $mood }}" icon='forum' label='Forum' content="Be part of the discussion!"></x-sidebarButton>
