@@ -36,7 +36,7 @@
     <div class='flex flex-row items-center px-2 py-0.5 h-8 text-small rounded-full placeholder:text-micro placeholder:italic bg-shadedOfGray-10 hover:bg-white focus-within:bg-white ease-in-out duration-125 md:text-body-size md:placeholder:text-small md:h-9.25 group'>
         <img src="{{ asset('assets/icons/search.svg') }}" alt="search" class='w-8 h-8 pr-1 mr-2 border-r-2 border-primary-70'>
         <input type="text" autocomplete="off" id='search' placeholder='Search songs, artist, lyrics' class='w-full pr-2'>
-        <x-iconButton type='cross' mood='relaxed' style='zoom:0.8;' class='invisible group-focus-within:visible'></x-iconButton>
+        <x-iconButton type='cross' mood='relaxed' style='zoom:0.8;' class='invisible group-focus-within:visible' id='searchClose'></x-iconButton>
     </div>
 @else
     <div class='flex flex-col p-1 h-max mb-6 w-full'>
