@@ -22,7 +22,12 @@ return new class extends Migration
             $table->string('fullname', 255);
             $table->string('email', 255)->unique();
             $table->date('dateOfBirth');
-            $table->string('country', 255);
+            $table->char('countryId', 2);
+            $table->foreign('countryId')
+                ->references('id')
+                ->on('regions')
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
             $table->boolean('gender')->default(null);
             $table->string('profilePhoto')->nullable();
             $table->timestamp('email_verified_at')->nullable();

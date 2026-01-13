@@ -3,6 +3,8 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
@@ -21,6 +23,8 @@ class User extends Authenticatable
         'username',
         'password',
     ];
+
+    protected $primaryKey = 'id';
 
     public $incrementing = false;
     protected $keyType   = 'string';
@@ -46,6 +50,16 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password'          => 'hashed',
         ];
+    }
+
+    public function songs(): HasMany
+    {
+        return $this->hasMany(Songs::class, 'userId');
+    }
+
+    public function userDetail(): HasOne
+    {
+        return $this->hasOne(userDetails::class, 'userId', 'id');
     }
 
     protected static function booted()
