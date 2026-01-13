@@ -97,8 +97,22 @@ hamburgerBtn.addEventListener('click', (e) => {
     } else {
         sidebar.classList.remove('pt-5', 'px-3');
     }
+
+    // sidebar when < 768px view
+    if(window.innerWidth < 768){
+        sidebar.classList.toggle('translate-x-0', 'z-5');
+    }
 });
 
+window.addEventListener('resize', (e) => {
+    e.preventDefault();
+
+    if(window.innerWidth < 768){
+        sidebar.classList.add('absolute');
+    } else {
+        sidebar.classList.remove('absolute');
+    }
+});
 
         // <div class='flex flex-col items-center justify-center gap-2 py-1 w-max h-max relative cursor-pointer z-10 ' x-data="{ active: false }" x-on:click="active = !active">
         //     @for($i = 0; $i < 3; $i++)

@@ -9,7 +9,7 @@
 <div
 {{ 
     $attributes->merge([
-        'class' => 'flex flex-col gap-5 w-fit bg-primary-70 h-full pt-2 '
+        'class' => 'flex flex-col gap-5 w-fit bg-primary-70 h-full pt-2 -translate-x-full md:translate-x-0 '
     ])
 }} id='sidebar'
 >
