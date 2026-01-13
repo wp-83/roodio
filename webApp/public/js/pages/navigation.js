@@ -39,96 +39,101 @@ deleteSearchIcon.addEventListener('mousedown', (e) => {
     }, 0);
 });
 
-// Hamburger and Sidebar functionality
+// sidebar elements
 const hamburgerBtn = document.getElementById('hamburgerBtn');
-const hamburgerLine = hamburgerBtn.querySelectorAll('#hamburgerLine');
+const hamburgerLines = hamburgerBtn.querySelectorAll('#hamburgerLine');
 const musicNote = hamburgerBtn.querySelector('#musicNote');
-const sidebar = document.querySelector('#sidebar');
-const notToggleSidebarBtn = sidebar.querySelectorAll('#notToggleSidebar');
-const toggleSidebarBtn = sidebar.querySelectorAll('#toggleSidebar');
 
-// console.log(toggleSidebarBtn);
+const sidebar = document.getElementById('sidebar');
+const notToggleSidebarBtns = sidebar.querySelectorAll('#notToggleSidebar');
+const toggleSidebarBtns = sidebar.querySelectorAll('#toggleSidebar');
 
-// set music note invisible
-document.addEventListener('DOMContentLoaded', (e) => {
-    e.preventDefault();
+let isSidebarOpen = false;
+const MOBILE_WIDTH = 768;
+
+// initial animation
+document.addEventListener('DOMContentLoaded', () => {
     musicNote.classList.add('invisible');
-})
+    handleResponsive();
+});
 
-// hamburger button interaction
-hamburgerBtn.addEventListener('click', (e) => {
-    //prevent default browser behaviour
-    e.preventDefault();
+// open sidebar function
+function openSidebar() {
+    isSidebarOpen = true;
 
     // hamburger animation
-    hamburgerLine.forEach(h => {
-        if (h.classList.contains('expandWidth')) {
-            h.classList.add('collapseWidth');
-            h.classList.remove('expandWidth');
-        } else {
-            h.classList.add('expandWidth');
-            h.classList.remove('collapseWidth');
-        }
+    hamburgerLines.forEach(h => {
+        h.classList.add('expandWidth');
+        h.classList.remove('collapseWidth');
     });
 
-    // visibility animation of music note
-    if (musicNote.classList.contains('invisible')){
-        musicNote.classList.remove('invisible');
-    } else {
-        musicNote.classList.add('invisible');
-    }
-    
-    // music note animation
-    musicNote.classList.toggle('bouncyNote');
+    // music note
+    musicNote.classList.remove('invisible');
+    musicNote.classList.add('bouncyNote');
 
-    // open sidebar when hamburger expand
-    toggleSidebarBtn.forEach(btn => {
-        btn.classList.toggle('hidden');
+    // sidebar content
+    toggleSidebarBtns.forEach(btn => btn.classList.remove('hidden'));
+    notToggleSidebarBtns.forEach(btn => btn.classList.add('hidden'));
+
+    sidebar.classList.add('pt-5', 'px-3');
+
+    // mobile behavior
+    if (isMobile()) {
+        sidebar.classList.add('translate-x-0', 'z-5');
+        sidebar.classList.remove('-translate-x-full');
+    }
+}
+
+// close sidebar function
+function closeSidebar() {
+    isSidebarOpen = false;
+
+    // hamburger animation
+    hamburgerLines.forEach(h => {
+        h.classList.add('collapseWidth');
+        h.classList.remove('expandWidth');
     });
 
-    // close sidebar shortcut icon when hamburger shrink
-    notToggleSidebarBtn.forEach(btn => {
-        btn.classList.toggle('hidden');
-    });
+    // music note
+    musicNote.classList.add('invisible');
+    musicNote.classList.remove('bouncyNote');
 
-    // give special style for sidebar container
-    if (!toggleSidebarBtn[0].classList.contains('hidden')){
-        sidebar.classList.add('pt-5', 'px-3');
-    } else {
-        sidebar.classList.remove('pt-5', 'px-3');
+    // sidebar content
+    toggleSidebarBtns.forEach(btn => btn.classList.add('hidden'));
+    notToggleSidebarBtns.forEach(btn => btn.classList.remove('hidden'));
+
+    sidebar.classList.remove('pt-5', 'px-3');
+
+    // mobile behavior
+    if (isMobile()) {
+        sidebar.classList.add('-translate-x-full');
+        sidebar.classList.remove('translate-x-0', 'z-5');
     }
+}
 
-    // sidebar when < 768px view
-    if(window.innerWidth < 768){
-        sidebar.classList.toggle('translate-x-0', 'z-5');
-    }
-});
+// helper for checking window width size
+function isMobile() {
+    return window.innerWidth < MOBILE_WIDTH;
+}
 
-window.addEventListener('resize', (e) => {
-    e.preventDefault();
-
-    if(window.innerWidth < 768){
+// responsive behaviour
+function handleResponsive() {
+    if (isMobile()) {
         sidebar.classList.add('absolute');
+
+        if (!isSidebarOpen) {
+            sidebar.classList.add('-translate-x-full');
+            sidebar.classList.remove('translate-x-0', 'z-5');
+        }
     } else {
-        sidebar.classList.remove('absolute');
+        sidebar.classList.remove('absolute', '-translate-x-full');
+        sidebar.classList.add('translate-x-0');
     }
+}
+
+// trigger function
+hamburgerBtn.addEventListener('click', () => {
+    isSidebarOpen ? closeSidebar() : openSidebar();
 });
 
-        // <div class='flex flex-col items-center justify-center gap-2 py-1 w-max h-max relative cursor-pointer z-10 ' x-data="{ active: false }" x-on:click="active = !active">
-        //     @for($i = 0; $i < 3; $i++)
-        //         <div {{ $attributes->merge(["class" =>  $elementColor[$mood] . ' w-8 h-1 rounded-md hamburger-line ']) }} :class="active ? 'expandWidth' : 'collapseWidth'"></div>
-        //     @endfor
-        //     <div {{ $attributes->merge(["class" => 'absolute w-7 h-7 ']) }} :class="active ? 'bouncyNote' : 'invisible'">
-        //         <img src="{{ asset('assets/icons/music-notes.svg') }}" alt="music-notes">
-        //     </div>
-        // </div>
-
-
-
-        // sidebar
-        // <div
-// {{ 
-//     $attributes->merge([
-//         'class' => 'flex flex-col gap-5 w-fit bg-primary-85 h-full pt-2 ' . (($isToggle) ? ' px-4 ' : ' ')
-//     ])
-// }}
+window.addEventListener('resize', handleResponsive);
