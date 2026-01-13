@@ -38,16 +38,16 @@
                 </a>
             </div>
         </div>
-        <div class='w-xl h-max invisible lg:visible relative group'>
+        <div class='w-xl h-max invisible lg:visible relative transition-transform duration-500 ease-out group' id='searchbar'>
             <x-input type='search' id='search' placeholder='Search songs, artists, lyrics'></x-input>
-            <div class='absolute top-1/2 right-4 flex flex-row -translate-y-1/2 opacity-50 group-focus-within:hidden'>
+            <div class='absolute top-1/2 right-4 flex flex-row -translate-y-1/2 opacity-50 group-focus-within:hidden' id='searchContent'>
                 <div class='border-[0.5px] border-shadedOfGray-50 bg-shadedOfGray-20 font-secondaryAndButton px-1 py-[0.25px] rounded-md text-micro text-shadedOfGray-85'>CTRL</div>
                 <p class='mx-1'>+</p>
                 <div class='border-[0.5px] border-shadedOfGray-50 bg-shadedOfGray-20 font-secondaryAndButton px-1 py-[0.25px] rounded-md text-micro text-shadedOfGray-85'>K</div>
             </div>
         </div>
         <div class=' flex flex-row items-center justify-end gap-5'>
-            <div class='w-8 h-8 lg:hidden'>
+            <div class='w-8 h-8 lg:hidden cursor-pointer' id='searchIcon'>
                 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 
                 <!-- Uploaded to: SVG Repo, www.svgrepo.com, Transformed by: SVG Repo Mixer Tools -->

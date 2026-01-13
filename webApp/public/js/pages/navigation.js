@@ -1,12 +1,11 @@
+const searchInput = document.getElementById('search');
+
 // shortcut for search bar in navbar
 document.addEventListener('keydown', (e) => {
     // Check for Ctrl key (or Cmd key on macOS) and the K key
     if ((e.ctrlKey || e.metaKey) && (e.key === 'K' || e.key === 'k')) {
         // Prevent the default browser behavior for Ctrl+K (usually bookmarking)
         e.preventDefault();
-
-        // Get the search input element by its ID
-        const searchInput = document.getElementById('search');
 
         // If the input element exists, focus it
         if (searchInput) {
@@ -16,7 +15,6 @@ document.addEventListener('keydown', (e) => {
 
     // Optional: Add an 'Escape' key listener to blur the input
     if (e.key === 'Escape') {
-        const searchInput = document.getElementById('search');
         if (searchInput) {
             searchInput.blur();
         }
@@ -37,6 +35,55 @@ deleteSearchIcon.addEventListener('mousedown', (e) => {
     setTimeout(() => {
         searchBar.focus();
     }, 0);
+});
+
+// search bar icon behaviour
+const searchbar = document.getElementById('searchbar');
+const searchIcon = document.getElementById('searchIcon');
+const searchAttr = searchbar.querySelector('#searchContent');
+let isSearchBarOpened = false;
+
+// open the search bar responsive
+function openSearchBar(){
+    isSearchBarOpened = true;
+    searchbar.classList.add("absolute", 'z-10', 'top-[10%]', 'left-1/2', '-translate-x-1/2', 'w-sm');
+    searchAttr.classList.add('hidden');
+    searchbar.classList.remove('invisible', 'relative', 'w-xl', 'h-max');
+
+    searchInput.focus();
+};
+
+// close the search bar responsive
+function closeSearchBar(){
+    isSearchBarOpened = false;
+    searchbar.classList.add('-z-1');
+    searchbar.classList.add('invisible', 'w-xl', 'relative', 'h-max');
+    searchbar.classList.remove('z-10', 'top-[10%]', 'left-1/2', '-translate-x-1/2', 'w-sm');
+    searchbar.classList.remove('absolute', '-z-1');
+    searchAttr.classList.remove('hidden');
+};
+
+// search bar responsive trigger
+searchIcon.addEventListener('click', () => {
+    (isSearchBarOpened) ? closeSearchBar() : openSearchBar();
+});
+
+// document.addEventListener('click')
+document.addEventListener('click', (e) => {
+    if (!isSearchBarOpened) return;
+
+    const isClickInsideSearch =
+        searchbar.contains(e.target) ||
+        searchIcon.contains(e.target);
+
+    if (!isClickInsideSearch) {
+        closeSearchBar();
+    }
+});
+
+// back to the default style of searchbar after responsive behaviour
+window.addEventListener('resize', () => {
+    if(isSearchBarOpened && window.innerWidth >= 768) closeSearchBar();
 });
 
 // sidebar elements
