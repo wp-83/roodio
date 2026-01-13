@@ -19,6 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'register.step' => \App\Http\Middleware\EnsureRegistrationStep::class,
             'role'          => \App\Http\Middleware\RoleMidleware::class,
+            'forgot.step'   => \App\Http\Middleware\EnsureForgotPasswordStep::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

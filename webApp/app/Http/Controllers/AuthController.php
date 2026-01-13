@@ -39,13 +39,14 @@ class AuthController extends Controller
 
     public function userVerification()
     {
-        // the logic is not yet
 
+        session(['otp_forgot_passed' => true]);
         return redirect()->route('forgetPassword');
     }
 
     public function forgetPasswordView()
     {
+        session()->forget('otp_forgot_passed');
         return view('auth.forgetPassword');
     }
 

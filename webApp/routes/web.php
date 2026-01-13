@@ -5,7 +5,6 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MoodController;
 use App\Http\Controllers\ThreadController;
 use App\Http\Controllers\User\ProfileController;
-use App\Mail\EmailOtp;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -37,8 +36,11 @@ Route::prefix('auth')->group(function () {
 
     Route::get('/user-verification', [AuthController::class, 'userVerificationView'])->name('user.verification');
     Route::post('/user-verification', [AuthController::class, 'userVerification'])->name('auth.user.verification');
-    Route::get('/forget-pasword', [AuthController::class, 'forgetPasswordView'])->name('forgetPassword');
-    Route::post('/forget-password', [AuthController::class, 'forgetPassword'])->name('auth.forgetPassword');
+
+    Route::middleware('forgot.step')->group(function () {
+        Route::get('/forget-password', [AuthController::class, 'forgetPasswordView'])->name('forgetPassword');
+        Route::post('/forget-password', [AuthController::class, 'forgetPassword'])->name('auth.forgetPassword');
+    });
 
     Route::get('/sign-up', [AuthController::class, 'registerView'])->name('register');
     Route::post('/sign-up', [AuthController::class, 'register'])->name('auth.register');
@@ -80,9 +82,9 @@ Route::get('/awikwok', function () {
 //     return view('components.sidebar');
 // })->name('awokwok');
 
-Route::get('/test', function () {
-    Mail::to('william.pratama004@binus.ac.id')->send(
-        new EmailOtp(123456, 'Test User', 1)
-    );
-    dd('ok');
-});
+// Route::get('/test', function () {
+//     Mail::to('william.pratama004@binus.ac.id')->send(
+//         new EmailOtp(123456, 'Test User', 1)
+//     );
+//     dd('ok');
+// });
