@@ -71,9 +71,9 @@ Route::prefix('threads')->middleware('auth')->group(function () {
 // Route::post('/{threadId}/reaction', [ThreadController::class, 'react'])->name('thread.react');
 
 // Dev Route Preview
-// Route::get('/awikwok', function () {
-//     return view('components.navbar');
-// })->name('awikwok');
+Route::get('/awikwok', function () {
+    return view('layouts.main');
+})->name('awikwok');
 
 // Route::get('/pageDevelop', function () {
 //     return view('components.sidebar');

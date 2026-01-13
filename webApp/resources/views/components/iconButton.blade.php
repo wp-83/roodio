@@ -1,13 +1,13 @@
-@vite(['resources/css/app.css', 'resources/js/app.js'])
-
 @props([
-    'mood' => 'happy',
     'type',
     'arrowOrientation' => 'left'
 ])
 
 
 @php
+    // this part must be removed when page is ready
+    $mood = 'relaxed';
+
     $iconTypes = [
         'cross', 'arrow', 'kebab', 'hamburger'
     ];
@@ -42,7 +42,7 @@
 @endphp
 
 
-<div class='w-max h-max'>
+<div class='w-max h-max cursor-pointer'>
     @if ($type === $iconTypes[0])
         <div {{ $attributes->merge(["class" => 'flex flex-col gap-5 w-8 h-8 group rounded-full relative border border-primary-50 '. $backgroundHover[$mood] . ' ']) }}>
             <div {{ $attributes->merge(["class" => 'w-5 h-0.5 absolute top-1/2 left-1/2 -translate-1/2 rotate-45 rounded-2xl '. $elementColor[$mood] . ' ']) }}></div>
@@ -69,11 +69,11 @@
             @endfor
         </div>
     @elseif ($type === $iconTypes[3])
-        <div class='flex flex-col items-center justify-center gap-2 py-1 w-max h-max relative cursor-pointer z-10 ' x-data="{ active: false }" x-on:click="active = !active">
+        <div class='flex flex-col items-center justify-center gap-2 py-1 w-max h-max relative cursor-pointer z-10' id='hamburgerBtn'>
             @for($i = 0; $i < 3; $i++)
-                <div {{ $attributes->merge(["class" =>  $elementColor[$mood] . ' w-8 h-1 rounded-md hamburger-line ']) }} :class="active ? 'expandWidth' : 'collapseWidth'"></div>
+                <div {{ $attributes->merge(["class" =>  $elementColor[$mood] . ' w-8 h-1 rounded-md hamburger-line ']) }} id='hamburgerLine'></div>
             @endfor
-            <div {{ $attributes->merge(["class" => 'absolute w-7 h-7 ']) }} :class="active ? 'bouncyNote' : 'invisible'">
+            <div {{ $attributes->merge(["class" => 'absolute w-7 h-7 ']) }} id='musicNote'>
                 <img src="{{ asset('assets/icons/music-notes.svg') }}" alt="music-notes">
             </div>
         </div>
