@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MoodController;
 use App\Http\Controllers\ThreadController;
 use App\Http\Controllers\User\ProfileController;
+use App\Mail\EmailOtp;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -78,3 +79,10 @@ Route::get('/awikwok', function () {
 // Route::get('/pageDevelop', function () {
 //     return view('components.sidebar');
 // })->name('awokwok');
+
+Route::get('/test', function () {
+    Mail::to('william.pratama004@binus.ac.id')->send(
+        new EmailOtp(123456, 'Test User', 1)
+    );
+    dd('ok');
+});
