@@ -4,6 +4,7 @@ namespace App\Livewire\User;
 use App\Models\Region;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rules\Password;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
 
@@ -19,6 +20,12 @@ class Profile extends Component
     public $gender;
     public $countryId;
     public $username;
+    public $newUsername;
+    public $confirmPassword;
+    public $currentPassword;
+    public $newPassword;
+    public $newPasswordConfirmation;
+    public $deleteConfirmationPassword;
 
     public array $originalData = [];
     public function uploadPhoto()
@@ -35,6 +42,8 @@ class Profile extends Component
         );
 
         $user->userDetail()->update(['profilePhoto' => $path]);
+
+        $this->dispatch(event: 'photo-updated');
 
         session()->flash('success', 'Image successfully uploaded.');
     }
@@ -58,6 +67,61 @@ class Profile extends Component
         ]);
 
         session()->flash('success', 'Profile updated successfully.');
+    }
+
+    public function updateUsername()
+    {
+        $this->validate([
+            'newUsername'     => 'required|max:25',
+            'confirmPassword' => 'required|current_password',
+        ]);
+
+        auth()->user()->update([
+            'username' => $this->newUsername,
+        ]);
+
+        $this->username = $this->newUsername;
+
+        $this->reset(['newUsername', 'confirmPassword']);
+
+        $this->dispatch('username-updated');
+
+        session()->flash('success', 'Username updated successfully.');
+    }
+
+    public function updatePassword()
+    {
+        $this->validate([
+            'currentPassword'         => 'required|current_password',
+            'newPassword'             => ['required',
+                'string',
+                'same:newPasswordConfirmation',
+                Password::min(8)->letters()->numbers()],
+            'newPasswordConfirmation' => 'required',
+        ]);
+
+        auth()->user()->update([
+            'password' => $this->newPassword,
+        ]);
+
+        $this->currentPassword = $this->newPassword;
+
+        $this->reset(['currentPassword', 'newPassword', 'newPasswordConfirmation']);
+
+        $this->dispatch('password-updated');
+
+        session()->flash('success', 'Password updated successfully.');
+    }
+
+    public function deleteAccount()
+    {
+        $this->validate([
+            'deleteConfirmationPassword' => 'required|current_password',
+        ]);
+
+        auth()->user()->delete();
+
+        return redirect()->route('auth.login');
     }
 
     public function mount()
