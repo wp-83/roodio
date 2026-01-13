@@ -29,7 +29,7 @@ class AuthController extends Controller
             return redirect()->route('welcome');
         }
 
-        return back()->with('failed', 'Failed to login!');
+        return back()->with('failed', 'username or password incorrect!');
     }
 
     public function userVerificationView()
@@ -140,14 +140,27 @@ class AuthController extends Controller
 
         $datas                = session('register.step1');
         $datas['dateOfBirth'] = $datas['dob'];
+        $datas['countryId']   = $datas['country'];
         $datas['dateOfBirth'] = Carbon::createFromFormat(
             'm/d/Y',
             $datas['dateOfBirth']
         )->format('Y-m-d');
         unset($datas['dob']);
+        unset($datas['country']);
         $datas['userId'] = $user->id;
 
         userDetails::create($datas);
+
+        return redirect()->route('login');
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
 
         return redirect()->route('login');
     }
