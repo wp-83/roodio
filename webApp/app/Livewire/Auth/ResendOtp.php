@@ -14,12 +14,20 @@ class ResendOtp extends Component
 
     public function mount()
     {
-        $validated = session('register.step1');
-
-        if ($validated) {
-            $this->email    = $validated['email'];
-            $this->fullname = $validated['fullname'];
-            $this->gender   = $validated['gender'];
+        if (session('register.step1')) {
+            $validated = session('register.step1');
+            if ($validated) {
+                $this->email    = $validated['email'];
+                $this->fullname = $validated['fullname'];
+                $this->gender   = $validated['gender'];
+            }
+        } else if (session('forgot.step1')) {
+            $validated = session('forgot.step1');
+            if ($validated) {
+                $this->email    = $validated['email'];
+                $this->fullname = '';
+                $this->gender   = 2;
+            }
         }
     }
 

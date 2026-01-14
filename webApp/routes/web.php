@@ -34,10 +34,15 @@ Route::prefix('auth')->group(function () {
     Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
     Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 
-    Route::get('/user-verification', [AuthController::class, 'userVerificationView'])->name('user.verification');
-    Route::post('/user-verification', [AuthController::class, 'userVerification'])->name('auth.user.verification');
+    Route::get('email-verification', [AuthController::class, 'emailVerificationView'])->name('emailVerification');
+    Route::post('email-verification', [AuthController::class, 'emailVerification'])->name('auth.emailVerification');
 
-    Route::middleware('forgot.step')->group(function () {
+    Route::middleware('forgot.step:otp')->group(function () {
+        Route::get('/user-verification', [AuthController::class, 'userVerificationView'])->name('user.verification');
+        Route::post('/user-verification', [AuthController::class, 'userVerification'])->name('auth.user.verification');
+    });
+
+    Route::middleware('forgot.step:forgot')->group(function () {
         Route::get('/forget-password', [AuthController::class, 'forgetPasswordView'])->name('forgetPassword');
         Route::post('/forget-password', [AuthController::class, 'forgetPassword'])->name('auth.forgetPassword');
     });
