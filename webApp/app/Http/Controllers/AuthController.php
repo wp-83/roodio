@@ -63,7 +63,7 @@ class AuthController extends Controller
         return view('auth.register', compact('regions'));
     }
 
-    public function register(Request $request, OtpController $otpController)
+    public function register(Request $request)
     {
         $validated = $request->validate([
             'fullname' => 'required|max:255',
@@ -75,15 +75,16 @@ class AuthController extends Controller
 
         session()->put('register.step1', $validated);
 
-        $otpController->send($validated['email'], $validated['fullname'], $validated['gender']);
-
         session(['user_verification_passed' => true]);
 
         return redirect()->route('register.validation');
     }
 
-    public function registerValidationView()
+    public function registerValidationView(OtpController $otpController)
     {
+        if (! session()->has('register.step1')) {
+            return redirect()->route('register');
+        }
         return view('auth.registerValidation');
     }
 
