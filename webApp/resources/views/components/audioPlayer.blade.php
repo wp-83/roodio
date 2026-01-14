@@ -118,7 +118,7 @@
             </div>
             <div class='flex-row hidden lg:flex gap-2'>
                 <div>
-                    <div class='w-7 h-7 cursor-pointer'>
+                    <div class='w-7 h-7 cursor-pointer' id='loop'>
                         <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
     
                             <!-- Uploaded to: SVG Repo, www.svgrepo.com, Transformed by: SVG Repo Mixer Tools -->
@@ -133,7 +133,7 @@
                             </svg>
                     </div>
                 </div>
-                <div class='w-8 h-8 cursor-pointer'>
+                <div class='w-8 h-8 cursor-pointer' id='shuffle'>
                     <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
     
                         <!-- Uploaded to: SVG Repo, www.svgrepo.com, Transformed by: SVG Repo Mixer Tools -->
@@ -148,7 +148,7 @@
                         </svg>
                 </div>
                 <div class='flex gap-1'>
-                    <div class='w-8 h-8 cursor-pointer'>
+                    <div class='w-8 h-8 cursor-pointer' id='speaker'>
                         <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
     
                             <!-- Uploaded to: SVG Repo, www.svgrepo.com, Transformed by: SVG Repo Mixer Tools -->
@@ -162,7 +162,7 @@
     
                             </svg>
                     </div>
-                    <div class='w-8 h-8 cursor-pointer hidden'>
+                    <div class='w-8 h-8 cursor-pointer hidden' id='muted'>
                         <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
     
                             <!-- Uploaded to: SVG Repo, www.svgrepo.com, Transformed by: SVG Repo Mixer Tools -->
