@@ -80,8 +80,12 @@ Route::prefix('threads')->middleware('auth')->group(function () {
 
 // Dev Route Preview
 Route::get('/awikwok', function () {
-    return view('layouts.main');
+    return view('components.audioPlayer');
 })->name('awikwok');
+
+Route::get('/hahahihi', function () {
+    return view('index');
+})->name('hahahihi');
 
 // Route::get('/pageDevelop', function () {
 //     return view('components.sidebar');
