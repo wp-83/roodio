@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\PlaylistController;
 use App\Http\Controllers\Admin\SongController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MoodController;
@@ -20,6 +21,15 @@ Route::prefix('admin')->middleware(['auth', 'role:1'])->group(function () {
         Route::get('/{song}/edit', [SongController::class, 'edit'])->name('admin.songs.edit');
         Route::post('/{song}', [SongController::class, 'update'])->name('admin.songs.update');
         Route::delete('/{song}', [SongController::class, 'destroy'])->name('admin.songs.destroy');
+    });
+
+    Route::prefix('playlists')->group(function () {
+        Route::get('', [PlaylistController::class, 'index'])->name('admin.playlists.index');
+        Route::get('create', [PlaylistController::class, 'create'])->name('admin.playlists.create');
+        Route::post('create', [PlaylistController::class, 'store'])->name('admin.playlists.store');
+        Route::get('/{playlist}/edit', [PlaylistController::class, 'edit'])->name('admin.playlists.edit');
+        Route::put('/{playlist}', [PlaylistController::class, 'update'])->name('admin.playlists.update');
+        Route::delete('/{playlist}', [PlaylistController::class, 'destroy'])->name('admin.playlists.detsroy');
     });
 });
 
