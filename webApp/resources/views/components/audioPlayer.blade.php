@@ -1,6 +1,3 @@
-@vite(['resources/css/app.css', 'resources/js/app.js'])
-
-
 @php
     // this variable should be removed when the page is ready
     $mood = 'relaxed';
@@ -13,10 +10,10 @@
     ];
         
     $bgStyle = [
-        'happy' => 'hover:bg-secondary-happy-10',
-        'sad' => 'hover:bg-secondary-sad-10',
-        'relaxed' => 'hover:bg-secondary-relaxed-10',
-        'angry' => 'hover:bg-secondary-angry-10'
+        'happy' => 'hover:bg-secondary-happy-10/30',
+        'sad' => 'hover:bg-secondary-sad-10/30',
+        'relaxed' => 'hover:bg-secondary-relaxed-10/30',
+        'angry' => 'hover:bg-secondary-angry-10/30'
     ];
 
     $textStyle = [
@@ -32,12 +29,20 @@
         'relaxed' => '#CCF2DD',
         'angry' => '#FBDADC'
     ];
+
+    $sliderStyle = [
+        'happy' => 'accent-secondary-happy-70',
+        'sad' => 'accent-secondary-sad-70',
+        'relaxed' => 'accent-secondary-relaxed-70',
+        'angry' => 'accent-secondary-angry-70',
+    ]
 @endphp
 
 
 <div>
-    <div class='w-full h-0.75 bg-white'>
-
+    <audio id='audio'></audio>
+    <div id="progressContainer" class="w-full h-1.25 bg-white cursor-pointer">
+        <div id="progressBar" class="{{ 'h-1.25 w-0 ' . $mainBtnStyle[$mood] . ' ' }}"></div>
     </div>
     <div class='w-full h-22 bg-primary-85 relative flex flex-row items-center justify-between px-5'>
         <div class='flex flex-row items-center gap-2'>
@@ -45,15 +50,12 @@
                 <img src="" alt="musicAlbum">
             </div>
             <div class='text-white font-secondaryAndButton hidden md:inline'>
-                <p class='{{ 'text-body-size font-bold ' . $textStyle[$mood] . ' ' }}'>{{ Str::limit('Alamak', 20) }}</p>
+                <p class='{{ 'text-body-size font-bold ' . $textStyle[$mood] . ' ' }}'>{{ Str::limit('Alamak', 35) }}</p>
                 <p class='text-micro'>{{ Str::limit('Rizky Febian', 30) }}</p>
             </div>
-            {{-- <div>
-                <p class='text-white'>--:--/--:--</p>
-            </div> --}}
         </div>
-        <div class='flex flex-row items-center gap-4'>
-            <div class='w-9 h-9 p-1 rounded-full cursor-pointer' id='prev'>
+        <div class='flex flex-row items-center gap-4 absolute left-1/2 top-1/2 -translate-1/2'>
+            <div class='{{ 'w-9 h-9 p-1 rounded-full cursor-pointer ' . $bgStyle[$mood] . ' ' }}' id='prev'>
                 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
     
                     <!-- Uploaded to: SVG Repo, www.svgrepo.com, Transformed by: SVG Repo Mixer Tools -->
@@ -68,7 +70,7 @@
                     </svg>
             </div>
             <div>
-                <div class='{{ 'w-15 h-15 p-2 rounded-full cursor-pointer ' . $mainBtnStyle[$mood] . ' ' }}' id='pause'>
+                <div class='{{ 'w-15 h-15 p-2 rounded-full cursor-pointer hidden ' . $mainBtnStyle[$mood] . ' ' }}' id='pause'>
                     <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
     
                         <!-- Uploaded to: SVG Repo, www.svgrepo.com, Transformed by: SVG Repo Mixer Tools -->
@@ -78,11 +80,11 @@
     
                         <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
     
-                        <g id="SVGRepo_iconCarrier"> <path d="M10 6.42004C10 4.76319 8.65685 3.42004 7 3.42004C5.34315 3.42004 4 4.76319 4 6.42004V18.42C4 20.0769 5.34315 21.42 7 21.42C8.65685 21.42 10 20.0769 10 18.42V6.42004Z" stroke="{{ $elementStyle[$mood] }}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> <path d="M20 6.42004C20 4.76319 18.6569 3.42004 17 3.42004C15.3431 3.42004 14 4.76319 14 6.42004V18.42C14 20.0769 15.3431 21.42 17 21.42C18.6569 21.42 20 20.0769 20 18.42V6.42004Z" stroke="{{ $elementStyle[$mood] }}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </g>
+                        <g id="SVGRepo_iconCarrier"> <path d="M10 6.42004C10 4.76319 8.65685 3.42004 7 3.42004C5.34315 3.42004 4 4.76319 4 6.42004V18.42C4 20.0769 5.34315 21.42 7 21.42C8.65685 21.42 10 20.0769 10 18.42V6.42004Z" stroke="{{ $elementStyle[$mood] }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> <path d="M20 6.42004C20 4.76319 18.6569 3.42004 17 3.42004C15.3431 3.42004 14 4.76319 14 6.42004V18.42C14 20.0769 15.3431 21.42 17 21.42C18.6569 21.42 20 20.0769 20 18.42V6.42004Z" stroke="{{ $elementStyle[$mood] }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> </g>
     
                         </svg>
                 </div>
-                <div class='{{ 'w-15 h-15 p-2 rounded-full hidden cursor-pointer ' . $mainBtnStyle[$mood] . ' ' }}' id='play'>
+                <div class='{{ 'w-15 h-15 p-2 rounded-full cursor-pointer ' . $mainBtnStyle[$mood] . ' ' }}' id='play'>
                     <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
     
                         <!-- Uploaded to: SVG Repo, www.svgrepo.com, Transformed by: SVG Repo Mixer Tools -->
@@ -97,7 +99,7 @@
                         </svg>
                 </div>
             </div>
-            <div class='w-9 h-9 p-1 rounded-full cursor-pointer' id='next'>
+            <div class='{{ 'w-9 h-9 p-1 rounded-full cursor-pointer ' . $bgStyle[$mood] . ' ' }}' id='next'>
                 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
     
                     <!-- Uploaded to: SVG Repo, www.svgrepo.com, Transformed by: SVG Repo Mixer Tools -->
@@ -113,12 +115,14 @@
             </div>
         </div>
         <div class='flex flex-row gap-3'>
-            <div>
-                <p class='text-white'>--:--/--:--</p>
+            <div class='flex flex-row items-center text-white'>
+                <span id='currentDuration'>--:--</span>
+                <span>/</span>
+                <span id='duration'>--:--</span>
             </div>
             <div class='flex-row hidden lg:flex gap-2'>
                 <div>
-                    <div class='w-7 h-7 cursor-pointer' id='loop'>
+                    <div class='{{ 'w-9 h-9 p-1 rounded-full cursor-pointer ' . $bgStyle[$mood] . ' ' }}' id='loop'>
                         <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
     
                             <!-- Uploaded to: SVG Repo, www.svgrepo.com, Transformed by: SVG Repo Mixer Tools -->
@@ -133,7 +137,7 @@
                             </svg>
                     </div>
                 </div>
-                <div class='w-8 h-8 cursor-pointer' id='shuffle'>
+                <div class='{{ 'w-9 h-9 p-1 rounded-full cursor-pointer ' . $bgStyle[$mood] . ' ' }}' id='shuffle'>
                     <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
     
                         <!-- Uploaded to: SVG Repo, www.svgrepo.com, Transformed by: SVG Repo Mixer Tools -->
@@ -148,7 +152,7 @@
                         </svg>
                 </div>
                 <div class='flex gap-1'>
-                    <div class='w-8 h-8 cursor-pointer' id='speaker'>
+                    <div class='{{ 'w-9 h-9 p-1 rounded-full cursor-pointer ' . $bgStyle[$mood] . ' ' }}' id='speaker'>
                         <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
     
                             <!-- Uploaded to: SVG Repo, www.svgrepo.com, Transformed by: SVG Repo Mixer Tools -->
@@ -162,7 +166,7 @@
     
                             </svg>
                     </div>
-                    <div class='w-8 h-8 cursor-pointer hidden' id='muted'>
+                    <div class='{{ 'w-9 h-9 p-1 rounded-full cursor-pointer hidden ' . $bgStyle[$mood] . ' ' }}' id='muted'>
                         <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
     
                             <!-- Uploaded to: SVG Repo, www.svgrepo.com, Transformed by: SVG Repo Mixer Tools -->
@@ -176,7 +180,7 @@
     
                             </svg>
                     </div>
-                    <input type="range" name="" id="" class='[accent-color]'>
+                    <input type="range" name="" id="volumeSlider" min='0' max='1' step='0.01' class='{{ 'w-28 ' . $sliderStyle[$mood] . ' ' }}'>
                 </div>
             </div>
             <x-iconButton type='kebab' class='lg:hidden'></x-iconButton>

@@ -19,7 +19,7 @@ showPassBtn.addEventListener("click", () => {
 
 // customize behaviour show password for register page
 const btnConfirm = document.getElementById("showPassConfirm");
-const altInput = document.getElementById("passwordConfirm");
+const altInput = document.getElementById("password_confirmation");
 const altCloseEye = document.getElementById("eye-closed-pass-confirm");
 const altOpenEye = document.getElementById("eye-open-pass-confirm");
 
