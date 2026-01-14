@@ -11,6 +11,10 @@ export default defineConfig({
         tailwindcss(),
     ],
     server: {
+        // host: '0.0.0.0', // Mengizinkan akses dari semua IP
+        // hmr: {
+        //     host: '10.68.97.143' // GANTI dengan IP Address komputer kamu dari langkah 1
+        // },
         watch: {
             ignored: ['**/storage/framework/views/**'],
         },
