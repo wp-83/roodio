@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\DB;
 
 class Playlists extends Model
 {
-    protected $fillable  = ['id', 'name', 'description'];
+    protected $fillable  = ['id', 'name', 'description', 'playlistPath'];
     public $incrementing = false;
     protected $keyType   = 'string';
 

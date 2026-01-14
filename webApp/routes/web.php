@@ -29,7 +29,7 @@ Route::prefix('admin')->middleware(['auth', 'role:1'])->group(function () {
         Route::post('create', [PlaylistController::class, 'store'])->name('admin.playlists.store');
         Route::get('/{playlist}/edit', [PlaylistController::class, 'edit'])->name('admin.playlists.edit');
         Route::put('/{playlist}', [PlaylistController::class, 'update'])->name('admin.playlists.update');
-        Route::delete('/{playlist}', [PlaylistController::class, 'destroy'])->name('admin.playlists.detsroy');
+        Route::delete('/{playlist}', [PlaylistController::class, 'destroy'])->name('admin.playlists.destroy');
     });
 });
 
