@@ -52,9 +52,8 @@
             @endif
         </div>
         <x-button behaviour='action' actionType='submit' form='otp-form' content='Verify Account' class='min-w-full'></x-button>
-        <p class='text-micro text-center md:text-small'>
-            Don't get the code?
-            <button class='font-bold text-secondary-sad-100 hover:text-primary-50 cursor-pointer'> Resend The Code.</button>
-        </p>
+        <div class="mt-4">
+            @livewire('auth.resendOtp')
+        </div>
     </form>
 @endsection
