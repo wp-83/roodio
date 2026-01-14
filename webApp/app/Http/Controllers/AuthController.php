@@ -32,27 +32,77 @@ class AuthController extends Controller
         return back()->with('failed', 'username or password incorrect!');
     }
 
+    public function emailVerificationView()
+    {
+        return view('auth.emailForgotPassword');
+    }
+
+    public function emailVerification(Request $request)
+    {
+        $validated = $request->validate([
+            'email' => 'required|email|max:255|exists:user_details,email',
+        ]);
+
+        session()->put('forgot.step1', $validated);
+
+        session(key: ['email_verification_passed' => true]);
+
+        return redirect()->route('user.verification');
+    }
+
     public function userVerificationView()
     {
         return view('auth.forgetPasswordValidation');
     }
 
-    public function userVerification()
+    public function userVerification(Request $request, OtpController $otpController)
     {
+        $otp = collect(range(1, 6))
+            ->map(fn($i) => $request->input("otp-$i"))
+            ->implode('');
 
-        session(['otp_forgot_passed' => true]);
-        return redirect()->route('forgetPassword');
+        $request->merge(['otp' => $otp]);
+
+        $request->validate([
+            'otp' => 'required|digits:6',
+        ], [
+            'otp.required' => 'OTP code must be completed.',
+            'otp.digits'   => 'OTP code must be 6 digits.',
+        ]);
+
+        $session = session('forgot.step1');
+        $verify  = $otpController->verify($session['email'], $request['otp']);
+        if ($verify) {
+            session()->forget('email_verification_passed');
+            session(['otp_forgot_passed' => true]);
+            return redirect()->route('forgetPassword');
+        } else {
+            return back()->withErrors(['otp' => 'Invalid or expired OTP']);
+        }
     }
 
     public function forgetPasswordView()
     {
-        session()->forget('otp_forgot_passed');
         return view('auth.forgetPassword');
     }
 
-    public function forgetPassword()
+    public function forgetPassword(Request $request)
     {
-        //the logic is not yet
+        $validated = $request->validate([
+            'password'              => [
+                'required',
+                'string',
+                'confirmed',
+                Password::min(8)->letters()->numbers(),
+            ],
+            'password_confirmation' => 'required',
+        ]);
+
+        $session = session('forgot.step1');
+        $user    = userDetails::where('email', $session['email'])->with('user')->first();
+        $user->user->update([
+            'password' => $validated['password'],
+        ]);
 
         return redirect()->route('login');
     }
@@ -80,7 +130,7 @@ class AuthController extends Controller
         return redirect()->route('register.validation');
     }
 
-    public function registerValidationView(OtpController $otpController)
+    public function registerValidationView()
     {
         if (! session()->has('register.step1')) {
             return redirect()->route('register');

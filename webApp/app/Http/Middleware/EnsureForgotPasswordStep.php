@@ -12,10 +12,15 @@ class EnsureForgotPasswordStep
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next, $step): Response
     {
-        if (! session()->has('otp_forgot_passed')) {
-            return redirect()->route('user.verification');
+        $steps = [
+            'otp'    => 'email_verification_passed',
+            'forgot' => 'otp_forgot_passed',
+        ];
+
+        if (! isset($steps[$step]) || ! session()->has($steps[$step])) {
+            return redirect()->route('emailVerification');
         }
 
         return $next($request);

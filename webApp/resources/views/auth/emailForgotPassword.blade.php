@@ -23,9 +23,9 @@
 
 
 @section('content')
-    <form action="{{ route('auth.forgetPassword') }}" method='POST' id='changePassword'>
+    <form action="{{ route('auth.emailVerification') }}" method='POST' id='changePassword'>
         @csrf {{-- cross site request forgery --}}
-        <x-input type='password' id='password' icon='email' label='Your Email' placeholder='Your email account...'></x-input>
+        <x-input type='email' id='email' icon='email' label='Your Email' placeholder='Your email account...'></x-input>
         <x-button behaviour='action' actionType='submit' form='changePassword' content='Verify Email' class='min-w-full'></x-button>
     </form>
 @endsection
