@@ -87,6 +87,10 @@ Route::get('/hahahihi', function () {
     return view('index');
 })->name('hahahihi');
 
+// Route::get('/wkwkwk', function () {
+//     return view('auth.account');
+// })->name('wkwkwk');
+
 // Route::get('/pageDevelop', function () {
 //     return view('components.sidebar');
 // })->name('awokwok');

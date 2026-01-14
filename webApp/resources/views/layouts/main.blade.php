@@ -5,7 +5,7 @@
 
 
 @push('script')
-    <script src="{{ asset('js/pages/navigation.js') }}" defer></script> 
+    {{-- <script src="{{ asset('js/pages/navigation.js') }}" defer></script>  --}}
 @endpush
 
 
@@ -18,7 +18,7 @@
     </div>
     <div class='flex flex-col flex-1 min-h-0'>
         <div class='flex flex-row flex-1 min-h-0 relative'>
-            <x-sidebar></x-sidebar>
+            <x-sidebar class='relative z-10'></x-sidebar>
             <div class='w-full bg-primary-100 overflow-x-hidden overflow-y-auto min-h-0 p-10 @yield('mainContentContainerClass')'>
                 @yield('mainContent')
             </div>
