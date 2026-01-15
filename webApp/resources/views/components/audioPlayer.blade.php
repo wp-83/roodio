@@ -39,7 +39,7 @@
 @endphp
 
 
-<div>
+<div id='audioPlayer'>
     <audio id='audio'></audio>
     <div id="progressContainer" class="w-full h-1.25 bg-white cursor-pointer">
         <div id="progressBar" class="{{ 'h-1.25 w-0 ' . $mainBtnStyle[$mood] . ' ' }}"></div>

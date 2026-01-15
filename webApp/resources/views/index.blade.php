@@ -5,50 +5,37 @@
 
 
 @push('script')
-    <script src="{{ asset('js/pages/navigation.js') }}" defer></script>
     <script src="{{ asset('js/pages/audioControl.js') }}" defer></script>   
 @endpush
 
 
 {{-- @section('mainContentContainerClass') --}}
 
+@php
+    $mood = 'relaxed';
+@endphp
+
 
 @section('mainContent')
-    <div clas=''>
-        <p class='font-primary text-white text-title'>Hi, Andi!</p>
+    <div class='flex flex-row justify-content items-center'>
+        <img src="{{ asset('assets/moods/' . $mood . '.png') }}" alt="" class='h-42 w-42'>
+        <div class='flex flex-col text-white bg-accent-70'>
+            <p class='font-primary text-white text-title'>Hi,
+                <div>
+                    Andi
+                </div>    
+            !</p>
+            <p>Welcome to our life</p>
+        </div>
+    </div>
+    <div>
+        <p class='text-title'>Most Current Play</p>
     </div>
 
     
 @endsection
 
 
-
-@extends('layouts.master')
-
-
-@section('title', 'Roodio - Get The MOO-DIES, Listen The Music')
-
-
-@push('script')
-    {{-- <script src="{{ asset('js/pages/navigation.js') }}" def    er></script>  --}}
-@endpush
-
-
-@section('bodyClass', 'max-h-screen h-screen flex flex-col')
-
-
-@section('bodyContent')
-    <div class="shrink-0">
-        <x-navbar></x-navbar>
-    </div>
-    <div class='flex flex-col flex-1 min-h-0'>
-        <div class='flex flex-row flex-1 min-h-0 relative'>
-            <x-sidebar class='relative z-10'></x-sidebar>
-            <div class='w-full bg-primary-100 overflow-x-hidden overflow-y-auto min-h-0 p-10 @yield('mainContentContainerClass')'>
-                @yield('mainContent')
-            </div>
-        </div>
-    </div>
+@section('bottomContent')
     <x-audioPlayer></x-audioPlayer>
-    {{-- <div class='w-full h-16 bg-primary-85 shrink-0'></div> --}}
 @endsection
