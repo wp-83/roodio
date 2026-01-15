@@ -82,17 +82,7 @@ Route::prefix('admin')->middleware(['auth', 'role:1'])->group(function () {
 });
 
 // Thread Route
-
 // Route::post('/{threadId}/reaction', [ThreadController::class, 'react'])->name('thread.react');
-
-// Dev Route Preview
-Route::get('/awikwok', function () {
-    return view('components.audioPlayer');
-})->name('awikwok');
-
-Route::get('/hahahihi', function () {
-    return view('index');
-})->name('hahahihi');
 
 // // Mood Route
 // Route::get('/moods', [MoodController::class, 'index'])->name('moods.index');
@@ -101,3 +91,12 @@ Route::get('/hahahihi', function () {
 // Route::get('/moods/{mood}/edit', [MoodController::class, 'edit'])->name('moods.edit');
 // Route::put('/moods/{mood}', [MoodController::class, 'update'])->name('moods.update');
 // Route::delete('/moods/{mood}', [MoodController::class, 'destroy'])->name('moods.destroy');
+
+//unit test route
+Route::get('/wkwkwk', function () {
+    return view('components.modal');
+});
+
+Route::get('/hahahaha', function () {
+    return view('main.index');
+});
