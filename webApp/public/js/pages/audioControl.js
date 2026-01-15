@@ -12,7 +12,7 @@ const mutedBtn = document.getElementById('muted');
 const volumeSlider = document.getElementById('volumeSlider');
 
 // set audio path
-// audio.src = 'https://roodio.blob.core.windows.net/uploads/songs/dKuze1CQQwO0cU7jLP3ZCvxwX13uaDyNKpL15zBi.mp3';
+audio.src = 'https://roodio.blob.core.windows.net/uploads/songs/dKuze1CQQwO0cU7jLP3ZCvxwX13uaDyNKpL15zBi.mp3';
 
 // current player condition
 let isPlay = false;
@@ -36,6 +36,23 @@ function playMusic(){
 // play and pause trigger
 playBtn.addEventListener('click', playMusic);
 pauseBtn.addEventListener('click', playMusic);
+
+// keyboard shorcut for some audio behaviour
+document.addEventListener('keydown', (e) => {
+    e.preventDefault();
+
+    if(e.code == 'Space'){
+        playMusic();
+    } 
+
+    if (e.key == 'ArrowRight'){
+        audio.currentTime += 10;
+    }
+
+    if (e.key == 'ArrowLeft'){
+        audio.currentTime -= 10;
+    }
+});
 
 // loop button behaviour
 loopBtn.addEventListener('click', (e) => {
