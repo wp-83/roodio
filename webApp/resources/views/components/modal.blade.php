@@ -5,16 +5,11 @@
     
 ])
 
-
-{{-- <div class='relative z-100 inline-block w-full h-full bg-shadedOfGray-20'>
-    <div class='w-64 h-36 bg-primary-20'>
-        <div></div>
-        <div></div>
-        <div></div>
+<body class='bg-accent-100'>
+    <div class='relative top-0 left-0'>
+        <div class='absolute w-screen h-screen bg-shadedOfGray-10 opacity-70'>
+            
+        </div>
     </div>
-</div> --}}
-
-<div>
-    
-</div>
+</body>
 
