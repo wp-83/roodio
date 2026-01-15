@@ -13,6 +13,7 @@
 
 
 @section('bodyContent')
+    @yield('overlayContent')
     <div class="shrink-0">
         <x-navbar></x-navbar>
     </div>
