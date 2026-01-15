@@ -107,4 +107,15 @@ button:focus {
   .bouncyNote {
     animation: bouncyMusicNot .75s linear forwards;
   }
+
+  @keyframes float-vertical-soft {
+    0% { transform: translateY(0); }
+    40% { transform: translateY(-5px); }
+    60% { transform: translateY(-7px); }
+    100% { transform: translateY(0); }
+  }
+
+  .animate-float-soft {
+    animation: float-vertical-soft 2.25s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
 }

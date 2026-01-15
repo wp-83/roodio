@@ -12,7 +12,7 @@ const mutedBtn = document.getElementById('muted');
 const volumeSlider = document.getElementById('volumeSlider');
 
 // set audio path
-audio.src = 'https://roodio.blob.core.windows.net/uploads/songs/dKuze1CQQwO0cU7jLP3ZCvxwX13uaDyNKpL15zBi.mp3';
+// audio.src = 'https://roodio.blob.core.windows.net/uploads/songs/dKuze1CQQwO0cU7jLP3ZCvxwX13uaDyNKpL15zBi.mp3';
 
 // current player condition
 let isPlay = false;
@@ -39,7 +39,7 @@ pauseBtn.addEventListener('click', playMusic);
 
 // keyboard shorcut for some audio behaviour
 document.addEventListener('keydown', (e) => {
-    e.preventDefault();
+    // e.preventDefault();
 
     if(e.code == 'Space'){
         playMusic();
