@@ -16,7 +16,7 @@ class ThreadController extends Controller
     public function index()
     {
         $threads = Thread::withCount('reactions')->orderByDesc('created_at')->paginate(5);
-        return view('threads.index', compact('threads'));
+        return view('main.threads.index', compact('threads'));
     }
 
     /**
@@ -24,7 +24,7 @@ class ThreadController extends Controller
      */
     public function create()
     {
-        return view('threads.create');
+        return view('main.threads.create');
     }
 
     /**
