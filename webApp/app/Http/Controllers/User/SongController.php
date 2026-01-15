@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Playlists;
 use Illuminate\Http\Request;
 
 class SongController extends Controller
@@ -11,8 +12,11 @@ class SongController extends Controller
      */
     public function index()
     {
-
-        return view('main.index');
+        $playlists    = Playlists::orderByDesc('created_at')->get();
+        $username     = auth()->user()->username;
+        $fullname     = auth()->user()->userDetail->fullname;
+        $profilePhoto = auth()->user()->userDetail->profilePhoo;
+        return view('main.index', compact('playlists', 'username', 'fullname', 'profilePhoto'));
     }
 
     /**
