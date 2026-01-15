@@ -3,40 +3,13 @@
 use App\Http\Controllers\Admin\PlaylistController;
 use App\Http\Controllers\Admin\SongController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\MoodController;
 use App\Http\Controllers\ThreadController;
 use App\Http\Controllers\User\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
+Route::get('/welcome', function () {
     return view('errors.503');
 })->name('welcome');
-
-// Admin Route
-Route::prefix('admin')->middleware(['auth', 'role:1'])->group(function () {
-    Route::prefix('songs')->group(function () {
-        Route::get('', [SongController::class, 'index'])->name('admin.songs.index');
-        Route::get('/create', [SongController::class, 'create'])->name('admin.songs.create');
-        Route::post('/create', [SongController::class, 'store'])->name('admin.songs.store');
-        Route::get('/{song}/edit', [SongController::class, 'edit'])->name('admin.songs.edit');
-        Route::post('/{song}', [SongController::class, 'update'])->name('admin.songs.update');
-        Route::delete('/{song}', [SongController::class, 'destroy'])->name('admin.songs.destroy');
-    });
-
-    Route::prefix('playlists')->group(function () {
-        Route::get('', [PlaylistController::class, 'index'])->name('admin.playlists.index');
-        Route::get('create', [PlaylistController::class, 'create'])->name('admin.playlists.create');
-        Route::post('create', [PlaylistController::class, 'store'])->name('admin.playlists.store');
-        Route::get('/{playlist}/edit', [PlaylistController::class, 'edit'])->name('admin.playlists.edit');
-        Route::put('/{playlist}', [PlaylistController::class, 'update'])->name('admin.playlists.update');
-        Route::delete('/{playlist}', [PlaylistController::class, 'destroy'])->name('admin.playlists.destroy');
-    });
-});
-
-// User Route
-Route::prefix('user')->middleware(['auth', 'role:0'])->group(function () {
-    Route::get('profile', [ProfileController::class, 'index'])->name('user.profile');
-});
 
 // Auth Route
 Route::prefix('auth')->group(function () {
@@ -71,21 +44,45 @@ Route::prefix('auth')->group(function () {
     });
 });
 
-// Mood Route
-Route::get('/moods', [MoodController::class, 'index'])->name('moods.index');
-Route::get('/moods/create', [MoodController::class, 'create'])->name('moods.create');
-Route::post('/moods', [MoodController::class, 'store'])->name('moods.store');
-Route::get('/moods/{mood}/edit', [MoodController::class, 'edit'])->name('moods.edit');
-Route::put('/moods/{mood}', [MoodController::class, 'update'])->name('moods.update');
-Route::delete('/moods/{mood}', [MoodController::class, 'destroy'])->name('moods.destroy');
+// Main Route
+Route::prefix('')->middleware(['auth', 'role:0'])->group(function () {
+    Route::get('/', [\App\Http\Controllers\User\SongController::class, 'index'])->name('user.index');
+
+    // Profile
+    Route::get('profile', [ProfileController::class, 'index'])->name('user.profile');
+
+    // Threads
+    Route::prefix('threads')->middleware('auth')->group(function () {
+        Route::get('', [ThreadController::class, 'index'])->name('thread.index');
+        Route::get('/create', [ThreadController::class, 'create'])->name('thread.create');
+        Route::post('', [ThreadController::class, 'store'])->name('thread.store');
+        Route::post('/{thread}/reply', [ThreadController::class, 'reply'])->name('thread.reply');
+    });
+});
+
+// Admin Route
+Route::prefix('admin')->middleware(['auth', 'role:1'])->group(function () {
+    Route::prefix('songs')->group(function () {
+        Route::get('', [SongController::class, 'index'])->name('admin.songs.index');
+        Route::get('/create', [SongController::class, 'create'])->name('admin.songs.create');
+        Route::post('/create', [SongController::class, 'store'])->name('admin.songs.store');
+        Route::get('/{song}/edit', [SongController::class, 'edit'])->name('admin.songs.edit');
+        Route::post('/{song}', [SongController::class, 'update'])->name('admin.songs.update');
+        Route::delete('/{song}', [SongController::class, 'destroy'])->name('admin.songs.destroy');
+    });
+
+    Route::prefix('playlists')->group(function () {
+        Route::get('', [PlaylistController::class, 'index'])->name('admin.playlists.index');
+        Route::get('create', [PlaylistController::class, 'create'])->name('admin.playlists.create');
+        Route::post('create', [PlaylistController::class, 'store'])->name('admin.playlists.store');
+        Route::get('/{playlist}/edit', [PlaylistController::class, 'edit'])->name('admin.playlists.edit');
+        Route::put('/{playlist}', [PlaylistController::class, 'update'])->name('admin.playlists.update');
+        Route::delete('/{playlist}', [PlaylistController::class, 'destroy'])->name('admin.playlists.destroy');
+    });
+});
 
 // Thread Route
-Route::prefix('threads')->middleware('auth')->group(function () {
-    Route::get('', [ThreadController::class, 'index'])->name('thread.index');
-    Route::get('/create', [ThreadController::class, 'create'])->name('thread.create');
-    Route::post('', [ThreadController::class, 'store'])->name('thread.store');
-    Route::post('/{thread}/reply', [ThreadController::class, 'reply'])->name('thread.reply');
-});
+
 // Route::post('/{threadId}/reaction', [ThreadController::class, 'react'])->name('thread.react');
 
 // Dev Route Preview
@@ -97,17 +94,10 @@ Route::get('/hahahihi', function () {
     return view('index');
 })->name('hahahihi');
 
-// Route::get('/wkwkwk', function () {
-//     return view('auth.account');
-// })->name('wkwkwk');
-
-// Route::get('/pageDevelop', function () {
-//     return view('components.sidebar');
-// })->name('awokwok');
-
-// Route::get('/test', function () {
-//     Mail::to('william.pratama004@binus.ac.id')->send(
-//         new EmailOtp(123456, 'Test User', 1)
-//     );
-//     dd('ok');
-// });
+// // Mood Route
+// Route::get('/moods', [MoodController::class, 'index'])->name('moods.index');
+// Route::get('/moods/create', [MoodController::class, 'create'])->name('moods.create');
+// Route::post('/moods', [MoodController::class, 'store'])->name('moods.store');
+// Route::get('/moods/{mood}/edit', [MoodController::class, 'edit'])->name('moods.edit');
+// Route::put('/moods/{mood}', [MoodController::class, 'update'])->name('moods.update');
+// Route::delete('/moods/{mood}', [MoodController::class, 'destroy'])->name('moods.destroy');

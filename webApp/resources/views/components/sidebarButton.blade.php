@@ -54,7 +54,7 @@
         'relaxed' => 'from-secondary-relaxed-100 to-secondary-relaxed-20',
         'angry' => 'from-secondary-angry-100 to-secondary-angry-20'
     ];
-    
+
     $backgroundToggleStyle = [
         'happy' => 'bg-secondary-happy-20 group-hover:bg-secondary-happy-30',
         'sad' => 'bg-secondary-sad-20 group-hover:bg-secondary-sad-30',
@@ -92,7 +92,7 @@
                 'class' => 'w-18 h-18 p-3 relative z-10 flex flex-col items-center justify-center group-hover:border-y-2 duration-100 lg:w-20 lg:h-20 ' . $iconContainerStyle[$mood] . ' ' . (($isActive) ? $iconContainerActiveStyle[$mood] . ' border-r-4' : ' bg-primary-70')
             ]) }}
         >
-            <div 
+            <div
             {{ $attributes->merge([
                 'class' => 'w-10 p-2 rounded-full ' . $iconStyle[$mood] . ' '
             ])
@@ -101,7 +101,7 @@
                 <img src="{{ asset('assets/icons/'. $icon .'.svg') }}" alt="{{ $icon }}">
             </div>
             <p
-            {{ 
+            {{
                 $attributes->merge([
                     "class" => 'text-micro group-hover:text-primary-70 group-hover:font-bold lg:text-small ' . (($isActive) ? $labelActiveStyle[$mood] . ' font-bold' : 'text-white') . ' '
                 ])
@@ -109,7 +109,7 @@
             >{{ $label }}</p>
         </div>
         <div
-        {{ 
+        {{
             $attributes->merge([
                 'class' => 'flex items-center justify-center w-16 h-16 rounded-full absolute z-5 top-1/2 left-0 -translate-y-1/2 group-hover:translate-x-3/5 group-hover:animate-spin duration-350 transition-transform bg-conic border border-primary-50 lg:w-18 lg:h-18 '. $musicDiscStyle[$mood] . ' '
             ])
@@ -117,8 +117,8 @@
         >
             <img src="{{ asset('assets/logo/logo-no-text.png') }}" alt="logo" class='w-9 p-1 bg-primary-70 rounded-full lg:w-10'>
         </div>
-        <div 
-        {{ 
+        <div
+        {{
             $attributes->merge([
                 'class' => 'bg-linear-to-r w-max h-max rounded-md pl-29 px-3 py-1 absolute z-3 top-1/2 left-0 -translate-x-full -translate-y-1/2 transition-transform duration-350 group-hover:translate-x-0 lg:pl-33 invisible group-hover:visible ' . $contentStyle[$mood] . ' '
             ])
@@ -130,7 +130,7 @@
     <div class='relative w-max font-secondaryAndButton hidden' id='toggleSidebar'>
         <div class='h-max flex flex-row relative'>
             <div
-            {{ 
+            {{
                 $attributes->merge([
                     "class" => 'p-2 w-fit relative z-5 rounded-l-xl border-r-4 border-r-primary-50 ' . ' group-hover:' . $backgroundToggleActiveStyle[$mood] . ' ' . (($isActive) ? $backgroundToggleActiveStyle[$mood] : $backgroundToggleStyle[$mood]) . ' '
                 ])
@@ -139,14 +139,14 @@
                 <img src="{{ asset('assets/icons/'. $icon .'.svg') }}" alt="{{ $icon }}" class='w-8 h-8'>
             </div>
             <div
-            {{ 
+            {{
                 $attributes->merge([
                     "class" => 'w-36 relative z-3 px-8 flex flex-col justify-center rounded-r-xl ' . $labelToggleStyle[$mood] . ' ' . (($isActive) ? 'bg-linear-to-r ' . $labelToggleActiveStyle[$mood] : '') . ' '
                 ])
             }}
             >
                 <p
-                {{ 
+                {{
                     $attributes->merge([
                         "class" => 'text-small text-primary-60 ' . (($isActive) ? 'font-bold' : '') . ' '
                     ])
@@ -155,7 +155,7 @@
             </div>
         </div>
         <div
-        {{ 
+        {{
             $attributes->merge([
                 'class' => 'absolute z-4 w-12 h-12 rounded-full left-1/8 top-1/2 -translate-y-1/2 flex items-center justify-center rounded-full group-hover:animate-spin duration-350 transition-transform bg-conic border border-primary-50 '. $musicDiscStyle[$mood] . ' ' . (($isActive) ? 'animate-spin' : '') . ' '
             ])

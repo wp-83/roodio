@@ -5,7 +5,7 @@
 
 
 @push('script')
-    <script src="{{ asset('js/pages/audioControl.js') }}" defer></script>   
+    <script src="{{ asset('js/pages/audioControl.js') }}" defer></script>
 @endpush
 
 
@@ -23,7 +23,7 @@
             <p class='font-primary text-white text-title'>Hi,
                 <div>
                     Andi
-                </div>    
+                </div>
             !</p>
             <p>Welcome to our life</p>
         </div>
@@ -32,7 +32,7 @@
         <p class='text-title'>Most Current Play</p>
     </div>
 
-    
+
 @endsection
 
 
