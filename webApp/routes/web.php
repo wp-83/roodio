@@ -47,6 +47,7 @@ Route::prefix('auth')->group(function () {
 // Main Route
 Route::prefix('')->middleware(['auth', 'role:0'])->group(function () {
     Route::get('/', [App\Http\Controllers\User\SongController::class, 'index'])->name('user.index');
+    Route::get('/{playlists}', [App\Http\Controllers\User\SongController::class, 'playlists'])->name('user.playlists');
 
     // Profile
     Route::get('profile', [ProfileController::class, 'index'])->name('user.profile');

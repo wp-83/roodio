@@ -33,6 +33,11 @@ class Songs extends Model
         return $this->belongsTo(User::class, 'userId', 'id');
     }
 
+    public function playlists()
+    {
+        return $this->belongsToMany(Playlists::class, 'Tracks', 'songId', 'playlistId');
+    }
+
     protected static function booted()
     {
         static::creating(function ($model) {
