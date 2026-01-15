@@ -167,6 +167,7 @@ function isMobile() {
 function handleResponsive() {
     if (isMobile()) {
         sidebar.classList.add('absolute');
+        if(sidebar.classList.contains('relative')) sidebar.classList.remove('relative');
 
         if (!isSidebarOpen) {
             sidebar.classList.add('-translate-x-full');
