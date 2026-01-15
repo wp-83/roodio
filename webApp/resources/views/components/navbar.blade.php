@@ -33,7 +33,7 @@
             <x-iconButton type='hamburger' mood='{{ $mood }}'></x-iconButton>
             <div class='w-40'>
                 {{-- Route is not fixed --}}
-                <a href="{{ route('awikwok') }}" class='cursor-default'>
+                <a href="{{ route('user.index') }}" class='cursor-default'>
                     <img src="{{ asset('assets/logo/logo-horizontal.png') }}" alt="logo">
                 </a>
             </div>
