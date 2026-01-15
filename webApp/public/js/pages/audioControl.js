@@ -1,4 +1,5 @@
 // take all audio play components
+const player = document.getElementById('audioPlayer');
 const audio = document.getElementById('audio');
 const prevBtn = document.getElementById('prev');
 const nextBtn = document.getElementById('next');

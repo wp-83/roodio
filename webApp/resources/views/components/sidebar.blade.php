@@ -1,5 +1,3 @@
-@vite(['resources/css/app.css', 'resources/js/app.js'])
-
 {{-- this part should be removed when page is ready --}}
 @php
     $mood = 'relaxed';

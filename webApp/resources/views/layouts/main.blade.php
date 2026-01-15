@@ -5,7 +5,7 @@
 
 
 @push('script')
-    {{-- <script src="{{ asset('js/pages/navigation.js') }}" defer></script>  --}}
+    <script src="{{ asset('js/pages/navigation.js') }}" defer></script> 
 @endpush
 
 
@@ -24,6 +24,5 @@
             </div>
         </div>
     </div>
-    <x-audioPlayer></x-audioPlayer>
-    {{-- <div class='w-full h-16 bg-primary-85 shrink-0'></div> --}}
+    @yield('bottomContent')
 @endsection
