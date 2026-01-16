@@ -50,8 +50,8 @@
 
 @section('overlayContent')
     {{-- <form action=""></form> --}}
-{{-- 
-    <x-modal modalId='dayMood' additionalStyle='top-1/2 left-1/2 -translate-1/2 w-sm md:w-xl lg:w-2xl' :isNeedBg='true'>
+
+    {{-- <x-modal modalId='dayMood' additionalStyle='top-1/2 left-1/2 -translate-1/2 w-sm md:w-xl lg:w-2xl'>
         <x-slot name='header'>
             <p class='text-center font-bold text-primary-50 '>Welcome to ROODIO, Buddy!</p>
         </x-slot>
@@ -69,9 +69,9 @@
                 
             </div>
         </x-slot>
-    </x-modal>
+    </x-modal> --}}
 
-    <x-modal modalId='choosePlaylist' additionalStyle='top-1/2 left-1/2 -translate-1/2 w-xs md:w-sm' :isNeedBg='true'>
+     {{-- <x-modal modalId='choosePlaylist' additionalStyle='top-1/2 left-1/2 -translate-1/2 w-xs md:w-sm'>
         <x-slot name='header'>
             <div class='w-full flex justify-center'>
                 <img src="{{ asset('assets/moods/'. Str::lower($mood) .'.png') }}" alt="{{ Str::lower($mood) }}" class='w-40 h-40'>
@@ -87,8 +87,11 @@
         </x-slot>
     </x-modal> --}}
     
-    {{-- <x-modal modalId='profilePopup' additionalStyle='right-3 top-14 w-60 h-max ' :isNeedBg='true'>
+    {{-- <x-modal modalId='profilePopup' additionalStyle='right-3 top-14 w-60 h-max '>
         <x-slot name='body'>
+            <div class='absolute right-6 top-5' style='zoom: 0.75;'>
+                <x-iconButton :mood='$mood' type='cross'></x-iconButton>
+            </div>
             <div class='flex flex-col items-center gap-2'>
                 <div class='w-20 h-20 rounded-full flex items-center justify-center {{ $bgMoodStyle[$mood] }}'>
                     <p class='text-title font-primary font-bold h-fit {{ $textMoodStyle[$mood] }}'>{{ Str::charAt(Str::upper($name), 0) }}</p>
@@ -115,6 +118,22 @@
             </div>
         </x-slot>
     </x-modal> --}}
+
+    <x-modal modalId='changeMood' additionalStyle='right-48 top-14'>
+        <x-slot name='body'>
+            <p class='mb-3 font-bold text-primary-60'>Change Your Mood</p>
+            <div class='w-full flex flex-col gap-2.5 font-secondaryAndButton text-small'>
+                @foreach ($moodOptions as $moodOpt)
+                    <a href="">
+                        <div class='h-max rounded-sm px-2 py-1 flex flex-row items-center gap-2.5 {{ $hoverBgMoodStyle[$mood] }}'>
+                            <img src="{{ asset('assets/moods/' . $moodOpt . '.png') }}" alt="{{ $moodOpt }}" class='w-7 h-7'>
+                            <p class='text-primary-60'>{{ Str::ucfirst($moodOpt) }}</p>
+                        </div>
+                    </a>
+                @endforeach
+            </div>
+        </x-slot>
+    </x-modal>
 
 @endsection
 

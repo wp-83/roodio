@@ -16,7 +16,7 @@
             <div class='w-full font-secondaryAndButton text-small lg:text-body-size'>
                 {{($body) ?? ''}}
             </div>
-            <div class='w-full mt-5 font-secondaryAndButton text-small lg:text-body-size'>
+            <div class='w-full font-secondaryAndButton text-small lg:text-body-size'>
                 {{($footer) ?? ''}}
             </div>
         </div>

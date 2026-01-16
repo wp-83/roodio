@@ -98,5 +98,5 @@ Route::get('/wkwkwk', function () {
 });
 
 Route::get('/hahahaha', function () {
-    return view('main.index', ['mood' => 'relaxed']);
+    return view('main.index', ['mood' => 'angry']);
 });
