@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-
     const firstPopup = document.getElementById('dayMood');
     const secondPopup = document.getElementById('choosePlaylist');
 
@@ -12,5 +11,4 @@ document.addEventListener('DOMContentLoaded', () => {
         // show second pop-up
         secondPopup.classList.remove('opacity-0', 'invisible');
     }
-
 });

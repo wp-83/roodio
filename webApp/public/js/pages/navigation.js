@@ -78,7 +78,12 @@ document.addEventListener('mousedown', (e) => {
 
     // profile popup close
     if(!profileContent.contains(e.target)){
-        profilePopup.classList.add('opacity-0', 'invisible')
+        profilePopup.classList.add('opacity-0', 'invisible');
+    }
+
+    // mood popup close
+    if(!moodContent.contains(e.target)){
+        moodPopup.classList.add('opacity-0', 'invisible');
     }
 });
 
@@ -196,9 +201,9 @@ function popupBehaviour(element){
 // profile pop-up behaviour
 const profileArea = document.getElementById('profileNavbar');
 const profilePopup = document.getElementById('profilePopup');
-const profileContent = document.querySelector('#profilePopup .popupContent');
+const profileContent = profilePopup.querySelector('.popupContent');
 
-// event trigger
+// event trigger for profile
 profileArea.addEventListener('click', () => {
     popupBehaviour(profilePopup);
 });
@@ -208,4 +213,12 @@ profilePopup.querySelector('#closeProfilePopup').addEventListener('click', () =>
     profilePopup.classList.add('opacity-0', 'invisible');
 });
 
-//
+//mood pop-up behaviour
+const moodArea = document.getElementById('currentMood');
+const moodPopup = document.getElementById('changeMood');
+const moodContent = moodPopup.querySelector('.popupContent');
+
+// event trigger for mood
+moodArea.addEventListener('click', () => {
+    popupBehaviour(moodPopup);
+})

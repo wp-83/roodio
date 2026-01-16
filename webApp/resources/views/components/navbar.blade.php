@@ -61,7 +61,7 @@
 
                 </svg>
             </div>
-            <div class='flex flex-row items-center'>
+            <div class='flex flex-row items-center cursor-pointer' id='currentMood'>
                 <p class='text-primary-70 font-secondaryAndButton text-small {{ $softStyle[$mood] }} pr-5 relative -right-3 pl-2 rounded-md py-0.5 hidden lg:block'>{{ Str::ucfirst($mood) }}</p>
                 <div class='w-10 h-10 rounded-full p-0.5 relative z-5 {{ $contrastStyle[$mood] }}'>
                     <img src="{{ asset('assets/moods/'. $mood .'.png') }}" alt="mood" class='drop-shadow-lg drop-shadow-white'>
