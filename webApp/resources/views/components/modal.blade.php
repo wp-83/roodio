@@ -4,7 +4,7 @@
     'additionalStyle' => null
 ])
 
-<div class='absolute top-0 left-0 z-100 transition-all duration-150 opacity-0 invisible' id='{{ $modalId }}'>
+<div class='absolute top-0 left-0 z-100 transition-all duration-250 opacity-0 invisible' id='{{ $modalId }}'>
     <div class='relative w-screen h-screen top-0 left-0  {{ ($isNeedBg) ? 'bg-shadedOfGray-100/30' : '' }}'>
         <div {{ 
             $attributes->merge([

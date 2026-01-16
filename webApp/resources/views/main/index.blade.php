@@ -42,6 +42,13 @@
         'relaxed' => 'hover:bg-secondary-relaxed-20',
         'angry' => 'hover:bg-secondary-angry-20'
     ];
+
+    $checkboxStyle = [
+        'happy' => 'accent-secondary-happy-50',
+        'sad' => 'accent-secondary-sad-50',
+        'relaxed' => 'accent-secondary-relaxed-50',
+        'angry' => 'accent-secondary-angry-50'
+    ];
 @endphp
 
 
@@ -160,13 +167,19 @@
             <p class='mb-3 font-bold text-primary-60'>Change Your Mood</p>
             <div class='w-full flex flex-col gap-2.5 font-secondaryAndButton text-small'>
                 @foreach ($moodOptions as $moodOpt)
-                    <a href="">
-                        <div class='h-max rounded-sm px-2 py-1 flex flex-row items-center gap-2.5 {{ $hoverBgMoodStyle[$mood] }}'>
-                            <img src="{{ asset('assets/moods/' . $moodOpt . '.png') }}" alt="{{ $moodOpt }}" class='w-7 h-7'>
-                            <p class='text-primary-60'>{{ Str::ucfirst($moodOpt) }}</p>
-                        </div>
-                    </a>
+                <a href="">
+                    <div class='h-max rounded-sm px-2 py-1 flex flex-row items-center gap-2.5 {{ (($moodOpt == $mood) ? $bgMoodStyle[$mood] . ' cursor-default disabled ' : $hoverBgMoodStyle[$mood] . ' ') }}'>
+                        <img src="{{ asset('assets/moods/' . $moodOpt . '.png') }}" alt="{{ $moodOpt }}" class='w-7 h-7'>
+                        <p class='text-primary-60'>{{ Str::ucfirst($moodOpt) }}</p>
+                    </div>
+                </a>
                 @endforeach
+            </div>
+            <hr class='my-4'>
+            <p class='mb-3 font-bold text-primary-60'>Playlist Behaviour</p>
+            <div class='flex flex-row items-center gap-1.25'>
+                <input type="checkbox" name='playlistMood' id='playlistMood' value='1' class='w-5 h-5 rounded-lg {{ $checkboxStyle[$mood] }}'>
+                <label for="playlistMood" class='text-small'>Based on Mood</label>
             </div>
         </x-slot>
     </x-modal>
