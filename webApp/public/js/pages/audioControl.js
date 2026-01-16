@@ -12,14 +12,32 @@ const mutedBtn = document.getElementById('muted');
 const volumeSlider = document.getElementById('volumeSlider');
 
 // set audio path
-audio.src = 'https://roodio.blob.core.windows.net/uploads/songs/dKuze1CQQwO0cU7jLP3ZCvxwX13uaDyNKpL15zBi.mp3';
+// audio.src = 'https://roodio.blob.core.windows.net/uploads/songs/dKuze1CQQwO0cU7jLP3ZCvxwX13uaDyNKpL15zBi.mp3';
 
 // current player condition
 let isPlay = false;
 let isMuted = false;
 
+// check if the song is NaN
+function isSongNan(){
+    return (audio.src == '') ? true : false;
+}
+
+//DOMContentLoaded Event
+document.addEventListener('DOMContentLoaded', () => {
+    const overlayAudioPlay = player.querySelector('#overlayNan');
+
+    if(isSongNan()){
+        overlayAudioPlay.classList.remove('hidden');
+    } else {
+        overlayAudioPlay.classList.add('hidden');
+    }
+});
+
 // main logic play and pause condition
 function playMusic(){
+    if(isSongNan()) return;
+
     if (!isPlay){
         isPlay = true;
         audio.play();
@@ -39,7 +57,7 @@ pauseBtn.addEventListener('click', playMusic);
 
 // keyboard shorcut for some audio behaviour
 document.addEventListener('keydown', (e) => {
-    // e.preventDefault();
+    if(isSongNan()) return;
 
     if(e.code == 'Space'){
         playMusic();
@@ -65,8 +83,6 @@ loopBtn.addEventListener('click', (e) => {
 shuffleBtn.addEventListener('click', (e) => {
 
 });
-
-// soundedBtn, mutedBtn, volumeSlider
 
 // intial value for volume slider
 document.addEventListener('DOMContentLoaded', () => {
