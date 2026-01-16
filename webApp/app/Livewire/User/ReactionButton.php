@@ -1,5 +1,5 @@
 <?php
-namespace App\Livewire;
+namespace App\Livewire\User;
 
 use App\Models\Reactions;
 use Livewire\Component;
