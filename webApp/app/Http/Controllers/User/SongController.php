@@ -12,7 +12,8 @@ class SongController extends Controller
         $username     = auth()->user()->username;
         $fullname     = auth()->user()->userDetail->fullname;
         $profilePhoto = auth()->user()->userDetail->profilePhoo;
-        return view('main.index', compact('playlists', 'username', 'fullname', 'profilePhoto'));
+        $mood         = 'angry';
+        return view('main.index', compact('playlists', 'username', 'fullname', 'profilePhoto', 'mood'));
     }
 
     public function playlists(Playlists $playlists)
