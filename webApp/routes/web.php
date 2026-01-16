@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\PlaylistController;
 use App\Http\Controllers\Admin\SongController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ThreadController;
+use App\Http\Controllers\User\MoodController;
 use App\Http\Controllers\User\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -46,12 +47,12 @@ Route::prefix('auth')->group(function () {
 
 // Main Route
 Route::prefix('/')->middleware(['auth', 'role:0'])->group(function () {
+    // Profile
     Route::get('profile', [ProfileController::class, 'index'])->name('user.profile');
 
-    Route::get('', [App\Http\Controllers\User\SongController::class, 'index'])->name('user.index');
-    Route::get('{playlists}', [App\Http\Controllers\User\SongController::class, 'playlists'])->name('user.playlists');
-
-    // Profile
+    // Mood
+    Route::post('mood', [MoodController::class, 'moodStore'])->name('mood.store');
+    Route::post('preference', [MoodController::class, 'preferenceStore'])->name('preference.store');
 
     // Threads
     Route::prefix('threads')->middleware('auth')->group(function () {
@@ -60,6 +61,9 @@ Route::prefix('/')->middleware(['auth', 'role:0'])->group(function () {
         Route::post('', [ThreadController::class, 'store'])->name('thread.store');
         Route::post('/{thread}/reply', [ThreadController::class, 'reply'])->name('thread.reply');
     });
+
+    Route::get('', [App\Http\Controllers\User\SongController::class, 'index'])->name('user.index');
+    Route::get('{playlists}', [App\Http\Controllers\User\SongController::class, 'playlists'])->name('user.playlists');
 });
 
 // Admin Route
@@ -100,5 +104,5 @@ Route::get('/wkwkwk', function () {
 });
 
 Route::get('/hahahaha', function () {
-    return view('main.index', ['mood' => 'angry']);
+    return view('main.index', ['mood' => 'sad']);
 });

@@ -12,9 +12,6 @@
 {{-- @section('mainContentContainerClass') --}}
 
 @php
-    $name = 'Thomas Aquinas Riald Prabadi';
-    $username = 'Xullfikar831';
-
     $moodOptions = ['happy', 'sad', 'relaxed', 'angry'];
 
     $moodMessage = [
@@ -48,73 +45,110 @@
 
 
 @section('overlayContent')
-    <!-- <form action=""></form> -->
+    @if (!session()->has('chooseMood'))
+        <x-modal modalId='dayMood' additionalStyle='top-1/2 left-1/2 -translate-1/2 w-sm md:w-xl lg:w-2xl'>
+            <x-slot name='header'>
+                <p class='text-center font-bold text-primary-50 '>Welcome to ROODIO, Buddy!</p>
+            </x-slot>
+            <x-slot name='body'>
+                <p class='my-3'>What do you feel today, Andi? Let us get to know you!</p>
 
-    <!-- <x-modal modalId='dayMood' additionalStyle='top-1/2 left-1/2 -translate-1/2 w-sm md:w-xl lg:w-2xl'>
-        <x-slot name='header'>
-            <p class='text-center font-bold text-primary-50 '>Welcome to ROODIO, Buddy!</p>
-        </x-slot>
-        <x-slot name='body'>
-            <p class='my-3'>What do you feel today, Andi? Let us get to know you!</p>
-            <div class='grid grid-cols-2 md:grid-cols-4'>
-                @foreach ($moodOptions as $moodOption)
-                    <div class='flex flex-col items-center justify-center group cursor-pointer hover:bg-shadedOfGray-10/30 rounded-lg animate-float-soft'>
-                        <img src="{{ asset('assets/moods/' . Str::lower($moodOption) . '.png') }}" alt="{{ Str::lower($moodOption) }}" class='w-28 h-28 opacity-50 group-hover:opacity-100 md:w-36 md:h-36 lg:w-40 lg:h-40'>
-                        <p class='w-fit mb-2 text-primary-70'>{{ Str::ucfirst($moodOption) }}</p>
-                        <input type="radio" name="mood" id="{{ Str::lower($moodOption) . 'Mood' }}" value='{{ Str::lower($moodOption) }}' hidden>
+                <form action="{{ route('mood.store') }}" method="POST">
+                    @csrf
+                    <div class='grid grid-cols-2 md:grid-cols-4'>
+                        @foreach ($moodOptions as $moodOption)
+                            <label class='flex flex-col items-center justify-center group cursor-pointer hover:bg-shadedOfGray-10/30 rounded-lg animate-float-soft'>
+
+                                <img src="{{ asset('assets/moods/' . Str::lower($moodOption) . '.png') }}"
+                                    alt="{{ Str::lower($moodOption) }}"
+                                    class='w-28 h-28 opacity-50 group-hover:opacity-100 md:w-36 md:h-36 lg:w-40 lg:h-40'>
+
+                                <p class='w-fit mb-2 text-primary-70'>{{ Str::ucfirst($moodOption) }}</p>
+
+                                <input type="radio"
+                                    name="mood"
+                                    value='{{ Str::lower($moodOption) }}'
+                                    class="hidden"
+                                    onchange="this.form.submit()">
+                            </label>
+                        @endforeach
                     </div>
-                @endforeach
-            </div>
-        </x-slot>
-    </x-modal> -->
+                </form>
 
-    <!-- <x-modal modalId='choosePlaylist' additionalStyle='top-1/2 left-1/2 -translate-1/2 w-xs md:w-sm'>
-        <x-slot name='header'>
-            <div class='w-full flex justify-center'>
-                <img src="{{ asset('assets/moods/'. Str::lower($mood) .'.png') }}" alt="{{ Str::lower($mood) }}" class='w-40 h-40'>
-            </div>
-        </x-slot>
-        <x-slot name='body'>
-            <p class='text-justify'>{{ $moodMessage[$mood] . '' }}</p>
-            <p class='mt-5'>Should I play something that matches your mood?</p>
-            <div class='w-full flex flex-col '>
-                <x-button content='Yes, Give me that' mood='{{ $mood }}'></x-button>
-                <x-button content='No, Just random'></x-button>
-            </div>
-        </x-slot>
-    </x-modal> -->
+            </x-slot>
+        </x-modal>
+    @endif
 
-    <!-- <x-modal modalId='profilePopup' additionalStyle='right-3 top-14 w-60 h-max '>
+    @if (session()->has('chooseMood') && !session()->has('preferenceMood'))
+        <x-modal modalId='choosePlaylist' additionalStyle='top-1/2 left-1/2 -translate-1/2 w-xs md:w-sm'>
+            <x-slot name='header'>
+                <div class='w-full flex justify-center'>
+                    <img src="{{ asset('assets/moods/'. Str::lower(session('chooseMood')) .'.png') }}" alt="{{ Str::lower(session('chooseMood')) }}" class='w-40 h-40'>
+                </div>
+            </x-slot>
+            <x-slot name='body'>
+                <p class='text-justify'>{{ $moodMessage[session('chooseMood')] ?? 'How are you feeling?' }}</p>
+                <p class='mt-5'>Should I play something that matches your mood?</p>
+
+                <div class="w-full flex flex-col gap-2 mt-4">
+
+                    <form action="{{ route('preference.store') }}" method="POST" class="w-full">
+                        @csrf
+                        <input type="hidden" name="preference" value="match">
+
+                        <div onclick="this.closest('form').submit()" class="cursor-pointer w-full">
+                            <x-button content='Yes, Give me that' mood='{{ session("chooseMood") }}'></x-button>
+                        </div>
+                    </form>
+
+                    <form action="{{ route('preference.store') }}" method="POST" class="w-full">
+                        @csrf
+                        <input type="hidden" name="preference" value="mismatch">
+
+                        <div onclick="this.closest('form').submit()" class="cursor-pointer w-full">
+                            <x-button content='No, Just random'></x-button>
+                        </div>
+                    </form>
+
+                </div>
+            </x-slot>
+        </x-modal>
+    @endif
+
+    <x-modal modalId='profilePopup' additionalStyle='right-3 top-14 w-60 h-max '>
         <x-slot name='body'>
             <div class='absolute right-6 top-5' style='zoom: 0.75;'>
                 <x-iconButton :mood='$mood' type='cross'></x-iconButton>
             </div>
             <div class='flex flex-col items-center gap-2'>
                 <div class='w-20 h-20 rounded-full flex items-center justify-center {{ $bgMoodStyle[$mood] }}'>
-                    <p class='text-title font-primary font-bold h-fit {{ $textMoodStyle[$mood] }}'>{{ Str::charAt(Str::upper($name), 0) }}</p>
+                    <p class='text-title font-primary font-bold h-fit {{ $textMoodStyle[$mood] }}'>{{ Str::charAt(Str::upper($fullname), 0) }}</p>
                 </div>
                 <div class='flex flex-col items-center'>
-                    <p class='text-small font-bold {{ $textMoodStyle[$mood] }}'>{{ Str::limit($name, 24) }}</p>
+                    <p class='text-small font-bold {{ $textMoodStyle[$mood] }}'>{{ Str::limit($fullname, 24) }}</p>
                     <p class='text-micro text-primary-60'>{{ '@' . Str::limit($username, 18) }}</p>
                 </div>
             </div>
             <hr class='my-2 border-primary-50'>
             <div class='w-full flex flex-col gap-2.5 font-secondaryAndButton text-small'>
-                <a href="">
+                <a href="{{ route('user.profile') }}">
                     <div class='h-max rounded-sm px-2 py-1 flex flex-row items-center gap-2.5 {{ $hoverBgMoodStyle[$mood] }}'>
                         <img src="{{ asset('assets/icons/user.svg') }}" alt="user" class='w-7 h-7'>
                         <p class='text-primary-60'>Edit Your Profile</p>
                     </div>
                 </a>
-                <a href="">
-                    <div class='h-max rounded-sm px-2 py-1 flex flex-row items-center gap-2.5 {{ $hoverBgMoodStyle[$mood] }}'>
+                <form action="{{ route('auth.logout') }}" method="POST">
+                    @csrf
+                    <div onclick="this.closest('form').submit()"
+                        class='cursor-pointer h-max rounded-sm px-2 py-1 flex flex-row items-center gap-2.5 {{ $hoverBgMoodStyle[$mood] }}'>
+
                         <img src="{{ asset('assets/icons/logout.svg') }}" alt="logout" class='w-7 h-7'>
                         <p class='text-primary-60'>Logout</p>
                     </div>
-                </a>
+                </form>
             </div>
         </x-slot>
-    </x-modal> -->
+    </x-modal>
 
     <!-- <x-modal modalId='changeMood' additionalStyle='right-48 top-14'>
         <x-slot name='body'>
