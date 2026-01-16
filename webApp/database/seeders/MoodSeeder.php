@@ -14,7 +14,7 @@ class MoodSeeder extends Seeder
         $moods = [
             ['id' => 'MD-0000001', 'type' => 'happy'],
             ['id' => 'MD-0000002', 'type' => 'sad'],
-            ['id' => 'MD-0000003', 'type' => 'relax'],
+            ['id' => 'MD-0000003', 'type' => 'relaxed'],
             ['id' => 'MD-0000004', 'type' => 'angry'],
         ];
 

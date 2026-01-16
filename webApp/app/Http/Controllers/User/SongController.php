@@ -12,14 +12,13 @@ class SongController extends Controller
         $username     = auth()->user()->username;
         $fullname     = auth()->user()->userDetail->fullname;
         $profilePhoto = auth()->user()->userDetail->profilePhoo;
-        $mood         = 'angry';
+        $mood         = session('chooseMood', 'happy');
         return view('main.index', compact('playlists', 'username', 'fullname', 'profilePhoto', 'mood'));
     }
 
     public function playlists(Playlists $playlists)
     {
         $songs = $playlists->songs;
-        // dd($songs[0]->songPath);
         return view('main.playlists.index', compact('songs'));
     }
 }
