@@ -117,12 +117,16 @@
 
     <x-modal modalId='profilePopup' additionalStyle='right-3 top-14 w-60 h-max '>
         <x-slot name='body'>
-            <div class='absolute right-6 top-5' style='zoom: 0.75;'>
+            <div class='absolute right-6 top-5' style='zoom: 0.75;' id='closeProfilePopup'>
                 <x-iconButton :mood='$mood' type='cross'></x-iconButton>
             </div>
             <div class='flex flex-col items-center gap-2'>
-                <div class='w-20 h-20 rounded-full flex items-center justify-center {{ $bgMoodStyle[$mood] }}'>
-                    <p class='text-title font-primary font-bold h-fit {{ $textMoodStyle[$mood] }}'>{{ Str::charAt(Str::upper($fullname), 0) }}</p>
+                <div class='w-20 h-20 rounded-full flex items-center justify-center overflow-hidden {{ $bgMoodStyle[$mood] }}'>
+                    @if (isset($profilePhoto))
+                        <img src="{{ config('filesystems.disks.azure.url') . '/' . $profilePhoto }}" alt="{{ $fullname }}" class='w-full h-full object-cover'> 
+                    @else
+                        <p class='text-title font-primary font-bold h-fit {{ $textMoodStyle[$mood] }}'>{{ Str::charAt(Str::upper($fullname), 0) }}</p>
+                    @endif
                 </div>
                 <div class='flex flex-col items-center'>
                     <p class='text-small font-bold {{ $textMoodStyle[$mood] }}'>{{ Str::limit($fullname, 24) }}</p>
@@ -150,7 +154,7 @@
         </x-slot>
     </x-modal>
 
-    <!-- <x-modal modalId='changeMood' additionalStyle='right-48 top-14'>
+    <x-modal modalId='changeMood' additionalStyle='right-48 top-14'>
         <x-slot name='body'>
             <p class='mb-3 font-bold text-primary-60'>Change Your Mood</p>
             <div class='w-full flex flex-col gap-2.5 font-secondaryAndButton text-small'>
@@ -164,7 +168,7 @@
                 @endforeach
             </div>
         </x-slot>
-    </x-modal> -->
+    </x-modal>
 
 @endsection
 
@@ -175,9 +179,9 @@
         <div class='flex flex-col text-white'>
             <p class='font-primary text-white text-title font-bold'>Hi, Andi!</p>
             <p>Welcome to our life</p>
-             {{-- @foreach ($playlists as $playlist)
+             @foreach ($playlists as $playlist)
                 <p>Title: {{ $playlist->name }}</p>
-            @endforeach --}}
+            @endforeach
         </div>
     </div>
     <div>

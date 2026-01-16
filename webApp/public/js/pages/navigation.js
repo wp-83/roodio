@@ -70,15 +70,20 @@ searchIcon.addEventListener('click', () => {
 
 // document.addEventListener('click')
 document.addEventListener('click', (e) => {
-    if (!isSearchBarOpened) return;
+    const isClickInsideSearch = (searchbar.contains(e.target) || searchIcon.contains(e.target));
 
-    const isClickInsideSearch =
-        searchbar.contains(e.target) ||
-        searchIcon.contains(e.target);
-
-    if (!isClickInsideSearch) {
+    if (!isClickInsideSearch && isSearchBarOpened) {
         closeSearchBar();
     }
+
+    // profile popup close
+    // console.log(e.target)
+    // console.log(profilePopup)
+    // console.log(profilePopup.classList.contains('invisible'))
+    // if (!profilePopup.classList.contains('invisible')){
+    //     console.log('Haoiooooooooo');
+    //     if(!profilePopup.querySelector('.popupContent').contains(e.target)) profilePopup.classList.add('opacity-0', 'invisible');
+    // }
 });
 
 // back to the default style of searchbar after responsive behaviour
@@ -185,3 +190,23 @@ hamburgerBtn.addEventListener('click', () => {
 });
 
 window.addEventListener('resize', handleResponsive);
+
+// popup behaviour
+function popupBehaviour(element){
+    if(element.classList.contains('invisible')) element.classList.remove('opacity-0', 'invisible');
+    else element.classList.add('opacity', 'invisible');
+}
+
+// profile pop-up behaviour
+const profileArea = document.getElementById('profileNavbar');
+const profilePopup = document.getElementById('profilePopup');
+
+// event trigger
+profileArea.addEventListener('click', () => {
+    popupBehaviour(profilePopup);
+});
+
+// close icon behaviour on profile popup
+profilePopup.querySelector('#closeProfilePopup').addEventListener('click', () => {
+    profilePopup.classList.add('opacity-0', 'invisible');
+});
