@@ -6,6 +6,7 @@
 
 @push('script')
     <script src="{{ asset('js/pages/audioControl.js') }}" defer></script>
+    <script src="{{ asset('js/pages/main/index.js') }}" defer></script>
 @endpush
 
 
@@ -106,7 +107,7 @@
                         <input type="hidden" name="preference" value="mismatch">
 
                         <div onclick="this.closest('form').submit()" class="cursor-pointer w-full">
-                            <x-button content='No, Just random'></x-button>
+                            <x-button content='No, Give others'></x-button>
                         </div>
                     </form>
 
