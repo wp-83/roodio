@@ -35,7 +35,7 @@
                 @enderror
             </div>
 
-            <livewire:reaction-button :thread-id="$thread->id" />
+            <livewire:user.reaction-button :thread-id="$thread->id" />
         </div>
     </div>
     @empty
