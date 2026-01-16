@@ -162,7 +162,7 @@
         </x-slot>
     </x-modal>
 
-    <x-modal modalId='changeMood' additionalStyle='right-48 top-14'>
+    <x-modal modalId='changeMood' additionalStyle='right-20 top-14 md:right-48'>
         <x-slot name='body'>
             <p class='mb-3 font-bold text-primary-60'>Change Your Mood</p>
             <div class='w-full flex flex-col gap-2.5 font-secondaryAndButton text-small'>
@@ -177,13 +177,18 @@
             </div>
             <hr class='my-4'>
             <p class='mb-3 font-bold text-primary-60'>Playlist Behaviour</p>
-            <div class='flex flex-row items-center gap-1.25'>
-                <input type="checkbox" name='playlistMood' id='playlistMood' value='1' class='w-5 h-5 rounded-lg {{ $checkboxStyle[$mood] }}'>
-                <label for="playlistMood" class='text-small'>Based on Mood</label>
+            <div class='flex flex-row items-center gap-1.25 w-max h-max'>
+                <input type="checkbox" name='playlistMood' id='playlistMood' value='1' class='w-6 h-6 rounded-lg {{ $checkboxStyle[$mood] }}'>
+                <label for="playlistMood" class='text-micro md:text-small'>Based on mood</label>
             </div>
         </x-slot>
     </x-modal>
 
+    <x-modal modalId='' additionalStyle='' :isNeedBg='true'>
+        <x-slot name='header'></x-slot>
+        <x-slot name='body'></x-slot>
+        <x-slot name='footer'></x-slot>
+    </x-modal>
 @endsection
 
 
