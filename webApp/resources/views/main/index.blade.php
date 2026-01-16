@@ -12,7 +12,7 @@
 {{-- @section('mainContentContainerClass') --}}
 
 @php
-    $mood = 'angry';
+    // $mood = 'angry';
     $name = 'Thomas Aquinas Riald Prabadi';
     $username = 'Xullfikar831';
 
@@ -87,7 +87,7 @@
         </x-slot>
     </x-modal> --}}
     
-    <x-modal modalId='profilePopup' additionalStyle='right-3 top-14 w-60 h-max ' :isNeedBg='true'>
+    {{-- <x-modal modalId='profilePopup' additionalStyle='right-3 top-14 w-60 h-max ' :isNeedBg='true'>
         <x-slot name='body'>
             <div class='flex flex-col items-center gap-2'>
                 <div class='w-20 h-20 rounded-full flex items-center justify-center {{ $bgMoodStyle[$mood] }}'>
@@ -114,7 +114,7 @@
                 </a>
             </div>
         </x-slot>
-    </x-modal>
+    </x-modal> --}}
 
 @endsection
 
@@ -139,5 +139,5 @@
 
 
 @section('bottomContent')
-    <x-audioPlayer></x-audioPlayer>
+    <x-audioPlayer :mood='$mood'></x-audioPlayer>
 @endsection

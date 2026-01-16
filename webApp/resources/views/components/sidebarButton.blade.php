@@ -1,4 +1,5 @@
 @props([
+    'mood',
     'route' => 'welcome',
     'icon' => 'home',
     'isActive' => false,
@@ -8,9 +9,6 @@
 
 
 @php
-    //this part must be removed when the page is ready
-    $mood = 'relaxed';
-
     $isActive = request()->routeIs($route);
 
     $iconContainerStyle = [

@@ -1,7 +1,9 @@
-@php
-    // this variable should be removed when the page is ready
-    $mood = 'relaxed';
+@props([
+    'mood'
+])
 
+
+@php
     $mainBtnStyle = [
         'happy' => 'bg-secondary-happy-85',
         'sad' => 'bg-secondary-sad-85',
@@ -183,7 +185,7 @@
                     <input type="range" name="" id="volumeSlider" min='0' max='1' step='0.01' class='{{ 'w-28 ' . $sliderStyle[$mood] . ' ' }}'>
                 </div>
             </div>
-            <x-iconButton type='kebab' class='lg:hidden'></x-iconButton>
+            <x-iconButton type='kebab' :mood='$mood' class='lg:hidden'></x-iconButton>
         </div>
     </div>
 </div>
