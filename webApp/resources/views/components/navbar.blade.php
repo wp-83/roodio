@@ -73,11 +73,12 @@
             </div>
             <div class='flex flex-row gap-1.75 items-center justify-between w-max'>
                 <div class='flex-col text-white hidden md:flex'>
-                    <p class='text-small font-bold {{ $textStyle[$mood] }}'>{{ Str::limit($name, 12) }}</p>
-                    <p class='text-micro'>{{ '@' . Str::limit($username, 9) }}</p>
+                    <p class='text-small font-bold {{ $textStyle[$mood] }}'>{{ Str::limit($user->userDetail->fullname, 12) }}</p>
+                    <p class='text-micro'>{{ '@' . Str::limit($user->username, 9) }}</p>
                 </div>
                 <div class='w-10 h-10 bg-primary-10 rounded-full flex items-center justify-center relative z-5'>
-                    <p class='text-paragraph font-primary font-bold text-primary-70 h-fit'>{{ Str::charAt(Str::upper($name), 0) }}</p>
+                    <!-- <p class='text-paragraph font-primary font-bold text-primary-70 h-fit'>{{ Str::charAt(Str::upper($name), 0) }}</p> -->
+                  <img src="{{ config('filesystems.disks.azure.url') . '/' . $user->userDetail->profilePhoto }}" alt="">
                 </div>
             </div>
         </div>

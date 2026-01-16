@@ -12,7 +12,6 @@
 {{-- @section('mainContentContainerClass') --}}
 
 @php
-    // $mood = 'angry';
     $name = 'Thomas Aquinas Riald Prabadi';
     $username = 'Xullfikar831';
 
@@ -49,9 +48,9 @@
 
 
 @section('overlayContent')
-    {{-- <form action=""></form> --}}
+    <!-- <form action=""></form> -->
 
-    {{-- <x-modal modalId='dayMood' additionalStyle='top-1/2 left-1/2 -translate-1/2 w-sm md:w-xl lg:w-2xl'>
+    <!-- <x-modal modalId='dayMood' additionalStyle='top-1/2 left-1/2 -translate-1/2 w-sm md:w-xl lg:w-2xl'>
         <x-slot name='header'>
             <p class='text-center font-bold text-primary-50 '>Welcome to ROODIO, Buddy!</p>
         </x-slot>
@@ -65,13 +64,11 @@
                         <input type="radio" name="mood" id="{{ Str::lower($moodOption) . 'Mood' }}" value='{{ Str::lower($moodOption) }}' hidden>
                     </div>
                 @endforeach
-                
-                
             </div>
         </x-slot>
-    </x-modal> --}}
+    </x-modal> -->
 
-     {{-- <x-modal modalId='choosePlaylist' additionalStyle='top-1/2 left-1/2 -translate-1/2 w-xs md:w-sm'>
+    <!-- <x-modal modalId='choosePlaylist' additionalStyle='top-1/2 left-1/2 -translate-1/2 w-xs md:w-sm'>
         <x-slot name='header'>
             <div class='w-full flex justify-center'>
                 <img src="{{ asset('assets/moods/'. Str::lower($mood) .'.png') }}" alt="{{ Str::lower($mood) }}" class='w-40 h-40'>
@@ -85,9 +82,9 @@
                 <x-button content='No, Just random'></x-button>
             </div>
         </x-slot>
-    </x-modal> --}}
-    
-    {{-- <x-modal modalId='profilePopup' additionalStyle='right-3 top-14 w-60 h-max '>
+    </x-modal> -->
+
+    <!-- <x-modal modalId='profilePopup' additionalStyle='right-3 top-14 w-60 h-max '>
         <x-slot name='body'>
             <div class='absolute right-6 top-5' style='zoom: 0.75;'>
                 <x-iconButton :mood='$mood' type='cross'></x-iconButton>
@@ -117,9 +114,9 @@
                 </a>
             </div>
         </x-slot>
-    </x-modal> --}}
+    </x-modal> -->
 
-    <x-modal modalId='changeMood' additionalStyle='right-48 top-14'>
+    <!-- <x-modal modalId='changeMood' additionalStyle='right-48 top-14'>
         <x-slot name='body'>
             <p class='mb-3 font-bold text-primary-60'>Change Your Mood</p>
             <div class='w-full flex flex-col gap-2.5 font-secondaryAndButton text-small'>
@@ -133,7 +130,7 @@
                 @endforeach
             </div>
         </x-slot>
-    </x-modal>
+    </x-modal> -->
 
 @endsection
 
