@@ -37,9 +37,38 @@
         'sad' => 'accent-secondary-sad-70',
         'relaxed' => 'accent-secondary-relaxed-70',
         'angry' => 'accent-secondary-angry-70',
-    ]
+    ];
+
+    $audioControlOptions = ['loop', 'shuffle', 'speaker-muted'];
+    $audioControlLabel = [
+        'loop' => 'Loop Song',
+        'shuffle' => 'Shuffle Play',
+        'speaker-muted' => 'Muted Audio'
+    ];
+
+    $hoverBgMoodStyle = [
+        'happy' => 'hover:bg-secondary-happy-20',
+        'sad' => 'hover:bg-secondary-sad-20',
+        'relaxed' => 'hover:bg-secondary-relaxed-20',
+        'angry' => 'hover:bg-secondary-angry-20'
+    ];
 @endphp
 
+
+<x-modal modalId='audioControlPopup' additionalStyle='right-5 bottom-18' :isNeedBg='true'>
+    <x-slot name='body'>
+        <div class='w-full flex flex-col gap-2.5 font-secondaryAndButton text-small'>
+            @foreach ($audioControlOptions as $audioCtrlOpt)
+            <a href="">
+                <div class='h-max rounded-sm px-2 pr-8 py-1 flex flex-row items-center gap-2.5 {{ $hoverBgMoodStyle[$mood] }}'>
+                    <img src="{{ asset('assets/icons/' . $audioCtrlOpt . '.svg') }}" alt="{{ $audioCtrlOpt }}" class='w-7 h-7'>
+                    <p class='text-primary-60'>{{ Str::ucfirst($audioControlLabel[$audioCtrlOpt]) }}</p>
+                </div>
+            </a>
+            @endforeach
+        </div>
+    </x-slot>
+</x-modal>
 
 <div id='audioPlayer'>
     <audio id='audio'></audio>
@@ -186,7 +215,7 @@
                     <input type="range" name="" id="volumeSlider" min='0' max='1' step='0.01' class='{{ 'w-28 ' . $sliderStyle[$mood] . ' ' }}'>
                 </div>
             </div>
-            <x-iconButton type='kebab' :mood='$mood' class='lg:hidden'></x-iconButton>
+            <x-iconButton type='kebab' :mood='$mood' class='lg:hidden' id='audioControlResponsive'></x-iconButton>
         </div>
     </div>
 </div>

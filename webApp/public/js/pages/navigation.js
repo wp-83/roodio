@@ -68,7 +68,7 @@ searchIcon.addEventListener('click', () => {
     (isSearchBarOpened) ? closeSearchBar() : openSearchBar();
 });
 
-// document.addEventListener('click')
+// document.addEventListener('mousedown')
 document.addEventListener('mousedown', (e) => {
     const isClickInsideSearch = (searchbar.contains(e.target) || searchIcon.contains(e.target));
 
@@ -221,4 +221,4 @@ const moodContent = moodPopup.querySelector('.popupContent');
 // event trigger for mood
 moodArea.addEventListener('click', () => {
     popupBehaviour(moodPopup);
-})
+});

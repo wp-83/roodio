@@ -15,6 +15,8 @@
 @php
     $moodOptions = ['happy', 'sad', 'relaxed', 'angry'];
 
+
+
     $moodMessage = [
         'happy' => "Ahh!! You're happy now. Stay happy and keep smiling.",
         'sad' => "Oh no… you seem sad right now. It's okay, take your time.",
@@ -182,12 +184,6 @@
                 <label for="playlistMood" class='text-micro md:text-small'>Based on mood</label>
             </div>
         </x-slot>
-    </x-modal>
-
-    <x-modal modalId='' additionalStyle='' :isNeedBg='true'>
-        <x-slot name='header'></x-slot>
-        <x-slot name='body'></x-slot>
-        <x-slot name='footer'></x-slot>
     </x-modal>
 @endsection
 
