@@ -10,9 +10,9 @@ class Playlists extends Model
     public $incrementing = false;
     protected $keyType   = 'string';
 
-    public function tracks()
+    public function songs()
     {
-        return $this->hasMany(Tracks::class, 'playlistId');
+        return $this->belongsToMany(Songs::class, 'Tracks', 'playlistId', 'songId');
     }
 
     protected static function booted()

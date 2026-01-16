@@ -12,7 +12,7 @@ class Tracks extends Model
 
     public function playlists()
     {
-        return $this->belongsTo('playlists', 'playlistId');
+        return $this->belongsTo('playlists', 'playlistId', 'id');
     }
 
     protected static function booted()
