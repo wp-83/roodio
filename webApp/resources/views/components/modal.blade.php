@@ -23,8 +23,8 @@
     </div>
 </div>
 
-{{-- template for using, for isNeedBg must :isNeedBg
-<x-modal modalId='' additionalStyle='' isNeedBg='true'>
+{{-- template for using
+<x-modal modalId='' additionalStyle='' :isNeedBg='true'>
     <x-slot name='header'></x-slot>
     <x-slot name='body'></x-slot>
     <x-slot name='footer'></x-slot>
