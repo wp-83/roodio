@@ -1,6 +1,10 @@
+@props([
+    'mood'
+])
+
+
 @php
     // this must be removed when the page is ready
-    $mood = Str::lower('Relaxed');
     $name = 'Andi Zulfikar';
     $username = 'Xullfikar77';
 
@@ -30,7 +34,7 @@
 <div class='w-full h-16 bg-primary-85 flex justify-center items-center border-b-[0.5px] border-white'>
     <div class='w-full flex flex-row justify-between items-center px-4'>
         <div class='w-60 flex flex-row items-start gap-3'>
-            <x-iconButton type='hamburger' mood='{{ $mood }}'></x-iconButton>
+            <x-iconButton type='hamburger' :mood='$mood'></x-iconButton>
             <div class='w-40'>
                 {{-- Route is not fixed --}}
                 <a href="{{ route('user.index') }}" class='cursor-default'>
@@ -39,7 +43,7 @@
             </div>
         </div>
         <div class='w-xl h-max invisible lg:visible relative transition-transform duration-500 ease-out group' id='searchbar'>
-            <x-input type='search' id='search' placeholder='Search songs, artists, lyrics'></x-input>
+            <x-input type='search' :mood='$mood' id='search' placeholder='Search songs, artists, lyrics'></x-input>
             <div class='absolute top-1/2 right-4 flex flex-row -translate-y-1/2 opacity-50 group-focus-within:hidden' id='searchContent'>
                 <div class='border-[0.5px] border-shadedOfGray-50 bg-shadedOfGray-20 font-secondaryAndButton px-1 py-[0.25px] rounded-md text-micro text-shadedOfGray-85'>CTRL</div>
                 <p class='mx-1'>+</p>

@@ -1,7 +1,9 @@
-@php
-    // this variable should be removed when the page is ready
-    $mood = 'relaxed';
+@props([
+    'mood'
+])
 
+
+@php
     $mainBtnStyle = [
         'happy' => 'bg-secondary-happy-85',
         'sad' => 'bg-secondary-sad-85',
@@ -44,6 +46,7 @@
     <div id="progressContainer" class="w-full h-1.25 bg-white cursor-pointer">
         <div id="progressBar" class="{{ 'h-1.25 w-0 ' . $mainBtnStyle[$mood] . ' ' }}"></div>
     </div>
+    <div id='overlayNan' class='hidden absolute bottom-0 z-10 h-22 w-full bg-shadedOfGray-85/50 cursor-not-allowed'></div>
     <div class='w-full h-22 bg-primary-85 relative flex flex-row items-center justify-between px-5'>
         <div class='flex flex-row items-center gap-2'>
             <div class='h-14 w-14 bg-shadedOfGray-20 rounded-md'>
@@ -183,7 +186,7 @@
                     <input type="range" name="" id="volumeSlider" min='0' max='1' step='0.01' class='{{ 'w-28 ' . $sliderStyle[$mood] . ' ' }}'>
                 </div>
             </div>
-            <x-iconButton type='kebab' class='lg:hidden'></x-iconButton>
+            <x-iconButton type='kebab' :mood='$mood' class='lg:hidden'></x-iconButton>
         </div>
     </div>
 </div>

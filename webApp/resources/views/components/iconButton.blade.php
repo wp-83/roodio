@@ -1,13 +1,11 @@
 @props([
+    'mood',
     'type',
     'arrowOrientation' => 'left'
 ])
 
 
 @php
-    // this part must be removed when page is ready
-    $mood = 'relaxed';
-
     $iconTypes = [
         'cross', 'arrow', 'kebab', 'hamburger'
     ];
