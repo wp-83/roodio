@@ -4,11 +4,11 @@
     'additionalStyle' => null
 ])
 
-<div class='absolute top-0 left-0 z-100  ' id='{{ $modalId }}'>
-    <div class='relative w-screen h-screen top-0 left-0  {{ ($isNeedBg) ? 'bg-shadedOfGray-100/25' : '' }}'>
+<div class='absolute top-0 left-0 z-100 ' id='{{ $modalId }}'>
+    <div class='relative w-screen h-screen top-0 left-0  {{ ($isNeedBg) ? 'bg-shadedOfGray-100/30' : '' }}'>
         <div {{ 
             $attributes->merge([
-                'class' => 'absolute min-w-5 h-max p-8 rounded-lg text-wrap bg-white ' . (($additionalStyle) ?? ' w-max') . ' '])    
+                'class' => 'absolute min-w-5 h-max p-5 rounded-lg text-wrap bg-white ' . (($additionalStyle) ?? ' w-max') . ' '])
         }}>
             <div class='w-full font-primary text-body-size lg:text-paragraph'>
                 {{($header) ?? ''}}
