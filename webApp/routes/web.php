@@ -100,7 +100,7 @@ Route::prefix('admin')->middleware(['auth', 'role:1'])->group(function () {
 
 //unit test route
 Route::get('/wkwkwk', function () {
-    return view('components.modal');
+    return view('components.threadBox');
 });
 
 Route::get('/hahahaha', function () {
