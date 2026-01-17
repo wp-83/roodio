@@ -25,7 +25,7 @@ return new class extends Migration
                 ->on('users')
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
-            $table->string('content', 255);
+            $table->text('content');
             $table->timestamps();
         });
     }
