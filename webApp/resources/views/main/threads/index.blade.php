@@ -79,7 +79,7 @@
 
 @endsection
 
-{{--     
+{{--
     <div class="">
         <div class="">
             <span>Title: </span>{{ $thread->title }}
@@ -103,5 +103,5 @@
                 @error('content')
                     {{ $message }}
                 @enderror
-            </div>  
+            </div>
         </div>  --}}
