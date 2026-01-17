@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\PlaylistController;
 use App\Http\Controllers\Admin\SongController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\SocialController;
 use App\Http\Controllers\ThreadController;
 use App\Http\Controllers\User\MoodController;
 use App\Http\Controllers\User\ProfileController;
@@ -53,13 +54,20 @@ Route::prefix('/')->middleware(['auth', 'role:0', 'prevent-back-history'])->grou
     // Mood
     Route::post('mood', [MoodController::class, 'moodStore'])->name('mood.store');
     Route::post('preference', [MoodController::class, 'preferenceStore'])->name('preference.store');
+    Route::post('mood-update', [MoodController::class, 'moodUpdate'])->name('mood.update');
+    Route::post('preference-update', [MoodController::class, 'preferenceUpdate'])->name('preference.update');
 
     // Threads
-    Route::prefix('threads')->middleware('auth')->group(function () {
+    Route::prefix('threads')->group(function () {
         Route::get('', [ThreadController::class, 'index'])->name('thread.index');
         Route::get('/create', [ThreadController::class, 'create'])->name('thread.create');
         Route::post('', [ThreadController::class, 'store'])->name('thread.store');
         Route::post('/{thread}/reply', [ThreadController::class, 'reply'])->name('thread.reply');
+    });
+
+    // Social
+    Route::prefix('/social')->group(function () {
+        Route::get('', [SocialController::class, 'index'])->name('social.index');
     });
 
     Route::get('', [App\Http\Controllers\User\SongController::class, 'index'])->name('user.index');

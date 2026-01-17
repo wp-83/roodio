@@ -19,6 +19,7 @@ class SongController extends Controller
     public function playlists(Playlists $playlists)
     {
         $songs = $playlists->songs;
-        return view('main.playlists.index', compact('songs'));
+        $mood  = session('chooseMood', 'happy');
+        return view('main.playlists.index', compact('songs', 'mood'));
     }
 }

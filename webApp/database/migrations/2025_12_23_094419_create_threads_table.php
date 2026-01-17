@@ -20,7 +20,7 @@ return new class extends Migration
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
             $table->string('title', 100);
-            $table->string('content', 255);
+            $table->text('content');
             $table->dateTime('datePost');
             $table->boolean('isReplyable')->default(false);
             $table->timestamps();

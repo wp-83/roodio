@@ -43,7 +43,7 @@ class ThreadController extends Controller
         $threadData['datePost'] = now();
 
         Thread::create($threadData);
-        return redirect()->route('main.threads.index')->with('success', 'Thread added successfully!');
+        return redirect()->route('thread.index')->with('success', 'Thread added successfully!');
     }
 
     /**

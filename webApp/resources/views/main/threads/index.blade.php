@@ -16,7 +16,7 @@
 
 @section('mainContentContainerClass')
 
-@php    
+@php
     $bgPlusIcon = [
         'happy' => 'bg-secondary-happy-10',
         'sad' => 'bg-secondary-sad-10',
@@ -82,11 +82,8 @@
             <livewire:user.reaction-button :thread-id="$thread->id" />
         </div>
     </div>
+    <x-threadBox creator="{{ $thread->user->userDetail->fullname }}" createdAt="{{ \Carbon\Carbon::createFromFormat('d/m/Y', '17/12/1990')->diffForHumans() }}" title="{{ $thread->title }}" content="{{ $thread->content }}"></x-threadBox>
     @empty
     @endforelse
-    {{-- @php
-        dd($thread)
-    @endphp --}}
 
-    <x-threadBox creator="{{ $thread->userId }}" createdAt="{{ \Carbon\Carbon::createFromFormat('d/m/Y', '17/12/1990')->diffForHumans() }}" title="{{ $thread->title }}" content="{{ $thread->content }}"></x-threadBox>
 @endsection
