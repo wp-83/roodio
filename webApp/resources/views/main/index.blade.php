@@ -106,8 +106,6 @@
     <div>
         <p class='text-title text-secondary-relaxed-30 font-primary font-bold mt-5'>Most Current Play Songs</p>
     </div>
-
-
 @endsection
 
 
