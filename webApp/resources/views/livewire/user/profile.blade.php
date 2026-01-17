@@ -13,7 +13,7 @@ x-on:password-updated.window="showPasswordModal = false">
 
         {{-- Header Section (Tidak Berubah) --}}
         <div class="h-48 bg-gradient-to-r from-primary-100 to-primary-60 relative">
-            <a href="{{ url()->previous() }}" class="absolute top-8 left-8 flex items-center gap-2 px-5 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white hover:bg-white/20 transition group z-20">
+            <a href="{{ route('user.index') }}" class="absolute top-8 left-8 flex items-center gap-2 px-5 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white hover:bg-white/20 transition group z-20">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>

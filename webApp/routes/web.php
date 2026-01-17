@@ -46,7 +46,7 @@ Route::prefix('auth')->group(function () {
 });
 
 // Main Route
-Route::prefix('/')->middleware(['auth', 'role:0'])->group(function () {
+Route::prefix('/')->middleware(['auth', 'role:0', 'prevent-back-history'])->group(function () {
     // Profile
     Route::get('profile', [ProfileController::class, 'index'])->name('user.profile');
 
@@ -67,7 +67,7 @@ Route::prefix('/')->middleware(['auth', 'role:0'])->group(function () {
 });
 
 // Admin Route
-Route::prefix('admin')->middleware(['auth', 'role:1'])->group(function () {
+Route::prefix('admin')->middleware(['auth', 'role:1', 'prevent-back-history'])->group(function () {
     Route::prefix('songs')->group(function () {
         Route::get('', [SongController::class, 'index'])->name('admin.songs.index');
         Route::get('/create', [SongController::class, 'create'])->name('admin.songs.create');

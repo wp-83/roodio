@@ -7,13 +7,19 @@ use Illuminate\View\Component;
 
 class Navbar extends Component
 {
-    public $user;
+    public $username;
+    public $fullname;
+    public $profilePhoto;
+    public $mood;
     /**
      * Create a new component instance.
      */
     public function __construct()
     {
-        $this->user = auth()->user();
+        $this->username     = auth()->user()->username;
+        $this->fullname     = auth()->user()->userDetail->fullname;
+        $this->profilePhoto = auth()->user()->userDetail->profilePhoto;
+        $this->mood         = session('chooseMood', 'happy');
     }
 
     /**

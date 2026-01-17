@@ -1,24 +1,30 @@
 <div class="text-micro text-center md:text-small"
+     {{-- Hapus wire:init="sendOtp" di sini karena sudah ditangani mount() --}}
      x-data="{
-        timer: 60,
-        canResend: false,
+        timer: {{ $secondsRemaining }}, {{-- Ambil nilai dinamis dari backend --}}
+        canResend: {{ $secondsRemaining > 0 ? 'false' : 'true' }},
         init() {
-            this.startTimer();
+            if (this.timer > 0) {
+                this.startTimer();
+            }
         },
         startTimer() {
-            this.timer = 60;
             this.canResend = false;
             let interval = setInterval(() => {
                 this.timer--;
                 if (this.timer <= 0) {
                     clearInterval(interval);
+                    this.timer = 0;
                     this.canResend = true;
                 }
             }, 1000);
+        },
+        resetTimer() {
+             this.timer = 60;
+             this.startTimer();
         }
      }"
-     @otp-resent.window="startTimer()"
-     wire:init="sendOtp"
+     @otp-resent.window="resetTimer()"
 >
 
     <span>Don't get the code?</span>
@@ -27,7 +33,6 @@
             wire:click="sendOtp"
             x-bind:disabled="!canResend"
             wire:loading.attr="disabled"
-
             class="font-bold cursor-pointer transition-colors duration-200"
             :class="(!canResend) ? 'text-gray-400 cursor-not-allowed' : 'text-secondary-sad-100 hover:text-primary-50'"
     >

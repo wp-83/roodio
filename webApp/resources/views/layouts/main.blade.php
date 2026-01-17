@@ -5,7 +5,7 @@
 
 
 @push('script')
-    <script src="{{ asset('js/pages/main/navigation.js') }}" defer></script> 
+    <script src="{{ asset('js/pages/main/navigation.js') }}" defer></script>
 @endpush
 
 
@@ -15,7 +15,7 @@
 @section('bodyContent')
     @yield('overlayContent')
     <div class="shrink-0">
-        <x-navbar :mood='$mood' :fullname='$fullname' :username='$username' :profilePhoto='$profilePhoto'></x-navbar>
+        <x-navbar></x-navbar>
     </div>
     <div class='flex flex-col flex-1 min-h-0'>
         <div class='flex flex-row flex-1 min-h-0 relative'>

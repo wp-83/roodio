@@ -17,9 +17,10 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
-            'register.step' => \App\Http\Middleware\EnsureRegistrationStep::class,
-            'role'          => \App\Http\Middleware\RoleMidleware::class,
-            'forgot.step'   => \App\Http\Middleware\EnsureForgotPasswordStep::class,
+            'register.step'        => \App\Http\Middleware\EnsureRegistrationStep::class,
+            'role'                 => \App\Http\Middleware\RoleMidleware::class,
+            'forgot.step'          => \App\Http\Middleware\EnsureForgotPasswordStep::class,
+            'prevent-back-history' => App\Http\Middleware\PreventBackHistory::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
