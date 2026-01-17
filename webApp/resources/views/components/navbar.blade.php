@@ -1,11 +1,3 @@
-@props([
-    'mood',
-    'fullname',
-    'username',
-    'profilePhoto'
-])
-
-
 @php
     $contrastStyle = [
         'happy' => 'bg-secondary-happy-85',
@@ -68,7 +60,7 @@
         <div class='flex flex-col items-center gap-2'>
             <div class='w-20 h-20 rounded-full flex items-center justify-center overflow-hidden {{ $bgMoodStyle[$mood] }}'>
                 @if (isset($profilePhoto))
-                    <img src="{{ config('filesystems.disks.azure.url') . '/' . $profilePhoto }}" alt="{{ $fullname }}" class='w-full h-full object-cover'> 
+                    <img src="{{ config('filesystems.disks.azure.url') . '/' . $profilePhoto }}" alt="{{ $fullname }}" class='w-full h-full object-cover'>
                 @else
                     <p class='text-title font-primary font-bold h-fit {{ $textMoodStyle[$mood] }}'>{{ Str::charAt(Str::upper($fullname), 0) }}</p>
                 @endif
@@ -101,23 +93,61 @@
 
 <x-modal modalId='changeMood' additionalStyle='right-20 top-14 md:right-48'>
     <x-slot name='body'>
-        <p class='mb-3 font-bold text-primary-60'>Change Your Mood</p>
-        <div class='w-full flex flex-col gap-2.5 font-secondaryAndButton text-small'>
-            @foreach ($moodOptions as $moodOpt)
-            <a href="">
-                <div class='h-max rounded-sm px-2 py-1 flex flex-row items-center gap-2.5 {{ (($moodOpt == $mood) ? $bgMoodStyle[$mood] . ' cursor-default disabled ' : $hoverBgMoodStyle[$mood] . ' ') }}'>
+        <form
+            action="{{ route('mood.update') }}"
+            method="POST"
+        >
+            @csrf
+
+            <p class='mb-3 font-bold text-primary-60'>Change Your Mood</p>
+
+            <div class='w-full flex flex-col gap-2.5 font-secondaryAndButton text-small'>
+                @foreach ($moodOptions as $moodOpt)
+                <button
+                    type="submit"
+                    name="mood"
+                    value="{{ $moodOpt }}"
+                    {{ ($moodOpt == $mood) ? 'disabled' : '' }}
+                    class='w-full h-max rounded-sm px-2 py-1 flex flex-row items-center gap-2.5 text-left transition-colors duration-200
+                    {{ (($moodOpt == $mood) ? $bgMoodStyle[$mood] . ' cursor-default opacity-80' : $hoverBgMoodStyle[$mood] . ' cursor-pointer') }}'
+                >
                     <img src="{{ asset('assets/moods/' . $moodOpt . '.png') }}" alt="{{ $moodOpt }}" class='w-7 h-7'>
                     <p class='text-primary-60'>{{ Str::ucfirst($moodOpt) }}</p>
-                </div>
-            </a>
-            @endforeach
-        </div>
-        <hr class='my-4'>
-        <p class='mb-3 font-bold text-primary-60'>Playlist Behaviour</p>
-        <div class='flex flex-row items-center gap-1.25 w-max h-max'>
-            <input type="checkbox" name='playlistMood' id='playlistMood' value='1' class='w-6 h-6 rounded-lg {{ $checkboxStyle[$mood] }}'>
-            <label for="playlistMood" class='text-micro md:text-small'>Based on mood</label>
-        </div>
+                </button>
+                @endforeach
+            </div>
+        </form>
+
+        <hr class='my-4 border-gray-200'>
+
+        <form
+            action="{{ route('preference.update') }}"
+            method="POST"
+            x-data="{
+                isMatch: {{ (session('preferenceMood', 'match') == 'match') ? 'true' : 'false' }}
+            }"
+        >
+            @csrf
+
+            <p class='mb-3 font-bold text-primary-60'>Playlist Behaviour</p>
+
+            <div class='flex flex-row items-center gap-1.25 w-max h-max'>
+
+                <input type="hidden" name="preferenceMood" :value="isMatch ? 'match' : 'mismatch'">
+
+                <input
+                    type="checkbox"
+                    id="playlistMood"
+                    x-model="isMatch"
+                    @change="$nextTick(() => $el.form.submit())"
+                    class='w-6 h-6 rounded-lg border-2 border-gray-300 focus:ring-0 cursor-pointer {{ $checkboxStyle[$mood] }}'
+                >
+
+                <label for="playlistMood" class='text-micro md:text-small cursor-pointer text-primary-60'>
+                    Based on mood
+                </label>
+            </div>
+        </form>
     </x-slot>
 </x-modal>
 
@@ -167,8 +197,8 @@
                     <p class='text-micro'>{{ '@' . Str::limit($username, 9) }}</p>
                 </div>
                 <div class='w-10 h-10 bg-primary-10 rounded-full flex items-center justify-center relative z-5 overflow-hidden'>
-                    @if (isset($user->userDetail->profilePhoto))
-                        <img src="{{ config('filesystems.disks.azure.url') . '/' . $profilePhoto }}" alt="{{ $fullname }}" class='w-full h-full object-cover'> 
+                    @if (isset($profilePhoto))
+                        <img src="{{ config('filesystems.disks.azure.url') . '/' . $profilePhoto }}" alt="{{ $fullname }}" class='w-full h-full object-cover'>
                     @else
                         <p class='text-paragraph font-primary font-bold text-primary-70 h-fit'>{{ Str::charAt(Str::upper($fullname), 0) }}</p>
                     @endif

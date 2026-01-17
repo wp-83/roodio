@@ -16,11 +16,8 @@ class ThreadController extends Controller
     public function index()
     {
         $threads = Thread::withCount('reactions')->orderByDesc('created_at')->paginate(5);
-        $username     = auth()->user()->username;
-        $fullname     = auth()->user()->userDetail->fullname;
-        $profilePhoto = auth()->user()->userDetail->profilePhoto;
-        $mood         = session('chooseMood', 'happy');
-        return view('main.threads.index', compact('threads', 'username', 'fullname', 'profilePhoto', 'mood'));
+        $mood    = session('chooseMood', 'happy');
+        return view('main.threads.index', compact('threads', 'mood'));
     }
 
     /**
@@ -46,7 +43,7 @@ class ThreadController extends Controller
         $threadData['datePost'] = now();
 
         Thread::create($threadData);
-        return redirect()->route('main.threads.index')->with('success', 'Thread added successfully!');
+        return redirect()->route('thread.index')->with('success', 'Thread added successfully!');
     }
 
     /**

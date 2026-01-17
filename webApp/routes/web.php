@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\PlaylistController;
 use App\Http\Controllers\Admin\SongController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\SocialController;
 use App\Http\Controllers\ThreadController;
 use App\Http\Controllers\User\MoodController;
 use App\Http\Controllers\User\ProfileController;
@@ -46,20 +47,27 @@ Route::prefix('auth')->group(function () {
 });
 
 // Main Route
-Route::prefix('/')->middleware(['auth', 'role:0'])->group(function () {
+Route::prefix('/')->middleware(['auth', 'role:0', 'prevent-back-history'])->group(function () {
     // Profile
     Route::get('profile', [ProfileController::class, 'index'])->name('user.profile');
 
     // Mood
     Route::post('mood', [MoodController::class, 'moodStore'])->name('mood.store');
     Route::post('preference', [MoodController::class, 'preferenceStore'])->name('preference.store');
+    Route::post('mood-update', [MoodController::class, 'moodUpdate'])->name('mood.update');
+    Route::post('preference-update', [MoodController::class, 'preferenceUpdate'])->name('preference.update');
 
     // Threads
-    Route::prefix('threads')->middleware('auth')->group(function () {
+    Route::prefix('threads')->group(function () {
         Route::get('', [ThreadController::class, 'index'])->name('thread.index');
         Route::get('/create', [ThreadController::class, 'create'])->name('thread.create');
         Route::post('', [ThreadController::class, 'store'])->name('thread.store');
         Route::post('/{thread}/reply', [ThreadController::class, 'reply'])->name('thread.reply');
+    });
+
+    // Social
+    Route::prefix('/social')->group(function () {
+        Route::get('', [SocialController::class, 'index'])->name('social.index');
     });
 
     Route::get('', [App\Http\Controllers\User\SongController::class, 'index'])->name('user.index');
@@ -67,7 +75,7 @@ Route::prefix('/')->middleware(['auth', 'role:0'])->group(function () {
 });
 
 // Admin Route
-Route::prefix('admin')->middleware(['auth', 'role:1'])->group(function () {
+Route::prefix('admin')->middleware(['auth', 'role:1', 'prevent-back-history'])->group(function () {
     Route::prefix('songs')->group(function () {
         Route::get('', [SongController::class, 'index'])->name('admin.songs.index');
         Route::get('/create', [SongController::class, 'create'])->name('admin.songs.create');

@@ -11,17 +11,14 @@ class MoodController extends Controller
     {
         session()->put('chooseMood', $request['mood']);
         $session = session('chooseMood');
-        if ($session === 'happy') {
-            $mood = 'MD-0000001';
-        } else if ($session === 'sad') {
-            $mood = 'MD-0000002';
-        } else if ($session === 'relaxed') {
-            $mood = 'MD-0000003';
-        } else if ($session === 'angry') {
-            $mood = 'MD-0000004';
-        }
+        $moodMap = [
+            'happy'   => 'MD-0000001',
+            'sad'     => 'MD-0000002',
+            'relaxed' => 'MD-0000003',
+            'angry'   => 'MD-0000004',
+        ];
 
-        MoodHistories::create(['moodId' => $mood, 'userId' => auth()->user()->id]);
+        MoodHistories::create(['moodId' => $moodMap[$session], 'userId' => auth()->user()->id]);
         return redirect()->route('user.index');
     }
 
@@ -29,5 +26,32 @@ class MoodController extends Controller
     {
         session()->put('preferenceMood', $request['preference']);
         return redirect()->route('user.index');
+    }
+
+    public function moodUpdate(Request $request)
+    {
+        $validated = $request->validate([
+            'mood' => 'required|in:happy,sad,relaxed,angry',
+        ]);
+
+        session()->put('chooseMood', $validated['mood']);
+        $moodMap = [
+            'happy'   => 'MD-0000001',
+            'sad'     => 'MD-0000002',
+            'relaxed' => 'MD-0000003',
+            'angry'   => 'MD-0000004',
+        ];
+
+        MoodHistories::where('userId', auth()->id())->latest()->first()->update(['moodId' => $moodMap[$validated['mood']]]);
+        return back();
+    }
+
+    public function preferenceUpdate(Request $request)
+    {
+        $validated = $request->validate([
+            'preferenceMood' => 'required|in:match,mismatch',
+        ]);
+        session()->put('preferenceMood', $validated['preferenceMood']);
+        return back();
     }
 }

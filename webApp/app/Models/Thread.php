@@ -12,6 +12,21 @@ class Thread extends Model
     public $incrementing = false;
     protected $keyType   = 'string';
 
+    public function replies(): HasMany
+    {
+        return $this->hasMany(Reply::class, 'threadId', 'id');
+    }
+
+    public function reactions(): HasMany
+    {
+        return $this->hasMany(Reactions::class, 'threadId', 'id');
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'userId', 'id');
+    }
+
     protected static function booted()
     {
         static::creating(function ($model) {
@@ -29,20 +44,5 @@ class Thread extends Model
                 $model->id = 'TH-' . str_pad($number, 7, '0', STR_PAD_LEFT);
             }
         });
-    }
-
-    public function replies(): HasMany
-    {
-        return $this->hasMany(Reply::class, 'threadId', 'id');
-    }
-
-    public function reactions(): HasMany
-    {
-        return $this->hasMany(Reactions::class, 'threadId', 'id');
-    }
-
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'userId', 'id');
     }
 }

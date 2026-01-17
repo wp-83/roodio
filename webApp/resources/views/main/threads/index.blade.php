@@ -16,7 +16,7 @@
 
 @section('mainContentContainerClass')
 
-@php    
+@php
     $bgPlusIcon = [
         'happy' => 'bg-secondary-happy-10',
         'sad' => 'bg-secondary-sad-10',
