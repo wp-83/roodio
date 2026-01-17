@@ -11,7 +11,7 @@ class SongController extends Controller
         $playlists    = Playlists::orderByDesc('created_at')->get();
         $username     = auth()->user()->username;
         $fullname     = auth()->user()->userDetail->fullname;
-        $profilePhoto = auth()->user()->userDetail->profilePhoo;
+        $profilePhoto = auth()->user()->userDetail->profilePhoto;
         $mood         = session('chooseMood', 'happy');
         return view('main.index', compact('playlists', 'username', 'fullname', 'profilePhoto', 'mood'));
     }

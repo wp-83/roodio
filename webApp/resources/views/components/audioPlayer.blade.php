@@ -37,16 +37,45 @@
         'sad' => 'accent-secondary-sad-70',
         'relaxed' => 'accent-secondary-relaxed-70',
         'angry' => 'accent-secondary-angry-70',
-    ]
+    ];
+
+    $audioControlOptions = ['loop', 'shuffle', 'speaker-muted'];
+    $audioControlLabel = [
+        'loop' => 'Loop Song',
+        'shuffle' => 'Shuffle Play',
+        'speaker-muted' => 'Muted Audio'
+    ];
+
+    $hoverBgMoodStyle = [
+        'happy' => 'hover:bg-secondary-happy-20',
+        'sad' => 'hover:bg-secondary-sad-20',
+        'relaxed' => 'hover:bg-secondary-relaxed-20',
+        'angry' => 'hover:bg-secondary-angry-20'
+    ];
 @endphp
 
 
-<div id='audioPlayer'>
+<x-modal modalId='audioControlPopup' additionalStyle='right-5 bottom-18' :isNeedBg='true'>
+    <x-slot name='body'>
+        <div class='w-full flex flex-col gap-2.5 font-secondaryAndButton text-small'>
+            @foreach ($audioControlOptions as $audioCtrlOpt)
+            <a href="">
+                <div class='h-max rounded-sm px-2 pr-8 py-1 flex flex-row items-center gap-2.5 {{ $hoverBgMoodStyle[$mood] }}'>
+                    <img src="{{ asset('assets/icons/' . $audioCtrlOpt . '.svg') }}" alt="{{ $audioCtrlOpt }}" class='w-7 h-7'>
+                    <p class='text-primary-60'>{{ Str::ucfirst($audioControlLabel[$audioCtrlOpt]) }}</p>
+                </div>
+            </a>
+            @endforeach
+        </div>
+    </x-slot>
+</x-modal>
+
+<div id='audioPlayer' class='relative'>
+    <div id='overlayNan' class='hidden absolute bottom-0 z-10 h-23.25 w-full bg-shadedOfGray-85/50 cursor-not-allowed'></div>
     <audio id='audio'></audio>
     <div id="progressContainer" class="w-full h-1.25 bg-white cursor-pointer">
         <div id="progressBar" class="{{ 'h-1.25 w-0 ' . $mainBtnStyle[$mood] . ' ' }}"></div>
     </div>
-    <div id='overlayNan' class='hidden absolute bottom-0 z-10 h-22 w-full bg-shadedOfGray-85/50 cursor-not-allowed'></div>
     <div class='w-full h-22 bg-primary-85 relative flex flex-row items-center justify-between px-5'>
         <div class='flex flex-row items-center gap-2'>
             <div class='h-14 w-14 bg-shadedOfGray-20 rounded-md'>
@@ -186,7 +215,7 @@
                     <input type="range" name="" id="volumeSlider" min='0' max='1' step='0.01' class='{{ 'w-28 ' . $sliderStyle[$mood] . ' ' }}'>
                 </div>
             </div>
-            <x-iconButton type='kebab' :mood='$mood' class='lg:hidden'></x-iconButton>
+            <x-iconButton type='kebab' :mood='$mood' class='lg:hidden' id='audioControlResponsive'></x-iconButton>
         </div>
     </div>
 </div>

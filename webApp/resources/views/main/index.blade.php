@@ -1,15 +1,11 @@
 @extends('layouts.main')
 
 
-{{-- @section('title') --}}
-
-
 @push('script')
-    <script src="{{ asset('js/pages/audioControl.js') }}" defer></script>
+    <script src="{{ asset('js/pages/main/audioControl.js') }}" defer></script>
+    <script src="{{ asset('js/pages/main/index.js') }}" defer></script>
 @endpush
 
-
-{{-- @section('mainContentContainerClass') --}}
 
 @php
     $moodOptions = ['happy', 'sad', 'relaxed', 'angry'];
@@ -19,27 +15,6 @@
         'sad' => "Oh no… you seem sad right now. It's okay, take your time.",
         'relaxed' => 'Hmm… you look relaxed now. Enjoy the calm and breathe easy.',
         'angry' => "Whoa… you seem angry right now. Take a deep breath, it'll pass."
-    ];
-
-    $textMoodStyle = [
-        'happy' => 'text-secondary-happy-100',
-        'sad' => 'text-secondary-sad-100',
-        'relaxed' => 'text-secondary-relaxed-100',
-        'angry' => 'text-secondary-angry-100'
-    ];
-
-    $bgMoodStyle = [
-        'happy' => 'bg-secondary-happy-20',
-        'sad' => 'bg-secondary-sad-20',
-        'relaxed' => 'bg-secondary-relaxed-20',
-        'angry' => 'bg-secondary-angry-20'
-    ];
-
-    $hoverBgMoodStyle = [
-        'happy' => 'hover:bg-secondary-happy-20',
-        'sad' => 'hover:bg-secondary-sad-20',
-        'relaxed' => 'hover:bg-secondary-relaxed-20',
-        'angry' => 'hover:bg-secondary-angry-20'
     ];
 @endphp
 
@@ -106,7 +81,7 @@
                         <input type="hidden" name="preference" value="mismatch">
 
                         <div onclick="this.closest('form').submit()" class="cursor-pointer w-full">
-                            <x-button content='No, Just random'></x-button>
+                            <x-button content='No, Give others'></x-button>
                         </div>
                     </form>
 
@@ -114,77 +89,23 @@
             </x-slot>
         </x-modal>
     @endif
-
-    <x-modal modalId='profilePopup' additionalStyle='right-3 top-14 w-60 h-max '>
-        <x-slot name='body'>
-            <div class='absolute right-6 top-5' style='zoom: 0.75;'>
-                <x-iconButton :mood='$mood' type='cross'></x-iconButton>
-            </div>
-            <div class='flex flex-col items-center gap-2'>
-                <div class='w-20 h-20 rounded-full flex items-center justify-center {{ $bgMoodStyle[$mood] }}'>
-                    <p class='text-title font-primary font-bold h-fit {{ $textMoodStyle[$mood] }}'>{{ Str::charAt(Str::upper($fullname), 0) }}</p>
-                </div>
-                <div class='flex flex-col items-center'>
-                    <p class='text-small font-bold {{ $textMoodStyle[$mood] }}'>{{ Str::limit($fullname, 24) }}</p>
-                    <p class='text-micro text-primary-60'>{{ '@' . Str::limit($username, 18) }}</p>
-                </div>
-            </div>
-            <hr class='my-2 border-primary-50'>
-            <div class='w-full flex flex-col gap-2.5 font-secondaryAndButton text-small'>
-                <a href="{{ route('user.profile') }}">
-                    <div class='h-max rounded-sm px-2 py-1 flex flex-row items-center gap-2.5 {{ $hoverBgMoodStyle[$mood] }}'>
-                        <img src="{{ asset('assets/icons/user.svg') }}" alt="user" class='w-7 h-7'>
-                        <p class='text-primary-60'>Edit Your Profile</p>
-                    </div>
-                </a>
-                <form action="{{ route('auth.logout') }}" method="POST">
-                    @csrf
-                    <div onclick="this.closest('form').submit()"
-                        class='cursor-pointer h-max rounded-sm px-2 py-1 flex flex-row items-center gap-2.5 {{ $hoverBgMoodStyle[$mood] }}'>
-
-                        <img src="{{ asset('assets/icons/logout.svg') }}" alt="logout" class='w-7 h-7'>
-                        <p class='text-primary-60'>Logout</p>
-                    </div>
-                </form>
-            </div>
-        </x-slot>
-    </x-modal>
-
-    <!-- <x-modal modalId='changeMood' additionalStyle='right-48 top-14'>
-        <x-slot name='body'>
-            <p class='mb-3 font-bold text-primary-60'>Change Your Mood</p>
-            <div class='w-full flex flex-col gap-2.5 font-secondaryAndButton text-small'>
-                @foreach ($moodOptions as $moodOpt)
-                    <a href="">
-                        <div class='h-max rounded-sm px-2 py-1 flex flex-row items-center gap-2.5 {{ $hoverBgMoodStyle[$mood] }}'>
-                            <img src="{{ asset('assets/moods/' . $moodOpt . '.png') }}" alt="{{ $moodOpt }}" class='w-7 h-7'>
-                            <p class='text-primary-60'>{{ Str::ucfirst($moodOpt) }}</p>
-                        </div>
-                    </a>
-                @endforeach
-            </div>
-        </x-slot>
-    </x-modal> -->
-
 @endsection
 
 
 @section('mainContent')
-    <div class='flex flex-row justify-content items-center'>
+    <div class='flex flex-row justify-content items-center contentFadeLoad'>
         <img src="{{ asset('assets/moods/' . $mood . '.png') }}" alt="" class='h-42 w-42'>
         <div class='flex flex-col text-white'>
-            <p class='font-primary text-white text-title font-bold'>Hi, Andi!</p>
+            <p class='font-primary text-white text-title font-bold'>Hi, {{ Str::before($fullname, ' ') }}!</p>
             <p>Welcome to our life</p>
-             {{-- @foreach ($playlists as $playlist)
+             @foreach ($playlists as $playlist)
                 <p>Title: {{ $playlist->name }}</p>
-            @endforeach --}}
+            @endforeach
         </div>
     </div>
     <div>
         <p class='text-title text-secondary-relaxed-30 font-primary font-bold mt-5'>Most Current Play Songs</p>
     </div>
-
-
 @endsection
 
 

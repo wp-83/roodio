@@ -99,10 +99,6 @@ Route::prefix('admin')->middleware(['auth', 'role:1'])->group(function () {
 // Route::delete('/moods/{mood}', [MoodController::class, 'destroy'])->name('moods.destroy');
 
 //unit test route
-Route::get('/wkwkwk', function () {
-    return view('components.modal');
-});
-
-Route::get('/hahahaha', function () {
-    return view('main.index', ['mood' => 'sad']);
+Route::get('/test/component', function () {
+    return view('components.threadBox');
 });

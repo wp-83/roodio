@@ -68,16 +68,22 @@ searchIcon.addEventListener('click', () => {
     (isSearchBarOpened) ? closeSearchBar() : openSearchBar();
 });
 
-// document.addEventListener('click')
-document.addEventListener('click', (e) => {
-    if (!isSearchBarOpened) return;
+// document.addEventListener('mousedown')
+document.addEventListener('mousedown', (e) => {
+    const isClickInsideSearch = (searchbar.contains(e.target) || searchIcon.contains(e.target));
 
-    const isClickInsideSearch =
-        searchbar.contains(e.target) ||
-        searchIcon.contains(e.target);
-
-    if (!isClickInsideSearch) {
+    if (!isClickInsideSearch && isSearchBarOpened) {
         closeSearchBar();
+    }
+
+    // profile popup close
+    if(!profileContent.contains(e.target)){
+        profilePopup.classList.add('opacity-0', 'invisible');
+    }
+
+    // mood popup close
+    if(!moodContent.contains(e.target)){
+        moodPopup.classList.add('opacity-0', 'invisible');
     }
 });
 
@@ -185,3 +191,34 @@ hamburgerBtn.addEventListener('click', () => {
 });
 
 window.addEventListener('resize', handleResponsive);
+
+// popup behaviour
+function popupBehaviour(element){
+    if(element.classList.contains('invisible')) element.classList.remove('opacity-0', 'invisible');
+    else element.classList.add('opacity', 'invisible');
+}
+
+// profile pop-up behaviour
+const profileArea = document.getElementById('profileNavbar');
+const profilePopup = document.getElementById('profilePopup');
+const profileContent = profilePopup.querySelector('.popupContent');
+
+// event trigger for profile
+profileArea.addEventListener('click', () => {
+    popupBehaviour(profilePopup);
+});
+
+// close icon behaviour on profile popup
+profilePopup.querySelector('#closeProfilePopup').addEventListener('click', () => {
+    profilePopup.classList.add('opacity-0', 'invisible');
+});
+
+//mood pop-up behaviour
+const moodArea = document.getElementById('currentMood');
+const moodPopup = document.getElementById('changeMood');
+const moodContent = moodPopup.querySelector('.popupContent');
+
+// event trigger for mood
+moodArea.addEventListener('click', () => {
+    popupBehaviour(moodPopup);
+});

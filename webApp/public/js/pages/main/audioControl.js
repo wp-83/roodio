@@ -161,3 +161,28 @@ progressContainer.addEventListener("click", (e) => {
 
     audio.currentTime = (clickX / width) * audio.duration;
 });
+
+// popup behaviour
+function popupBehaviour(element){
+    if(element.classList.contains('invisible')) element.classList.remove('opacity-0', 'invisible');
+    else element.classList.add('opacity', 'invisible');
+}
+
+//audio control pop-up behaviour
+const audioCtrlArea = document.getElementById('audioControlResponsive');
+const audioCtrlPopup = document.getElementById('audioControlPopup');
+const audioCtrlContent = audioCtrlPopup.querySelector('.popupContent');
+
+// event trigger for mood
+audioCtrlArea.addEventListener('click', () => {
+    popupBehaviour(audioCtrlPopup);
+    popupBehaviour(audioCtrlContent);
+});
+
+// close pop up when clicking outside
+document.addEventListener('mousedown', (e) => {
+    if(!audioCtrlContent.contains(e.target)){
+        audioCtrlContent.classList.add('opacity-0', 'invisible');
+        audioCtrlPopup.classList.add('opacity-0', 'invisible');
+    }
+});
