@@ -70,12 +70,12 @@
     </x-slot>
 </x-modal>
 
-<div id='audioPlayer'>
+<div id='audioPlayer' class='relative'>
+    <div id='overlayNan' class='hidden absolute bottom-0 z-10 h-23.25 w-full bg-shadedOfGray-85/50 cursor-not-allowed'></div>
     <audio id='audio'></audio>
     <div id="progressContainer" class="w-full h-1.25 bg-white cursor-pointer">
         <div id="progressBar" class="{{ 'h-1.25 w-0 ' . $mainBtnStyle[$mood] . ' ' }}"></div>
     </div>
-    <div id='overlayNan' class='hidden absolute bottom-0 z-10 h-22 w-full bg-shadedOfGray-85/50 cursor-not-allowed'></div>
     <div class='w-full h-22 bg-primary-85 relative flex flex-row items-center justify-between px-5'>
         <div class='flex flex-row items-center gap-2'>
             <div class='h-14 w-14 bg-shadedOfGray-20 rounded-md'>
