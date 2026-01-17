@@ -53,14 +53,23 @@
             <p>Give your opinion!</p>
         </div>
     </a>
-    @forelse($threads as $thread)
+    <div class='flex flex-col gap-30 contentFadeLoad' >
+        @forelse($threads as $thread)
+            <x-threadBox creator="{{ $thread->userId }}" createdAt="{{ \Carbon\Carbon::parse($thread->created_at)->diffForHumans() }}" title="{{ $thread->title }}" content="{{ $thread->content }}" :threadId='$thread->id'></x-threadBox>
+        @empty
+        @endforelse
+    </div>
+
+@endsection
+
+{{--     
     <div class="">
         <div class="">
             <span>Title: </span>{{ $thread->title }}
             <p>{{ $thread->content }}</p>
         </div>
         <div class="">
-            @session('succes')
+            @session('success')
             <strong>Success! {{ $value }}</strong>
             @endsession
             @forelse($thread->replies as $reply)
@@ -77,16 +86,5 @@
                 @error('content')
                     {{ $message }}
                 @enderror
-            </div>
-
-            <livewire:user.reaction-button :thread-id="$thread->id" />
-        </div>
-    </div>
-    @empty
-    @endforelse
-    {{-- @php
-        dd($thread)
-    @endphp --}}
-
-    <x-threadBox creator="{{ $thread->userId }}" createdAt="{{ \Carbon\Carbon::createFromFormat('d/m/Y', '17/12/1990')->diffForHumans() }}" title="{{ $thread->title }}" content="{{ $thread->content }}"></x-threadBox>
-@endsection
+            </div>  
+        </div>  --}}

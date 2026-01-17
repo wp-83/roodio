@@ -19,6 +19,7 @@
       'sad' => 'bg-secondary-sad-20 text-secondary-sad-100 before:bg-secondary-sad-85 hover:text-secondary-sad-10',
       'relaxed' => 'bg-secondary-relaxed-20 text-secondary-relaxed-100 before:bg-secondary-relaxed-85 hover:text-secondary-relaxed-10',
       'angry' => 'bg-secondary-angry-20 text-secondary-angry-100 before:bg-secondary-angry-85 hover:text-secondary-angry-10',
+      'grayscale' => 'bg-shadedOfGray-10 text-shadedOfGray-60',
       'default' => 'bg-primary-10 text-primary-85 before:bg-primary-50 hover:text-white'
     ];
 
