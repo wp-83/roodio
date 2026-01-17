@@ -192,7 +192,7 @@
     <div class='flex flex-row justify-content items-center'>
         <img src="{{ asset('assets/moods/' . $mood . '.png') }}" alt="" class='h-42 w-42'>
         <div class='flex flex-col text-white'>
-            <p class='font-primary text-white text-title font-bold'>Hi, Andi!</p>
+            <p class='font-primary text-white text-title font-bold'>Hi, {{ Str::before($fullname, ' ') }}!</p>
             <p>Welcome to our life</p>
              @foreach ($playlists as $playlist)
                 <p>Title: {{ $playlist->name }}</p>
