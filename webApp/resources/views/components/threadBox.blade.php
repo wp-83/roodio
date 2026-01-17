@@ -1,5 +1,8 @@
 @props([
-
+    'creator',
+    'createdAt',
+    'title',
+    'content'
 ])
 
 <div class='bg-secondary-angry-10 rounded-lg w-sm h-max p-5 md:w-md lg:w-2xl'>
@@ -14,17 +17,18 @@
         </div>
         <div class='flex-1 w-full'>
             <div class='flex flex-row justify-between'>
-                <p>William Pratama</p>
+                <p>{{ $creator }}</p>
                 <p>Follow</p>
             </div>
             <div>
-                <p>3 hours ago</p>
+                <p>{{ $createdAt }}</p>
             </div>
         </div>
     </div>
     <hr class='my-3'>
     <div>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim, neque. Corrupti cum alias voluptatibus architecto placeat harum rem saepe, laboriosam quidem modi eaque aut facere delectus nisi dolor vel obcaecati.</p>
+        <p class='font-bold'>{{ $title }}</p>
+        <p>{{ $content }}</p>
     </div>
     <div class='flex flex-row '>
         <div class='w-7 h-7'>
