@@ -5,7 +5,7 @@
 
 
 @push('script')
-    <script src="{{ asset('js/pages/navigation.js') }}" defer></script> 
+    <script src="{{ asset('js/pages/main/navigation.js') }}" defer></script> 
 @endpush
 
 

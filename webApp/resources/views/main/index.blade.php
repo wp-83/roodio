@@ -2,7 +2,7 @@
 
 
 @push('script')
-    <script src="{{ asset('js/pages/audioControl.js') }}" defer></script>
+    <script src="{{ asset('js/pages/main/audioControl.js') }}" defer></script>
     <script src="{{ asset('js/pages/main/index.js') }}" defer></script>
 @endpush
 
