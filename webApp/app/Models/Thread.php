@@ -3,6 +3,7 @@ namespace App\Models;
 
 use DB;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Thread extends Model
@@ -38,5 +39,10 @@ class Thread extends Model
     public function reactions(): HasMany
     {
         return $this->hasMany(Reactions::class, 'threadId', 'id');
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'userId', 'id');
     }
 }
