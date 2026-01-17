@@ -130,4 +130,19 @@ button:focus {
   .animate-float-soft {
     animation: float-vertical-soft 2.25s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
+
+  @keyframes typing-text {
+      from {
+          width: 0%;
+      }
+
+      to {
+          width: 100%;
+      }
+  }
+
+  .typingTextAnimation {
+    animation: typing-text 4s steps(60, end) forwards;
+  }
+
 }

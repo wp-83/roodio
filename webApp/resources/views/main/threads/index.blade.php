@@ -38,10 +38,27 @@
         'angry' => 'bg-secondary-angry-85'
     ];
 
+    $textColor = [
+        'happy' => 'text-secondary-happy-30',
+        'sad' => 'text-secondary-sad-30',
+        'relaxed' => 'text-secondary-relaxed-30',
+        'angry' => 'text-secondary-angry-30'
+    ];
+
 @endphp
 
 
 @section('mainContent')
+    <div class='mb-6 md:mb-11'>
+        <div>
+            <div class='flex flex-col'>
+                <div class='w-0 relative overflow-hidden typingTextAnimation max-w-max '>
+                    <p class='font-primary text-title font-bold {{ $textColor[$mood] }} md:text-hero' >Threads</p>
+                </div>
+                <p class='font-secondaryAndButton text-white text-justify contentFadeLoad text-small md:text-body-size'>Nice to meet you again, {{ Str::before($fullname, ' ') }}! Go ahead and express how you feel.</p>
+            </div>
+        </div>
+    </div>
     <a href="{{ route('thread.create') }}" class='group'>
         <div class='absolute z-75 right-7 bottom-7' id='threadIcon'>
             <div class="relative w-12 h-12 rounded-full border-2 bg-white {{ $borderPlusIcon[$mood] }}">
@@ -49,18 +66,27 @@
                 <div class='absolute w-8 h-1 {{ $moodBaseColor[$mood] }} rounded-full top-1/2 left-1/2 -translate-1/2 rotate-90 md:h-1.25'></div>
             </div>
         </div>
-        <div id='threadIconLabel' class='z-10 absolute opacity-0 transition-opacity duration-150 h-max right-12 bottom-9.5 pl-2 pr-10 text-primary-70 rounded-md py-0.5 text-small {{ $bgPlusIcon[$mood] }} group-hover:opacity-100 '>
+        <div id='threadIconLabel' class='z-10 absolute opacity-0 transition-opacity duration-150 h-max right-12 bottom-9.5 pl-2 pr-10 text-primary-70 rounded-md py-0.5 text-small border-2 {{ $bgPlusIcon[$mood] . ' ' . $borderPlusIcon[$mood] }} group-hover:opacity-100 '>
             <p>Give your opinion!</p>
         </div>
     </a>
-    @forelse($threads as $thread)
+    <div class='flex flex-col gap-10 contentFadeLoad' >
+        @forelse($threads as $thread)
+            <x-threadBox mood='{{ $mood }}' creator="{{ $thread->user->userDetail->fullname }}" profilePicture='{{ $thread->user->userDetail->profilePhoto }}' createdAt="{{ \Carbon\Carbon::parse($thread->created_at)->diffForHumans() }}" title="{{ $thread->title }}" content="{{ $thread->content }}" :threadId='$thread->id'></x-threadBox>
+        @empty
+        @endforelse
+    </div>
+
+@endsection
+
+{{--     
     <div class="">
         <div class="">
             <span>Title: </span>{{ $thread->title }}
             <p>{{ $thread->content }}</p>
         </div>
         <div class="">
-            @session('succes')
+            @session('success')
             <strong>Success! {{ $value }}</strong>
             @endsession
             @forelse($thread->replies as $reply)
@@ -77,13 +103,5 @@
                 @error('content')
                     {{ $message }}
                 @enderror
-            </div>
-
-            <livewire:user.reaction-button :thread-id="$thread->id" />
-        </div>
-    </div>
-    <x-threadBox creator="{{ $thread->user->userDetail->fullname }}" createdAt="{{ \Carbon\Carbon::createFromFormat('d/m/Y', '17/12/1990')->diffForHumans() }}" title="{{ $thread->title }}" content="{{ $thread->content }}"></x-threadBox>
-    @empty
-    @endforelse
-
-@endsection
+            </div>  
+        </div>  --}}
