@@ -1,6 +1,7 @@
 @import 'tailwindcss';
 @import "flowbite/src/themes/default";
 
+
 @config "../../tailwind.config.js";
 
 @source "../../node_modules/flowbite-datepicker";
@@ -58,6 +59,17 @@ button:focus {
 
   .error-message {
     @apply text-error-moderate w-[inherit] h-3 pt-0.5 text-micro md:text-small;
+  }
+
+  .contentFadeLoad {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.75s ease-in-out, transform 0.75s ease-in-out;
+  }
+
+  .contentFadeLoad.show {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 

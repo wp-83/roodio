@@ -6,7 +6,12 @@
 @endpush
 
 
+@section('mainContentContainerClass')
+
+
 @section('mainContent')
+    {{-- <div data-aos="fade-right" class='text-white'>Hai, namaku</div> --}}
+    <div class='contentFadeLoad text-white'>Hai, namaku</div>
     <a href="{{ route('thread.create') }}">Add thread</a>
     @forelse($threads as $thread)
     <div class="">

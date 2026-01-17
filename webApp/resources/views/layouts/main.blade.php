@@ -20,7 +20,7 @@
     <div class='flex flex-col flex-1 min-h-0'>
         <div class='flex flex-row flex-1 min-h-0 relative'>
             <x-sidebar :mood='$mood' class='relative z-10'></x-sidebar>
-            <div class='w-full bg-primary-100 overflow-x-hidden overflow-y-auto min-h-0 p-10 @yield('mainContentContainerClass')'>
+            <div id='scrollContainer' class='w-full bg-primary-100 overflow-x-hidden overflow-y-auto min-h-0 p-10 @yield('mainContentContainerClass')'>
                 @yield('mainContent')
             </div>
         </div>

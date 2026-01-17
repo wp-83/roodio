@@ -93,7 +93,7 @@
 
 
 @section('mainContent')
-    <div class='flex flex-row justify-content items-center'>
+    <div class='flex flex-row justify-content items-center contentFadeLoad'>
         <img src="{{ asset('assets/moods/' . $mood . '.png') }}" alt="" class='h-42 w-42'>
         <div class='flex flex-col text-white'>
             <p class='font-primary text-white text-title font-bold'>Hi, {{ Str::before($fullname, ' ') }}!</p>
