@@ -6,7 +6,8 @@
     'content',
     'thread',
     'profilePicture',
-    'isReplyable'
+    'isReplyable',
+    'mainUser'
 ])
 
 @php
@@ -54,16 +55,19 @@
         </div>
         <div class='flex flex-row justify-between items-center flex-1 w-full font-secondaryAndButton'>
             <div class='flex flex-col'>
-                <p class='text-body-size font-bold {{ $textMood[$mood] }}'>{{ $creator }}</p>
+                <p class='text-body-size font-bold {{ $textMood[$mood] }}'>{{ ($mainUser->id == $thread->userId) ? 'You' : $creator }}</p>
                 <p class='text-micro lg:text-small'>{{ $createdAt }}</p>
             </div>
-            <livewire:user.button-follow :thread="$thread"/>
+            @if (!($mainUser->id == $thread->userId))
+                <livewire:user.button-follow :thread="$thread"/>
+            @endif
         </div>
     </div>
     <hr class='border rounded-full my-3 {{ $borderMood[$mood] }}'>
     <div class='mb-6'>
         <p class='font-bold font-primary text-primary-60 text-paragraph lg:text-subtitle'>{{ $title }}</p>
-        <p class='font-secondaryAndButton text-small lg:text-body-size'>{{ Str::limit($content, 1000, '...') }}</p>
+        <p class='font-secondaryAndButton text-small lg:text-body-size'>{{ $content }}</p>
+        {{-- Str::limit($content, 1000, '...') --}}
     </div>
     <div class='flex flex-row gap-8 items-center'>
         <livewire:user.reaction-button :thread-id="$thread->id" />
@@ -87,4 +91,30 @@
             </div>
         @endif
     </div>
+    @if ($isReplyable)
+        <div class='mt-6'>
+            <hr class='border border-shadedOfGray-30'>
+            <div>
+                <div>
+                    <div class="">
+                    @forelse($thread->replies as $reply)
+                        <p>{{ $reply->content }}</p>
+                    @empty
+                    @endforelse
+                    <div class="">
+                        <form action="{{ route('thread.reply', $thread->id) }}" method="POST">
+                            @csrf
+                            <label for="content">Reply:</label>
+                            <textarea name="content" class="border"></textarea>
+                            <button type="submit">send</button>
+                        </form>
+                        @error('content')
+                            {{ $message }}
+                        @enderror
+                    </div>
+                </div> 
+                        </div>
+            </div>
+        </div>
+    @endif
 </div>

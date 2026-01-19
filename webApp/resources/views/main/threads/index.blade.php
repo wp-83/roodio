@@ -77,7 +77,7 @@
     </a>
     <div class='flex flex-col gap-8 contentFadeLoad' >
         @forelse($threads as $thread)
-            <x-threadBox mood='{{ $mood }}' creator="{{ $thread->user->userDetail->fullname }}" profilePicture='{{ $thread->user->userDetail->profilePhoto }}' createdAt="{{ \Carbon\Carbon::parse($thread->created_at)->diffForHumans() }}" title="{{ $thread->title }}" content="{{ $thread->content }}" :thread='$thread' :isReplyable='$thread->isReplyable'></x-threadBox>
+            <x-threadBox mood='{{ $mood }}' creator="{{ $thread->user->userDetail->fullname }}" profilePicture='{{ $thread->user->userDetail->profilePhoto }}' createdAt="{{ \Carbon\Carbon::parse($thread->created_at)->diffForHumans() }}" title="{{ $thread->title }}" content="{{ $thread->content }}" :thread='$thread' :isReplyable='$thread->isReplyable' :mainUser='$user'></x-threadBox>
         @empty
         @endforelse
     </div>
@@ -85,30 +85,3 @@
         {{ $threads->links() }}
     </div>
 @endsection
-
-{{--
-    <div class="">
-        <div class="">
-            <span>Title: </span>{{ $thread->title }}
-            <p>{{ $thread->content }}</p>
-        </div>
-        <div class="">
-            @session('success')
-            <strong>Success! {{ $value }}</strong>
-            @endsession
-            @forelse($thread->replies as $reply)
-                <p>{{ $reply->content }}</p>
-            @empty
-            @endforelse
-            <div class="">
-                <form action="{{ route('thread.reply', $thread->id) }}" method="POST">
-                    @csrf
-                    <label for="content">Reply:</label>
-                    <textarea name="content" class="border"></textarea>
-                    <button type="submit">send</button>
-                </form>
-                @error('content')
-                    {{ $message }}
-                @enderror
-            </div>
-        </div>  --}}
