@@ -54,8 +54,8 @@
     </div>
     <hr class='my-3'>
     <div>
-        <p class='font-bold'>{{ $title }}</p>
-        <p>{{ $content }}</p>
+        <p class='font-bold font-primary text-paragraph lg:text-subtitle '>{{ $title }}</p>
+        <p class='font-secondaryAndButton text-small lg:text-body-size'>{{ $content }}</p>
     </div>
     <div class='flex flex-row '>
         <livewire:user.reaction-button :thread-id="$threadId" />
