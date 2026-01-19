@@ -92,9 +92,29 @@
         @endif
     </div>
     @if ($isReplyable)
-        <div>
-            <hr class='w'>
-
+        <div class='mt-6'>
+            <hr class='border border-shadedOfGray-30'>
+            <div>
+                <div>
+                    <div class="">
+                    @forelse($thread->replies as $reply)
+                        <p>{{ $reply->content }}</p>
+                    @empty
+                    @endforelse
+                    <div class="">
+                        <form action="{{ route('thread.reply', $thread->id) }}" method="POST">
+                            @csrf
+                            <label for="content">Reply:</label>
+                            <textarea name="content" class="border"></textarea>
+                            <button type="submit">send</button>
+                        </form>
+                        @error('content')
+                            {{ $message }}
+                        @enderror
+                    </div>
+                </div> 
+                        </div>
+            </div>
         </div>
     @endif
 </div>
