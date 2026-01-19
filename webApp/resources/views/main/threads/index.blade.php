@@ -50,12 +50,17 @@
 
 @section('mainContent')
     <div class='mb-6 md:mb-11'>
-        <div>
+        <div class='flex w-full flex-row justify-between items-center'>
             <div class='flex flex-col'>
                 <div class='w-0 relative overflow-hidden typingTextAnimation max-w-max '>
                     <p class='font-primary text-title font-bold {{ $textColor[$mood] }} md:text-hero' >Threads</p>
                 </div>
                 <p class='font-secondaryAndButton text-white text-justify contentFadeLoad text-small md:text-body-size'>Nice to meet you again, {{ Str::before($fullname, ' ') }}! Go ahead and express how you feel.</p>
+            </div>
+            <div class='w-max invisible lg:visible'>
+                <a href="{{ route('thread.create') }}">
+                    <x-button content='Add new thread' :mood='$mood'></x-button>
+                </a>
             </div>
         </div>
     </div>
@@ -72,11 +77,14 @@
     </a>
     <div class='flex flex-col gap-10 contentFadeLoad' >
         @forelse($threads as $thread)
-            <x-threadBox mood='{{ $mood }}' creator="{{ $thread->user->userDetail->fullname }}" profilePicture='{{ $thread->user->userDetail->profilePhoto }}' createdAt="{{ \Carbon\Carbon::parse($thread->created_at)->diffForHumans() }}" title="{{ $thread->title }}" content="{{ $thread->content }}" :threadId='$thread->id'></x-threadBox>
+            
+            <x-threadBox mood='{{ $mood }}' creator="{{ $thread->user->userDetail->fullname }}" profilePicture='{{ $thread->user->userDetail->profilePhoto }}' createdAt="{{ \Carbon\Carbon::parse($thread->created_at)->diffForHumans() }}" title="{{ $thread->title }}" content="{{ $thread->content }}" :threadId='$thread->id' :isReplyable='$thread->isReplyable'></x-threadBox>
         @empty
         @endforelse
     </div>
-
+    <div class='w-full flex justify-start'>
+        {{ $threads->links() }}
+    </div>
 @endsection
 
 {{--

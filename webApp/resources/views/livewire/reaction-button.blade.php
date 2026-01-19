@@ -1,6 +1,6 @@
-<div>
+<div class='w-max h-max flex items-center'>
     <button wire:click="toggle">
-        <div class='flex flex-row gap-1'>
+        <div class='w-max h-max flex flex-row gap-1 items-center'>
             <div class='w-7 h-7'>
                 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
         
@@ -15,7 +15,7 @@
         
                     </svg>                    
             </div>
-            <p>{{ \Illuminate\Support\Number::abbreviate($count) }}</p>
+            <p class='font-secondaryAndButton text-primary-60 text-micro md:text-small'>{{ \Illuminate\Support\Number::abbreviate($count) }}</p>
         </div>
     </button>
 </div>
