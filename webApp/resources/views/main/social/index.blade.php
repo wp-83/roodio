@@ -34,14 +34,17 @@
             >
             <label for="following">Following Only</label>
         </div>
-
     </form>
 
     <div class="mt-4">
         @foreach($users as $user)
             <div class="card">
                 {{ $user->username }}
+                <h1 class="text-white">{{ $user->followings()->count() }}</h1>
+                <h1 class="text-white">{{ $user->followers()->count() }}</h1>
             </div>
         @endforeach
     </div>
+
+
 @endsection
