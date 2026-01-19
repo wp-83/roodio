@@ -57,7 +57,7 @@
                 </div>
                 <p class='font-secondaryAndButton text-white text-justify contentFadeLoad text-small md:text-body-size'>Nice to meet you again, {{ Str::before($fullname, ' ') }}! Go ahead and express how you feel.</p>
             </div>
-            <div class='w-max invisible lg:visible'>
+            <div class='w-max invisible lg:visible contentFadeLoad'>
                 <a href="{{ route('thread.create') }}">
                     <x-button content='Add new thread' :mood='$mood'></x-button>
                 </a>
@@ -75,7 +75,7 @@
             <p>Give your opinion!</p>
         </div>
     </a>
-    <div class='flex flex-col gap-10 contentFadeLoad' >
+    <div class='flex flex-col gap-8 contentFadeLoad' >
         @forelse($threads as $thread)
             
             <x-threadBox mood='{{ $mood }}' creator="{{ $thread->user->userDetail->fullname }}" profilePicture='{{ $thread->user->userDetail->profilePhoto }}' createdAt="{{ \Carbon\Carbon::parse($thread->created_at)->diffForHumans() }}" title="{{ $thread->title }}" content="{{ $thread->content }}" :threadId='$thread->id' :isReplyable='$thread->isReplyable'></x-threadBox>
