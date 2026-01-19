@@ -10,6 +10,8 @@
 ])
 
 @php
+    $isFollowing = false;
+
     $bgContainer = [
         'happy' => 'bg-secondary-happy-10/95',
         'sad' => 'bg-secondary-sad-10/95',
@@ -56,7 +58,7 @@
                 <p class='text-micro lg:text-small'>{{ $createdAt }}</p>
             </div>
             <div>
-                <x-button :mood='$mood' content='Follow'></x-button>
+                <x-button mood="{{ ($isFollowing) ? 'grayscale' : $mood }}" content="{{ ($isFollowing) ? 'Following' : 'Follow' }}" style='zoom:0.8;'></x-button>
             </div>
         </div>
     </div>
