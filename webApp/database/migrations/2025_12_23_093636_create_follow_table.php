@@ -11,20 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('friends', function (Blueprint $table) {
+        Schema::create('follows', function (Blueprint $table) {
             $table->char('id', 10)->primary();
-            $table->char('followerId', 10);
-            $table->foreign('followerId')
+            $table->char('userId', 10);
+            $table->foreign('userId')
                 ->references('id')
                 ->on('users')
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
-            $table->char('followingId', 10);
-            $table->foreign('followingId')
+            $table->char('followedId', 10);
+            $table->foreign('followedId')
                 ->references('id')
                 ->on('users')
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
+            $table->unique(['userId', 'followedId']);
             $table->timestamps();
         });
     }

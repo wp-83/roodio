@@ -4,7 +4,7 @@
     'createdAt',
     'title',
     'content',
-    'threadId',
+    'thread',
     'profilePicture',
     'isReplyable'
 ])
@@ -46,7 +46,7 @@
         <div class='w-16 h-16 lg:w-18 lg:h-18 border-2 {{ $borderMood[$mood] }} rounded-full flex items-center justify-center'>
             <div class='w-14 h-14 lg:w-16 lg:h-16 bg-primary-10 rounded-full flex items-center justify-center relative z-5 overflow-hidden'>
             @if (!empty($profilePicture))
-                <img src="{{ config('filesystems.disks.azure.url') . '/' . $profilePicture }}" alt="{{ $creator }}" class='w-full h-full object-cover'> 
+                <img src="{{ config('filesystems.disks.azure.url') . '/' . $profilePicture }}" alt="{{ $creator }}" class='w-full h-full object-cover'>
             @else
                 <p class='text-subtitle font-primary font-bold text-primary-70 h-fit'>{{ Str::charAt(Str::upper($creator), 0) }}</p>
             @endif
@@ -57,9 +57,7 @@
                 <p class='text-body-size font-bold {{ $textMood[$mood] }}'>{{ $creator }}</p>
                 <p class='text-micro lg:text-small'>{{ $createdAt }}</p>
             </div>
-            <div>
-                <x-button mood="{{ ($isFollowing) ? 'grayscale' : $mood }}" content="{{ ($isFollowing) ? 'Following' : 'Follow' }}" style='zoom:0.8;'></x-button>
-            </div>
+            <livewire:user.button-follow :thread="$thread"/>
         </div>
     </div>
     <hr class='border rounded-full my-3 {{ $borderMood[$mood] }}'>
@@ -68,7 +66,7 @@
         <p class='font-secondaryAndButton text-small lg:text-body-size'>{{ Str::limit($content, 1000, '...') }}</p>
     </div>
     <div class='flex flex-row gap-8 items-center'>
-        <livewire:user.reaction-button :thread-id="$threadId" />
+        <livewire:user.reaction-button :thread-id="$thread->id" />
         @if ($isReplyable)
             <div class='flex gap-1 items-center'>
                 <div class='w-6 h-6'>
