@@ -77,8 +77,7 @@
     </a>
     <div class='flex flex-col gap-8 contentFadeLoad' >
         @forelse($threads as $thread)
-            
-            <x-threadBox mood='{{ $mood }}' creator="{{ $thread->user->userDetail->fullname }}" profilePicture='{{ $thread->user->userDetail->profilePhoto }}' createdAt="{{ \Carbon\Carbon::parse($thread->created_at)->diffForHumans() }}" title="{{ $thread->title }}" content="{{ $thread->content }}" :threadId='$thread->id' :isReplyable='$thread->isReplyable'></x-threadBox>
+            <x-threadBox mood='{{ $mood }}' creator="{{ $thread->user->userDetail->fullname }}" profilePicture='{{ $thread->user->userDetail->profilePhoto }}' createdAt="{{ \Carbon\Carbon::parse($thread->created_at)->diffForHumans() }}" title="{{ $thread->title }}" content="{{ $thread->content }}" :thread='$thread' :isReplyable='$thread->isReplyable'></x-threadBox>
         @empty
         @endforelse
     </div>

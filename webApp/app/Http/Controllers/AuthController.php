@@ -26,7 +26,7 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            return redirect()->route('welcome');
+            return redirect()->route('user.index');
         }
 
         return back()->with('failed', 'username or password incorrect!');

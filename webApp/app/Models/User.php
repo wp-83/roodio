@@ -70,12 +70,12 @@ class User extends Authenticatable
 
     public function followings(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'friends', 'followerId', 'followingId');
+        return $this->belongsToMany(User::class, 'follows', 'userId', 'followedId');
     }
 
     public function followers(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'friends', 'followingId', 'followerId');
+        return $this->belongsToMany(User::class, 'follows', 'followedId', 'userId');
     }
 
     protected static function booted()
