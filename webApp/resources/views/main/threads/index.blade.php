@@ -57,7 +57,7 @@
                 </div>
                 <p class='font-secondaryAndButton text-white text-justify contentFadeLoad text-small md:text-body-size'>Nice to meet you again, {{ Str::before($fullname, ' ') }}! Go ahead and express how you feel.</p>
             </div>
-            <div class='w-max invisible lg:visible contentFadeLoad'>
+            <div class='w-max hidden lg:inline contentFadeLoad'>
                 <a href="{{ route('thread.create') }}">
                     <x-button content='Add new thread' :mood='$mood'></x-button>
                 </a>
