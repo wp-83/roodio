@@ -33,6 +33,7 @@ return new class extends Migration
             $table->string('publisher', 255);
             $table->date('datePublished');
             $table->string('songPath', 255);
+            $table->string('photoPath', 255);
             $table->timestamps();
         });
     }
