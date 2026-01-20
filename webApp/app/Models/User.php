@@ -55,7 +55,7 @@ class User extends Authenticatable
 
     public function songs(): HasMany
     {
-        return $this->hasMany(Songs::class, 'userId');
+        return $this->hasMany(Songs::class, 'userId', 'id');
     }
 
     public function userDetail(): HasOne

@@ -18,6 +18,7 @@ class Songs extends Model
         'publisher',
         'datePublished',
         'songPath',
+        'photoPath',
     ];
 
     public $incrementing = false;
