@@ -13,69 +13,67 @@ const volumeSlider = document.getElementById('volumeSlider');
 const overlayAudioPlay = player.querySelector('#overlayNan');   
 
 // set audio path
-// audio.src = 'https://roodio.blob.core.windows.net/uploads/songs/dKuze1CQQwO0cU7jLP3ZCvxwX13uaDyNKpL15zBi.mp3';
 let playlist = window.currentPlaylist || [];
 let currentIndex = 0;
 
+// load all songs in playlist
 function loadSong(index) {
-    if (playlist.length === 0) return;
+    if (playlist.length == 0) return;
 
-    if (index < 0) index = playlist.length - 1;
-    if (index >= playlist.length) index = 0;
+    if (index < 0) index = 0;
+    if (index >= playlist.length) index = playlist.length - 1;
 
     currentIndex = index;
     const song = playlist[currentIndex];
     audio.src = song.path;
     
     audio.load();
+    if(!isSongNan()) overlayAudioPlay.classList.add('hidden');
+};
 
-    if(overlayAudioPlay) overlayAudioPlay.classList.add('hidden');
-}
-
-// 1. FUNGSI KHUSUS MENYALAKAN (Force Play)
+// play audio
 function playAudio() {
     if(isSongNan()) return;
 
-    const playPromise = audio.play();
-    if (playPromise !== undefined) {
-        playPromise.then(_ => {
-            isPlay = true;
-            playBtn.classList.add('hidden');
-            pauseBtn.classList.remove('hidden');
-        }).catch(error => {
-            console.error("Play error:", error);
-        });
-    }
-}
+    audio.play().then(() => {
+        isPlay = true;
+        playBtn.classList.add('hidden');
+        pauseBtn.classList.remove('hidden');
+    });
+};
 
-// 2. FUNGSI KHUSUS MEMATIKAN (Force Pause)
+// pause audio
 function pauseAudio() {
     audio.pause();
     isPlay = false;
     playBtn.classList.remove('hidden');
     pauseBtn.classList.add('hidden');
-}
+};
 
-// 3. FUNGSI TOGGLE (Untuk Tombol Play/Pause)
+// toggle play
 function togglePlay() {
     if (isPlay) {
         pauseAudio();
     } else {
         playAudio();
     }
-}
+};
 
+// ensure the audio has been loaded
 function playAfterLoad() {
-    audio.onloadeddata = function() {
-        playAudio(); 
-        audio.onloadeddata = null; 
+    const handler = () => {
+        playAudio();
+        audio.removeEventListener('loadeddata', handler);
     };
-}
 
-window.playByIndex = function(index) {
+    audio.addEventListener('loadeddata', handler);
+};
+
+// global function to play song based on the index
+window.playByIndex = (index) => {
     loadSong(index);    
     playAfterLoad();
-}
+};
 
 // Next Button
 nextBtn.addEventListener('click', () => {
@@ -111,33 +109,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// main logic play and pause condition
-// function playMusic(){
-//     if(isSongNan()) return;
-
-//     if (!isPlay){
-//         isPlay = true;
-//         audio.play();
-//     } else {
-//         isPlay = false;
-//         audio.pause();
-//     }
-
-//     // toggle class display
-//     playBtn.classList.toggle('hidden');
-//     pauseBtn.classList.toggle('hidden');
-// };
-
 // play and pause trigger
 playBtn.addEventListener('click', togglePlay);
 pauseBtn.addEventListener('click', togglePlay);
 
 // keyboard shorcut for some audio behaviour
 document.addEventListener('keydown', (e) => {
-    if(isSongNan()) return;
+    if(isSongNan() || audio.readyState < 2) return;
 
     if(e.code == 'Space'){
-        playMusic();
+        togglePlay();
     } 
 
     if (e.key == 'ArrowRight'){
@@ -150,14 +131,16 @@ document.addEventListener('keydown', (e) => {
 });
 
 // loop button behaviour
+let loopActive = false;
 loopBtn.addEventListener('click', (e) => {
     e.preventDefault();
 
-
+    
 });
 
 // shuffle button behaviour
 shuffleBtn.addEventListener('click', (e) => {
+    e.preventDefault();
 
 });
 
@@ -165,12 +148,12 @@ shuffleBtn.addEventListener('click', (e) => {
 document.addEventListener('DOMContentLoaded', () => {
     volumeSlider.value = 1;
     audio.volume = volumeSlider.value;
-
 });
 
 // muted behaviour
 let currVol = volumeSlider.value;
 
+// muted sound behaviour
 function mutedSound(){
     let tempVol = volumeSlider.value;
 
@@ -191,6 +174,7 @@ function mutedSound(){
 soundedBtn.addEventListener('click', mutedSound);
 mutedBtn.addEventListener('click', mutedSound);
 
+// slider volume behaviour
 volumeSlider.addEventListener('change', () => {
     if (volumeSlider.value == 0){
         isMuted = true;
@@ -217,6 +201,7 @@ function formatTime(time) {
     return `${minutes}:${seconds}`;
 }
 
+// format time
 audio.addEventListener("loadedmetadata", () => {
     durationEl.textContent = formatTime(audio.duration);
 });
@@ -225,12 +210,16 @@ audio.addEventListener("timeupdate", () => {
     const percent = (audio.currentTime / audio.duration) * 100;
     progressBar.style.width = `${percent}%`;
     currentTimeEl.textContent = formatTime(audio.currentTime);
+});
 
-    if (audio.currentTime == audio.duration){
-        pauseBtn.classList.add('hidden');
-        playBtn.classList.remove('hidden');
-        isPlay = false;
-    };  
+audio.addEventListener("ended", () => {
+    pauseBtn.classList.add('hidden');
+    playBtn.classList.remove('hidden');
+    isPlay = false;
+
+    if (currentIndex < playlist.length - 1) {
+        playByIndex(currentIndex + 1);
+    };
 });
 
 progressContainer.addEventListener("click", (e) => {
