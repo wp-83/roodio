@@ -93,14 +93,14 @@
     </div>
     @if ($isReplyable)
         <div class='mt-6'>
-            <hr class='border border-shadedOfGray-30'>
+            <hr class='border border-shadedOfGray-30 my-2'>
             <div>
-                <div>
-                    <div class="">
+                <div id="replyContainer" class="bg-primary-20 h-36 overflow-y-auto">
                     @forelse($thread->replies as $reply)
                         <p>{{ $reply->content }}</p>
                     @empty
                     @endforelse
+                </div>
                     <div class="">
                         <form action="{{ route('thread.reply', $thread->id) }}" method="POST">
                             @csrf
@@ -112,8 +112,6 @@
                             {{ $message }}
                         @enderror
                     </div>
-                </div> 
-                        </div>
             </div>
         </div>
     @endif
