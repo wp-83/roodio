@@ -71,8 +71,11 @@ function playAfterLoad() {
 
 // global function to play song based on the index
 window.playByIndex = (index) => {
-    loadSong(index);    
-    playAfterLoad();
+    loadSong(index);
+
+    audio.onloadeddata = () => {
+        playAudio();
+    };
 };
 
 // Next Button
@@ -115,6 +118,8 @@ pauseBtn.addEventListener('click', togglePlay);
 
 // keyboard shorcut for some audio behaviour
 document.addEventListener('keydown', (e) => {
+    e.preventDefault();
+    
     if(isSongNan() || audio.readyState < 2 || isNaN(audio.duration)) return;
 
     if(e.code == 'Space'){
