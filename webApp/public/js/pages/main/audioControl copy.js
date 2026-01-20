@@ -10,84 +10,9 @@ const shuffleBtn = document.getElementById('shuffle');
 const soundedBtn = document.getElementById('speaker');
 const mutedBtn = document.getElementById('muted');
 const volumeSlider = document.getElementById('volumeSlider');
-const overlayAudioPlay = player.querySelector('#overlayNan');   
 
 // set audio path
-// audio.src = 'https://roodio.blob.core.windows.net/uploads/songs/dKuze1CQQwO0cU7jLP3ZCvxwX13uaDyNKpL15zBi.mp3';
-let playlist = window.currentPlaylist || [];
-let currentIndex = 0;
-
-function loadSong(index) {
-    if (playlist.length === 0) return;
-
-    if (index < 0) index = playlist.length - 1;
-    if (index >= playlist.length) index = 0;
-
-    currentIndex = index;
-    const song = playlist[currentIndex];
-    audio.src = song.path;
-    
-    audio.load();
-
-    if(overlayAudioPlay) overlayAudioPlay.classList.add('hidden');
-}
-
-// 1. FUNGSI KHUSUS MENYALAKAN (Force Play)
-function playAudio() {
-    if(isSongNan()) return;
-
-    const playPromise = audio.play();
-    if (playPromise !== undefined) {
-        playPromise.then(_ => {
-            isPlay = true;
-            playBtn.classList.add('hidden');
-            pauseBtn.classList.remove('hidden');
-        }).catch(error => {
-            console.error("Play error:", error);
-        });
-    }
-}
-
-// 2. FUNGSI KHUSUS MEMATIKAN (Force Pause)
-function pauseAudio() {
-    audio.pause();
-    isPlay = false;
-    playBtn.classList.remove('hidden');
-    pauseBtn.classList.add('hidden');
-}
-
-// 3. FUNGSI TOGGLE (Untuk Tombol Play/Pause)
-function togglePlay() {
-    if (isPlay) {
-        pauseAudio();
-    } else {
-        playAudio();
-    }
-}
-
-function playAfterLoad() {
-    audio.onloadeddata = function() {
-        playAudio(); 
-        audio.onloadeddata = null; 
-    };
-}
-
-window.playByIndex = function(index) {
-    loadSong(index);    
-    playAfterLoad();
-}
-
-// Next Button
-nextBtn.addEventListener('click', () => {
-    loadSong(currentIndex + 1);
-    playAfterLoad();
-});
-
-// Prev Button
-prevBtn.addEventListener('click', () => {
-    loadSong(currentIndex - 1);
-    playAfterLoad();
-});
+audio.src = 'https://roodio.blob.core.windows.net/uploads/songs/dKuze1CQQwO0cU7jLP3ZCvxwX13uaDyNKpL15zBi.mp3';
 
 // current player condition
 let isPlay = false;
@@ -100,9 +25,7 @@ function isSongNan(){
 
 //DOMContentLoaded Event
 document.addEventListener('DOMContentLoaded', () => {
-    if(playlist.length > 0) {
-        loadSong(0); 
-    }
+    const overlayAudioPlay = player.querySelector('#overlayNan');
 
     if(isSongNan()){
         overlayAudioPlay.classList.remove('hidden');
@@ -112,25 +35,25 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // main logic play and pause condition
-// function playMusic(){
-//     if(isSongNan()) return;
+function playMusic(){
+    if(isSongNan()) return;
 
-//     if (!isPlay){
-//         isPlay = true;
-//         audio.play();
-//     } else {
-//         isPlay = false;
-//         audio.pause();
-//     }
+    if (!isPlay){
+        isPlay = true;
+        audio.play();
+    } else {
+        isPlay = false;
+        audio.pause();
+    }
 
-//     // toggle class display
-//     playBtn.classList.toggle('hidden');
-//     pauseBtn.classList.toggle('hidden');
-// };
+    // toggle class display
+    playBtn.classList.toggle('hidden');
+    pauseBtn.classList.toggle('hidden');
+};
 
 // play and pause trigger
-playBtn.addEventListener('click', togglePlay);
-pauseBtn.addEventListener('click', togglePlay);
+playBtn.addEventListener('click', playMusic);
+pauseBtn.addEventListener('click', playMusic);
 
 // keyboard shorcut for some audio behaviour
 document.addEventListener('keydown', (e) => {
@@ -165,7 +88,6 @@ shuffleBtn.addEventListener('click', (e) => {
 document.addEventListener('DOMContentLoaded', () => {
     volumeSlider.value = 1;
     audio.volume = volumeSlider.value;
-
 });
 
 // muted behaviour

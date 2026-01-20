@@ -20,12 +20,11 @@
 @endphp
 
 <script>
-    // Taruh data ke window global
     window.currentPlaylist = @json($playlistData);
 </script>
 
 @push('script')
-    <script src="{{ asset('js/pages/main/audioControl.js') }}" defer></script>
+    <script src="{{ asset('js/pages/audioControl.js') }}" defer></script>
 @endpush
 
 @section('mainContent')
@@ -36,7 +35,10 @@
                     <p class="font-bold">{{ $song->title }}</p>
                     <p class="text-sm text-gray-500">{{ $song->artist }}</p>
                 </div>
-                <button onclick="playByIndex({{ $index }})"
+
+                {{-- Tombol Play di List --}}
+                {{-- Kita panggil fungsi playSongByIndex() dengan urutan array --}}
+                <button onclick="playSongByIndex({{ $index }})"
                         class="px-4 py-2 text-white rounded bg-secondary-happy-85 hover:bg-secondary-happy-70">
                     Play
                 </button>
