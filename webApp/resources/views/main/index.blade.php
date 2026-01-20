@@ -98,9 +98,11 @@
         <div class='flex flex-col text-white'>
             <p class='font-primary text-white text-title font-bold'>Hi, {{ Str::before($fullname, ' ') }}!</p>
             <p>Welcome to our life</p>
-             @foreach ($playlists as $playlist)
-                <p>Title: {{ $playlist->name }}</p>
-            @endforeach
+            <div class='bg-primary-10'>
+                @foreach ($playlists as $playlist)
+                    <a href="/{{ $playlist->id }}"><p>Title: {{ $playlist->name }}</p></a>
+                @endforeach
+            </div>
         </div>
     </div>
     <div>
