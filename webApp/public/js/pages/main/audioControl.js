@@ -115,7 +115,7 @@ pauseBtn.addEventListener('click', togglePlay);
 
 // keyboard shorcut for some audio behaviour
 document.addEventListener('keydown', (e) => {
-    if(isSongNan() || audio.readyState < 2) return;
+    if(isSongNan() || audio.readyState < 2 || isNaN(audio.duration)) return;
 
     if(e.code == 'Space'){
         togglePlay();
@@ -252,4 +252,4 @@ document.addEventListener('mousedown', (e) => {
         audioCtrlContent.classList.add('opacity-0', 'invisible');
         audioCtrlPopup.classList.add('opacity-0', 'invisible');
     }
-});
+}); 
