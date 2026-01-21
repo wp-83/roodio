@@ -2,8 +2,14 @@
 namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Region;
 use App\Models\User;
+use App\Models\userDetails;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 
 class UserController extends Controller
 {
@@ -22,12 +28,121 @@ class UserController extends Controller
         $users        = $query->orderByDesc('created_at')->paginate(10);
         $totalUser    = User::get()->count();
         $totalNewUser = User::whereDate('created_at', today())->count();
-        return view('superadmin.index', compact('users', 'totalUser', 'totalNewUser'));
+        $regions      = Region::get();
+        return view('superadmin.index', compact('users', 'totalUser', 'totalNewUser', 'regions'));
     }
 
     public function store(Request $request)
     {
+        $path      = null;
+        $validated = $request->validate([
+            'username'     => 'required|max:25|unique:users,username',
+            'password'     => [
+                'required',
+                'string',
+                Password::min(8)->letters()->numbers(),
+            ],
+            'fullname'     => 'required|max:255',
+            'email'        => 'required|email|max:255|unique:user_details,email',
+            'dateOfBirth'  => 'required|date',
+            'gender'       => 'nullable|in:0,1,null',
+            'countryId'    => 'required|string|exists:regions,id',
+            'role'         => 'required|in:0,1,2',
+            'profilePhoto' => 'image|max:5120',
+        ]);
 
+        if ($request->filled('profilePhoto')) {
+            $path = Storage::disk('azure')->put(
+                'images',
+                $validated['profilePhoto']
+            );
+        }
+
+        $user = User::create([
+            'username' => $validated['username'],
+            'password' => Hash::make($validated['password']),
+            'role'     => $validated['role'],
+        ]);
+
+        userDetails::create([
+            'userId'       => $user->id,
+            'fullname'     => $validated['fullname'],
+            'email'        => $validated['email'],
+            'dateOfBirth'  => $validated['dateOfBirth'],
+            'gender'       => $validated['gender'],
+            'countryId'    => $validated['countryId'],
+            'profilePhoto' => $path,
+        ]);
+
+        return back()->with(['success' => 'User successfully created!!']);
+    }
+
+    public function update(Request $request, User $user)
+    {
+        $validated = $request->validate([
+            'username'     => ['required', 'max:25', Rule::unique('users')->ignore($user->id)],
+            'password'     => ['nullable', 'string', Password::min(8)->letters()->numbers()],
+            'fullname'     => 'required|max:255',
+            'email'        => ['required', 'email', 'max:255', Rule::unique('user_details')->ignore($user->id, 'userId')],
+            'dateOfBirth'  => 'required|date',
+            'gender'       => 'nullable|in:0,1',
+            'countryId'    => 'required|string|exists:regions,id',
+            'role'         => 'required|in:0,1,2',
+            'profilePhoto' => 'nullable|image|max:5120',
+        ]);
+
+        $userData = [
+            'username' => $validated['username'],
+            'role'     => $validated['role'],
+        ];
+
+        if ($request->filled('password')) {
+            $userData['password'] = Hash::make($validated['password']);
+        }
+
+        $user->update($userData);
+
+        $detailData = [
+            'fullname'    => $validated['fullname'],
+            'email'       => $validated['email'],
+            'dateOfBirth' => $validated['dateOfBirth'],
+            'gender'      => $validated['gender'],
+            'countryId'   => $validated['countryId'],
+        ];
+
+        if ($request->filled('profilePhoto')) {
+            $path = Storage::disk('azure')->put(
+                'images',
+                $validated['profilePhoto']
+            );
+        }
+
+        $user->update([
+            'username' => $validated['username'],
+            'password' => Hash::make($validated['password']),
+            'role'     => $validated['role'],
+        ]);
+
+        if ($request->hasFile('profilePhoto')) {
+            if ($user->userDetail->profilePhoto) {
+                Storage::disk('azure')->delete($user->userDetail->profilePhoto);
+            }
+
+            $path = $request->file('profilePhoto')->store('images', 'azure');
+
+            $detailData['profilePhoto'] = $path;
+        }
+
+        $user->userDetail()->update($detailData);
+
+        return back()->with(['success' => 'User successfully updated!!']);
+    }
+
+    public function destroy(User $user)
+    {
+        $user->delete();
+
+        return back()->with(['success' => 'User successfully deleted!!']);
     }
 
     public function overview()
