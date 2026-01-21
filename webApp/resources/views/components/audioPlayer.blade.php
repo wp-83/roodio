@@ -1,5 +1,7 @@
 @props([
-    'mood'
+    'mood',
+    'title' => 'Title',
+    'artist' => 'Artist'
 ])
 
 
@@ -82,8 +84,8 @@
                 <img src="" alt="musicAlbum">
             </div>
             <div class='text-white font-secondaryAndButton hidden md:inline'>
-                <p class='{{ 'text-body-size font-bold ' . $textStyle[$mood] . ' ' }}'>{{ Str::limit('Alamak', 35) }}</p>
-                <p class='text-micro'>{{ Str::limit('Rizky Febian', 30) }}</p>
+                <p class='{{ 'text-body-size font-bold ' . $textStyle[$mood] . ' ' }}'>{{ Str::limit($title, 35) }}</p>
+                <p class='text-micro'>{{ Str::limit($artist, 30) }}</p>
             </div>
         </div>
         <div class='flex flex-row items-center gap-4 absolute left-1/2 top-1/2 -translate-1/2'>

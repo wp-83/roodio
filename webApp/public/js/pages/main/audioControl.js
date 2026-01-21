@@ -118,7 +118,7 @@ pauseBtn.addEventListener('click', togglePlay);
 
 // keyboard shorcut for some audio behaviour
 document.addEventListener('keydown', (e) => {
-    e.preventDefault();
+    // e.preventDefault();
     
     if(isSongNan() || audio.readyState < 2 || isNaN(audio.duration)) return;
 

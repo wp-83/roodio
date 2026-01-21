@@ -16,6 +16,20 @@
         'relaxed' => 'Hmm… you look relaxed now. Enjoy the calm and breathe easy.',
         'angry' => "Whoa… you seem angry right now. Take a deep breath, it'll pass."
     ];
+
+    $bgTextName = [
+        'happy' => 'bg-secondary-happy-20 text-secondary-happy-100',
+        'sad' => 'bg-secondary-sad-20 text-secondary-sad-100',
+        'relaxed' => 'bg-secondary-relaxed-20 text-secondary-relaxed-100',
+        'angry' => 'bg-secondary-angry-20 text-secondary-angry-100'
+    ];
+
+    $contentMoodBased = [
+        'happy' => 'Sounds nice! Let ROODIO increase your happiness with some melodies.',
+        'sad' => 'Ahhh, Let me give you hug. ROODIO will give you special songs today.',
+        'relaxed' => 'So relaxing today! Hear these songs to become more relax.',
+        'angry' => 'Wow, so scary... May these songs suitable with your mood.'
+    ];
 @endphp
 
 
@@ -93,20 +107,56 @@
 
 
 @section('mainContent')
-    <div class='flex flex-row justify-content items-center contentFadeLoad'>
-        <img src="{{ asset('assets/moods/' . $mood . '.png') }}" alt="" class='h-42 w-42'>
+    <div class='flex flex-row justify-content items-center contentFadeLoad mb-3'>
+        <img src="{{ asset('assets/moods/' . $mood . '.png') }}" alt="{{ $mood }}" class='h-42 w-42'>
         <div class='flex flex-col text-white'>
-            <p class='font-primary text-white text-title font-bold'>Hi, {{ Str::before($fullname, ' ') }}!</p>
-            <p>Welcome to our life</p>
-            <div class='bg-primary-10'>
-                @foreach ($playlists as $playlist)
-                    <a href="/{{ $playlist->id }}"><p>Title: {{ $playlist->name }}</p></a>
-                @endforeach
-            </div>
+            <p class='font-primary text-white text-subtitle font-bold md:text-title'>Hi, <span class='{{ $bgTextName[$mood] }} pr-3 pl-1.5'>{{ Str::before($fullname, ' ') }}</span>!</p>
+            <p class='font-secondaryAndButton text-small md:text-body-size'>{{ $contentMoodBased[$mood] }}</p>
         </div>
     </div>
-    <div>
-        <p class='text-title text-secondary-relaxed-30 font-primary font-bold mt-5'>Most Current Play Songs</p>
+    <div class=''>
+        <div class='w-full'>
+            <div class='mb-10 contentFadeLoad'>
+                <div class='w-fit h-fit flex flex-row items-center gap-3 mb-3'>
+                    <img src="{{ asset('assets/moods/icons/' . $mood . '.png') }}" alt="{{ $mood }}" class='w-15 h-15 md:w-24 md:h-24'>
+                    <p class='text-subtitle md:text-title text-secondary-relaxed-30 font-primary font-bold'>Trending Albums</p>
+                </div>
+                <div class='flex flex-row'>
+                    
+                </div>
+            </div>
+            <div class='mb-10 contentFadeLoad'>
+                <div class='w-fit h-fit flex flex-row items-center gap-3 mb-3'>
+                    <img src="{{ asset('assets/moods/icons/' . $mood . '.png') }}" alt="{{ $mood }}" class='w-15 h-15 md:w-24 md:h-24'>
+                    <p class='text-subtitle md:text-title text-secondary-relaxed-30 font-primary font-bold'>New Arrivals</p>
+                </div>
+                <div></div>
+            </div>
+            <div class='mb-5 contentFadeLoad'>
+                <div class='w-fit h-fit flex flex-row items-center gap-3 mb-3'>
+                    <img src="{{ asset('assets/moods/icons/' . $mood . '.png') }}" alt="{{ $mood }}" class='w-15 h-15 md:w-24 md:h-24'>
+                    <p class='text-subtitle md:text-title text-secondary-relaxed-30 font-primary font-bold'>Random Mix</p>
+                </div>
+                <div></div>
+            </div>
+
+            {{-- <div class='flex flex-row justify-between'>
+                @foreach ($playlists as $playlist)
+                    <a href="/{{ $playlist->id }}">
+                            <div class='w-max  overflow-hidden'>
+                                <div>
+                                    <div>
+
+                                    </div>
+                                    <div>
+
+                                    </div>
+                                </div>
+                            </div>
+                    </a>
+                @endforeach
+            </div> --}}
+        </div>
     </div>
 @endsection
 
