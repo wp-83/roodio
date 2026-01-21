@@ -4,6 +4,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class Songs extends Model
 {
@@ -37,6 +38,39 @@ class Songs extends Model
     public function playlists()
     {
         return $this->belongsToMany(Playlists::class, 'Tracks', 'songId', 'playlistId');
+    }
+
+    public function getOppositesMood($mood)
+    {
+        $map = [
+            'angry'   => 'relaxed',
+            'relaxed' => 'angry',
+            'happy'   => 'sad',
+            'sad'     => 'happy',
+        ];
+
+        return $map[$mood] ?? $mood;
+    }
+
+    public function scopeApllyUserMood($query)
+    {
+        $userMood = Session::get('chooseMood');
+        $mode     = Session::get('preferenceMood');
+
+        $targetMood = $userMood;
+
+        if ($mode == 'mismatch') {
+            $targetMood = $this->getOppositesMood($userMood);
+        }
+
+        $map = [
+            'happy'   => 'MD-0000001',
+            'sad'     => 'MD-0000002',
+            'relaxed' => 'MD-0000003',
+            'angry'   => 'MD-0000004',
+        ];
+
+        return $query->where('moodId', $map[$targetMood]);
     }
 
     protected static function booted()
