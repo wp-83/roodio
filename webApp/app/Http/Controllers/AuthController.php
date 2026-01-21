@@ -33,7 +33,7 @@ class AuthController extends Controller
             } elseif ($user->role === 1) {
                 return redirect()->route('admin.songs.index');
             } elseif ($user->role === 2) {
-                return redirect()->route('superadmin.users.index');
+                return redirect()->route('superadmin.users.overview');
             }
         }
 

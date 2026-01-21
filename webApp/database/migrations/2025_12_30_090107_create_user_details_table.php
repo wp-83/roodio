@@ -28,7 +28,7 @@ return new class extends Migration
                 ->on('regions')
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
-            $table->boolean('gender')->default(null);
+            $table->boolean('gender')->default(null)->nullable();
             $table->string('profilePhoto')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->timestamps();

@@ -62,7 +62,7 @@
                 @if (isset($profilePhoto))
                     <img src="{{ config('filesystems.disks.azure.url') . '/' . $profilePhoto }}" alt="{{ $fullname }}" class='w-full h-full object-cover'>
                 @else
-                    <p class='text-title font-primary font-bold h-fit {{ $textMoodStyle[$mood] }}'>{{ Str::charAt(Str::upper($fullname), 0) }}</p>
+                <p class='text-title font-primary font-bold h-fit {{ $textMoodStyle[$mood] }}'>{{ Str::charAt(Str::upper($fullname), 0) }}</p>
                 @endif
             </div>
             <div class='flex flex-col items-center'>

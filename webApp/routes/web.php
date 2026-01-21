@@ -102,6 +102,9 @@ Route::prefix('superadmin')->middleware(['auth', 'role:2', 'prevent-back-history
         Route::get('', [UserController::class, 'index'])->name('superadmin.users.index');
         Route::get('overview', [UserController::class, 'overview'])->name('superadmin.users.overview');
         Route::get('roles', [UserController::class, 'roles'])->name('superadmin.users.roles');
+        Route::post('create', [UserController::class, 'store'])->name('superadmin.users.store');
+        Route::put('{user}', [UserController::class, 'update'])->name('superadmin.users.update');
+        Route::delete('{user}', [UserController::class, 'destroy'])->name('superadmin.users.destroy');
     });
 });
 
