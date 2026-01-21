@@ -2,10 +2,6 @@
 
 @section('mainContentContainerClass')
 
-@php
-    $mood = 'relaxed';
-@endphp
-
 {{-- 1. Definisikan Data Playlist DULU --}}
 @php
     $playlistData = $songs->map(function($song) {
@@ -35,6 +31,7 @@
                 <div>
                     <p class="font-bold">{{ $song->title }}</p>
                     <p class="text-sm text-gray-500">{{ $song->artist }}</p>
+                    <img src="{{ $song->photoPath }}" alt="{{ config('filesystems.disks.azure.url') . '/' . $song->photoPath }}" class='w-8 h-8'>
                 </div>
                 <button onclick="playByIndex({{ $index }})"
                         class="px-4 py-2 text-white rounded bg-secondary-happy-85 hover:bg-secondary-happy-70">
