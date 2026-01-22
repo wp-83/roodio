@@ -30,8 +30,6 @@
         'relaxed' => 'So relaxing today! Hear these songs to become more relax.',
         'angry' => 'Wow, so scary... May these songs suitable with your mood.'
     ];
-
-    $
 @endphp
 
 
@@ -124,11 +122,7 @@
                     <p class='text-subtitle md:text-title text-secondary-relaxed-30 font-primary font-bold'>Trending Albums</p>
                 </div>
                 <div class='flex flex-row w-full gap-2 overflow-y-auto'>
-                    <div class='min-w-5 min-h-5 w-full h-15 bg-secondary-happy-10'>
-                        <div class=''>
-
-                        </div>
-                    </div>
+                    <x-albumCard></x-albumCard>
                 </div>
             </div>
             <div class='mb-10 contentFadeLoad'>
