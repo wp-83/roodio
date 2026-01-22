@@ -162,7 +162,7 @@
                 </a>
             </div>
         </div>
-        <div class='w-xl h-max hidden lg:visible relative transition-transform duration-500 ease-out group' id='searchbar'>
+        <div class='w-xl h-max hidden lg:inline relative transition-transform duration-500 ease-out group' id='searchbar'>
             <x-input type='search' :mood='$mood' id='search' placeholder='Search songs, artists, lyrics'></x-input>
             <div class='absolute top-1/2 right-4 flex flex-row -translate-y-1/2 opacity-50 group-focus-within:hidden' id='searchContent'>
                 <div class='border-[0.5px] border-shadedOfGray-50 bg-shadedOfGray-20 font-secondaryAndButton px-1 py-[0.25px] rounded-md text-micro text-shadedOfGray-85'>CTRL</div>
