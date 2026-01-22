@@ -106,6 +106,11 @@
 @endsection
 
 
+@section('scrollContaine')
+    
+@endsection
+
+
 @section('mainContent')
     <div class='flex flex-row justify-content items-center contentFadeLoad mb-3'>
         <img src="{{ asset('assets/moods/' . $mood . '.png') }}" alt="{{ $mood }}" class='h-42 w-42'>
@@ -121,8 +126,12 @@
                     <img src="{{ asset('assets/moods/icons/' . $mood . '.png') }}" alt="{{ $mood }}" class='w-15 h-15 md:w-24 md:h-24'>
                     <p class='text-subtitle md:text-title text-secondary-relaxed-30 font-primary font-bold'>Trending Albums</p>
                 </div>
-                <div class='flex flex-row'>
-                    
+                <div class='flex flex-col w-full h-max gap-8'>
+                    @foreach ($playlists as $playlist)
+                    <a href="/{{ $playlist->id }}">
+                        <x-albumCard :mood='$mood' :playlistName='$playlist->name' :playlistDesc='$playlist->description' :imageSource='$playlist->playlistPath'></x-albumCard>
+                    </a>
+                    @endforeach
                 </div>
             </div>
             <div class='mb-10 contentFadeLoad'>
@@ -139,23 +148,6 @@
                 </div>
                 <div></div>
             </div>
-
-            {{-- <div class='flex flex-row justify-between'>
-                @foreach ($playlists as $playlist)
-                    <a href="/{{ $playlist->id }}">
-                            <div class='w-max  overflow-hidden'>
-                                <div>
-                                    <div>
-
-                                    </div>
-                                    <div>
-
-                                    </div>
-                                </div>
-                            </div>
-                    </a>
-                @endforeach
-            </div> --}}
         </div>
     </div>
 @endsection
