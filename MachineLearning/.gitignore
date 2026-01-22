@@ -1,0 +1,67 @@
+# --- Python & Bytecode ---
+__pycache__/
+*.py[cod]
+*$py.class
+
+# --- Virtual Environments ---
+# Agar folder env conda/pip tidak ikut terupload
+env/
+venv/
+.venv/
+.conda/
+
+# --- IDE Settings (VS Code, PyCharm, dll) ---
+# Settingan editor ini spesifik user, teman sekelompok tidak butuh
+.vscode/
+.idea/
+*.swp
+
+# --- Datasets (PENTING) ---
+# Jangan upload file audio/csv besar ke GitHub!
+# Kita hanya upload script, data harusnya didownload terpisah
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# Ignore ekstensi audio spesifik (jaga-jaga ada yang tercecer)
+*.wav
+*.mp3
+*.flac
+*.ogg
+
+# --- MLflow & Logs (PENTING) ---
+# Folder ini isinya ribuan file log & artifact model
+# Path-nya sering hardcoded absolute path komputer Anda (C:\Users...), jadi rusak kalau dishare
+mlruns/
+.trash/
+*.log
+
+# --- Model Artifacts & Reports ---
+# Hasil generate script sebaiknya tidak di-track, cukup script-nya saja
+# Kecuali Anda memang ingin menyimpan hasil final untuk laporan
+models/*.pkl
+models/*.joblib
+reports/*.png
+reports/*.jpg
+reports/*.pdf
+reports/scaler.pkl
+
+# --- API & Temporary Files ---
+# File audio sementara yang diupload user saat hit API
+temp_audio.wav
+instance/
+
+# --- SQLite Database (jika MLflow pakai db lokal) ---
+*.sqlite
+*.db
+
+# --- OS Generated Files ---
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# --- Environment Variables ---
+# JANGAN PERNAH upload API Key atau password!
+.env
