@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\PlaylistController;
 use App\Http\Controllers\Admin\SongController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\SocialController;
+use App\Http\Controllers\SuperAdmin\UserController;
 use App\Http\Controllers\ThreadController;
 use App\Http\Controllers\User\MoodController;
 use App\Http\Controllers\User\ProfileController;
@@ -92,6 +93,18 @@ Route::prefix('admin')->middleware(['auth', 'role:1', 'prevent-back-history'])->
         Route::get('/{playlist}/edit', [PlaylistController::class, 'edit'])->name('admin.playlists.edit');
         Route::put('/{playlist}', [PlaylistController::class, 'update'])->name('admin.playlists.update');
         Route::delete('/{playlist}', [PlaylistController::class, 'destroy'])->name('admin.playlists.destroy');
+    });
+});
+
+// Super Admin Route
+Route::prefix('superadmin')->middleware(['auth', 'role:2', 'prevent-back-history'])->group(function () {
+    Route::prefix('users')->group(function () {
+        Route::get('', [UserController::class, 'index'])->name('superadmin.users.index');
+        Route::get('overview', [UserController::class, 'overview'])->name('superadmin.users.overview');
+        Route::get('roles', [UserController::class, 'roles'])->name('superadmin.users.roles');
+        Route::post('create', [UserController::class, 'store'])->name('superadmin.users.store');
+        Route::put('{user}', [UserController::class, 'update'])->name('superadmin.users.update');
+        Route::delete('{user}', [UserController::class, 'destroy'])->name('superadmin.users.destroy');
     });
 });
 

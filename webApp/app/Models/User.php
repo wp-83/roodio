@@ -23,6 +23,7 @@ class User extends Authenticatable
     protected $fillable = [
         'username',
         'password',
+        'role',
     ];
 
     protected $primaryKey = 'id';
@@ -55,7 +56,7 @@ class User extends Authenticatable
 
     public function songs(): HasMany
     {
-        return $this->hasMany(Songs::class, 'userId');
+        return $this->hasMany(Songs::class, 'userId', 'id');
     }
 
     public function userDetail(): HasOne

@@ -26,7 +26,15 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            return redirect()->route('user.index');
+            $user = Auth::user();
+
+            if ($user->role === 0) {
+                return redirect()->route('user.index');
+            } elseif ($user->role === 1) {
+                return redirect()->route('admin.songs.index');
+            } elseif ($user->role === 2) {
+                return redirect()->route('superadmin.users.overview');
+            }
         }
 
         return back()->with('failed', 'username or password incorrect!');

@@ -53,11 +53,17 @@ class SongController extends Controller
             'song'          => 'required|file|mimes:mp3',
         ]);
 
-        $song = $request->file('song');
+        $song  = $request->file('song');
+        $photo = $request->file('photo');
 
         $path = Storage::disk('azure')->put(
             'songs',
             $song
+        );
+
+        $photoPath = Storage::disk('azure')->put(
+            'images',
+            $photo
         );
 
         $response = Http::attach(
@@ -74,12 +80,14 @@ class SongController extends Controller
             $prediction = $response->json();
         }
 
-        $datas             = $validated;
-        $datas['duration'] = $this->getAudioDuration($song->getPathname());
-        $datas['songPath'] = $path;
-        $datas['userId']   = Auth::id();
-        $datas['moodId']   = $prediction['mood'];
+        $datas              = $validated;
+        $datas['duration']  = $this->getAudioDuration($song->getPathname());
+        $datas['songPath']  = $path;
+        $datas['photoPath'] = $photoPath;
+        $datas['userId']    = Auth::id();
+        $datas['moodId']    = $prediction['mood'];
         unset($datas['song']);
+        unset($datas['photo']);
         Songs::create($datas);
         return redirect()->route('admin.songs.index')->with('succes', 'Successfully added song');
     }

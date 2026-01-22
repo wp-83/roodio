@@ -21,7 +21,7 @@
                 <thead class="bg-primary-85 text-white font-primary">
                     <tr>
                         <th class="p-4 font-semibold text-small">ID</th>
-                        <th class="p-4 font-semibold text-small">User</th>
+                        <th class="p-4 font-semibold text-small">Admin</th>
                         <th class="p-4 font-semibold text-small">Title</th>
                         <th class="p-4 font-semibold text-small w-48">Lyrics Preview</th>
                         <th class="p-4 font-semibold text-small">Artist</th>
@@ -38,8 +38,8 @@
                             <td class="p-4 text-shadedOfGray-60">#{{ $song->id }}</td>
 
                             <td class="p-4">
-                                @if($song->user && $song->user->userDetail)
-                                    {{ $song->user->userDetail->fullname }}
+                                @if($song->user() && $song->user)
+                                    {{ $song->user->username}}
                                 @else
                                     <span class="text-shadedOfGray-40 italic">System/Unassigned</span>
                                 @endif

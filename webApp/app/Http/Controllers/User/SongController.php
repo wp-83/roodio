@@ -18,7 +18,7 @@ class SongController extends Controller
 
     public function playlists(Playlists $playlists)
     {
-        $songs = $playlists->songs;
+        $songs = $playlists->songs()->apllyUserMood()->get();
         $mood  = session('chooseMood', 'happy');
         return view('main.playlists.index', compact('songs', 'mood'));
     }
