@@ -121,8 +121,15 @@
                     <img src="{{ asset('assets/moods/icons/' . $mood . '.png') }}" alt="{{ $mood }}" class='w-15 h-15 md:w-24 md:h-24'>
                     <p class='text-subtitle md:text-title text-secondary-relaxed-30 font-primary font-bold'>Trending Albums</p>
                 </div>
-                <div class='flex flex-row'>
-                    
+                <div class='flex flex-row w-full gap-2 overflow-y-auto'>
+                    <div class='w-max h-max bg-secondary-angry-10'>
+                        <div class='w-64 h-64 bg-shadedOfGray-10'>
+                            
+                        </div>
+                        <div>
+
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class='mb-10 contentFadeLoad'>
