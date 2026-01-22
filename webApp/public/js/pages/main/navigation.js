@@ -48,7 +48,7 @@ function openSearchBar(){
     isSearchBarOpened = true;
     searchbar.classList.add("absolute", 'z-10', 'top-[10%]', 'left-1/2', '-translate-x-1/2', 'w-sm');
     searchAttr.classList.add('hidden');
-    searchbar.classList.remove('invisible', 'relative', 'w-xl', 'h-max');
+    searchbar.classList.remove('hidden', 'relative', 'w-xl', 'h-max');
 
     searchInput.focus();
 };
@@ -57,7 +57,7 @@ function openSearchBar(){
 function closeSearchBar(){
     isSearchBarOpened = false;
     searchbar.classList.add('-z-1');
-    searchbar.classList.add('invisible', 'w-xl', 'relative', 'h-max');
+    searchbar.classList.add('hidden', 'w-xl', 'relative', 'h-max');
     searchbar.classList.remove('z-10', 'top-[10%]', 'left-1/2', '-translate-x-1/2', 'w-sm');
     searchbar.classList.remove('absolute', '-z-1');
     searchAttr.classList.remove('hidden');
