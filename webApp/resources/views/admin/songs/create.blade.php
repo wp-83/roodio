@@ -1,168 +1,211 @@
-@extends('layouts.master')
+@extends('layouts.admin.master')
 
-@section('title', 'Playlists Create')
+@section('title', 'Add New Song')
+@section('page_title', 'Upload Music')
+@section('page_subtitle', 'Add new tracks to the library')
 
-@section('bodyContent')
-<div class="max-w-5xl mx-auto py-10 px-4">
-    <div class="mb-8">
-        <h1 class="font-primary text-title text-white font-bold">Add New Song</h1>
-        <p class="font-secondaryAndButton text-body-size text-shadedOfGray-20">Fill in the details below to upload a new track.</p>
+@section('content')
+<div class="max-w-6xl mx-auto py-6">
+
+    {{-- Header --}}
+    <div class="flex items-center justify-between mb-8">
+        <div>
+            <h1 class="font-primary text-2xl text-white font-bold tracking-tight">Add New Song</h1>
+            <p class="font-secondaryAndButton text-sm text-shadedOfGray-30 mt-1">Fill in the details below to upload a new track.</p>
+        </div>
+        <a href="{{ route('admin.songs.index') }}" class="px-5 py-2.5 rounded-xl border border-primary-60 text-shadedOfGray-30 font-bold hover:bg-primary-70 hover:text-white transition-colors text-sm flex items-center gap-2">
+            <i class="fa-solid fa-arrow-left"></i> Back to Library
+        </a>
     </div>
 
-    <div class="bg-white rounded-xl shadow-lg p-8">
-        <form action="{{ route('admin.songs.store') }}" method="POST" enctype="multipart/form-data">
-            @csrf
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <form action="{{ route('admin.songs.store') }}" method="POST" enctype="multipart/form-data">
+        @csrf
 
-                {{-- Kiri: UPLOAD FOTO COVER --}}
-                <div>
-                    <label class="font-bold text-gray-700 font-secondaryAndButton text-small mb-2 block">Upload Foto Cover</label>
-                    <div class="w-full">
-                        <label class="flex flex-col w-full aspect-square border-2 border-dashed border-shadedOfGray-30 hover:bg-shadedOfGray-10 hover:border-accent-100 rounded-lg cursor-pointer transition duration-200 relative overflow-hidden group">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-                            {{-- Placeholder --}}
-                            <div class="flex flex-col items-center justify-center absolute inset-0 z-10 transition-opacity duration-200 p-4 text-center" id="photo-placeholder">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-shadedOfGray-40 mb-3 group-hover:text-accent-100 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                </svg>
-                                <span class="font-secondaryAndButton text-small text-shadedOfGray-60 group-hover:text-primary-100 transition-colors">Click to upload cover</span>
-                                <span class="font-secondaryAndButton text-micro text-shadedOfGray-40 mt-2">JPG, PNG (Max 2MB)</span>
+            {{-- LEFT COLUMN: COVER ART --}}
+            <div class="lg:col-span-1 space-y-6">
+                <div class="bg-primary-85 rounded-2xl p-6 border border-primary-70 shadow-lg">
+                    <label class="font-bold text-white font-primary text-sm mb-4 block">Cover Art</label>
+
+                    {{-- Upload Box --}}
+                    <div class="w-full aspect-square relative group">
+                        <label class="flex flex-col items-center justify-center w-full h-full border-2 border-dashed border-primary-60 hover:border-secondary-happy-100 hover:bg-primary-70/50 rounded-2xl cursor-pointer transition-all duration-300 overflow-hidden relative">
+
+                            {{-- Placeholder Content --}}
+                            <div class="flex flex-col items-center justify-center text-center p-6 transition-opacity duration-300" id="photo-placeholder">
+                                <div class="w-16 h-16 rounded-full bg-primary-70 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                    <i class="fa-regular fa-image text-3xl text-shadedOfGray-40 group-hover:text-secondary-happy-100 transition-colors"></i>
+                                </div>
+                                <span class="font-secondaryAndButton text-sm text-shadedOfGray-30 font-medium group-hover:text-white transition-colors">Click to upload cover</span>
+                                <span class="text-[10px] text-shadedOfGray-50 mt-2 uppercase tracking-wide">JPG, PNG (Max 5MB)</span>
                             </div>
 
                             {{-- Image Preview --}}
-                            <img id="photo-preview" class="absolute inset-0 w-full h-full object-cover hidden z-20" alt="Cover Preview" />
+                            <img id="photo-preview" class="absolute inset-0 w-full h-full object-cover hidden z-10" alt="Cover Preview" />
 
-                            {{-- Input File --}}
-                            <input type="file" name="photo" id="photo_input" accept="image/*" class="opacity-0 w-full h-full absolute inset-0 cursor-pointer z-30" required />
-                        </label>
-                    </div>
-                </div>
-
-                {{-- Kanan: INPUT DETAILS (Title, Artist, Genre, Publisher, Date) --}}
-                <div class="col-span-1 md:col-span-1 flex flex-col gap-5 justify-center"> {{-- Menggunakan flex-col agar semua input menumpuk di kanan --}}
-
-                    {{-- Title --}}
-                    <div>
-                        <label for="title" class="block font-secondaryAndButton text-small text-primary-100 font-bold mb-2">Title</label>
-                        <input type="text" name="title" class="w-full bg-white border border-shadedOfGray-30 rounded-lg text-primary-100 font-secondaryAndButton text-body-size px-4 py-2 focus:border-accent-100 focus:ring-1 focus:ring-accent-100 outline-none transition placeholder-shadedOfGray-30" placeholder="Enter song title">
-                        @error('title')
-                            <div class="mt-1 text-error-moderate text-small font-secondaryAndButton">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    {{-- Artist --}}
-                    <div>
-                        <label for="artist" class="block font-secondaryAndButton text-small text-primary-100 font-bold mb-2">Artist</label>
-                        <input type="text" name="artist" class="w-full bg-white border border-shadedOfGray-30 rounded-lg text-primary-100 font-secondaryAndButton text-body-size px-4 py-2 focus:border-accent-100 focus:ring-1 focus:ring-accent-100 outline-none transition" placeholder="Artist Name">
-                        @error('artist')
-                            <div class="mt-1 text-error-moderate text-small font-secondaryAndButton">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    {{-- Genre (Dipindah ke sini) --}}
-                    <div>
-                        <label for="genre" class="block font-secondaryAndButton text-small text-primary-100 font-bold mb-2">Genre</label>
-                        <input type="text" name="genre" class="w-full bg-white border border-shadedOfGray-30 rounded-lg text-primary-100 font-secondaryAndButton text-body-size px-4 py-2 focus:border-accent-100 focus:ring-1 focus:ring-accent-100 outline-none transition" placeholder="e.g. Pop, Jazz">
-                        @error('genre')
-                            <div class="mt-1 text-error-moderate text-small font-secondaryAndButton">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    {{-- Publisher (Dipindah ke sini) --}}
-                    <div>
-                        <label for="publisher" class="block font-secondaryAndButton text-small text-primary-100 font-bold mb-2">Publisher</label>
-                        <input type="text" name="publisher" class="w-full bg-white border border-shadedOfGray-30 rounded-lg text-primary-100 font-secondaryAndButton text-body-size px-4 py-2 focus:border-accent-100 focus:ring-1 focus:ring-accent-100 outline-none transition" placeholder="Publisher Name">
-                        @error('publisher')
-                            <div class="mt-1 text-error-moderate text-small font-secondaryAndButton">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    {{-- Date Published (Dipindah ke sini) --}}
-                    <div>
-                        <label for="datePublished" class="block font-secondaryAndButton text-small text-primary-100 font-bold mb-2">Date Published</label>
-                        <input type="date" name="datePublished" class="w-full bg-white border border-shadedOfGray-30 rounded-lg text-primary-100 font-secondaryAndButton text-body-size px-4 py-2 focus:border-accent-100 focus:ring-1 focus:ring-accent-100 outline-none transition text-shadedOfGray-60">
-                        @error('datePublished')
-                            <div class="mt-1 text-error-moderate text-small font-secondaryAndButton">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                </div>
-
-                {{-- Bawah: LYRICS & FILE UPLOAD (Full Width) --}}
-                <div class="col-span-1 md:col-span-2">
-                    <label for="lyrics" class="block font-secondaryAndButton text-small text-primary-100 font-bold mb-2">Lyrics</label>
-                    <textarea name="lyrics" rows="5" class="w-full bg-white border border-shadedOfGray-30 rounded-lg text-primary-100 font-secondaryAndButton text-body-size px-4 py-2 focus:border-accent-100 focus:ring-1 focus:ring-accent-100 outline-none transition placeholder-shadedOfGray-30" placeholder="Type lyrics here..."></textarea>
-                    @error('lyrics')
-                        <div class="mt-1 text-error-moderate text-small font-secondaryAndButton">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                <div class="col-span-1 md:col-span-2">
-                    <label name="song" class="block font-secondaryAndButton text-small text-primary-100 font-bold mb-2">Upload Song File</label>
-                    <div class="flex items-center justify-center w-full">
-                        <label class="flex flex-col w-full h-32 border-2 border-dashed border-shadedOfGray-30 hover:bg-shadedOfGray-10 hover:border-accent-100 rounded-lg cursor-pointer transition duration-200 relative group">
-
-                            <div class="flex flex-col items-center justify-center pt-7" id="upload-placeholder">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-shadedOfGray-40 mb-2 group-hover:text-accent-100 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                                </svg>
-                                <span class="font-secondaryAndButton text-small text-shadedOfGray-60 group-hover:text-primary-100 transition-colors" id="file-name-text">Click to browse file</span>
-                                <span class="font-secondaryAndButton text-micro text-shadedOfGray-40 mt-1" id="file-size-text">MP3, WAV (Max 10MB)</span>
+                            {{-- Hover Overlay for Preview --}}
+                            <div id="preview-overlay" class="absolute inset-0 bg-black/50 z-20 hidden items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                <span class="text-white text-sm font-bold"><i class="fa-solid fa-pen"></i> Change Cover</span>
                             </div>
 
-                            <input type="file" name="song" id="song-input" class="opacity-0 w-full h-full absolute inset-0 cursor-pointer" accept="audio/*" />
+                            <input type="file" name="cover_art" id="photo_input" accept="image/*" class="opacity-0 w-full h-full absolute inset-0 cursor-pointer z-30" />
                         </label>
                     </div>
-                    @error('song')
-                        <div class="mt-1 text-error-moderate text-small font-secondaryAndButton">{{ $message }}</div>
+                    @error('cover_art')
+                        <p class="mt-2 text-secondary-angry-100 text-xs font-medium">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                {{-- AUDIO FILE UPLOAD --}}
+                <div class="bg-primary-85 rounded-2xl p-6 border border-primary-70 shadow-lg">
+                    <label class="font-bold text-white font-primary text-sm mb-4 block">Audio File</label>
+                    <div class="relative">
+                        <label class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-primary-60 hover:border-accent-100 hover:bg-primary-70/50 rounded-xl cursor-pointer transition-all duration-300 group">
+
+                            <div class="flex flex-col items-center justify-center pt-2" id="audio-placeholder">
+                                <i class="fa-solid fa-cloud-arrow-up text-2xl text-shadedOfGray-40 mb-2 group-hover:text-accent-100 transition-colors"></i>
+                                <p class="text-sm text-shadedOfGray-30 font-medium group-hover:text-white transition-colors" id="audio-filename">Browse Audio File</p>
+                                <p class="text-[10px] text-shadedOfGray-50 mt-1">MP3, WAV, AAC (Max 20MB)</p>
+                            </div>
+
+                            <input type="file" name="file_path" id="song-input" accept=".mp3,.wav,.aac" class="opacity-0 w-full h-full absolute inset-0 cursor-pointer" />
+                        </label>
+                    </div>
+                    @error('file_path')
+                        <p class="mt-2 text-secondary-angry-100 text-xs font-medium">{{ $message }}</p>
                     @enderror
                 </div>
             </div>
 
-            <div class="mt-8 flex justify-end gap-4">
-                <a href="{{ route('admin.songs.index') }}" class="px-6 py-3 rounded-lg border border-shadedOfGray-30 text-shadedOfGray-60 font-secondaryAndButton text-mediumBtn hover:bg-shadedOfGray-10 transition">Cancel</a>
-                <button type="submit" class="px-8 py-3 rounded-lg bg-primary-60 text-white font-secondaryAndButton text-mediumBtn font-semibold hover:bg-primary-50 shadow-lg shadow-primary-30/50 transition duration-200">Submit Song</button>
+            {{-- RIGHT COLUMN: TRACK DETAILS --}}
+            <div class="lg:col-span-2">
+                <div class="bg-primary-85 rounded-2xl p-8 border border-primary-70 shadow-lg h-full">
+                    <h3 class="text-lg font-bold text-white mb-6 border-b border-primary-70 pb-4">Track Information</h3>
+
+                    <div class="space-y-6">
+                        {{-- Title --}}
+                        <div class="space-y-2">
+                            <label for="title" class="text-sm font-bold text-shadedOfGray-10">Track Title <span class="text-secondary-angry-100">*</span></label>
+                            <input type="text" name="title" id="title" value="{{ old('title') }}"
+                                class="w-full bg-primary-100 border border-primary-60 rounded-xl text-white px-4 py-3 focus:border-secondary-happy-100 focus:ring-1 focus:ring-secondary-happy-100 outline-none transition placeholder-shadedOfGray-50"
+                                placeholder="e.g. Bohemian Rhapsody">
+                            @error('title') <p class="text-secondary-angry-100 text-xs">{{ $message }}</p> @enderror
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {{-- Artist --}}
+                            <div class="space-y-2">
+                                <label for="artist" class="text-sm font-bold text-shadedOfGray-10">Artist Name <span class="text-secondary-angry-100">*</span></label>
+                                <div class="relative">
+                                    <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-shadedOfGray-50"><i class="fa-solid fa-microphone"></i></span>
+                                    <input type="text" name="artist" id="artist" value="{{ old('artist') }}"
+                                        class="w-full bg-primary-100 border border-primary-60 rounded-xl text-white pl-10 pr-4 py-3 focus:border-secondary-happy-100 focus:ring-1 focus:ring-secondary-happy-100 outline-none transition placeholder-shadedOfGray-50"
+                                        placeholder="e.g. Queen">
+                                </div>
+                                @error('artist') <p class="text-secondary-angry-100 text-xs">{{ $message }}</p> @enderror
+                            </div>
+
+                            {{-- Genre --}}
+                            <div class="space-y-2">
+                                <label for="genre" class="text-sm font-bold text-shadedOfGray-10">Genre <span class="text-secondary-angry-100">*</span></label>
+                                <div class="relative">
+                                    <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-shadedOfGray-50"><i class="fa-solid fa-music"></i></span>
+                                    <input type="text" name="genre" id="genre" value="{{ old('genre') }}"
+                                        class="w-full bg-primary-100 border border-primary-60 rounded-xl text-white pl-10 pr-4 py-3 focus:border-secondary-happy-100 focus:ring-1 focus:ring-secondary-happy-100 outline-none transition placeholder-shadedOfGray-50"
+                                        placeholder="e.g. Rock, Pop">
+                                </div>
+                                @error('genre') <p class="text-secondary-angry-100 text-xs">{{ $message }}</p> @enderror
+                            </div>
+                        </div>
+
+                        {{-- MOOD SELECTION (Dropdown) --}}
+                        {{-- Asumsi Anda punya tabel 'moods' dan mengirim variabel $moods dari controller --}}
+                        {{-- Jika belum ada, bisa hardcode option atau input text biasa --}}
+                        {{-- <div class="space-y-2">
+                            <label for="mood_id" class="text-sm font-bold text-shadedOfGray-10">Mood <span class="text-secondary-angry-100">*</span></label>
+                            <div class="relative">
+                                <select name="mood_id" id="mood_id" class="w-full bg-primary-100 border border-primary-60 rounded-xl text-white px-4 py-3 focus:border-secondary-happy-100 focus:ring-1 focus:ring-secondary-happy-100 outline-none appearance-none cursor-pointer">
+                                    <option value="" disabled selected>Select Track Mood</option>
+                                    <option value="1">Happy</option>
+                                    <option value="2">Sad</option>
+                                    <option value="3">Relaxed</option>
+                                    <option value="4">Angry</option>
+                                </select>
+                                <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-shadedOfGray-50">
+                                    <i class="fa-solid fa-chevron-down text-xs"></i>
+                                </div>
+                            </div>
+                        </div> --}}
+
+                        {{-- Lyrics --}}
+                        <div class="space-y-2">
+                            <label for="lyrics" class="text-sm font-bold text-shadedOfGray-10">Lyrics <span class="text-xs font-normal text-shadedOfGray-50">(Optional)</span></label>
+                            <textarea name="lyrics" id="lyrics" rows="6"
+                                class="w-full bg-primary-100 border border-primary-60 rounded-xl text-white px-4 py-3 focus:border-secondary-happy-100 focus:ring-1 focus:ring-secondary-happy-100 outline-none transition placeholder-shadedOfGray-50 leading-relaxed scrollbar-thin scrollbar-thumb-primary-60"
+                                placeholder="Paste lyrics here...">{{ old('lyrics') }}</textarea>
+                        </div>
+
+                        {{-- Submit Buttons --}}
+                        <div class="pt-6 flex items-center justify-end gap-4 border-t border-primary-70 mt-4">
+                            <button type="reset" class="px-6 py-3 rounded-xl border border-primary-60 text-shadedOfGray-30 font-bold hover:bg-primary-70 hover:text-white transition-colors text-sm">
+                                Reset
+                            </button>
+                            <button type="submit" class="px-8 py-3 rounded-xl bg-secondary-happy-100 text-white font-bold hover:bg-secondary-happy-85 shadow-lg shadow-secondary-happy-100/20 transition-all text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-check"></i> Upload Song
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </form>
-    </div>
+        </div>
+    </form>
 </div>
 
 <script>
-    // 1. Script untuk Audio Upload
+    // 1. Script untuk Audio Upload Preview Filename
     document.getElementById('song-input').addEventListener('change', function(e) {
-        var fileName = e.target.files[0] ? e.target.files[0].name : "Click to browse file";
-        const fileNameText = document.getElementById('file-name-text');
-        fileNameText.textContent = fileName;
-        fileNameText.classList.add('text-primary-100', 'font-semibold');
+        var fileName = e.target.files[0] ? e.target.files[0].name : "Browse Audio File";
+        const fileNameText = document.getElementById('audio-filename');
+        const placeholder = document.getElementById('audio-placeholder');
 
-        const fileSizeText = document.getElementById('file-size-text');
+        fileNameText.textContent = fileName;
+
         if(e.target.files[0]) {
-            fileSizeText.textContent = "File selected";
-            fileSizeText.classList.add('text-accent-100');
+            fileNameText.classList.remove('text-shadedOfGray-30');
+            fileNameText.classList.add('text-secondary-happy-100', 'font-bold');
+            // Ganti icon jadi check
+            placeholder.querySelector('i').className = "fa-solid fa-file-audio text-2xl text-secondary-happy-100 mb-2";
         } else {
-            fileSizeText.textContent = "MP3, WAV (Max 10MB)";
-            fileSizeText.classList.remove('text-accent-100');
+            fileNameText.classList.add('text-shadedOfGray-30');
+            fileNameText.classList.remove('text-secondary-happy-100', 'font-bold');
+            placeholder.querySelector('i').className = "fa-solid fa-cloud-arrow-up text-2xl text-shadedOfGray-40 mb-2";
         }
     });
 
-    // 2. Script untuk Photo Upload
+    // 2. Script untuk Photo Upload Preview
     document.getElementById('photo_input').addEventListener('change', function(e) {
         const file = e.target.files[0];
         const previewElement = document.getElementById('photo-preview');
         const placeholderElement = document.getElementById('photo-placeholder');
+        const overlayElement = document.getElementById('preview-overlay');
 
         if (file) {
             const reader = new FileReader();
             reader.onload = function(e) {
                 previewElement.src = e.target.result;
                 previewElement.classList.remove('hidden');
-                placeholderElement.classList.add('opacity-0');
+                placeholderElement.classList.add('opacity-0', 'absolute'); // Hide placeholder but keep layout
+                overlayElement.classList.remove('hidden');
+                overlayElement.classList.add('flex');
             }
             reader.readAsDataURL(file);
         } else {
             previewElement.src = '#';
             previewElement.classList.add('hidden');
-            placeholderElement.classList.remove('opacity-0');
+            placeholderElement.classList.remove('opacity-0', 'absolute');
+            overlayElement.classList.add('hidden');
+            overlayElement.classList.remove('flex');
         }
     });
 </script>

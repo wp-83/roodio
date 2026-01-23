@@ -1,4 +1,4 @@
-@extends('layouts.superadmin.master')
+@extends('layouts.admin.master')
 
 @section('title', 'User Management')
 @section('page_title', 'User Management')
@@ -493,7 +493,9 @@
                     {{-- Footer Buttons --}}
                     <div class="mt-8 flex items-center justify-end gap-3 border-t border-shadedOfGray-10 pt-6">
                         <button type="button" onclick="toggleEditModal()" class="px-6 py-2.5 rounded-xl border border-shadedOfGray-20 text-shadedOfGray-60 font-bold hover:bg-shadedOfGray-10 transition-colors text-sm">Cancel</button>
-                        <button type="submit" class="px-6 py-2.5 rounded-xl bg-accent-100 text-white font-bold hover:bg-accent-85 shadow-lg shadow-accent-50/50 transition-all text-sm flex items-center gap-2">
+                        <button type="submit" id="editSubmitBtn" disabled
+                            class="px-6 py-2.5 rounded-xl bg-accent-100 text-white font-bold shadow-lg shadow-accent-50/50 transition-all text-sm flex items-center gap-2
+                            disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none hover:bg-accent-85">
                             <i class="fa-solid fa-floppy-disk"></i> Save Changes
                         </button>
                     </div>
@@ -597,47 +599,109 @@
         }
 
         // Function to Populate and Open Edit Modal
+        let initialEditData = {};
+
         function openEditModal(user, profilePhotoUrl) {
-            // 1. Set Action URL dynamically
             const form = document.getElementById('editUserForm');
-            // Pastikan user.id ada, gunakan fallback jika perlu
             form.action = "{{ route('superadmin.users.index') }}/" + user.id;
 
-            // 2. Set ID for Error Handling
             document.getElementById('edit_user_id').value = user.id;
-
-            // 3. Populate Fields (Tabel Users Utama)
             document.getElementById('edit_username').value = user.username;
             document.getElementById('edit_role').value = user.role;
 
-            // 4. Populate Fields dari User Detail (Tabel Relasi)
-            // Laravel mengubah nama relasi 'userDetail' menjadi 'user_detail' (snake_case) di JSON
-            if(user.user_detail) {
-                // Fix: Ambil email dari user_detail, bukan root user
-                document.getElementById('edit_email').value = user.user_detail.email;
+            // Reset Password field selalu kosong saat dibuka
+            document.getElementById('edit_password').value = '';
 
+            // Reset File input (karena browser tidak mengizinkan set value file input secara programmatically)
+            document.getElementById('edit_profilePhoto').value = '';
+
+            if(user.user_detail) {
+                document.getElementById('edit_email').value = user.user_detail.email;
                 document.getElementById('edit_fullname').value = user.user_detail.fullname;
 
-                // Fix: Ambil DOB dari user_detail
                 let dob = user.user_detail.dateOfBirth;
                 document.getElementById('edit_dateOfBirth').value = dob ? dob.substring(0, 10) : '';
 
-                // Handle Gender
                 let genderVal = user.user_detail.gender;
                 if(genderVal === null) genderVal = "";
                 document.getElementById('edit_gender').value = genderVal;
 
                 document.getElementById('edit_countryId').value = user.user_detail.countryId;
             } else {
-                // Reset jika user_detail kosong (opsional)
-                document.getElementById('edit_email').value = '';
-                document.getElementById('edit_fullname').value = '';
-                document.getElementById('edit_dateOfBirth').value = '';
+                // Reset fields
+                ['edit_email', 'edit_fullname', 'edit_dateOfBirth', 'edit_gender', 'edit_countryId'].forEach(id => {
+                    document.getElementById(id).value = '';
+                });
             }
 
-            // 5. Open the modal
+            // SIMPAN STATE AWAL
+            saveInitialState();
+
+            // Aktifkan listener untuk deteksi perubahan
+            setupChangeListener();
+
+            // Disable tombol save di awal
+            document.getElementById('editSubmitBtn').disabled = true;
+
             toggleEditModal();
         }
+
+    // Helper: Simpan data awal form ke object
+    function saveInitialState() {
+        initialEditData = {
+            username: document.getElementById('edit_username').value,
+            email: document.getElementById('edit_email').value,
+            role: document.getElementById('edit_role').value,
+            fullname: document.getElementById('edit_fullname').value,
+            dob: document.getElementById('edit_dateOfBirth').value,
+            gender: document.getElementById('edit_gender').value,
+            country: document.getElementById('edit_countryId').value,
+            // Password dan Photo dianggap "changed" jika ada isinya
+        };
+    }
+
+    // Helper: Pasang listener ke semua input di form edit
+    function setupChangeListener() {
+        const formInputs = document.querySelectorAll('#editUserForm input, #editUserForm select');
+        formInputs.forEach(input => {
+            // Hapus listener lama biar gak numpuk (opsional tapi aman)
+            input.removeEventListener('input', checkFormChanges);
+            input.removeEventListener('change', checkFormChanges);
+
+            // Pasang listener baru
+            input.addEventListener('input', checkFormChanges);
+            input.addEventListener('change', checkFormChanges);
+        });
+    }
+
+    // Helper: Cek apakah ada perbedaan data
+    function checkFormChanges() {
+        const currentData = {
+            username: document.getElementById('edit_username').value,
+            email: document.getElementById('edit_email').value,
+            role: document.getElementById('edit_role').value,
+            fullname: document.getElementById('edit_fullname').value,
+            dob: document.getElementById('edit_dateOfBirth').value,
+            gender: document.getElementById('edit_gender').value,
+            country: document.getElementById('edit_countryId').value,
+        };
+
+        const passwordFilled = document.getElementById('edit_password').value.length > 0;
+        const photoFilled = document.getElementById('edit_profilePhoto').files.length > 0;
+
+        // Bandingkan JSON string (cara paling gampang untuk object sederhana)
+        const isDataChanged = JSON.stringify(initialEditData) !== JSON.stringify(currentData);
+
+        // Tombol aktif JIKA: (Data Berubah) ATAU (Password Diisi) ATAU (Foto Diupload)
+        const btn = document.getElementById('editSubmitBtn');
+        if (isDataChanged || passwordFilled || photoFilled) {
+            btn.disabled = false;
+            btn.classList.remove('opacity-50', 'cursor-not-allowed');
+        } else {
+            btn.disabled = true;
+            btn.classList.add('opacity-50', 'cursor-not-allowed');
+        }
+    }
 
         // Helper to clear error styles
         function clearErrors(form) {

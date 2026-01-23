@@ -110,21 +110,8 @@ class UserController extends Controller
             'countryId'   => $validated['countryId'],
         ];
 
-        if ($request->filled('profilePhoto')) {
-            $path = Storage::disk('azure')->put(
-                'images',
-                $validated['profilePhoto']
-            );
-        }
-
-        $user->update([
-            'username' => $validated['username'],
-            'password' => Hash::make($validated['password']),
-            'role'     => $validated['role'],
-        ]);
-
         if ($request->hasFile('profilePhoto')) {
-            if ($user->userDetail->profilePhoto) {
+            if ($user->userDetail && $user->userDetail->profilePhoto) {
                 Storage::disk('azure')->delete($user->userDetail->profilePhoto);
             }
 
@@ -176,6 +163,9 @@ class UserController extends Controller
 
     public function roles()
     {
-        return view('superadmin.roles');
+        $role0 = User::where('role', 0)->count();
+        $role1 = User::where('role', 1)->count();
+        $role2 = User::where('role', 2)->count();
+        return view('superadmin.roles', compact('role0', 'role1', 'role2', ));
     }
 }

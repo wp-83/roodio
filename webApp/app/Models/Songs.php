@@ -27,7 +27,7 @@ class Songs extends Model
 
     public function mood(): BelongsTo
     {
-        return $this->belongsTo(Mood::class, );
+        return $this->belongsTo(Mood::class, 'moodId', 'id');
     }
 
     public function user(): BelongsTo
