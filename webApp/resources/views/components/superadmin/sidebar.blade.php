@@ -50,10 +50,16 @@
 
     <div class="p-4 border-t border-primary-85">
         <div class="flex items-center gap-3">
-            <img src="https://ui-avatars.com/api/?name=Super+Admin&background=E650C5&color=fff" alt="Admin" class="w-10 h-10 rounded-full border-2 border-accent-100">
+            @if (auth()->user()->userDetail?->profilePhoto)
+                                        <img class="w-10 h-10 rounded-full object-cover" src="{{ config('filesystems.disks.azure.url') . '/' . auth()->user()->userDetail?->profilePhoto }}" alt="{{ auth()->user()->userDetail?->fullname }}">
+                                    @else
+                                        <p class='w-10 h-10 rounded-full object-cover text-title font-primary font-bold flex items-center justify-center bg-shadedOfGray-10 text-primary-100'>
+                                            {{ Str::length(auth()->user()->username) > 0 ? Str::upper(Str::substr(auth()->user()->username, 0, 1)) : '?' }}
+                                        </p>
+                                    @endif
             <div class="overflow-hidden">
-                <p class="text-sm font-bold text-white truncate">{{ auth()->user()->username }}</p>
-                <p class="text-xs text-primary-30 truncate">admin@system.com</p>
+                <p class="text-sm font-bold text-white truncate">{{ auth()->user()->userDetail?->fullname }}</p>
+                <p class="text-xs text-primary-30 truncate">{{ "@" . auth()->user()->username }}</p>
             </div>
         </div>
     </div>
