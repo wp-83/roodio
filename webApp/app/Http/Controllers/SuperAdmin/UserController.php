@@ -147,7 +147,31 @@ class UserController extends Controller
 
     public function overview()
     {
-        return view('superadmin.overview');
+        $totalUser     = User::count();
+        $newUsersToday = User::whereDate('created_at', today())->count();
+        $totalAdmins   = User::whereIn('role', [1, 2])->count();
+        $totalMale     = User::whereHas('userDetail', function ($q) {
+            $q->where('gender', 1);
+        })->count();
+        $totalFemale = User::whereHas('userDetail', function ($q) {
+            $q->where('gender', 0);
+        })->count();
+        $users = User::with('userDetail')->orderByDesc('created_at')->limit(5)->get();
+
+        $role0 = User::where('role', 0)->count();
+        $role1 = User::where('role', 1)->count();
+        $role2 = User::where('role', 2)->count();
+
+        $total = $role0 + $role1 + $role2;
+
+        $perc0 = $total > 0 ? round(($role0 / $total) * 100, 1) : 0;
+        $perc1 = $total > 0 ? round(($role1 / $total) * 100, 1) : 0;
+        $perc2 = $total > 0 ? round(($role2 / $total) * 100, 1) : 0;
+
+        return view('superadmin.overview', compact('totalUser', 'newUsersToday', 'totalAdmins', 'totalMale', 'totalFemale', 'users',
+            'role0', 'role1', 'role2',
+            'perc0', 'perc1', 'perc2',
+        ));
     }
 
     public function roles()

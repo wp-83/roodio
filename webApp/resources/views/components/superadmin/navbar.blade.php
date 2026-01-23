@@ -11,10 +11,6 @@
     </div>
 
     <div class="flex items-center gap-3 lg:gap-4">
-        <button class="w-10 h-10 rounded-full bg-shadedOfGray-10 text-primary-85 hover:bg-primary-10 hover:text-primary-100 transition-colors relative">
-            <i class="fa-regular fa-bell"></i>
-            <span class="absolute top-2 right-2 w-2.5 h-2.5 bg-accent-100 rounded-full border-2 border-white"></span>
-        </button>
         <form action="{{ route('auth.logout') }}" method="POST">
             @csrf
             <div onclick="this.closest('form').submit()"
