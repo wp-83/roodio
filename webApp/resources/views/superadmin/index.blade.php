@@ -1,4 +1,4 @@
-@extends('layouts.admin.master')
+@extends('layouts.superadmin.master')
 
 @section('title', 'User Management')
 @section('page_title', 'User Management')
