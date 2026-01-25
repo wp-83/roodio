@@ -107,7 +107,7 @@
 
 
 @section('scrollContainer')
-    
+
 @endsection
 
 
@@ -129,7 +129,7 @@
                 <div class='flex flex-col w-full h-max gap-8'>
                     @foreach ($playlists as $playlist)
                     <a href="/{{ $playlist->id }}">
-                        <x-albumCard :mood='$mood' :playlistName='$playlist->name' :playlistDesc='$playlist->description' :imageSource='$playlist->playlistPath'></x-albumCard>
+                        <x-albumCard :mood='$mood' :playlistName='$playlist->name' :playlistDesc='$playlist->description' :imageSource='$playlist->playlistPath' :totalSong="$playlist->songs->count()"></x-albumCard>
                     </a>
                     @endforeach
                 </div>
