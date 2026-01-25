@@ -52,7 +52,7 @@ class Songs extends Model
         return $map[$mood] ?? $mood;
     }
 
-    public function scopeApllyUserMood($query)
+    public function scopeApplyUserMood($query)
     {
         $userMood = Session::get('chooseMood');
         $mode     = Session::get('preferenceMood');
