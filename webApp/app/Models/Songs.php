@@ -54,10 +54,13 @@ class Songs extends Model
 
     public function scopeApplyUserMood($query)
     {
-        $userMood = Session::get('chooseMood');
-        $mode     = Session::get('preferenceMood');
-
+        $userMood   = Session::get('chooseMood');
+        $mode       = Session::get('preferenceMood');
         $targetMood = $userMood;
+
+        if ($targetMood == null) {
+            return null;
+        }
 
         if ($mode == 'mismatch') {
             $targetMood = $this->getOppositesMood($userMood);
