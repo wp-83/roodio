@@ -3,6 +3,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\Playlists;
+use Illuminate\Support\Facades\Session;
 
 class SongController extends Controller
 {
