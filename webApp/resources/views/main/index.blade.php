@@ -126,12 +126,18 @@
                     <img src="{{ asset('assets/moods/icons/' . $mood . '.png') }}" alt="{{ $mood }}" class='w-15 h-15 md:w-24 md:h-24'>
                     <p class='text-subtitle md:text-title text-secondary-relaxed-30 font-primary font-bold'>Trending Albums</p>
                 </div>
-                <div class='flex flex-col w-full h-max gap-8'>
-                    @foreach ($playlists as $playlist)
-                    <a href="/{{ $playlist->id }}">
-                        <x-albumCard :mood='$mood' :playlistName='$playlist->name' :playlistDesc='$playlist->description' :imageSource='$playlist->playlistPath' :totalSong="$playlist->songs->count()"></x-albumCard>
-                    </a>
-                    @endforeach
+                <div class="md:w-full md:overflow-x-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-200">
+                    <div class='flex flex-col w-full h-max gap-8 md:flex-row md:justify-between md:gap-10 md:w-max'>
+                        @foreach ($playlists as $playlist)
+                        <a href="/{{ $playlist->id }}">
+                            <x-albumCard :mood='$mood' :playlistName='$playlist->name' :playlistDesc='$playlist->description' :imageSource='$playlist->playlistPath' :totalSong="$playlist->songs->count()"></x-albumCard>
+                        </a>
+                        @endforeach
+                        <x-albumCard></x-albumCard>
+                        <x-albumCard></x-albumCard>
+                        <x-albumCard></x-albumCard>
+                        <x-albumCard></x-albumCard>
+                    </div>
                 </div>
             </div>
             <div class='mb-10 contentFadeLoad'>
