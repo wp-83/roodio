@@ -32,7 +32,7 @@
 @endphp
 
 
-<div class='min-w-5 min-h-5 w-full h-max p-4 flex flex-row justify-start gap-3 rounded-md relative overflow-hidden duration-200 group {{ $bgSoftOpacityMood[$mood] }} md:w-lg'>
+<div class='min-w-5 min-h-5 w-full h-max p-4 flex flex-row justify-start gap-3 rounded-md relative overflow-hidden duration-200 group {{ $bgSoftOpacityMood[$mood] }} cursor-pointer md:w-lg'>
     <div class='h-26 w-26 shrink-0 relative z-100 rounded-sm object-cover overflow-hidden {{ $bgBasedMood[$mood] }} md:w-48 md:h-48'>
         <img src="{{ config('filesystems.disks.azure.url') . '/' . $imageSource }}" alt="{{ $playlistName }}" class='w-full h-full'>
     </div>
