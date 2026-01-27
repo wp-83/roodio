@@ -30,6 +30,13 @@
         'relaxed' => 'So relaxing today! Hear these songs to become more relax.',
         'angry' => 'Wow, so scary... May these songs suitable with your mood.'
     ];
+
+    $scrollbarTheme = [
+        'happy' => 'scrollbar-thumb-secondary-happy-85/75 scrollbar-track-transparent',
+        'sad' => 'scrollbar-thumb-secondary-sad-85/75 scrollbar-track-transparent',
+        'relaxed' => 'scrollbar-thumb-secondary-relaxed-85/75 scrollbar-track-transparent',
+        'angry' => 'scrollbar-thumb-secondary-angry-85/75 scrollbar-track-transparent'
+    ];
 @endphp
 
 
@@ -126,17 +133,15 @@
                     <img src="{{ asset('assets/moods/icons/' . $mood . '.png') }}" alt="{{ $mood }}" class='w-15 h-15 md:w-24 md:h-24'>
                     <p class='text-subtitle md:text-title text-secondary-relaxed-30 font-primary font-bold'>Trending Albums</p>
                 </div>
-                <div class="md:w-full md:overflow-x-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-200">
-                    <div class='flex flex-col w-full h-max gap-8 md:flex-row md:justify-between md:gap-10 md:w-max'>
-                        @foreach ($playlists as $playlist)
-                        <a href="/{{ $playlist->id }}">
-                            <x-albumCard :mood='$mood' :playlistName='$playlist->name' :playlistDesc='$playlist->description' :imageSource='$playlist->playlistPath' :totalSong="$playlist->songs->count()"></x-albumCard>
-                        </a>
-                        @endforeach
-                        <x-albumCard></x-albumCard>
-                        <x-albumCard></x-albumCard>
-                        <x-albumCard></x-albumCard>
-                        <x-albumCard></x-albumCard>
+                <div class="md:w-full md:overflow-x-auto scrollbar pb-3 {{ $scrollbarTheme[$mood] }}">
+                    <div class='flex flex-col w-full h-max gap-8 md:flex-row md:justify-between md:gap-5 md:w-max'>
+                        @forelse($playlists as $playlist)
+                            <a href="/{{ $playlist->id }}">
+                                <x-albumCard :mood='$mood' :playlistName='$playlist->name' :playlistDesc='$playlist->description' :imageSource='$playlist->playlistPath' :totalSong="$playlist->songs->count()"></x-albumCard>
+                            </a>
+                        @empty
+                            <p class='text-white font-secondaryAndButton text-small md:text-body-size'>There is no playlist.</p>
+                        @endforelse
                     </div>
                 </div>
             </div>
@@ -145,14 +150,34 @@
                     <img src="{{ asset('assets/moods/icons/' . $mood . '.png') }}" alt="{{ $mood }}" class='w-15 h-15 md:w-24 md:h-24'>
                     <p class='text-subtitle md:text-title text-secondary-relaxed-30 font-primary font-bold'>New Arrivals</p>
                 </div>
-                <div></div>
+                <div class="md:w-full md:overflow-x-auto scrollbar pb-3 {{ $scrollbarTheme[$mood] }}">
+                    <div class='flex flex-col w-full h-max gap-8 md:flex-row md:justify-between md:gap-5 md:w-max'>
+                        @forelse($playlists as $playlist)
+                            <a href="/{{ $playlist->id }}">
+                                <x-albumCard :mood='$mood' :playlistName='$playlist->name' :playlistDesc='$playlist->description' :imageSource='$playlist->playlistPath' :totalSong="$playlist->songs->count()"></x-albumCard>
+                            </a>
+                        @empty
+                            <p class='text-white font-secondaryAndButton text-small md:text-body-size'>There is no playlist.</p>
+                        @endforelse
+                    </div>
+                </div>
             </div>
             <div class='mb-5 contentFadeLoad'>
                 <div class='w-fit h-fit flex flex-row items-center gap-3 mb-3'>
                     <img src="{{ asset('assets/moods/icons/' . $mood . '.png') }}" alt="{{ $mood }}" class='w-15 h-15 md:w-24 md:h-24'>
                     <p class='text-subtitle md:text-title text-secondary-relaxed-30 font-primary font-bold'>Random Mix</p>
                 </div>
-                <div></div>
+                <div class="md:w-full md:overflow-x-auto scrollbar pb-3 {{ $scrollbarTheme[$mood] }}">
+                    <div class='flex flex-col w-full h-max gap-8 md:flex-row md:justify-between md:gap-5 md:w-max'>
+                        @forelse($playlists as $playlist)
+                            <a href="/{{ $playlist->id }}">
+                                <x-albumCard :mood='$mood' :playlistName='$playlist->name' :playlistDesc='$playlist->description' :imageSource='$playlist->playlistPath' :totalSong="$playlist->songs->count()"></x-albumCard>
+                            </a>
+                        @empty
+                            <p class='text-white font-secondaryAndButton text-small md:text-body-size'>There is no playlist.</p>
+                        @endforelse
+                    </div>
+                </div>
             </div>
         </div>
     </div>
