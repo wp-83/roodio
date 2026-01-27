@@ -113,11 +113,6 @@
 @endsection
 
 
-@section('scrollContainer')
-
-@endsection
-
-
 @section('mainContent')
     <div class='flex flex-row justify-content items-center contentFadeLoad mb-3'>
         <img src="{{ asset('assets/moods/' . $mood . '.png') }}" alt="{{ $mood }}" class='h-42 w-42'>
