@@ -230,68 +230,70 @@
         </div>
     @endif
 
-    {{--
-        PERBAIKAN 3: MODAL DENGAN X-TELEPORT & TRANSISI
-        Ini akan memindahkan modal ke <body> agar z-indexnya benar-benar di atas sidebar.
-    --}}
     <template x-teleport="body">
-        <div x-show="showDeleteModal" style="display: none;"
-             class="fixed inset-0 z-[9999] overflow-y-auto"
-             aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    {{--
+        PERBAIKAN POSISI:
+        - lg:left-72 : Geser container modal ke kanan selebar sidebar
+        - lg:top-20  : Geser container modal ke bawah setinggi navbar
+        - z-50       : Cukup z-50 (tidak perlu 9999) karena area sidebar sudah dihindari
+        - flex justify-center items-center : Agar modal panel ada di tengah area tersebut
+    --}}
+    <div x-show="showDeleteModal" style="display: none;"
+         class="fixed inset-0 lg:left-72 lg:top-20 z-50 flex items-center justify-center"
+         aria-labelledby="modal-title" role="dialog" aria-modal="true">
 
-            <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+        {{-- Backdrop (Hanya menggelapkan area konten) --}}
+        <div class="absolute inset-0 bg-[#020a36]/80 backdrop-blur-sm transition-opacity"
+             @click="showDeleteModal = false"
+             x-show="showDeleteModal"
+             x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+             x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
+        </div>
 
-                {{-- Backdrop --}}
-                <div class="fixed inset-0 bg-[#020a36]/90 backdrop-blur-sm transition-opacity"
-                     @click="showDeleteModal = false"
-                     x-show="showDeleteModal"
-                     x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
-                     x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
-                </div>
+        {{-- Modal Panel --}}
+        <div class="relative w-full max-w-md m-4 bg-primary-85 rounded-2xl text-left overflow-hidden shadow-2xl border border-primary-70 transform transition-all"
+             x-show="showDeleteModal"
+             x-transition:enter="ease-out duration-300"
+             x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+             x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+             x-transition:leave="ease-in duration-200"
+             x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+             x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
 
-                <span class="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
-
-                {{-- Modal Panel --}}
-                <div class="relative inline-block align-bottom bg-primary-85 rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md w-full border border-primary-70"
-                     x-show="showDeleteModal"
-                     x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
-                     x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
-
-                    <div class="p-6">
-                        <div class="flex items-center gap-4 mb-4">
-                            <div class="w-12 h-12 rounded-full bg-secondary-angry-100/20 flex items-center justify-center flex-shrink-0 text-secondary-angry-100 text-xl border border-secondary-angry-100/30 shadow-inner">
-                                <i class="fa-solid fa-triangle-exclamation"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-primary font-bold text-white text-lg">Delete Playlist?</h4>
-                                <p class="font-secondaryAndButton text-sm text-shadedOfGray-30 mt-1">
-                                    Are you sure you want to delete <span x-text="deleteName" class="text-white font-bold"></span>? This action cannot be undone.
-                                </p>
-                            </div>
-                        </div>
-
-                        {{-- Form Action Dinamis --}}
-                        <form :action="deleteUrl" method="POST">
-                            @csrf
-                            @method('DELETE')
-
-                            <div class="flex justify-end gap-3 mt-6 pt-4 border-t border-primary-70">
-                                <button type="button" @click="showDeleteModal = false"
-                                        class="px-5 py-2.5 rounded-xl border border-primary-60 text-shadedOfGray-30 text-sm font-bold hover:bg-primary-70 hover:text-white transition-colors duration-200">
-                                    Cancel
-                                </button>
-
-                                <button type="submit"
-                                        class="px-5 py-2.5 rounded-xl bg-secondary-angry-100 text-white text-sm font-bold hover:bg-secondary-angry-85 shadow-lg shadow-secondary-angry-100/20 transition-all duration-200 flex items-center gap-2 transform active:scale-95">
-                                    <i class="fa-solid fa-trash"></i> Yes, Delete
-                                </button>
-                            </div>
-                        </form>
+            <div class="p-6">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-12 h-12 rounded-full bg-secondary-angry-100/20 flex items-center justify-center flex-shrink-0 text-secondary-angry-100 text-xl border border-secondary-angry-100/30 shadow-inner">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-primary font-bold text-white text-lg">Delete Playlist?</h4>
+                        <p class="font-secondaryAndButton text-sm text-shadedOfGray-30 mt-1">
+                            Are you sure you want to delete <span x-text="deleteName" class="text-white font-bold"></span>? This action cannot be undone.
+                        </p>
                     </div>
                 </div>
+
+                {{-- Form Action Dinamis --}}
+                <form :action="deleteUrl" method="POST">
+                    @csrf
+                    @method('DELETE')
+
+                    <div class="flex justify-end gap-3 mt-6 pt-4 border-t border-primary-70">
+                        <button type="button" @click="showDeleteModal = false"
+                                class="px-5 py-2.5 rounded-xl border border-primary-60 text-shadedOfGray-30 text-sm font-bold hover:bg-primary-70 hover:text-white transition-colors duration-200">
+                            Cancel
+                        </button>
+
+                        <button type="submit"
+                                class="px-5 py-2.5 rounded-xl bg-secondary-angry-100 text-white text-sm font-bold hover:bg-secondary-angry-85 shadow-lg shadow-secondary-angry-100/20 transition-all duration-200 flex items-center gap-2 transform active:scale-95">
+                            <i class="fa-solid fa-trash"></i> Yes, Delete
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
-    </template>
+    </div>
+</template>
 
 </div>
 
