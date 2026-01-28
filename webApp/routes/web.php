@@ -82,7 +82,7 @@ Route::prefix('admin')->middleware(['auth', 'role:1', 'prevent-back-history'])->
         Route::get('/create', [SongController::class, 'create'])->name('admin.songs.create');
         Route::post('/create', [SongController::class, 'store'])->name('admin.songs.store');
         Route::get('/{song}/edit', [SongController::class, 'edit'])->name('admin.songs.edit');
-        Route::post('/{song}', [SongController::class, 'update'])->name('admin.songs.update');
+        Route::put('/{song}', [SongController::class, 'update'])->name('admin.songs.update');
         Route::delete('/{song}', [SongController::class, 'destroy'])->name('admin.songs.destroy');
     });
 

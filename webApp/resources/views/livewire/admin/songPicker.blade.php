@@ -1,61 +1,75 @@
-<div>
-    <label class="block font-secondaryAndButton text-small text-primary-100 font-bold mb-3">
-        Pilih Lagu
-    </label>
+<div class="space-y-4">
 
-    <div class="relative mb-3">
-        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-shadedOfGray-60">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
+    {{-- Search Bar (Sticky Top agar tidak hilang saat scroll) --}}
+    <div class="relative sticky top-0 z-20 bg-primary-100 pb-2">
+        <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-shadedOfGray-40 pb-2">
+            <i class="fa-solid fa-magnifying-glass"></i>
         </span>
         <input wire:model.live.debounce.300ms="search"
                type="text"
-               placeholder="Cari lagu atau artis..."
-               class="w-full pl-10 pr-4 py-2 bg-white border border-shadedOfGray-30 rounded-lg text-primary-100 font-secondaryAndButton text-body-size focus:border-accent-100 focus:ring-1 focus:ring-accent-100 outline-none transition placeholder-shadedOfGray-30">
-    </div>
+               placeholder="Search song title or artist..."
+               class="w-full bg-primary-85 border border-primary-60 text-white text-sm rounded-xl pl-11 pr-4 py-3 focus:outline-none focus:border-secondary-happy-100 focus:ring-1 focus:ring-secondary-happy-100 placeholder-shadedOfGray-50 transition-all shadow-inner"
+               autofocus>
 
-    <div class="border border-shadedOfGray-20 rounded-lg overflow-hidden max-h-60 overflow-y-auto custom-scrollbar bg-shadedOfGray-10/10 relative">
-
-        <div wire:loading wire:target="search" class="absolute inset-0 bg-white/80 z-10 flex items-center justify-center">
-            <span class="text-primary-60 text-small font-bold animate-pulse">Mencari...</span>
+        {{-- Loading Indicator (Kecil di pojok kanan input) --}}
+        <div wire:loading wire:target="search" class="absolute right-4 top-3 text-secondary-happy-100 text-xs font-bold animate-pulse">
+            Searching...
         </div>
-
-        <ul class="divide-y divide-shadedOfGray-10">
-            @forelse($songs as $song)
-                <li class="flex items-center justify-between p-3 hover:bg-shadedOfGray-10/50 transition-colors cursor-pointer group" wire:key="song-{{ $song->id }}">
-                    <label class="flex items-center space-x-4 w-full cursor-pointer">
-                        <div class="flex-shrink-0">
-                            <input type="checkbox"
-                                   wire:model.live="selectedSongs"
-                                   value="{{ $song->id }}"
-                                   class="form-checkbox h-5 w-5 text-primary-60 border-shadedOfGray-30 rounded focus:ring-primary-50 transition duration-150 ease-in-out">
-                        </div>
-                        <div class="flex-grow">
-                            <p class="font-primary font-bold text-primary-100 text-body-size group-hover:text-primary-60 transition-colors">
-                                {{ $song->title }}
-                            </p>
-                            <p class="font-secondaryAndButton text-small text-shadedOfGray-60">
-                                {{ $song->artist }}
-                            </p>
-                        </div>
-                    </label>
-                </li>
-            @empty
-                <li class="p-4 text-center text-shadedOfGray-50 text-small italic">
-                    Tidak ada lagu ditemukan.
-                </li>
-            @endforelse
-        </ul>
     </div>
 
-    <div class="flex justify-between items-center mt-2">
-        <p class="text-micro text-shadedOfGray-40 italic">*Scroll untuk melihat lebih banyak.</p>
-        <p class="text-small font-bold text-primary-60">{{ count($selectedSongs) }} Lagu dipilih</p>
+    {{-- Song List Grid --}}
+    <div class="grid grid-cols-1 gap-2">
+        @forelse($songs as $song)
+            <div wire:key="song-{{ $song->id }}"
+                 class="group flex items-center justify-between p-3 bg-primary-85 hover:bg-primary-70 border border-transparent hover:border-primary-60 rounded-xl transition-all duration-200">
+
+                {{-- Song Info --}}
+                <div class="flex items-center gap-4 min-w-0">
+                    {{-- Icon Music --}}
+                    <div class="w-10 h-10 rounded-lg bg-primary-60 flex items-center justify-center text-shadedOfGray-30 group-hover:text-white transition-colors flex-shrink-0">
+                        <i class="fa-solid fa-music"></i>
+                    </div>
+
+                    {{-- Text --}}
+                    <div class="min-w-0">
+                        <h4 class="text-sm font-bold text-white truncate pr-2 group-hover:text-secondary-happy-100 transition-colors">
+                            {{ $song->title }}
+                        </h4>
+                        <p class="text-xs text-shadedOfGray-40 truncate">
+                            {{ $song->artist }}
+                        </p>
+                    </div>
+                </div>
+
+                {{-- Action Button --}}
+                <button type="button"
+                        wire:click.prevent="selectSong('{{ $song->id }}')"
+                        wire:loading.attr="disabled"
+                        wire:target="selectSong('{{ $song->id }}')"
+                        class="px-4 py-2 bg-primary-60 hover:bg-secondary-happy-100 text-white text-xs font-bold rounded-lg transition-all shadow-md flex items-center gap-2 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed">
+
+                    {{-- State Normal --}}
+                    <span wire:loading.remove wire:target="selectSong('{{ $song->id }}')">
+                        Add
+                    </span>
+                    <i wire:loading.remove wire:target="selectSong('{{ $song->id }}')" class="fa-solid fa-plus"></i>
+
+                    {{-- State Loading --}}
+                    <span wire:loading wire:target="selectSong('{{ $song->id }}')">
+                        Adding...
+                    </span>
+                    <i wire:loading wire:target="selectSong('{{ $song->id }}')" class="fa-solid fa-spinner fa-spin"></i>
+                </button>
+            </div>
+        @empty
+            {{-- Empty State --}}
+            <div class="text-center py-12 flex flex-col items-center justify-center border-2 border-dashed border-primary-60 rounded-xl">
+                <div class="w-12 h-12 rounded-full bg-primary-85 flex items-center justify-center mb-3 text-shadedOfGray-40">
+                    <i class="fa-solid fa-music-slash text-xl"></i>
+                </div>
+                <p class="text-sm text-shadedOfGray-30 font-medium">No songs found.</p>
+                <p class="text-xs text-shadedOfGray-50 mt-1">Try searching with a different keyword.</p>
+            </div>
+        @endforelse
     </div>
-
-    @foreach($selectedSongs as $songId)
-        <input type="hidden" name="songs[]" value="{{ $songId }}">
-    @endforeach
-
 </div>
