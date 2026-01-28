@@ -133,10 +133,10 @@
                             <x-albumCard :mood='$mood' :playlistName='$playlist->name' :playlistDesc='$playlist->description' :imageSource='$playlist->playlistPath' :totalSong="$playlist->songs->count()"></x-albumCard>
                         </a>
                         @endforeach
+                        <!-- <x-albumCard></x-albumCard>
                         <x-albumCard></x-albumCard>
                         <x-albumCard></x-albumCard>
-                        <x-albumCard></x-albumCard>
-                        <x-albumCard></x-albumCard>
+                        <x-albumCard></x-albumCard> -->
                     </div>
                 </div>
             </div>

@@ -14,6 +14,12 @@ return new class extends Migration
         Schema::create('playlists', function (Blueprint $table) {
             $table->char('id', 10)->primary();
             $table->string('name', 255);
+            $table->char('userId', 10);
+            $table->foreign('userId')
+                ->references('id')
+                ->on('Users')
+                ->noActionOnDelete()
+                ->noActionOnUpdate();   
             $table->string('description', 255);
             $table->string('playlistPath', 255);
             $table->timestamps();

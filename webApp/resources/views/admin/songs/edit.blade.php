@@ -36,8 +36,8 @@
                         <label class="flex flex-col items-center justify-center w-full h-full border-2 border-dashed border-primary-60 hover:border-secondary-happy-100 hover:bg-primary-70/50 rounded-2xl cursor-pointer transition-all duration-300 overflow-hidden relative">
 
                             {{-- Image Preview (Show Existing or Placeholder) --}}
-                            @if($song->cover_art)
-                                <img id="photo-preview" src="{{ config('filesystems.disks.azure.url') . '/' . $song->cover_art }}" class="absolute inset-0 w-full h-full object-cover z-10" alt="Cover Preview" />
+                            @if($song->photoPath)
+                                <img id="photo-preview" src="{{ config('filesystems.disks.azure.url') . '/' . $song->photoPath }}" class="absolute inset-0 w-full h-full object-cover z-10" alt="Cover Preview" />
                             @else
                                 <img id="photo-preview" class="absolute inset-0 w-full h-full object-cover hidden z-10" alt="Cover Preview" />
 
@@ -55,10 +55,10 @@
                                 <span class="text-white text-sm font-bold flex items-center gap-2"><i class="fa-solid fa-pen"></i> Change Cover</span>
                             </div>
 
-                            <input type="file" name="cover_art" id="photo_input" accept="image/*" class="opacity-0 w-full h-full absolute inset-0 cursor-pointer z-30" />
+                            <input type="file" name="photo" id="photo_input" accept="image/*" class="opacity-0 w-full h-full absolute inset-0 cursor-pointer z-30" />
                         </label>
                     </div>
-                    @error('cover_art')
+                    @error('photo')
                         <p class="mt-2 text-secondary-angry-100 text-xs font-medium">{{ $message }}</p>
                     @enderror
                 </div>
@@ -68,14 +68,14 @@
                     <label class="font-bold text-white font-primary text-sm mb-4 block">Audio File</label>
 
                     {{-- Current Audio Info --}}
-                    @if($song->file_path)
+                    @if($song->songPath)
                         <div class="mb-4 p-3 rounded-xl bg-primary-100 border border-primary-60 flex items-center gap-3">
                             <div class="w-10 h-10 rounded-full bg-secondary-happy-100/10 flex items-center justify-center text-secondary-happy-100">
                                 <i class="fa-solid fa-music"></i>
                             </div>
                             <div class="flex-1 min-w-0">
                                 <p class="text-xs text-shadedOfGray-30">Current File</p>
-                                <p class="text-sm font-bold text-white truncate">audio_file.mp3</p> {{-- Nama file asli susah diambil dari hash, jadi placeholder atau info --}}
+                                <p class="text-sm font-bold text-white truncate">{{ $song->songPath }}</p>
                             </div>
                         </div>
                     @endif
@@ -88,10 +88,10 @@
                                 <p class="text-xs text-shadedOfGray-30 font-medium group-hover:text-white transition-colors" id="audio-filename">Replace Audio File</p>
                             </div>
 
-                            <input type="file" name="file_path" id="song-input" accept=".mp3,.wav,.aac" class="opacity-0 w-full h-full absolute inset-0 cursor-pointer" />
+                            <input type="file" name="song" id="song-input" accept=".mp3,.wav,.aac" class="opacity-0 w-full h-full absolute inset-0 cursor-pointer" />
                         </label>
                     </div>
-                    @error('file_path')
+                    @error('song')
                         <p class="mt-2 text-secondary-angry-100 text-xs font-medium">{{ $message }}</p>
                     @enderror
                 </div>
@@ -138,12 +138,32 @@
                             </div>
                         </div>
 
-                        {{-- Mood --}}
-                        {{-- (Opsional: Jika ada dropdown mood, masukkan di sini) --}}
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label for="publisher" class="text-sm font-bold text-shadedOfGray-10">Publisher <span class="text-secondary-angry-100">*</span></label>
+                                <div class="relative">
+                                    <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-shadedOfGray-50"><i class="fa-solid fa-building"></i></span>
+                                    <input type="text" name="publisher" id="publisher" value="{{ old('genre', $song->publisher) }}"
+                                        class="w-full bg-primary-100 border border-primary-60 rounded-xl text-white pl-10 pr-4 py-3 focus:border-secondary-happy-100 focus:ring-1 focus:ring-secondary-happy-100 outline-none transition placeholder-shadedOfGray-50"
+                                        placeholder="e.g. Sony Music">
+                                </div>
+                                @error('publisher') <p class="text-secondary-angry-100 text-xs">{{ $message }}</p> @enderror
+                            </div>
+
+                            <div class="space-y-2">
+                                <label for="datePublished" class="text-sm font-bold text-shadedOfGray-10">Date Published <span class="text-secondary-angry-100">*</span></label>
+                                <div class="relative">
+                                    <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-shadedOfGray-50"><i class="fa-regular fa-calendar"></i></span>
+                                    <input type="date" name="datePublished" id="datePublished" value="{{ old('genre', $song->datePublished) }}"
+                                        class="w-full bg-primary-100 border border-primary-60 rounded-xl text-white pl-10 pr-4 py-3 focus:border-secondary-happy-100 focus:ring-1 focus:ring-secondary-happy-100 outline-none transition placeholder-shadedOfGray-50 [color-scheme:dark]">
+                                </div>
+                                @error('datePublished') <p class="text-secondary-angry-100 text-xs">{{ $message }}</p> @enderror
+                            </div>
+                        </div>
 
                         {{-- Lyrics --}}
                         <div class="space-y-2">
-                            <label for="lyrics" class="text-sm font-bold text-shadedOfGray-10">Lyrics <span class="text-xs font-normal text-shadedOfGray-50">(Optional)</span></label>
+                            <label for="lyrics" class="text-sm font-bold text-shadedOfGray-10">Lyrics <span class="text-secondary-angry-100">*</span></label>
                             <textarea name="lyrics" id="lyrics" rows="8"
                                 class="w-full bg-primary-100 border border-primary-60 rounded-xl text-white px-4 py-3 focus:border-secondary-happy-100 focus:ring-1 focus:ring-secondary-happy-100 outline-none transition placeholder-shadedOfGray-50 leading-relaxed scrollbar-thin scrollbar-thumb-primary-60"
                                 placeholder="Paste lyrics here...">{{ old('lyrics', $song->lyrics) }}</textarea>
