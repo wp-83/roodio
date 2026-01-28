@@ -1,8 +1,8 @@
 @props([
-    'mood' => 'happy',
-    'playlistName' => null,
-    'playlistDesc' => null,
-    'imageSource' => null,
+    'mood',
+    'playlistName',
+    'playlistDesc',
+    'imageSource',
     'totalSong' => 0,
     'totalTime' => 0
 ])
