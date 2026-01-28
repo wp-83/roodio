@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\OverviewController;
 use App\Http\Controllers\Admin\PlaylistController;
 use App\Http\Controllers\Admin\SongController;
 use App\Http\Controllers\AuthController;
@@ -77,6 +78,8 @@ Route::prefix('/')->middleware(['auth', 'role:0', 'prevent-back-history'])->grou
 
 // Admin Route
 Route::prefix('admin')->middleware(['auth', 'role:1', 'prevent-back-history'])->group(function () {
+    Route::get('overview', [OverviewController::class, 'overview'])->name('admin.overview');
+
     Route::prefix('songs')->group(function () {
         Route::get('', [SongController::class, 'index'])->name('admin.songs.index');
         Route::get('/create', [SongController::class, 'create'])->name('admin.songs.create');
