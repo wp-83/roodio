@@ -36,6 +36,14 @@ class PlaylistSelectedSongs extends Component
 
         $this->dispatch('song-removed', $removedSongId)->to(SongPicker::class);
     }
+    public function mount($initialSongs = [])
+    {
+        if (! empty($initialSongs)) {
+            foreach ($initialSongs as $song) {
+                $this->selectedSongs[] = $song;
+            }
+        }
+    }
 
     public function render()
     {
