@@ -6,13 +6,18 @@ use Illuminate\Support\Facades\DB;
 
 class Playlists extends Model
 {
-    protected $fillable  = ['id', 'name', 'description', 'playlistPath'];
+    protected $fillable  = ['id', 'userId', 'name', 'description', 'playlistPath'];
     public $incrementing = false;
     protected $keyType   = 'string';
 
     public function songs()
     {
         return $this->belongsToMany(Songs::class, 'Tracks', 'playlistId', 'songId');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'userId', 'id');
     }
 
     protected static function booted()
