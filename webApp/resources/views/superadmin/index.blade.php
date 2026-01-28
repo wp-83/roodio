@@ -295,15 +295,26 @@
 
                         {{-- Gender --}}
                         <div class="space-y-1">
-                            <label class="text-sm font-bold text-shadedOfGray-20">Gender <span class="text-secondary-angry-100">*</span></label>
+                            <label for="gender" class="text-sm font-bold text-shadedOfGray-20">Gender <span class="text-secondary-angry-100">*</span></label>
                             <div class="relative">
-                                <select name="gender" class="w-full px-4 py-2.5 rounded-xl border border-primary-60 bg-primary-100 text-white focus:border-secondary-happy-100 focus:ring-1 focus:ring-secondary-happy-100 text-sm appearance-none">
-                                    <option value="" disabled {{ old('gender') === null ? 'selected' : '' }}>Select Gender</option>
-                                    <option value="1" {{ old('gender') == '1' ? 'selected' : '' }}>Male</option>
-                                    <option value="0" {{ old('gender') == '0' ? 'selected' : '' }}>Female</option>
-                                    <option value="" {{ old('gender') !== null && old('gender') == '' ? 'selected' : '' }}>Prefer not to say</option>
+                                <select name="gender" id="gender" class="w-full px-4 py-2.5 rounded-xl border border-primary-60 bg-primary-100 text-white focus:border-secondary-happy-100 focus:ring-1 focus:ring-secondary-happy-100 text-sm appearance-none cursor-pointer">
+
+                                    {{-- 1. Placeholder (Terpilih jika old value kosong/null) --}}
+                                    <option value="" disabled @selected(old('gender') === null)>Select Gender</option>
+
+                                    {{-- 2. Male --}}
+                                    <option value="1" @selected(old('gender') == '1')>Male</option>
+
+                                    {{-- 3. Female (Gunakan string '0' agar aman) --}}
+                                    <option value="0" @selected(old('gender') === '0')>Female</option>
+
+                                    {{-- 4. Prefer not to say (Ubah value jadi -1 agar tidak bentrok dengan placeholder) --}}
+                                    <option value="-1" @selected(old('gender') == '-1')>Prefer not to say</option>
+
                                 </select>
-                                <span class="absolute inset-y-0 right-0 pr-3 flex items-center text-shadedOfGray-40 pointer-events-none"><i class="fa-solid fa-chevron-down text-xs"></i></span>
+                                <span class="absolute inset-y-0 right-0 pr-3 flex items-center text-shadedOfGray-40 pointer-events-none">
+                                    <i class="fa-solid fa-chevron-down text-xs"></i>
+                                </span>
                             </div>
                             @error('gender') <p class="text-secondary-angry-100 text-xs mt-1">{{ $message }}</p> @enderror
                         </div>

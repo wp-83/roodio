@@ -45,7 +45,7 @@ class UserController extends Controller
             'fullname'     => 'required|max:255',
             'email'        => 'required|email|max:255|unique:user_details,email',
             'dateOfBirth'  => 'required|date',
-            'gender'       => 'nullable|in:0,1,null',
+            'gender'       => 'nullable|in:0,1,-1',
             'countryId'    => 'required|string|exists:regions,id',
             'role'         => 'required|in:0,1,2',
             'profilePhoto' => 'image|max:5120',
@@ -63,6 +63,10 @@ class UserController extends Controller
             'password' => Hash::make($validated['password']),
             'role'     => $validated['role'],
         ]);
+
+        if ($validated['gender'] == "-1") {
+            $validated['gender'] = null;
+        }
 
         userDetails::create([
             'userId'       => $user->id,
