@@ -17,12 +17,12 @@ Route::get('/welcome', function () {
 
 // Auth Route
 Route::prefix('auth')->group(function () {
-    Route::get('/login', [AuthController::class, 'loginView'])->name('login');
-    Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
+    Route::get('/login', [AuthController::class, 'loginView'])->middleware('guest')->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->middleware('guest')->name('auth.login');
     Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 
-    Route::get('email-verification', [AuthController::class, 'emailVerificationView'])->name('emailVerification');
-    Route::post('email-verification', [AuthController::class, 'emailVerification'])->name('auth.emailVerification');
+    Route::get('email-verification', [AuthController::class, 'emailVerificationView'])->middleware('guest')->name('emailVerification');
+    Route::post('email-verification', [AuthController::class, 'emailVerification'])->middleware('guest')->name('auth.emailVerification');
 
     Route::middleware('forgot.step:otp')->group(function () {
         Route::get('/user-verification', [AuthController::class, 'userVerificationView'])->name('user.verification');
