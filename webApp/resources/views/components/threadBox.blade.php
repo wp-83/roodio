@@ -42,7 +42,7 @@
     ];
 @endphp
 
-<div class='{{ $bgContainer[$mood] }} rounded-lg h-max p-5 w-full'>
+<div class='{{ $bgContainer[$mood] }} rounded-lg h-max p-5 w-full'  >
     <div class='flex flex-row items-center gap-2 w-full'>
         <div class='w-16 h-16 lg:w-18 lg:h-18 border-2 {{ $borderMood[$mood] }} rounded-full flex items-center justify-center'>
             <div class='w-14 h-14 lg:w-16 lg:h-16 bg-primary-10 rounded-full flex items-center justify-center relative z-5 overflow-hidden'>
@@ -92,7 +92,7 @@
         @endif
     </div>
     @if ($isReplyable)
-        <div class='mt-6'>
+        <div class='mt-6' x-show="open" x-transition>
             <hr class='border border-shadedOfGray-30 my-2'>
             <div>
                 <div id="replyContainer" class="bg-primary-20 h-36 overflow-y-auto">

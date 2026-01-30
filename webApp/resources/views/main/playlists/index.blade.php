@@ -69,7 +69,7 @@
                     <div class='w-20 h-20 bg-shadedOfGray-10 rounded-md overflow-hidden relative'>
                         <img src="{{ config('filesystems.disks.azure.url') . '/' . $song->photoPath }}" alt="{{ $song->title }}" class='w-full h-full object-cover relative'>
                         <div class='{{ $hoverPlayStyle[$mood] }} w-full h-full absolute top-0 left-0 invisible flex items-center justify-center group-hover:visible'>
-                            <img src="{{ asset('assets/icons/play-dark.svg') }}" alt="" class='w-9 h-9 opacity-80'>
+                            <img src="{{ asset('assets/icons/play-dark.svg') }}" alt="play-btn" class='w-9 h-9 opacity-80'>
                         </div>
                     </div>
                     <div class='flex flex-col justify-between font-secondaryAndButton'>
