@@ -14,11 +14,27 @@ class SongController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $songs = Songs::with('user.userDetail')
-            ->orderByDesc('created_at')
-            ->get();
+        $query = Songs::query()->with('user.userDetail');
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                    ->orWhere('artist', 'like', "%{$search}%")
+                    ->orWhere('publisher', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('mood')) {
+            $query->whereHas('mood', function ($q) use ($request) {
+                $q->where('type', $request->mood);
+            });
+        }
+
+        $songs = $query->latest()->paginate(perPage: 10);
+
         return view('admin.songs.index', compact('songs'));
     }
 
@@ -51,6 +67,7 @@ class SongController extends Controller
             'publisher'     => 'required|max:255',
             'datePublished' => 'required|date',
             'song'          => 'required|file|mimes:mp3',
+            'photo'         => 'required|image|mimes:jpeg,png,jpg|max:5120',
         ]);
 
         $song  = $request->file('song');
@@ -89,7 +106,7 @@ class SongController extends Controller
         unset($datas['song']);
         unset($datas['photo']);
         Songs::create($datas);
-        return redirect()->route('admin.songs.index')->with('succes', 'Successfully added song');
+        return redirect()->route('admin.songs.index')->with('success', 'Successfully added song');
     }
 
     /**
@@ -122,8 +139,26 @@ class SongController extends Controller
             'datePublished' => 'required|date',
         ]);
 
+        if ($request->hasFile('photo')) {
+            $photo     = $request->file('photo');
+            $photoPath = Storage::disk('azure')->put(
+                'images',
+                $photo
+            );
+            $song::update(['photoPath' => $photoPath]);
+        }
+
+        if ($request->hasFile('song')) {
+            $songFile = $request->file('song');
+            $path     = Storage::disk('azure')->put(
+                'songs',
+                $songFile
+            );
+            $song::update(['songPath' => $path]);
+        }
+
         $validated['userId'] = Auth::id();
-        Songs::update($validated);
+        $song->update($validated);
         return redirect()->route('admin.songs.index')->with('success', 'Song updated successfully');
     }
 

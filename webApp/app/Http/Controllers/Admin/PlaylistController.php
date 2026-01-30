@@ -9,9 +9,37 @@ use Illuminate\Support\Facades\Storage;
 
 class PlaylistController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $playlists = Playlists::orderByDesc('created_at')->paginate(5);
+        $query = Playlists::with('user')->withCount('songs');
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%")
+                    ->orWhereHas('user', function ($u) use ($search) {
+                        $u->where('username', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        if ($request->filled('status')) {
+            if ($request->status == 'not_empty') {
+                $query->has('songs');
+            } elseif ($request->status == 'empty') {
+                $query->doesntHave('songs');
+            }
+        }
+
+        if ($request->filled('sort') && $request->sort == 'oldest') {
+            $query->oldest();
+        } else {
+            $query->latest();
+        }
+
+        $playlists = $query->paginate(8);
+
         return view('admin.playlists.index', compact('playlists'));
     }
 
@@ -25,6 +53,7 @@ class PlaylistController extends Controller
         $validated = $request->validate([
             'name'        => 'required|max:255',
             'description' => 'required|max:255',
+            'image'       => 'required|image|mimes:jpeg,png,jpg|max:5120',
         ]);
 
         $image = $request->file('image');
@@ -33,14 +62,17 @@ class PlaylistController extends Controller
             'image',
             $image
         );
+        $validated['userId'] = auth()->id();
 
         $playlist = Playlists::create($validated);
 
-        foreach ($request['songs'] as $song) {
-            Tracks::create([
-                'songId'     => $song,
-                'playlistId' => $playlist->id,
-            ]);
+        if ($request->has('songs')) {
+            foreach ($request['songs'] as $song) {
+                Tracks::create([
+                    'songId'     => $song,
+                    'playlistId' => $playlist->id,
+                ]);
+            }
         }
 
         return redirect()->route('admin.playlists.index')->with(['success' => "Successfully to Create Playlist"]);

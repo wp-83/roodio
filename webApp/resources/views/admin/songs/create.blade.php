@@ -23,16 +23,17 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-            {{-- LEFT COLUMN: COVER ART --}}
+            {{-- LEFT COLUMN: MEDIA UPLOAD --}}
             <div class="lg:col-span-1 space-y-6">
-                <div class="bg-primary-85 rounded-2xl p-6 border border-primary-70 shadow-lg">
-                    <label class="font-bold text-white font-primary text-sm mb-4 block">Cover Art</label>
 
-                    {{-- Upload Box --}}
+                {{-- 1. COVER ART UPLOAD --}}
+                <div class="bg-primary-85 rounded-2xl p-6 border border-primary-70 shadow-lg">
+                    <label class="font-bold text-white font-primary text-sm mb-4 block">Cover Art <span class="text-secondary-angry-100">*</span></label>
+
                     <div class="w-full aspect-square relative group">
                         <label class="flex flex-col items-center justify-center w-full h-full border-2 border-dashed border-primary-60 hover:border-secondary-happy-100 hover:bg-primary-70/50 rounded-2xl cursor-pointer transition-all duration-300 overflow-hidden relative">
 
-                            {{-- Placeholder Content --}}
+                            {{-- Placeholder --}}
                             <div class="flex flex-col items-center justify-center text-center p-6 transition-opacity duration-300" id="photo-placeholder">
                                 <div class="w-16 h-16 rounded-full bg-primary-70 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                                     <i class="fa-regular fa-image text-3xl text-shadedOfGray-40 group-hover:text-secondary-happy-100 transition-colors"></i>
@@ -41,25 +42,25 @@
                                 <span class="text-[10px] text-shadedOfGray-50 mt-2 uppercase tracking-wide">JPG, PNG (Max 5MB)</span>
                             </div>
 
-                            {{-- Image Preview --}}
+                            {{-- Preview Image --}}
                             <img id="photo-preview" class="absolute inset-0 w-full h-full object-cover hidden z-10" alt="Cover Preview" />
 
-                            {{-- Hover Overlay for Preview --}}
+                            {{-- Hover Overlay --}}
                             <div id="preview-overlay" class="absolute inset-0 bg-black/50 z-20 hidden items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                 <span class="text-white text-sm font-bold"><i class="fa-solid fa-pen"></i> Change Cover</span>
                             </div>
 
-                            <input type="file" name="cover_art" id="photo_input" accept="image/*" class="opacity-0 w-full h-full absolute inset-0 cursor-pointer z-30" />
+                            <input type="file" name="photo" id="photo_input" accept="image/*" class="opacity-0 w-full h-full absolute inset-0 cursor-pointer z-30" />
                         </label>
                     </div>
-                    @error('cover_art')
+                    @error('photo')
                         <p class="mt-2 text-secondary-angry-100 text-xs font-medium">{{ $message }}</p>
                     @enderror
                 </div>
 
-                {{-- AUDIO FILE UPLOAD --}}
+                {{-- 2. AUDIO FILE UPLOAD --}}
                 <div class="bg-primary-85 rounded-2xl p-6 border border-primary-70 shadow-lg">
-                    <label class="font-bold text-white font-primary text-sm mb-4 block">Audio File</label>
+                    <label class="font-bold text-white font-primary text-sm mb-4 block">Audio File <span class="text-secondary-angry-100">*</span></label>
                     <div class="relative">
                         <label class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-primary-60 hover:border-accent-100 hover:bg-primary-70/50 rounded-xl cursor-pointer transition-all duration-300 group">
 
@@ -69,10 +70,10 @@
                                 <p class="text-[10px] text-shadedOfGray-50 mt-1">MP3, WAV, AAC (Max 20MB)</p>
                             </div>
 
-                            <input type="file" name="file_path" id="song-input" accept=".mp3,.wav,.aac" class="opacity-0 w-full h-full absolute inset-0 cursor-pointer" />
+                            <input type="file" name="song" id="song-input" accept=".mp3,.wav,.aac" class="opacity-0 w-full h-full absolute inset-0 cursor-pointer" />
                         </label>
                     </div>
-                    @error('file_path')
+                    @error('song')
                         <p class="mt-2 text-secondary-angry-100 text-xs font-medium">{{ $message }}</p>
                     @enderror
                 </div>
@@ -84,6 +85,7 @@
                     <h3 class="text-lg font-bold text-white mb-6 border-b border-primary-70 pb-4">Track Information</h3>
 
                     <div class="space-y-6">
+
                         {{-- Title --}}
                         <div class="space-y-2">
                             <label for="title" class="text-sm font-bold text-shadedOfGray-10">Track Title <span class="text-secondary-angry-100">*</span></label>
@@ -93,8 +95,8 @@
                             @error('title') <p class="text-secondary-angry-100 text-xs">{{ $message }}</p> @enderror
                         </div>
 
+                        {{-- Artist & Genre --}}
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            {{-- Artist --}}
                             <div class="space-y-2">
                                 <label for="artist" class="text-sm font-bold text-shadedOfGray-10">Artist Name <span class="text-secondary-angry-100">*</span></label>
                                 <div class="relative">
@@ -106,7 +108,6 @@
                                 @error('artist') <p class="text-secondary-angry-100 text-xs">{{ $message }}</p> @enderror
                             </div>
 
-                            {{-- Genre --}}
                             <div class="space-y-2">
                                 <label for="genre" class="text-sm font-bold text-shadedOfGray-10">Genre <span class="text-secondary-angry-100">*</span></label>
                                 <div class="relative">
@@ -119,31 +120,37 @@
                             </div>
                         </div>
 
-                        {{-- MOOD SELECTION (Dropdown) --}}
-                        {{-- Asumsi Anda punya tabel 'moods' dan mengirim variabel $moods dari controller --}}
-                        {{-- Jika belum ada, bisa hardcode option atau input text biasa --}}
-                        {{-- <div class="space-y-2">
-                            <label for="mood_id" class="text-sm font-bold text-shadedOfGray-10">Mood <span class="text-secondary-angry-100">*</span></label>
-                            <div class="relative">
-                                <select name="mood_id" id="mood_id" class="w-full bg-primary-100 border border-primary-60 rounded-xl text-white px-4 py-3 focus:border-secondary-happy-100 focus:ring-1 focus:ring-secondary-happy-100 outline-none appearance-none cursor-pointer">
-                                    <option value="" disabled selected>Select Track Mood</option>
-                                    <option value="1">Happy</option>
-                                    <option value="2">Sad</option>
-                                    <option value="3">Relaxed</option>
-                                    <option value="4">Angry</option>
-                                </select>
-                                <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-shadedOfGray-50">
-                                    <i class="fa-solid fa-chevron-down text-xs"></i>
+                        {{-- Publisher & Date Published (NEW) --}}
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label for="publisher" class="text-sm font-bold text-shadedOfGray-10">Publisher <span class="text-secondary-angry-100">*</span></label>
+                                <div class="relative">
+                                    <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-shadedOfGray-50"><i class="fa-solid fa-building"></i></span>
+                                    <input type="text" name="publisher" id="publisher" value="{{ old('publisher') }}"
+                                        class="w-full bg-primary-100 border border-primary-60 rounded-xl text-white pl-10 pr-4 py-3 focus:border-secondary-happy-100 focus:ring-1 focus:ring-secondary-happy-100 outline-none transition placeholder-shadedOfGray-50"
+                                        placeholder="e.g. Sony Music">
                                 </div>
+                                @error('publisher') <p class="text-secondary-angry-100 text-xs">{{ $message }}</p> @enderror
                             </div>
-                        </div> --}}
+
+                            <div class="space-y-2">
+                                <label for="datePublished" class="text-sm font-bold text-shadedOfGray-10">Date Published <span class="text-secondary-angry-100">*</span></label>
+                                <div class="relative">
+                                    <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-shadedOfGray-50"><i class="fa-regular fa-calendar"></i></span>
+                                    <input type="date" name="datePublished" id="datePublished" value="{{ old('datePublished') }}"
+                                        class="w-full bg-primary-100 border border-primary-60 rounded-xl text-white pl-10 pr-4 py-3 focus:border-secondary-happy-100 focus:ring-1 focus:ring-secondary-happy-100 outline-none transition placeholder-shadedOfGray-50 [color-scheme:dark]">
+                                </div>
+                                @error('datePublished') <p class="text-secondary-angry-100 text-xs">{{ $message }}</p> @enderror
+                            </div>
+                        </div>
 
                         {{-- Lyrics --}}
                         <div class="space-y-2">
-                            <label for="lyrics" class="text-sm font-bold text-shadedOfGray-10">Lyrics <span class="text-xs font-normal text-shadedOfGray-50">(Optional)</span></label>
+                            <label for="lyrics" class="text-sm font-bold text-shadedOfGray-10">Lyrics <span class="text-secondary-angry-100">*</span></label>
                             <textarea name="lyrics" id="lyrics" rows="6"
                                 class="w-full bg-primary-100 border border-primary-60 rounded-xl text-white px-4 py-3 focus:border-secondary-happy-100 focus:ring-1 focus:ring-secondary-happy-100 outline-none transition placeholder-shadedOfGray-50 leading-relaxed scrollbar-thin scrollbar-thumb-primary-60"
                                 placeholder="Paste lyrics here...">{{ old('lyrics') }}</textarea>
+                            @error('lyrics') <p class="text-secondary-angry-100 text-xs">{{ $message }}</p> @enderror
                         </div>
 
                         {{-- Submit Buttons --}}
@@ -162,6 +169,7 @@
     </form>
 </div>
 
+{{-- SCRIPT FOR PREVIEWS --}}
 <script>
     // 1. Script untuk Audio Upload Preview Filename
     document.getElementById('song-input').addEventListener('change', function(e) {
@@ -174,7 +182,7 @@
         if(e.target.files[0]) {
             fileNameText.classList.remove('text-shadedOfGray-30');
             fileNameText.classList.add('text-secondary-happy-100', 'font-bold');
-            // Ganti icon jadi check
+            // Ganti icon jadi check file
             placeholder.querySelector('i').className = "fa-solid fa-file-audio text-2xl text-secondary-happy-100 mb-2";
         } else {
             fileNameText.classList.add('text-shadedOfGray-30');
@@ -195,7 +203,7 @@
             reader.onload = function(e) {
                 previewElement.src = e.target.result;
                 previewElement.classList.remove('hidden');
-                placeholderElement.classList.add('opacity-0', 'absolute'); // Hide placeholder but keep layout
+                placeholderElement.classList.add('opacity-0', 'absolute');
                 overlayElement.classList.remove('hidden');
                 overlayElement.classList.add('flex');
             }
