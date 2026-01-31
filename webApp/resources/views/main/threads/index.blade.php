@@ -11,6 +11,7 @@
 
 @push('script')
     <script src="{{ asset('js/pages/main/thread.js') }}" defer></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 @endpush
 
 
@@ -75,9 +76,9 @@
             <p>Give your opinion!</p>
         </div>
     </a>
-    <div class='bg-accent-60'>
+    {{-- <div class='bg-accent-60'>
         filter
-    </div>
+    </div> --}}
     <div class='flex flex-col gap-8 contentFadeLoad' >
         @forelse($threads as $thread)
             <x-threadBox mood='{{ $mood }}' creator="{{ $thread->user->userDetail->fullname }}" profilePicture='{{ $thread->user->userDetail->profilePhoto }}' createdAt="{{ \Carbon\Carbon::parse($thread->created_at)->diffForHumans() }}" title="{{ $thread->title }}" content="{{ $thread->content }}" :thread='$thread' :isReplyable='$thread->isReplyable' :mainUser='$user'></x-threadBox>
