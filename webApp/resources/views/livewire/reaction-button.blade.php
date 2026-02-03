@@ -1,7 +1,7 @@
 <div class='w-max h-max flex items-center'>
     <button wire:click="toggle">
         <div class='w-max h-max flex flex-row gap-1 items-center'>
-            <div class='w-7 h-7'>
+            <div class='w-7 h-7 cursor-pointer'>
                 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 
                     <!-- Uploaded to: SVG Repo, www.svgrepo.com, Transformed by: SVG Repo Mixer Tools -->
