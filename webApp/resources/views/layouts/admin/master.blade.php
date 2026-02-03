@@ -16,6 +16,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
+    {{-- Alpine.js (Wajib ada untuk fitur Responsive & Modal) --}}
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
+
     {{-- Tailwind CSS & Config --}}
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -24,9 +27,9 @@
                 extend: {
                     colors: {
                         primary: {
-                            100: '#020A36', // Background Utama (Deep Blue)
-                            85: '#06134D',  // Sidebar / Card Surface
-                            70: '#0D1F67',  // Border / Hover
+                            100: '#020A36', // Background Utama
+                            85: '#06134D',  // Card/Sidebar
+                            70: '#0D1F67',  // Border
                             60: '#142C80',
                             50: '#1F3A98',
                             30: '#4F6CC3',
@@ -47,7 +50,7 @@
                     },
                     fontFamily: {
                         'primary': ['Poppins', 'sans-serif'],
-                        'secondaryAndButton': ['Urbanist', 'sans-serif'], // Fallback ke Urbanist jika Aeonik tidak ada
+                        'secondaryAndButton': ['Urbanist', 'sans-serif'],
                     },
                     fontSize: {
                         'title': ['2.667rem', { lineHeight: '4rem' }],
@@ -62,7 +65,7 @@
     </script>
 
     <style>
-        /* Custom Scrollbar for Dark Theme */
+        /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: #020A36; }
         ::-webkit-scrollbar-thumb { background: #142C80; border-radius: 4px; }
@@ -70,27 +73,41 @@
 
         body { font-family: 'Urbanist', sans-serif; }
         h1, h2, h3, h4, h5, h6 { font-family: 'Poppins', sans-serif; }
+
+        [x-cloak] { display: none !important; }
     </style>
 </head>
-<body class="bg-primary-100 text-white antialiased selection:bg-secondary-happy-100 selection:text-white overflow-hidden">
 
-    <div class="flex h-screen w-full">
+{{-- TAMBAHKAN x-data DISINI UNTUK MENGONTROL SIDEBAR --}}
+<body class="bg-primary-100 text-white antialiased selection:bg-secondary-happy-100 selection:text-white"
+      x-data="{ sidebarOpen: false }">
 
-        {{-- SIDEBAR COMPONENT --}}
+    {{-- Main Container (Hapus overflow-hidden di body, pindah ke sini) --}}
+    <div class="flex h-screen w-full overflow-hidden">
+
+        {{--
+            INCLUDE SIDEBAR (Responsive)
+            Pastikan file ini berisi kode sidebar responsive yang saya berikan sebelumnya
+        --}}
         @include('components.admin.sidebar')
 
-        {{-- MAIN WRAPPER --}}
-        <div class="flex flex-col flex-1 h-full min-w-0 overflow-hidden">
+        {{-- CONTENT WRAPPER --}}
+        <div class="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
 
-            {{-- NAVBAR COMPONENT --}}
+            {{--
+                INCLUDE HEADER / NAVBAR (Responsive)
+                Pastikan file ini berisi kode header dengan tombol hamburger menu
+            --}}
             @include('components.admin.navbar')
 
             {{-- CONTENT SCROLL AREA --}}
-            <main class="flex-1 overflow-y-auto overflow-x-hidden p-6 md:p-8 scroll-smooth relative">
-                {{-- Background Gradient Decoration (Optional, like Roodio) --}}
+            <main class="flex-1 p-6 md:p-8 scroll-smooth relative">
+
+                {{-- Background Gradient Decoration --}}
                 <div class="absolute top-0 left-0 w-full h-96 bg-gradient-to-b from-primary-85/50 to-transparent pointer-events-none z-0"></div>
 
-                <div class="relative z-10">
+                {{-- Actual Content --}}
+                <div class="relative z-10 min-h-[80vh]">
                     @yield('content')
                 </div>
 

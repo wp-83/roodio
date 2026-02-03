@@ -57,6 +57,7 @@ class SongController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -66,7 +67,7 @@ class SongController extends Controller
             'genre'         => 'required|max:255',
             'publisher'     => 'required|max:255',
             'datePublished' => 'required|date',
-            'song'          => 'required|file|mimes:mp3',
+            'song'          => 'required|file|mimes:mp3|max:10240',
             'photo'         => 'required|image|mimes:jpeg,png,jpg|max:5120',
         ]);
 
@@ -83,18 +84,24 @@ class SongController extends Controller
             $photo
         );
 
-        $response = Http::attach(
-            'audio_file',
-            file_get_contents($song),
-            $song->getFilename()
-        )->post('https://xullfikar-roodio-analyzer.hf.space/analyze', [
-            'lyrics' => $validated['lyrics'],
-        ]);
+        try {
+            $apiUrl = env('ROODIO_API_URL') . '/predict';
 
-        if ($response->failed()) {
-            return back()->withErrors(['api' => 'Failed to send song to API']);
-        } else {
-            $prediction = $response->json();
+            $response = Http::attach(
+                'file',
+                file_get_contents($song->getRealPath()),
+                $song->getClientOriginalName()
+            )->post($apiUrl);
+
+            if ($response->successful()) {
+                $result = $response->json();
+                $moodId = $result['data']['mood_id'] ?? null;
+            } else {
+                return back()->withErrors(['api' => 'AI Server Error: ' . $response->body()]);
+            }
+
+        } catch (\Exception $e) {
+            return back()->withErrors(['api' => 'Connection Failed: ' . $e->getMessage()]);
         }
 
         $datas              = $validated;
@@ -102,11 +109,15 @@ class SongController extends Controller
         $datas['songPath']  = $path;
         $datas['photoPath'] = $photoPath;
         $datas['userId']    = Auth::id();
-        $datas['moodId']    = $prediction['mood'];
+
+        $datas['moodId'] = $moodId;
+
         unset($datas['song']);
         unset($datas['photo']);
+
         Songs::create($datas);
-        return redirect()->route('admin.songs.index')->with('success', 'Successfully added song');
+
+        return redirect()->route('admin.songs.index')->with('success', 'Successfully added song with AI prediction!');
     }
 
     /**
