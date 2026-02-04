@@ -15,7 +15,7 @@ class ThreadController extends Controller
      */
     public function index()
     {
-        $threads  = Thread::withCount('reactions')->orderByDesc('created_at')->paginate(5);
+        $threads  = Thread::withCount('reactions')->orderByDesc('created_at')->get();
         $mood     = session('chooseMood', 'happy');
         $fullname = auth()->user()->userDetail->fullname;
         $user     = auth()->user();
