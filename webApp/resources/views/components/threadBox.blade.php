@@ -65,7 +65,7 @@
 @endphp
 
 
-<div class='{{ $bgContainer[$mood] }} rounded-lg h-max p-5 w-full overflow-x-hidden'>
+<div class='{{ $bgContainer[$mood] }} rounded-lg h-max p-5 w-full overflow-x-hidden lg:max-w-md'>
     <div class='flex flex-row items-center gap-2 w-full'>
         <div class='w-16 h-16 lg:w-18 lg:h-18 border-2 {{ $borderMood[$mood] }} rounded-full flex items-center justify-center'>
             <div class='w-14 h-14 lg:w-16 lg:h-16 bg-primary-10 rounded-full flex items-center justify-center relative z-5 overflow-hidden'>
@@ -88,9 +88,8 @@
     </div>
     <hr class='border rounded-full my-3 {{ $borderMood[$mood] }}'>
     <div class='mb-6 w-full'>
-        <p class='font-bold font-primary text-primary-60 text-paragraph lg:text-subtitle'>{{ $title }}</p>
+        <p class='font-bold font-primary text-primary-60 text-body-size lg:text-paragraph'>{{ $title }}</p>
         <p class='font-secondaryAndButton text-small lg:text-body-size'>{!! nl2br(e($content)) !!}</p>
-        {{-- Str::limit($content, 1000, '...') --}}
     </div>
     <div class='w-full relative'>
         <div class='flex flex-row gap-4'>
