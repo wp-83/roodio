@@ -41,6 +41,13 @@
         'relaxed' => 'text-secondary-relaxed-100',
         'angry' => 'text-secondary-angry-100',
     ];
+
+    $bgMoodStyle = [
+        'happy' => 'bg-secondary-happy-30',
+        'sad' => 'bg-secondary-sad-30',
+        'relaxed' => 'bg-secondary-relaxed-30',
+        'angry' => 'bg-secondary-angry-30'
+    ];
 @endphp
 
 
@@ -97,41 +104,44 @@
         @if ($isReplyable)
             <div class='mt-6 w-full hidden' id="reply-{{ $thread->id }}">
                 <hr class='border border-shadedOfGray-30 my-2'>
-                <div>
-                    <div class="h-36 overflow-y-auto replyContainer">
-                        @forelse($thread->replies as $reply)
-                            @php
-                                $profilePhoto = $reply->user->userDetail->profilePhoto;
-                                $fullname = $reply->user->userDetail->fullname;
-                            @endphp
-                                {{-- "id" => "RP-0000033"
-    "threadId" => "TH-0000017"
-    "userId" => "US-0000002"
-    "content" => "ASssSSasAASSasAAS"
-    "created_at" => "2026-02-03 13:48:57"
-    "updated_at" => "2026-02-03 13:48:57" --}}
-                            <div class='w-10 h-10 bg-primary-10 rounded-full flex items-center justify-center relative z-5 overflow-hidden'>
+                <div class="h-max max-h-64 mt-3 overflow-y-auto replyContainer font-secondaryAndButton">
+                    @forelse($thread->replies as $reply)
+                        @php
+                            $profilePhoto = $reply->user->userDetail->profilePhoto;
+                            $fullname = $reply->user->userDetail->fullname;
+                        @endphp
+                        <div class='mb-3 flex flex-row items-start gap-3'>
+                            <div class='w-8 h-8 rounded-full flex items-center justify-center relative z-5 overflow-hidden {{ $bgMoodStyle[$mood] }}'>
                                 @if (!empty($profilePhoto))
                                     <img src="{{ config('filesystems.disks.azure.url') . '/' . $profilePhoto }}" alt="{{ $fullname }}" class='w-full h-full object-cover'>
                                 @else
-                                    <p class='text-paragraph font-primary font-bold text-primary-70 h-fit'>{{ Str::charAt(Str::upper($fullname), 0) }}</p>
+                                    <p class='text-small font-primary font-bold h-fit {{ $textMood[$mood] }}'>{{ Str::charAt(Str::upper($fullname), 0) }}</p>
                                 @endif
                             </div>
-                            <p>{{ $reply->content }}</p>
-                        @empty
-                        @endforelse
-                    </div>
-                        <div class="">
-                            <form action="{{ route('thread.reply', $thread->id) }}" method="POST">
-                                @csrf
-                                <label for="content">Reply:</label>
-                                <textarea name="content" class="border"></textarea>
-                                <button type="submit">send</button>
-                            </form>
-                            @error('content')
-                                {{ $message }}
-                            @enderror
+                            <div class='flex flex-col gap-1.25'>
+                                <div>
+                                    <p class='text-small font-bold {{ $textMood[$mood] }}'>{{ ($mainUser->id == $thread->userId) ? 'You' : $reply->user->userDetail->fullname }}</p>
+                                    <p class='text-micro text-shadedOfGray-50 italic'>{{ \Carbon\Carbon::parse($reply->created_at)->diffForHumans() }}</p>
+                                </div>
+                                <p class='text-small'>{{ $reply->content }}</p>
+                            </div>
                         </div>
+                    @empty
+                    @endforelse
+                </div>
+
+
+
+                <div class="">
+                    <form action="{{ route('thread.reply', $thread->id) }}" method="POST">
+                        @csrf
+                        <label for="content">Reply:</label>
+                        <textarea name="content" class="border"></textarea>
+                        <button type="submit">send</button>
+                    </form>
+                    @error('content')
+                        {{ $message }}
+                    @enderror
                 </div>
             </div>
         @endif
