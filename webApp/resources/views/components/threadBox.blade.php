@@ -55,6 +55,13 @@
         'relaxed' => 'scrollbar-thumb-secondary-relaxed-85/75 scrollbar-track-transparent',
         'angry' => 'scrollbar-thumb-secondary-angry-85/75 scrollbar-track-transparent'
     ];
+
+    $borderTextareaStyle = [
+        'happy' => 'border-secondary-happy-100',
+        'sad' => 'border-secondary-sad-100',
+        'angry' => 'border-secondary-angry-100',
+        'relaxed' => 'border-secondary-relaxed-100'
+    ];
 @endphp
 
 
@@ -139,13 +146,13 @@
                 <div class="w-full mt-4 relative">
                     <form action="{{ route('thread.reply', $thread->id) }}" method="POST">
                         @csrf
-                        <textarea name='content' rows='1' placeholder="Reply this thread..." class="font-secondaryAndButton text-small w-full min-h-1 max-h-18 p-2 pl-6 pr-20 overflow-y-auto resize-none border rounded-3xl scrollbar-none placeholder:italic" oninput="this.style.height='auto'; this.style.height=this.scrollHeight+'px';"></textarea>
-                        <div class='absolute top-0.25 right-1.5'>
-                            <x-button actionType='submit' :mood='$mood' content='Send' class='w-max absolute top-0 right-0 px-5' style='zoom:0.7;'></x-button>
+                        <textarea name='content' rows='1' placeholder="Reply this thread..." class="font-secondaryAndButton text-small w-full min-h-1 max-h-18 p-2 pl-6 pr-20 py-3 overflow-y-auto resize-none border {{ $borderTextareaStyle[$mood] }} bg-shadedOfGray-10/60 not-placeholder-shown:bg-accent-85/10 rounded-3xl scrollbar-none placeholder:italic" oninput="this.style.height='auto'; this.style.height=this.scrollHeight+'px';"></textarea>
+                        <div class='absolute top-1 right-2'>
+                            <x-button actionType='submit' :mood='$mood' content='Send' class='w-max absolute top-0 right-0' style='zoom:0.7;'></x-button>
                         </div>
                     </form>
                     @error('content')
-                        <p class='error-message pt-0.1 mb-2'>{{ $message }}</p>
+                        <p class='font-secondaryAndButton error-message pt-0.1 mb-2'>{{ $message }}</p>
                     @enderror
                 </div>
             </div>
