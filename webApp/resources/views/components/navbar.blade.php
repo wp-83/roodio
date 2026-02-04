@@ -59,7 +59,7 @@
         </div>
         <div class='flex flex-col items-center gap-2'>
             <div class='w-20 h-20 rounded-full flex items-center justify-center overflow-hidden {{ $bgMoodStyle[$mood] }}'>
-                @if (isset($profilePhoto))
+                @if (!empty($profilePhoto))
                     <img src="{{ config('filesystems.disks.azure.url') . '/' . $profilePhoto }}" alt="{{ $fullname }}" class='w-full h-full object-cover'>
                 @else
                 <p class='text-title font-primary font-bold h-fit {{ $textMoodStyle[$mood] }}'>{{ Str::charAt(Str::upper($fullname), 0) }}</p>
