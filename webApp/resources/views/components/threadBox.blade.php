@@ -48,6 +48,13 @@
         'relaxed' => 'bg-secondary-relaxed-30',
         'angry' => 'bg-secondary-angry-30'
     ];
+
+    $scrollbarTheme = [
+        'happy' => 'scrollbar-thumb-secondary-happy-85/75 scrollbar-track-transparent',
+        'sad' => 'scrollbar-thumb-secondary-sad-85/75 scrollbar-track-transparent',
+        'relaxed' => 'scrollbar-thumb-secondary-relaxed-85/75 scrollbar-track-transparent',
+        'angry' => 'scrollbar-thumb-secondary-angry-85/75 scrollbar-track-transparent'
+    ];
 @endphp
 
 
@@ -75,7 +82,7 @@
     <hr class='border rounded-full my-3 {{ $borderMood[$mood] }}'>
     <div class='mb-6 w-full'>
         <p class='font-bold font-primary text-primary-60 text-paragraph lg:text-subtitle'>{{ $title }}</p>
-        <p class='font-secondaryAndButton text-small lg:text-body-size'>{{ $content }}</p>
+        <p class='font-secondaryAndButton text-small lg:text-body-size'>{!! nl2br(e($content)) !!}</p>
         {{-- Str::limit($content, 1000, '...') --}}
     </div>
     <div class='w-full relative'>
@@ -104,7 +111,7 @@
         @if ($isReplyable)
             <div class='mt-6 w-full hidden' id="reply-{{ $thread->id }}">
                 <hr class='border border-shadedOfGray-30 my-2'>
-                <div class="h-max max-h-64 mt-3 overflow-y-auto replyContainer font-secondaryAndButton">
+                <div class="h-max max-h-64 mt-3 overflow-y-auto replyContainer font-secondaryAndButton scrollbar-thin {{ $scrollbarTheme[$mood] }}">
                     @forelse($thread->replies as $reply)
                         @php
                             $profilePhoto = $reply->user->userDetail->profilePhoto;
@@ -123,24 +130,22 @@
                                     <p class='text-small font-bold {{ $textMood[$mood] }}'>{{ ($mainUser->id == $thread->userId) ? 'You' : $reply->user->userDetail->fullname }}</p>
                                     <p class='text-micro text-shadedOfGray-50 italic'>{{ \Carbon\Carbon::parse($reply->created_at)->diffForHumans() }}</p>
                                 </div>
-                                <p class='text-small'>{{ $reply->content }}</p>
+                                <p class='text-small'>{!! nl2br(e($reply->content)) !!}</p>
                             </div>
                         </div>
                     @empty
                     @endforelse
                 </div>
-
-
-
-                <div class="">
+                <div class="w-full mt-4 relative">
                     <form action="{{ route('thread.reply', $thread->id) }}" method="POST">
                         @csrf
-                        <label for="content">Reply:</label>
-                        <textarea name="content" class="border"></textarea>
-                        <button type="submit">send</button>
+                        <textarea name='content' rows='1' placeholder="Reply this thread..." class="font-secondaryAndButton text-small w-full min-h-1 max-h-18 p-2 pl-6 pr-20 overflow-y-auto resize-none border rounded-3xl scrollbar-none placeholder:italic" oninput="this.style.height='auto'; this.style.height=this.scrollHeight+'px';"></textarea>
+                        <div class='absolute top-0.25 right-1.5'>
+                            <x-button actionType='submit' :mood='$mood' content='Send' class='w-max absolute top-0 right-0 px-5' style='zoom:0.7;'></x-button>
+                        </div>
                     </form>
                     @error('content')
-                        {{ $message }}
+                        <p class='error-message pt-0.1 mb-2'>{{ $message }}</p>
                     @enderror
                 </div>
             </div>
