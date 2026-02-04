@@ -78,13 +78,13 @@
     {{-- <div class='bg-accent-60'>
         filter
     </div> --}}
-    <div class='flex flex-col gap-8 contentFadeLoad' >
+    <div class='columns-1 md:columns-2 lg:columns-3 gap-5 contentFadeLoad'>
         @forelse($threads as $thread)
-            <x-threadBox mood='{{ $mood }}' creator="{{ $thread->user->userDetail->fullname }}" profilePicture='{{ $thread->user->userDetail->profilePhoto }}' createdAt="{{ \Carbon\Carbon::parse($thread->created_at)->diffForHumans() }}" title="{{ $thread->title }}" content="{{ $thread->content }}" :thread='$thread' :isReplyable='$thread->isReplyable' :mainUser='$user'></x-threadBox>
+            <div class='break-inside-avoid mb-5'>
+                <x-threadBox mood='{{ $mood }}' creator="{{ $thread->user->userDetail->fullname }}" profilePicture='{{ $thread->user->userDetail->profilePhoto }}' createdAt="{{ \Carbon\Carbon::parse($thread->created_at)->diffForHumans() }}" title="{{ $thread->title }}" content="{{ $thread->content }}" :thread='$thread' :isReplyable='$thread->isReplyable' :mainUser='$user'></x-threadBox>
+            </div>
         @empty
+            <p class='text-white font-secondaryAndButton text-small md:text-body-size'>There is no thread posted.</p>
         @endforelse
-    </div>
-    <div class='w-full flex justify-start'>
-        {{ $threads->links() }}
     </div>
 @endsection
