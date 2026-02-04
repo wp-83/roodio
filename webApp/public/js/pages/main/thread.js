@@ -13,6 +13,6 @@ document.addEventListener("click", (e) => {
     panel.classList.toggle('hidden');
 
     // make reply can be scrolled
-    const replyContainer = document.querySelector('.replyContainer');
+    const replyContainer = panel.querySelector('.replyContainer');
     replyContainer.scrollTop = replyContainer.scrollHeight;
 });
