@@ -44,18 +44,20 @@
         'relaxed' => 'text-secondary-relaxed-30',
         'angry' => 'text-secondary-angry-30'
     ];
-
 @endphp
 
 
 @section('mainContent')
-    <div class='mb-6 md:mb-11'>
+    <div class='mb-5 md:mb-9'>
         <div class='flex w-full flex-row justify-between items-center'>
-            <div class='flex flex-col'>
-                <div class='w-0 relative overflow-hidden typingTextAnimation max-w-max '>
-                    <p class='font-primary text-title font-bold {{ $textColor[$mood] }} md:text-hero' >Threads</p>
+            <div class='flex flex-row gap-3 items-center justify-center'>
+                <img src="{{ asset('assets/moods/icons/' . $mood . '.png') }}" alt="{{ $mood }}" class='h-32 w-32'>
+                <div class='flex flex-col'>
+                    <div class='w-0 relative overflow-hidden typingTextAnimation max-w-max '>
+                        <p class='font-primary text-title font-bold {{ $textColor[$mood] }} md:text-hero' >Threads</p>
+                    </div>
+                    <p class='font-secondaryAndButton text-white text-justify contentFadeLoad text-small md:text-body-size'>Nice to meet you again, {{ Str::before($fullname, ' ') }}! Go ahead and express how you feel.</p>
                 </div>
-                <p class='font-secondaryAndButton text-white text-justify contentFadeLoad text-small md:text-body-size'>Nice to meet you again, {{ Str::before($fullname, ' ') }}! Go ahead and express how you feel.</p>
             </div>
             <div class='w-max hidden lg:inline contentFadeLoad'>
                 <a href="{{ route('thread.create') }}">
@@ -75,9 +77,11 @@
             <p>Give your opinion!</p>
         </div>
     </a>
-    {{-- <div class='bg-accent-60'>
-        filter
-    </div> --}}
+    <div class='mb-7 flex flex-row gap-3 w-full lg:justify-end contentFadeLoad'>
+        <x-filterButton id='allFilter' value='all' :mood='$mood' label='All'></x-filterButton>
+        <x-filterButton id='followingFilter' value='following' :mood='$mood' label='Following'></x-filterButton>
+        <x-filterButton id='createdFilter' value='created' :mood='$mood' label='My Threads'></x-filterButton>
+    </div>
     <div class='columns-1 md:columns-2 lg:columns-3 gap-5 contentFadeLoad'>
         @forelse($threads as $thread)
             <div class='break-inside-avoid mb-5'>
