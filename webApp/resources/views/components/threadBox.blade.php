@@ -10,6 +10,7 @@
     'mainUser'
 ])
 
+
 @php
     $isFollowing = false;
 
@@ -42,7 +43,8 @@
     ];
 @endphp
 
-<div class='{{ $bgContainer[$mood] }} rounded-lg h-max p-5 w-full'  >
+
+<div class='{{ $bgContainer[$mood] }} rounded-lg h-max p-5 w-full overflow-x-hidden'>
     <div class='flex flex-row items-center gap-2 w-full'>
         <div class='w-16 h-16 lg:w-18 lg:h-18 border-2 {{ $borderMood[$mood] }} rounded-full flex items-center justify-center'>
             <div class='w-14 h-14 lg:w-16 lg:h-16 bg-primary-10 rounded-full flex items-center justify-center relative z-5 overflow-hidden'>
@@ -64,17 +66,17 @@
         </div>
     </div>
     <hr class='border rounded-full my-3 {{ $borderMood[$mood] }}'>
-    <div class='mb-6'>
+    <div class='mb-6 w-full'>
         <p class='font-bold font-primary text-primary-60 text-paragraph lg:text-subtitle'>{{ $title }}</p>
         <p class='font-secondaryAndButton text-small lg:text-body-size'>{{ $content }}</p>
         {{-- Str::limit($content, 1000, '...') --}}
     </div>
-    <div x-data="{ open: false }">
-        <div class='flex flex-row gap-8 items-center'>
+    <div class='w-full relative'>
+        <div class='flex flex-row gap-4'>
             <livewire:user.reaction-button :thread-id="$thread->id" />
             @if ($isReplyable)
-                <div class='flex gap-1 items-center'>
-                    <div class='w-6 h-6 cursor-pointer' @click.stop="open = !open">
+                <div class='flex gap-1 items-center' id='toggleComment' data-thread="reply-{{ $thread->id }}">
+                    <div class='w-6 h-6 cursor-pointer'>
                         <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 
                             <!-- Uploaded to: SVG Repo, www.svgrepo.com, Transformed by: SVG Repo Mixer Tools -->
@@ -93,10 +95,10 @@
             @endif
         </div>
         @if ($isReplyable)
-            <div class='mt-6' x-show="open" x-transition>
+            <div class='mt-6 w-full hidden' id="reply-{{ $thread->id }}">
                 <hr class='border border-shadedOfGray-30 my-2'>
                 <div>
-                    <div id="replyContainer" class="bg-primary-20 h-36 overflow-y-auto">
+                    <div class="bg-primary-20 h-36 overflow-y-auto replyContainer">
                         @forelse($thread->replies as $reply)
                             <p>{{ $reply->content }}</p>
                         @empty
