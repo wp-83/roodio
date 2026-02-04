@@ -98,8 +98,25 @@
             <div class='mt-6 w-full hidden' id="reply-{{ $thread->id }}">
                 <hr class='border border-shadedOfGray-30 my-2'>
                 <div>
-                    <div class="bg-primary-20 h-36 overflow-y-auto replyContainer">
+                    <div class="h-36 overflow-y-auto replyContainer">
                         @forelse($thread->replies as $reply)
+                            @php
+                                $profilePhoto = $reply->user->userDetail->profilePhoto;
+                                $fullname = $reply->user->userDetail->fullname;
+                            @endphp
+                                {{-- "id" => "RP-0000033"
+    "threadId" => "TH-0000017"
+    "userId" => "US-0000002"
+    "content" => "ASssSSasAASSasAAS"
+    "created_at" => "2026-02-03 13:48:57"
+    "updated_at" => "2026-02-03 13:48:57" --}}
+                            <div class='w-10 h-10 bg-primary-10 rounded-full flex items-center justify-center relative z-5 overflow-hidden'>
+                                @if (!empty($profilePhoto))
+                                    <img src="{{ config('filesystems.disks.azure.url') . '/' . $profilePhoto }}" alt="{{ $fullname }}" class='w-full h-full object-cover'>
+                                @else
+                                    <p class='text-paragraph font-primary font-bold text-primary-70 h-fit'>{{ Str::charAt(Str::upper($fullname), 0) }}</p>
+                                @endif
+                            </div>
                             <p>{{ $reply->content }}</p>
                         @empty
                         @endforelse
