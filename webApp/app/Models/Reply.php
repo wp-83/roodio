@@ -2,6 +2,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\DB;
 
 class Reply extends Model
@@ -9,6 +10,11 @@ class Reply extends Model
     protected $fillable  = ['content', 'threadId', 'userId'];
     public $incrementing = false;
     protected $keyType   = 'string';
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'userId', 'id');
+    }
 
     protected static function booted()
     {
