@@ -1,8 +1,18 @@
-const replyContainer = document.querySelectorAll('#replyContainer');
+// toggle comment
+document.addEventListener("click", (e) => {
+    // get and check the reply button
+    const btn = e.target.closest('#toggleComment');
+    if (!btn) return;
 
-// replyContainer.scrollTop = replyContainer.scrollHeight;
+    // get the reply panels
+    const targetId = btn.dataset.thread;
+    const panel = document.getElementById(targetId);
+    if (!panel) return;
 
-replyContainer.forEach((reply) => {
-    reply.scrollTop = reply.scrollHeight;
-    
+    // show and hide the reply panel
+    panel.classList.toggle('hidden');
+
+    // make reply can be scrolled
+    const replyContainer = document.querySelector('.replyContainer');
+    replyContainer.scrollTop = replyContainer.scrollHeight;
 });
