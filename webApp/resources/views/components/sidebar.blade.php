@@ -12,6 +12,6 @@
 >
     <x-sidebarButton route="user.index" :mood="$mood" icon='home' label='Home' content="Let's play the music!"></x-sidebarButton>
     <x-sidebarButton route='thread.index' :mood="$mood" icon='forum' label='Thread' content="Be part of the discussion!"></x-sidebarButton>
-    <x-sidebarButton route="social.index" :mood="$mood" icon='social' label='Social' content="Connect with others now!"></x-sidebarButton>
+    <x-sidebarButton route="social.index" :params="['filter' => 'all']" :mood="$mood" icon='social' label='Social' content="Connect with others now!"></x-sidebarButton>
     <x-sidebarButton :mood="$mood" icon='mood' label='Mood' content="Let's see your mood history!"></x-sidebarButton>
 </div>
