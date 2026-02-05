@@ -1,17 +1,25 @@
 @props([
-    'id',
-    'value',
     'mood',
+    'id',
+    'name',
+    'value',
     'label'
 ])
 
 
 @php
     $moodStyle = [
-        'happy' => 'bg-secondary-happy-50/35 group-hover:bg-secondary-happy-20',
-        'sad' => 'bg-secondary-sad-50/35 group-hover:bg-secondary-sad-20',
-        'relaxed' => 'bg-secondary-relaxed-50/35 group-hover:bg-secondary-relaxed-20',
-        'angry' => 'bg-secondary-angry-50/35 group-hover:bg-secondary-angry-20'
+        'happy' => 'bg-secondary-happy-50/35',
+        'sad' => 'bg-secondary-sad-50/35',
+        'relaxed' => 'bg-secondary-relaxed-50/35',
+        'angry' => 'bg-secondary-angry-50/35'
+    ];
+
+    $moodHoverStyle = [
+        'happy' => 'group-hover:bg-secondary-happy-20',
+        'sad' => 'group-hover:bg-secondary-sad-20',
+        'relaxed' => 'group-hover:bg-secondary-relaxed-20',
+        'angry' => 'group-hover:bg-secondary-angry-20'
     ];
 
     $textStyle = [
@@ -20,13 +28,30 @@
         'relaxed' => 'group-hover:text-secondary-relaxed-100',
         'angry' => 'group-hover:text-secondary-angry-100'
     ];
+
+    $activeStyle = [
+        'happy' => 'bg-secondary-happy-20',
+        'sad' => 'bg-secondary-sad-20',
+        'relaxed' => 'bg-secondary-relaxed-20',
+        'angry' => 'bg-secondary-angry-20'
+    ];
+
+    $textActiveStyle = [
+        'happy' => 'text-secondary-happy-100',
+        'sad' => 'text-secondary-sad-100',
+        'relaxed' => 'text-secondary-relaxed-100',
+        'angry' => 'text-secondary-angry-100'
+    ];
+
+    $activeFilter = request('filter');
+    $isActive = ($activeFilter == $value);
 @endphp
 
 
-<button class='cursor-pointer group' id='{{ $id }}' value='{{ $value }}'>
+<button class="cursor-pointer {{ ($isActive) ? '' : 'group' }}" id='{{ $id }}' name='{{ $name }}' value='{{ $value }}'>
     <div {{ $attributes->merge([
-        "class" => 'font-secondaryAndButton text-small py-1 px-2 rounded-md md:px-3 md:text-body-size duration-100 ' . $moodStyle[$mood] . ' '
+        "class" => "font-secondaryAndButton text-small py-1 px-2 rounded-md md:px-3 md:text-body-size duration-100 " . $moodHoverStyle[$mood] . ' ' . (($isActive) ? $activeStyle[$mood] : $moodStyle[$mood]) . ' '
     ]) }}>
-        <p class='text-white group-hover:font-bold {{ $textStyle[$mood] }}'>{{ $label }}</p>
+        <p class="text-white group-hover:font-bold {{ $textStyle[$mood] . ' ' . (($isActive) ? $textActiveStyle[$mood] : '') }}">{{ $label }}</p>
     </div>
 </button>
