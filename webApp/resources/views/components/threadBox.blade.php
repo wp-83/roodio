@@ -135,7 +135,7 @@
                             </div>
                             <div class='flex flex-col gap-1.25'>
                                 <div>
-                                    <p class='text-small font-bold {{ $textMood[$mood] }}'>{{ ($mainUser->id == $thread->userId) ? 'You' : $reply->user->userDetail->fullname }}</p>
+                                    <p class='text-small font-bold {{ $textMood[$mood] }}'>{{ ($mainUser->id == $reply->userId) ? 'You' : $reply->user->userDetail->fullname }}</p>
                                     <p class='text-micro text-shadedOfGray-50 italic'>{{ \Carbon\Carbon::parse($reply->created_at)->diffForHumans() }}</p>
                                 </div>
                                 <p class='text-small'>{!! nl2br(e($reply->content)) !!}</p>
