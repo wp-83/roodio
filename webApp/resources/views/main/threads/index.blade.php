@@ -88,7 +88,7 @@
     </x-slot>
     <x-slot name='body'>
         <img src="{{ asset('assets/moods/icons/' . $mood . '.png') }}" alt="$mood" class='w-44 h-44 opacity-7 absolute left-0 bottom-0 translate-x-12 rotate-25 translate-y-4 group-hover:opacity-20 md:w-72 md:h-72 md:-translate-x-20 md:translate-y-18'>
-        <form action="{{ route('thread.store') }}" method="POST">
+        <form action="{{ route('thread.store') }}" method="POST" id='createThread'>
             @csrf
             <div class="mb-6 flex flex-col font-secondaryAndButton">
                 <label for="title" class='mb-1 font-bold {{ $textMood[$mood] }}'>Title</label>
@@ -99,7 +99,7 @@
             </div>
             <div class="mb-6 flex flex-col font-secondaryAndButton relative z-10">
                 <label for="content" class='mb-1 font-bold {{ $textMood[$mood] }}'>Content</label>
-                <textarea name="content" rows='3' class="border rounded-sm p-2 resize-none scrollbar-none text-small {{ $hoverStyle[$mood] . ' ' . (($errors->has('content')) ? $errorStyle : 'bg-shadedOfGray-10/40') }}" placeholder="Share your thoughts...">{{ old('content') }}</textarea>
+                <textarea id='content' name="content" rows='3' class="border rounded-sm p-2 resize-none scrollbar-none text-small {{ $hoverStyle[$mood] . ' ' . (($errors->has('content')) ? $errorStyle : 'bg-shadedOfGray-10/40') }}" placeholder="Share your thoughts...">{{ old('content') }}</textarea>
                 @error('content')
                 <p class='error-message'>{{ $message }}</p>
                 @enderror
@@ -111,7 +111,7 @@
                     <span class="select-none ms-2 text-small font-secondaryAndButton text-shadedOfGray-100">Can be reply by others</span>
                 </label>
             </div>
-            <x-button :mood='$mood' actionType='submit' content='Send your reply'></x-button>
+            <x-button :mood='$mood' actionType='submit' id='createThreadBtn' content='Send your reply'></x-button>
         </form>
     </x-slot>
 </x-modal>
