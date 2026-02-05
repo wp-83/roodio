@@ -146,11 +146,13 @@
             <p>Give your opinion!</p>
         </div>
     </a>
-    <div class='mb-7 flex flex-row gap-3 w-full lg:justify-end contentFadeLoad'>
-        <x-filterButton id='allFilter' name='filter' value='all' :mood='$mood' label='All'></x-filterButton>
-        <x-filterButton id='followingFilter' name='filter' value='following' :mood='$mood' label='Following'></x-filterButton>
-        <x-filterButton id='createdFilter' name='filter' value='created' :mood='$mood' label='My Threads'></x-filterButton>
-    </div>
+    <form action="{{ route('thread.index') }}" method="GET">
+        <div class='mb-7 flex flex-row gap-3 w-full lg:justify-end contentFadeLoad'>
+            <x-filterButton id='allFilter' name='filter' value='all' :mood='$mood' label='All'></x-filterButton>
+            <x-filterButton id='followingFilter' name='filter' value='following' :mood='$mood' label='Following'></x-filterButton>
+            <x-filterButton id='createdFilter' name='filter' value='created' :mood='$mood' label='My Threads'></x-filterButton>
+        </div>
+    </form>
     <div class='columns-1 md:columns-2 lg:columns-3 2xl:columns-4 gap-5 2xl:gap-3 contentFadeLoad'>
         @forelse($threads as $thread)
             <div class='break-inside-avoid mb-5'>
