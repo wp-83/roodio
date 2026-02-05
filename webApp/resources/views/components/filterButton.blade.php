@@ -48,10 +48,10 @@
 @endphp
 
 
-<button class="cursor-pointer {{ ($isActive) ? '' : 'group' }}" id='{{ $id }}' name='{{ $name }}' value='{{ $value }}'>
+<button type='submit' class="cursor-pointer {{ ($isActive) ? '' : 'group' }}" id='{{ $id }}' name='{{ $name }}' value='{{ $value }}'>
     <div {{ $attributes->merge([
         "class" => "font-secondaryAndButton text-small py-1 px-2 rounded-md md:px-3 md:text-body-size duration-100 " . $moodHoverStyle[$mood] . ' ' . (($isActive) ? $activeStyle[$mood] : $moodStyle[$mood]) . ' '
     ]) }}>
-        <p class="text-white group-hover:font-bold {{ $textStyle[$mood] . ' ' . (($isActive) ? $textActiveStyle[$mood] : '') }}">{{ $label }}</p>
+        <p class="group-hover:font-bold {{ $textStyle[$mood] . ' ' . (($isActive) ? ($textActiveStyle[$mood] . ' font-bold') : 'text-white') }}">{{ $label }}</p>
     </div>
 </button>
