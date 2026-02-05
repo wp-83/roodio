@@ -48,7 +48,7 @@
 @endphp
 
 
-<button type='submit' class="cursor-pointer {{ ($isActive) ? '' : 'group' }}" id='{{ $id }}' name='{{ $name }}' value='{{ $value }}'>
+<button type='submit' class="{{ ($isActive) ? 'cursor-default' : 'group cursor-pointer' }}" id='{{ $id }}' name='{{ $name }}' value='{{ $value }}' {{ ($isActive) ? 'disabled' : ''}}>
     <div {{ $attributes->merge([
         "class" => "font-secondaryAndButton text-small py-1 px-2 rounded-md md:px-3 md:text-body-size duration-100 " . $moodHoverStyle[$mood] . ' ' . (($isActive) ? $activeStyle[$mood] : $moodStyle[$mood]) . ' '
     ]) }}>
