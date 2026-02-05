@@ -87,7 +87,7 @@
         <p class='font-bold text-paragraph md:text-subtitle text-primary-50 mt-3 mb-2 text-center'>Create Thread</p>
     </x-slot>
     <x-slot name='body'>
-        <img src="{{ asset('assets/moods/icons/' . $mood . '.png') }}" alt="$mood" class='w-44 h-44 opacity-10 absolute left-0 bottom-0 translate-x-12 rotate-25 translate-y-4 group-hover:opacity-20 md:w-72 md:h-72 md:-translate-x-20 md:translate-y-18'>
+        <img src="{{ asset('assets/moods/icons/' . $mood . '.png') }}" alt="$mood" class='w-44 h-44 opacity-7 absolute left-0 bottom-0 translate-x-12 rotate-25 translate-y-4 group-hover:opacity-20 md:w-72 md:h-72 md:-translate-x-20 md:translate-y-18'>
         <form action="{{ route('thread.store') }}" method="POST">
             @csrf
             <div class="mb-6 flex flex-col font-secondaryAndButton">
@@ -107,7 +107,7 @@
             <div class="mb-5">
                 <label class="inline-flex justify-center items-center cursor-pointer">
                     <input type="checkbox" name="isReplyable" value="1" class="sr-only peer">
-                    <div class="relative w-9 h-5 bg-neutral-quaternary peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-brand-soft rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-buffer after:content-[''] after:absolute after:top-0.5 after:start-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all {{ $checkboxStyle[$mood] }}"></div>
+                    <div class="relative w-9 h-5 bg-shadedOfGray-30 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-brand-soft rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-buffer after:content-[''] after:absolute after:top-0.5 after:start-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all {{ $checkboxStyle[$mood] }}"></div>
                     <span class="select-none ms-2 text-small font-secondaryAndButton text-shadedOfGray-100">Can be reply by others</span>
                 </label>
             </div>
