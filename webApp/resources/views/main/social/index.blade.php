@@ -9,32 +9,12 @@
 @section('mainContentContainerClass')
 
 @section('mainContent')
-    <form action="{{ route('social.index') }}" method="GET">
-
-        <div>
-            <input
-                type="radio"
-                id="all"
-                name="filter"
-                value="all"
-                onchange="this.form.submit()"
-                {{ request('filter') == 'all' || !request('filter') ? 'checked' : '' }}
-            >
-            <label for="all">All Users</label>
-        </div>
-
-        <div>
-            <input
-                type="radio"
-                id="following"
-                name="filter"
-                value="following"
-                onchange="this.form.submit()"
-                {{ request('filter') == 'following' ? 'checked' : '' }}
-            >
-            <label for="following">Following Only</label>
-        </div>
-    </form>
+<form action="{{ route('social.index') }}" method="GET">
+    <div>
+        <x-filterButton id='all' name='filter' value='all' :mood='$mood' label='All Users' onchange="this.form.submit()"></x-filterButton>
+        <x-filterButton id='following' name='filter' value='following' :mood='$mood' label='Following Only' onchange="this.form.submit()"></x-filterButton>
+    </div>
+</form>
 
     <div class="mt-4">
         @foreach($users as $user)
