@@ -89,8 +89,10 @@
     </div>
     <hr class='border rounded-full my-3 {{ $borderMood[$mood] }}'>
     <div class='mb-6 w-full'>
-        <p class='font-bold font-primary text-primary-60 text-body-size lg:text-paragraph'>{{ $title }}</p>
-        <p class='font-secondaryAndButton text-small lg:text-body-size'>{!! nl2br(e($content)) !!}</p>
+        <div class='w-full overflow-hidden'>
+            <p class='font-bold font-primary text-primary-60 text-body-size lg:text-paragraph'>{{ $title }}</p>
+            <p class='font-secondaryAndButton text-small lg:text-body-size'>{!! nl2br(e($content)) !!}</p>
+        </div>
     </div>
     <div class='w-full relative'>
         <div class='flex flex-row gap-4'>
