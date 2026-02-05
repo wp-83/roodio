@@ -197,7 +197,7 @@
                     <p class='text-micro'>{{ '@' . Str::limit($username, 9) }}</p>
                 </div>
                 <div class='w-10 h-10 bg-primary-10 rounded-full flex items-center justify-center relative z-5 overflow-hidden'>
-                    @if (!empty($profilePicture))
+                    @if (!empty($profilePhoto))
                         <img src="{{ config('filesystems.disks.azure.url') . '/' . $profilePhoto }}" alt="{{ $fullname }}" class='w-full h-full object-cover'>
                     @else
                         <p class='text-paragraph font-primary font-bold text-primary-70 h-fit'>{{ Str::charAt(Str::upper($fullname), 0) }}</p>
