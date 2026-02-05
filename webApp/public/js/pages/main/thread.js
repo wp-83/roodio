@@ -28,7 +28,6 @@ const createThreadBtn = document.querySelectorAll('.createThreadBtn');
 const createThreadPopup = document.getElementById('createThreadPopup');
 const createThreadContent = createThreadPopup.querySelector('.popupContent');
 const closeCreateThreadBtn = createThreadPopup.querySelector('#closeCreateThread');
-console.log(closeCreateThreadBtn)
 
 createThreadBtn.forEach(threadBtn => {
     threadBtn.addEventListener('click', (e) => {
@@ -40,4 +39,11 @@ createThreadBtn.forEach(threadBtn => {
 closeCreateThreadBtn.addEventListener('click', (e) => {
     e.preventDefault();
     popupBehaviour(createThreadPopup);
+});
+
+// close the popup when clicking outside
+document.addEventListener('mousedown', (e) => {
+    if(!createThreadContent.contains(e.target)){
+        createThreadPopup.classList.add('opacity-0', 'invisible');
+    }
 });
