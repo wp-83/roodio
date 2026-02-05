@@ -97,7 +97,7 @@
                     <p class='error-message'>{{ $message }}</p>
                 @enderror
             </div>
-            <div class="mb-6 flex flex-col font-secondaryAndButton">
+            <div class="mb-6 flex flex-col font-secondaryAndButton relative z-10">
                 <label for="content" class='mb-1 font-bold {{ $textMood[$mood] }}'>Content</label>
                 <textarea name="content" rows='3' class="border rounded-sm p-2 resize-none scrollbar-none text-small {{ $hoverStyle[$mood] . ' ' . (($errors->has('content')) ? $errorStyle : 'bg-shadedOfGray-10/40') }}" placeholder="Share your thoughts...">{{ old('content') }}</textarea>
                 @error('content')
