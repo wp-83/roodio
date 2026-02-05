@@ -67,19 +67,27 @@
         'angry' => 'peer-checked:bg-secondary-angry-100'
     ];
 
+    $popupBorder = [
+        'happy' => 'border-secondary-happy-85',
+        'sad' => 'border-secondary-sad-85',
+        'relaxed' => 'border-secondary-relaxed-85',
+        'angry' => 'border-secondary-angry-85'
+    ];
+
     $errorStyle = 'bg-error-lighten/25 border-error-dark';
 @endphp
 
 
-<x-modal modalId='createThreadPopup' additionalStyle='z-1000 top-1/2 left-1/2 -translate-1/2 w-xs md:w-md'>
+<x-modal modalId='createThreadPopup' additionalStyle='relative z-1000 top-1/2 left-1/2 -translate-1/2 w-xs overflow-hidden border-3 {{ $popupBorder[$mood] }} md:w-md'>
     <x-slot name='header'>
         <div id='closeCreateThread' class='mb-3 w-max px-3 py-1 flex flex-row gap-2 {{ $bgPlusIcon[$mood] }} rounded-full cursor-pointer'>
             <x-iconButton :mood='$mood' type='arrow'></x-iconButton>
-            <p class='font-secondaryAndButton text-body-size'>Back</p>
+            <p class='font-secondaryAndButton text-body-size font-bold text-primary-50'>Back</p>
         </div>
-        <p class='font-bold text-body-size md:text-paragraph text-primary-70 mt-3 mb-2'>Create Thread</p>
+        <p class='font-bold text-paragraph md:text-subtitle text-primary-50 mt-3 mb-2 text-center'>Create Thread</p>
     </x-slot>
     <x-slot name='body'>
+        <img src="{{ asset('assets/moods/icons/' . $mood . '.png') }}" alt="$mood" class='w-44 h-44 opacity-10 absolute left-0 bottom-0 translate-x-12 rotate-25 translate-y-4 group-hover:opacity-20 md:w-72 md:h-72 md:-translate-x-20 md:translate-y-18'>
         <form action="{{ route('thread.store') }}" method="POST">
             @csrf
             <div class="mb-6 flex flex-col font-secondaryAndButton">
