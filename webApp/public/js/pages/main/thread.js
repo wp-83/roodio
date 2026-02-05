@@ -16,3 +16,28 @@ document.addEventListener("click", (e) => {
     const replyContainer = panel.querySelector('.replyContainer');
     replyContainer.scrollTop = replyContainer.scrollHeight;
 });
+
+// pop-up function
+function popupBehaviour(element){
+    if(element.classList.contains('invisible')) element.classList.remove('opacity-0', 'invisible');
+    else element.classList.add('opacity-0', 'invisible');
+}
+
+// create thread pop-up
+const createThreadBtn = document.querySelectorAll('.createThreadBtn');
+const createThreadPopup = document.getElementById('createThreadPopup');
+const createThreadContent = createThreadPopup.querySelector('.popupContent');
+const closeCreateThreadBtn = createThreadPopup.querySelector('#closeCreateThread');
+console.log(closeCreateThreadBtn)
+
+createThreadBtn.forEach(threadBtn => {
+    threadBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        popupBehaviour(createThreadPopup);
+    })
+});
+
+closeCreateThreadBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    popupBehaviour(createThreadPopup);
+});
