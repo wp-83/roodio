@@ -99,7 +99,7 @@
             <div class="mb-5">
                 <label class="inline-flex justify-center items-center cursor-pointer">
                     <input type="checkbox" name="isReplyable" value="1" class="sr-only peer">
-                    <div class="relative w-9 h-5 bg-neutral-quaternary peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-brand-soft rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-buffer after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all {{ $checkboxStyle[$mood] }}"></div>
+                    <div class="relative w-9 h-5 bg-neutral-quaternary peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-brand-soft rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-buffer after:content-[''] after:absolute after:top-0.5 after:start-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all {{ $checkboxStyle[$mood] }}"></div>
                     <span class="select-none ms-2 text-small font-secondaryAndButton text-shadedOfGray-100">Can be reply by others</span>
                 </label>
             </div>
