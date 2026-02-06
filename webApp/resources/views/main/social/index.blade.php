@@ -81,6 +81,9 @@
 
     @if (count($users) > 0)
         @if (request('filter') == 'following')
+            <p class='text-white text-body-size font-secondaryAndButton w-max px-3 py-1 rounded-md '>Showing {{ $mainUser->followings()->count() . ' ' . (($mainUser->followings()->count() > 1 ? 'people' : 'person'))}} </p>
+        @endif
+
         <div class="w-full mt-4 grid grid-cols-1 justify-items-center md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-7 md:gap-9 contentFadeLoad">    
             @foreach($users as $user)
                 @php
