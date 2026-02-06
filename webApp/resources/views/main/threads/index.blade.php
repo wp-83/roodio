@@ -120,7 +120,7 @@
     <div class='mb-5 md:mb-9'>
         <div class='flex w-full flex-row justify-between items-center'>
             <div class='flex flex-row gap-3 items-center justify-center'>
-                <img src="{{ asset('assets/moods/' . $mood . '.png') }}" alt="{{ $mood }}" class='hidden md:inline h-40 w-40'>
+                <img src="{{ asset('assets/moods/' . $mood . '.png') }}" alt="{{ $mood }}" class='h-26 w-26 md:h-32 md:w-32 lg:h-40 lg:w-40'>
                 <div class='flex flex-col'>
                     <div class='w-0 relative overflow-hidden typingTextAnimation max-w-max '>
                         <p class='font-primary text-title font-bold {{ $textColor[$mood] }} md:text-hero' >Threads</p>
