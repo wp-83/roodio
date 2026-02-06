@@ -80,7 +80,8 @@
     </form>
 
     @if (count($users) > 0)
-        <div class="w-full mt-4 grid grid-cols-1 justify-items-center md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-7 md:gap-9 contentFadeLoad">        
+        @if (request('filter') == 'following')
+        <div class="w-full mt-4 grid grid-cols-1 justify-items-center md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-7 md:gap-9 contentFadeLoad">    
             @foreach($users as $user)
                 @php
                     $username = $user->username;
