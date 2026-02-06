@@ -18,7 +18,7 @@ class SocialController extends Controller
 
         $mood = session('chooseMood', 'happy');
 
-        return view('main.social.index', [
+        return view('main.socials.index', [
             'users' => $users,
             'mood'  => $mood,
         ]);
