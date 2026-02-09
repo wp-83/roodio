@@ -88,7 +88,7 @@
     </x-slot>
     <x-slot name='body'>
         <img src="{{ asset('assets/moods/icons/' . $mood . '.png') }}" alt="$mood" class='w-44 h-44 opacity-7 absolute left-0 bottom-0 translate-x-12 rotate-25 translate-y-4 group-hover:opacity-20 md:w-72 md:h-72 md:-translate-x-20 md:translate-y-18'>
-        <form action="{{ route('thread.store') }}" method="POST" id='createThread'>
+        <form action="{{ route('threads.store') }}" method="POST" id='createThread'>
             @csrf
             <div class="mb-6 flex flex-col font-secondaryAndButton">
                 <label for="title" class='mb-1 font-bold {{ $textMood[$mood] }}'>Title</label>
@@ -146,7 +146,7 @@
             <p>Give your opinion!</p>
         </div>
     </a>
-    <form action="{{ route('thread.index') }}" method="GET">
+    <form action="{{ route('threads.index') }}" method="GET">
         <div class='mb-7 flex flex-row gap-3 w-full lg:justify-end contentFadeLoad'>
             <x-filterButton id='allFilter' name='filter' value='all' :mood='$mood' label='All' onchange="this.form.submit()"></x-filterButton>
             <x-filterButton id='followingFilter' name='filter' value='following' :mood='$mood' label='Following' onchange="this.form.submit()"></x-filterButton>

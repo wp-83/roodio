@@ -34,7 +34,7 @@
         </div>
     </div>
 
-    <form action="{{ route('social.index') }}" method="GET">
+    <form action="{{ route('socials.index') }}" method="GET">
         <div class='mb-7 flex flex-row gap-3 w-full lg:justify-end contentFadeLoad'>
             <x-filterButton id='all' name='filter' value='all' :mood='$mood' label='All Users' onchange="this.form.submit()"></x-filterButton>
             <x-filterButton id='following' name='filter' value='following' :mood='$mood' label='Following Only' onchange="this.form.submit()"></x-filterButton>

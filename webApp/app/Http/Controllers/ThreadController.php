@@ -45,7 +45,7 @@ class ThreadController extends Controller
         $threadData['datePost'] = now();
 
         Thread::create($threadData);
-        return redirect()->route('thread.index')->with('success', 'Thread added successfully!');
+        return redirect()->route('threads.index')->with('success', 'Thread added successfully!');
     }
 
     /**
@@ -86,7 +86,7 @@ class ThreadController extends Controller
         $reply['threadId'] = $thread->id;
 
         Reply::create($reply);
-        return redirect()->route('thread.index', $thread)->with('succes', 'berhasil membuat reply');
+        return redirect()->route('threads.index', $thread)->with('succes', 'berhasil membuat reply');
     }
 
     /**

@@ -145,7 +145,7 @@
                     @endforelse
                 </div>
                 <div class="w-full mt-4 relative">
-                    <form action="{{ route('thread.reply', $thread->id) }}" method="POST">
+                    <form action="{{ route('threads.reply', $thread->id) }}" method="POST">
                         @csrf
                         <textarea name='content' rows='1' placeholder="Reply this thread..." class="font-secondaryAndButton text-small w-full min-h-1 max-h-18 p-2 pl-6 pr-20 py-3 overflow-y-auto resize-none border {{ $borderTextareaStyle[$mood] }} bg-shadedOfGray-10/60 not-placeholder-shown:bg-accent-85/10 rounded-3xl scrollbar-none placeholder:italic" oninput="this.style.height='auto'; this.style.height=this.scrollHeight+'px';"></textarea>
                         <div class='absolute top-1 right-2'>
