@@ -27,7 +27,7 @@
             {{-- LEFT COLUMN: COVER ART & AUDIO --}}
             <div class="lg:col-span-1 space-y-6">
 
-                {{-- Cover Art --}}
+                {{-- Cover Art Section --}}
                 <div class="bg-primary-85 rounded-2xl p-6 border border-primary-70 shadow-lg">
                     <label class="font-bold text-white font-primary text-sm mb-4 block">Cover Art</label>
 
@@ -35,13 +35,23 @@
                     <div class="w-full aspect-square relative group">
                         <label class="flex flex-col items-center justify-center w-full h-full border-2 border-dashed border-primary-60 hover:border-secondary-happy-100 hover:bg-primary-70/50 rounded-2xl cursor-pointer transition-all duration-300 overflow-hidden relative">
 
-                            {{-- Image Preview (Show Existing or Placeholder) --}}
+                            {{-- Image Preview Logic --}}
                             @if($song->photoPath)
-                                <img id="photo-preview" src="{{ config('filesystems.disks.azure.url') . '/' . $song->photoPath }}" class="absolute inset-0 w-full h-full object-cover z-10" alt="Cover Preview" />
-                            @else
-                                <img id="photo-preview" class="absolute inset-0 w-full h-full object-cover hidden z-10" alt="Cover Preview" />
+                                <img id="photo-preview"
+                                    src="{{ config('filesystems.disks.azure.url') . '/' . $song->photoPath }}"
+                                    class="absolute inset-0 w-full h-full object-cover z-10"
+                                    alt="Cover Preview" />
 
-                                {{-- Placeholder if no image --}}
+                                {{-- Placeholder (Hidden by default because image exists) --}}
+                                <div class="flex flex-col items-center justify-center text-center p-6 transition-opacity duration-300 hidden" id="photo-placeholder">
+                                {{-- Icon content --}}
+                                </div>
+                            @else
+                                <img id="photo-preview"
+                                    class="absolute inset-0 w-full h-full object-cover hidden z-10"
+                                    alt="Cover Preview" />
+
+                                {{-- Placeholder (Visible) --}}
                                 <div class="flex flex-col items-center justify-center text-center p-6 transition-opacity duration-300" id="photo-placeholder">
                                     <div class="w-16 h-16 rounded-full bg-primary-70 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                                         <i class="fa-regular fa-image text-3xl text-shadedOfGray-40 group-hover:text-secondary-happy-100 transition-colors"></i>
@@ -50,24 +60,31 @@
                                 </div>
                             @endif
 
-                            {{-- Hover Overlay for Preview --}}
+                            {{-- Hover Overlay --}}
                             <div id="preview-overlay" class="absolute inset-0 bg-black/50 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                 <span class="text-white text-sm font-bold flex items-center gap-2"><i class="fa-solid fa-pen"></i> Change Cover</span>
                             </div>
 
-                            <input type="file" name="photo" id="photo_input" accept="image/*" class="opacity-0 w-full h-full absolute inset-0 cursor-pointer z-30" />
-                        </label>
+                            {{-- Input File --}}
+                            <input
+                                type="file"
+                                name="photo"
+                                id="photo_input"
+                                accept="image/*"
+                                class="opacity-0 w-full h-full absolute inset-0 cursor-pointer z-30"
+                                onchange="previewImage(this)"
+                            />
                     </div>
                     @error('photo')
                         <p class="mt-2 text-secondary-angry-100 text-xs font-medium">{{ $message }}</p>
                     @enderror
                 </div>
 
-                {{-- AUDIO FILE UPLOAD --}}
+                {{-- AUDIO FILE INFO (READ ONLY) --}}
                 <div class="bg-primary-85 rounded-2xl p-6 border border-primary-70 shadow-lg">
                     <label class="font-bold text-white font-primary text-sm mb-4 block">Audio File</label>
 
-                    {{-- Current Audio Info --}}
+                    {{-- Current Audio Info (TETAP DITAMPILKAN) --}}
                     @if($song->songPath)
                         <div class="mb-4 p-3 rounded-xl bg-primary-100 border border-primary-60 flex items-center gap-3">
                             <div class="w-10 h-10 rounded-full bg-secondary-happy-100/10 flex items-center justify-center text-secondary-happy-100">
@@ -77,23 +94,32 @@
                                 <p class="text-xs text-shadedOfGray-30">Current File</p>
                                 <p class="text-sm font-bold text-white truncate">{{ $song->songPath }}</p>
                             </div>
+                            {{-- Optional: Play button preview if needed --}}
+                            {{-- <audio controls src="{{ asset('storage/' . $song->songPath) }}" class="h-8 w-24"></audio> --}}
                         </div>
                     @endif
 
+                    {{-- Disabled Upload Area --}}
                     <div class="relative">
-                        <label class="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed border-primary-60 hover:border-accent-100 hover:bg-primary-70/50 rounded-xl cursor-pointer transition-all duration-300 group">
+                        {{-- Ubah label menjadi div dan tambahkan cursor-not-allowed --}}
+                        <div class="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed border-primary-60/50 bg-primary-70/20 rounded-xl cursor-not-allowed">
 
-                            <div class="flex flex-col items-center justify-center pt-1" id="audio-placeholder">
-                                <i class="fa-solid fa-cloud-arrow-up text-xl text-shadedOfGray-40 mb-1 group-hover:text-accent-100 transition-colors"></i>
-                                <p class="text-xs text-shadedOfGray-30 font-medium group-hover:text-white transition-colors" id="audio-filename">Replace Audio File</p>
+                            <div class="flex flex-col items-center justify-center pt-1 text-center px-4">
+                                {{-- Ganti icon jadi Lock --}}
+                                <i class="fa-solid fa-lock text-xl text-shadedOfGray-40 mb-1"></i>
+
+                                {{-- Ganti teks informasi --}}
+                                <p class="text-xs text-shadedOfGray-40 font-medium">
+                                    Audio file cannot be changed
+                                </p>
+                                <p class="text-[10px] text-shadedOfGray-60 mt-1">
+                                    To upload a new file, please create a new song.
+                                </p>
                             </div>
 
-                            <input type="file" name="song" id="song-input" accept=".mp3,.wav,.aac" class="opacity-0 w-full h-full absolute inset-0 cursor-pointer" />
-                        </label>
+                            {{-- Input file DIHAPUS agar tidak bisa diklik/dipilih --}}
+                        </div>
                     </div>
-                    @error('song')
-                        <p class="mt-2 text-secondary-angry-100 text-xs font-medium">{{ $message }}</p>
-                    @enderror
                 </div>
             </div>
 
@@ -224,5 +250,35 @@
             reader.readAsDataURL(file);
         }
     });
+
+    function previewImage(input) {
+        // 1. Ambil file yang dipilih
+        const file = input.files[0];
+        
+        // 2. Ambil elemen gambar & placeholder
+        const preview = document.getElementById('photo-preview');
+        const placeholder = document.getElementById('photo-placeholder');
+
+        // 3. Cek apakah file ada
+        if (file) {
+            // Buat object URL untuk file (lebih cepat dari FileReader base64)
+            const objectUrl = URL.createObjectURL(file);
+            
+            // Ganti src gambar
+            preview.src = objectUrl;
+            
+            // Tampilkan gambar (hapus class hidden)
+            preview.classList.remove('hidden');
+
+            // Sembunyikan placeholder (jika ada)
+            // Kita pakai 'if' karena placeholder tidak ada jika gambar lama sudah ada
+            if (placeholder) {
+                placeholder.classList.add('hidden');
+            }
+
+            // Log untuk memastikan fungsi berjalan (Cek Console F12 jika masih error)
+            console.log("Gambar diganti ke:", file.name);
+        }
+    }
 </script>
 @endsection
