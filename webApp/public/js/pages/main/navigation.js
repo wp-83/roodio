@@ -195,7 +195,7 @@ window.addEventListener('resize', handleResponsive);
 // popup behaviour
 function popupBehaviour(element){
     if(element.classList.contains('invisible')) element.classList.remove('opacity-0', 'invisible');
-    else element.classList.add('opacity', 'invisible');
+    else element.classList.add('opacity-0', 'invisible');
 }
 
 // profile pop-up behaviour

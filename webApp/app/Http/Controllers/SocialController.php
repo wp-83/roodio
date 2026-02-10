@@ -8,7 +8,7 @@ class SocialController extends Controller
 {
     public function index(Request $request)
     {
-        $query = User::query();
+        $query = User::query()->where('role', '=', '0');
 
         if ($request->get('filter') === 'following') {
             $users = auth()->user()->followings()->get();
@@ -18,7 +18,7 @@ class SocialController extends Controller
 
         $mood = session('chooseMood', 'happy');
 
-        return view('main.social.index', [
+        return view('main.socials.index', [
             'users' => $users,
             'mood'  => $mood,
         ]);

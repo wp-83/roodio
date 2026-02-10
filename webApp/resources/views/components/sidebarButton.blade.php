@@ -1,6 +1,7 @@
 @props([
     'mood',
     'route' => 'welcome',
+    'params' => [],
     'icon' => 'home',
     'isActive' => false,
     'label' => 'label',
@@ -83,7 +84,7 @@
 @endphp
 
 
-<a href="{{ route($route) }}" class="{{ ($isActive) ? '' : 'group' }} w-fit inline-block " style="{{ ($isActive) ? 'pointer-events: none;' : '' }}">
+<a href="{{ route($route, $params) }}" class="{{ ($isActive) ? '' : 'group' }} w-fit inline-block " style="{{ ($isActive) ? 'pointer-events: none;' : '' }}">
     <div class="relative font-secondaryAndButton" id='notToggleSidebar'>
         <div
             {{ $attributes->merge([

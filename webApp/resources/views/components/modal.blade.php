@@ -5,7 +5,7 @@
 ])
 
 <div class='absolute top-0 left-0 z-100 transition-all duration-250 opacity-0 invisible' id='{{ $modalId }}'>
-    <div class='relative w-screen h-screen top-0 left-0  {{ ($isNeedBg) ? 'bg-shadedOfGray-100/30' : '' }}'>
+    <div class='relative w-screen h-screen top-0 left-0  {{ ($isNeedBg) ? 'bg-shadedOfGray-100/35' : '' }}'>
         <div {{ 
             $attributes->merge([
                 'class' => 'popupContent absolute min-w-5 h-max p-5 rounded-lg text-wrap bg-white ' . (($additionalStyle) ?? ' w-max') . ' '])

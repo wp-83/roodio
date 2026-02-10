@@ -17,6 +17,13 @@
         'angry' => "Whoa… you seem angry right now. Take a deep breath, it'll pass."
     ];
 
+    $textStyle = [
+        'happy' => 'text-secondary-happy-30',
+        'sad' => 'text-secondary-sad-30',
+        'relaxed' => 'text-secondary-relaxed-30',
+        'angry' => 'text-secondary-angry-30'
+    ];
+
     $bgTextName = [
         'happy' => 'bg-secondary-happy-20 text-secondary-happy-100',
         'sad' => 'bg-secondary-sad-20 text-secondary-sad-100',
@@ -126,7 +133,7 @@
             <div class='mb-10 contentFadeLoad'>
                 <div class='w-fit h-fit flex flex-row items-center gap-3 mb-3'>
                     <img src="{{ asset('assets/moods/icons/' . $mood . '.png') }}" alt="{{ $mood }}" class='w-15 h-15 md:w-24 md:h-24'>
-                    <p class='text-subtitle md:text-title text-secondary-relaxed-30 font-primary font-bold'>Trending Albums</p>
+                    <p class='text-subtitle md:text-title font-primary font-bold {{ $textStyle[$mood] }}'>Trending Albums</p>
                 </div>
                 <div class="md:w-full md:overflow-x-auto scrollbar pb-3 {{ $scrollbarTheme[$mood] }}">
                     <div class='flex flex-col w-full h-max gap-8 md:flex-row md:justify-between md:gap-5 md:w-max'>
@@ -143,7 +150,7 @@
             <div class='mb-10 contentFadeLoad'>
                 <div class='w-fit h-fit flex flex-row items-center gap-3 mb-3'>
                     <img src="{{ asset('assets/moods/icons/' . $mood . '.png') }}" alt="{{ $mood }}" class='w-15 h-15 md:w-24 md:h-24'>
-                    <p class='text-subtitle md:text-title text-secondary-relaxed-30 font-primary font-bold'>New Arrivals</p>
+                    <p class='text-subtitle md:text-title font-primary font-bold {{ $textStyle[$mood] }}'>New Arrivals</p>
                 </div>
                 <div class="md:w-full md:overflow-x-auto scrollbar pb-3 {{ $scrollbarTheme[$mood] }}">
                     <div class='flex flex-col w-full h-max gap-8 md:flex-row md:justify-between md:gap-5 md:w-max'>
@@ -160,7 +167,7 @@
             <div class='mb-5 contentFadeLoad'>
                 <div class='w-fit h-fit flex flex-row items-center gap-3 mb-3'>
                     <img src="{{ asset('assets/moods/icons/' . $mood . '.png') }}" alt="{{ $mood }}" class='w-15 h-15 md:w-24 md:h-24'>
-                    <p class='text-subtitle md:text-title text-secondary-relaxed-30 font-primary font-bold'>Random Mix</p>
+                    <p class='text-subtitle md:text-title font-primary font-bold {{ $textStyle[$mood] }}'>Random Mix</p>
                 </div>
                 <div class="md:w-full md:overflow-x-auto scrollbar pb-3 {{ $scrollbarTheme[$mood] }}">
                     <div class='flex flex-col w-full h-max gap-8 md:flex-row md:justify-between md:gap-5 md:w-max'>

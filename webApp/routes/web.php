@@ -53,25 +53,28 @@ Route::prefix('/')->middleware(['auth', 'role:0', 'prevent-back-history'])->grou
     // Profile
     Route::get('profile', [ProfileController::class, 'index'])->name('user.profile');
 
-    // Mood
-    Route::post('mood', [MoodController::class, 'moodStore'])->name('mood.store');
-    Route::post('preference', [MoodController::class, 'preferenceStore'])->name('preference.store');
-    Route::post('mood-update', [MoodController::class, 'moodUpdate'])->name('mood.update');
-    Route::post('preference-update', [MoodController::class, 'preferenceUpdate'])->name('preference.update');
-
     // Threads
     Route::prefix('threads')->group(function () {
-        Route::get('', [ThreadController::class, 'index'])->name('thread.index');
-        Route::get('/create', [ThreadController::class, 'create'])->name('thread.create');
-        Route::post('', [ThreadController::class, 'store'])->name('thread.store');
-        Route::post('/{thread}/reply', [ThreadController::class, 'reply'])->name('thread.reply');
+        Route::get('', [ThreadController::class, 'index'])->name('threads.index');
+        Route::get('/create', [ThreadController::class, 'create'])->name('threads.create');
+        Route::post('', [ThreadController::class, 'store'])->name('threads.store');
+        Route::post('/{thread}/reply', [ThreadController::class, 'reply'])->name('threads.reply');
     });
-
+        
     // Social
-    Route::prefix('/social')->group(function () {
-        Route::get('', [SocialController::class, 'index'])->name('social.index');
+    Route::prefix('/socials')->group(function () {
+        Route::get('', [SocialController::class, 'index'])->name('socials.index');
     });
-
+        
+    // Moods
+    Route::prefix('/moods')->group(function () {
+        Route::get('', [MoodController::class, 'index'])->name('moods.index');
+        Route::post('mood', [MoodController::class, 'moodStore'])->name('mood.store');
+        Route::post('preference', [MoodController::class, 'preferenceStore'])->name('preference.store');
+        Route::post('mood-update', [MoodController::class, 'moodUpdate'])->name('mood.update');
+        Route::post('preference-update', [MoodController::class, 'preferenceUpdate'])->name('preference.update');
+    });
+                
     Route::get('', [App\Http\Controllers\User\SongController::class, 'index'])->name('user.index');
     Route::get('{playlists}', [App\Http\Controllers\User\SongController::class, 'playlists'])->name('user.playlists');
 });
