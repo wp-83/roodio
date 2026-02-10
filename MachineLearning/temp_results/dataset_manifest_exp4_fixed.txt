@@ -1,0 +1,32 @@
+Total Train: 381 | Total Test: 29
+==================================================
+TESTING FILE LIST (For Error Analysis):
+angry : new_BAD OMENS - Just Pretend (Official Music Video).wav
+angry : new_Tate McRae - don't come back (Lyric Video).wav
+angry : new_happy ending - bailey spinn [Official Music Video].wav
+angry : old_Billie Eilish - Happier Than Ever.wav
+angry : old_Faouzia - Tears of Gold (Lyrics).wav
+angry : old_Olivia Rodrigo - vampire.wav
+angry : old_eli. - quiet. (Lyrics).wav
+happy : new_Alex Warren - Ordinary (Official Video).wav
+happy : new_Demi Lovato - Heart Attack (Official Video).wav
+happy : new_One Direction - Steal My Girl.wav
+happy : new_Yellow Claw - Till It Hurts ft. Ayden [Official Music Video].wav
+happy : new_Zedd, Alessia Cara - Stay (Official Music Video).wav
+happy : new_Zedd, Maren Morris, Grey - The Middle (Official Music Video).wav
+happy : old_Bruno Mars - Just The Way You Are.wav
+happy : old_Jessie J - Price Tag Feat. B.O.B.wav
+happy : old_NIKI - Every Summertime Every year we get older.wav
+happy : old_Taylor Swift - 22.wav
+relaxed : new_Henry Moodie - pick up the phone (official video).wav
+relaxed : new_Madison Beer - bittersweet.wav
+relaxed : new_The 1975 - About You.wav
+relaxed : old_Ardhito Pramono - I Just Couldnt Save You Tonight (Lyrics) ft. Aurélie - Prestige Vibes.wav
+relaxed : old_I Thought I Saw Your Face Today - She And Him (Lyrics) - Cassiopeia.wav
+relaxed : old_innocence- HildirSvensson & Six dior. (Lyrics) - yunooyle.wav
+relaxed : old_wave to earth - love. (Lyrics) [HAN_ROM_ENG] - hazelnut latte.wav
+sad : new_The Neighbourhood - Daddy Issues (Lyrics).wav
+sad : new_The Neighbourhood - You Get Me So High (Lyrics).wav
+sad : old_All Too Well (10 Minute Version) (Taylor's Version) (From The Vault) (Lyric Video).wav
+sad : old_Loreen - Tattoo.wav
+sad : old_Taylor-Swift-You_re-On-Your-Own_-Kid-_Official-Lyric-Video_.wav

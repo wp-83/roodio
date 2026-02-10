@@ -1,0 +1,30 @@
+Total Train: 72 | Total Test: 28
+
+TEST: angry - Bella Poarch - Living Hell (Official Lyric Video).wav
+TEST: angry - Dayseeker - Crying while you're dancing (Lyrics).wav
+TEST: angry - Murder My Feelings (Lyrics) - Lala Sadii.wav
+TEST: angry - Revenge In Kyoto - I Was Only Afraid Lyric Video.wav
+TEST: angry - Sik World - The Journey.wav
+TEST: angry - Wind Walker - Hereditary (Official Lyric Video).wav
+TEST: angry - You.wav
+TEST: happy - Baby - Justin Bieber feat. Ludacris.wav
+TEST: happy - Ellie Goulding - Love Me Like You Do.wav
+TEST: happy - Jessie J - Price Tag Feat. B.O.B.wav
+TEST: happy - Maroon 5, Wiz Khalifa  Payphone.wav
+TEST: happy - Rihanna - You Da One.wav
+TEST: happy - Sean Kingston, Justin Bieber - Eenie Meenie.wav
+TEST: happy - Taylor Swift - 22.wav
+TEST: relaxed - Faye Webster Kingston (Lyrics) - Worldly Hits.wav
+TEST: relaxed - Frank Ocean - Godspeed (Lyrics) - Lyricz.wav
+TEST: relaxed - keshi - WANTCHU (Lyrics) - Urban Paradise.wav
+TEST: relaxed - Let Down - Radiohead - Lyrics - Pyroarp.wav
+TEST: relaxed - Multo — Cup of Joe (Lyrics) - cezca.wav
+TEST: relaxed - Paul Partohap - BEAUTiFUL (Lyric Video) - paul partohap.wav
+TEST: relaxed - wave to earth - bad (Lyrics) - Alternate.wav
+TEST: sad - Adele - Hello (Official Music Video).wav
+TEST: sad - Ed Sheeran  Thinking Out Loud  Lirik Lagu Terjemahan.wav
+TEST: sad - Imagine Dragons - Demons (Official Music Video).wav
+TEST: sad - Lukas Graham - Love Someone [Official Music Video].wav
+TEST: sad - Maroon 5 - Memories (Official Video).wav
+TEST: sad - Olivia Rodrigo - happier (Lyric Video).wav
+TEST: sad - Take That - Patience (Official Video).wav

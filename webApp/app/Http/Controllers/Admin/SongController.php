@@ -156,16 +156,7 @@ class SongController extends Controller
                 'images',
                 $photo
             );
-            $song::update(['photoPath' => $photoPath]);
-        }
-
-        if ($request->hasFile('song')) {
-            $songFile = $request->file('song');
-            $path     = Storage::disk('azure')->put(
-                'songs',
-                $songFile
-            );
-            $song::update(['songPath' => $path]);
+            $song->update(['photoPath' => $photoPath]);
         }
 
         $validated['userId'] = Auth::id();

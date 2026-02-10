@@ -1,0 +1,103 @@
+=== TRAINING DATA (Pure Original) ===
+angry : Billie Eilish - Happier Than Ever.wav
+angry : Connor Kauffman - Cry (Lyrics).wav
+angry : eli. - quiet. (Lyrics).wav
+angry : Falling Through Petals.wav
+angry : Faouzia - Tears of Gold (Lyrics).wav
+angry : Fire Alarm - Soffie Dossi (lyrics).wav
+angry : God, Save Me From Myself_mp3.wav
+angry : How Was I Supposed to Know (Lyrics).wav
+angry : I'm not okay.wav
+angry : Ich geb's aus.wav
+angry : Natalie Jane - Tattoos (Lyrics).wav
+angry : Nevertel - Some Things [Lyrics].wav
+angry : NF- lost in the moment- lyrics.wav
+angry : Official Lyric video for Only When Its You.wav
+angry : Olivia Rodrigo - jealousy, jealousy (Lyric Video).wav
+angry : Olivia Rodrigo - vampire.wav
+angry : Sabrina Carpenter - because i liked a boy (Lyrics).wav
+angry : Taylor Swift - You're Not Sorry (Taylor's Version) (Lyric Video).wav
+happy : Anne Marie - 2002 .wav
+happy : Bruno Mars - Just The Way You Are.wav
+happy : Daya - Sit Still, Look Pretty.wav
+happy : Domino - Jessie J.wav
+happy : Gracie Abrams - Thats So True.wav
+happy : Jennifer Lopez - On The Floor ft. Pitbull.wav
+happy : Katy Perry - Last Friday Night.wav
+happy : Maroon 5 - Sugar.wav
+happy : NIKI - Every Summertime Every year we get older.wav
+happy : One Time - Justin Bieber.wav
+happy : Owl City, Carly Rae Jepsen - Good Time.wav
+happy : Shawn Mendes - Stitches.wav
+happy : Shawn Mendes - Treat You Better.wav
+happy : Somebody To You.wav
+happy : Sophia Grace - Girl In The Miror ft. Silento.wav
+happy : supernatural - Ariana Grande.wav
+happy : Taylor Swift - Fearless.wav
+happy : Taylor Swift - Paper Rings.wav
+relaxed : Ardhito Pramono - I Just Couldnt Save You Tonight (Lyrics) ft. Aurélie - Prestige Vibes.wav
+relaxed : Attack On Titan OST- Call of Silence (Lyrics) - ThatOnePotato.wav
+relaxed : Bôa - Duvet (Lyrics) - Taj Tracks.wav
+relaxed : Clairo - Bags (Lyrics) - The Tiny Majority.wav
+relaxed : d4vd - Romantic Homicide (Lyrics) - 7clouds.wav
+relaxed : Daniel Caesar - Always (Lyrics) - 7clouds Rock.wav
+relaxed : Daniel Caesar - Get You (Lyrics) ft. Kali Uchis - Luxury Tones.wav
+relaxed : I Thought I Saw Your Face Today - She And Him (Lyrics) - Cassiopeia.wav
+relaxed : innocence- HildirSvensson & Six dior. (Lyrics) - yunooyle.wav
+relaxed : Joji - SLOW DANCING IN THE DARK (Lyrics) - 7clouds.wav
+relaxed : JVKE - her (official lyric video) - JVKE.wav
+relaxed : Malcolm Todd - Chest Pain (I Love) (Lyrics) - 7clouds.wav
+relaxed : NIKI - lowkey (Lyrics) - Dan Music.wav
+relaxed : Ricky Montgomery - Line Without a Hook (Official Lyric Video) - Ricky Montgomery.wav
+relaxed : THANK YOU 4 LOVIN' ME -  Paul Partohap (lirik video) - AnyTime Music.wav
+relaxed : The Walters - I Love You So (Lyrics) - Vibe Music.wav
+relaxed : Tyler, The Creator - Answer (Lyrics) - Rap City.wav
+relaxed : wave to earth - love. (Lyrics) [HAN_ROM_ENG] - hazelnut latte.wav
+sad : All Too Well (10 Minute Version) (Taylor's Version) (From The Vault) (Lyric Video).wav
+sad : Bruno Mars - Talking To The Moon (Official Lyric Video).wav
+sad : Bruno Mars - When I Was Your Man (Official Music Video).wav
+sad : Christina Perri - A Thousand Years [Official Music Video].wav
+sad : Ed Sheeran - Perfect (Official Music Video).wav
+sad : Ed Sheeran - Photograph (Official Music Video).wav
+sad : Harry Styles - Sign of the Times (Official Video).wav
+sad : Lady Gaga, Bradley Cooper - Shallow (from A Star Is Born) (Official Music Video).wav
+sad : Lewis Capaldi - Someone You Loved.wav
+sad : Loreen - Tattoo.wav
+sad : Niall Horan - This Town (Official Lyric Video).wav
+sad : One Direction - Story of My Life.wav
+sad : Sam Smith - I'm Not The Only One (Official Music Video).wav
+sad : Tate McRae - you broke me first (Official Video).wav
+sad : Taylor Swift  august (Official Lyric Video).wav
+sad : Taylor Swift - Back To December (Lyrics).wav
+sad : Taylor Swift - cardigan.wav
+sad : Taylor Swift - You're On Your Own, Kid (Official Lyric Video).wav
+
+=== TESTING DATA (Pure Original) ===
+angry : Bella Poarch - Living Hell (Official Lyric Video).wav
+angry : Dayseeker - Crying while you're dancing (Lyrics).wav
+angry : Murder My Feelings (Lyrics) - Lala Sadii.wav
+angry : Revenge In Kyoto - I Was Only Afraid Lyric Video.wav
+angry : Sik World - The Journey.wav
+angry : Wind Walker - Hereditary (Official Lyric Video).wav
+angry : You.wav
+happy : Baby - Justin Bieber feat. Ludacris.wav
+happy : Ellie Goulding - Love Me Like You Do.wav
+happy : Jessie J - Price Tag Feat. B.O.B.wav
+happy : Maroon 5, Wiz Khalifa  Payphone.wav
+happy : Rihanna - You Da One.wav
+happy : Sean Kingston, Justin Bieber - Eenie Meenie.wav
+happy : Taylor Swift - 22.wav
+relaxed : Faye Webster Kingston (Lyrics) - Worldly Hits.wav
+relaxed : Frank Ocean - Godspeed (Lyrics) - Lyricz.wav
+relaxed : keshi - WANTCHU (Lyrics) - Urban Paradise.wav
+relaxed : Let Down - Radiohead - Lyrics - Pyroarp.wav
+relaxed : Multo — Cup of Joe (Lyrics) - cezca.wav
+relaxed : Paul Partohap - BEAUTiFUL (Lyric Video) - paul partohap.wav
+relaxed : wave to earth - bad (Lyrics) - Alternate.wav
+sad : Adele - Hello (Official Music Video).wav
+sad : Ed Sheeran  Thinking Out Loud  Lirik Lagu Terjemahan.wav
+sad : Imagine Dragons - Demons (Official Music Video).wav
+sad : Lukas Graham - Love Someone [Official Music Video].wav
+sad : Maroon 5 - Memories (Official Video).wav
+sad : Olivia Rodrigo - happier (Lyric Video).wav
+sad : Take That - Patience (Official Video).wav
