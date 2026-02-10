@@ -66,5 +66,5 @@ Desktop.ini
 # JANGAN PERNAH upload API Key atau password!
 .env
 
-52_mir_dataset
-models
+52_mir_dataset/
+models/
