@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use App\Models\Reactions;
 use App\Models\Reply;
 use App\Models\Thread;
+use App\Models\User;
+
 use function Symfony\Component\Clock\now;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,12 +15,22 @@ class ThreadController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $threads  = Thread::withCount('reactions')->orderByDesc('created_at')->get();
         $mood     = session('chooseMood', 'happy');
         $fullname = auth()->user()->userDetail->fullname;
         $user     = auth()->user();
+
+        $filter = $request->get('filter', 'all');
+        $query = Thread::withCount('reactions')->orderByDesc('created_at');
+        
+        if ($filter == 'created') {
+            $query->where('userId', $user->id);
+        } elseif ($filter == 'following'){
+
+        };
+
+        $threads = $query->get();
         return view('main.threads.index', compact('threads', 'mood', 'fullname', 'user'));
     }
 
