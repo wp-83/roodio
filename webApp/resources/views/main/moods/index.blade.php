@@ -2,3 +2,8 @@
 
 
 @section('title', 'ROODIO - Moods')
+
+
+@section('script')
+    
+@endsection
