@@ -2,16 +2,28 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Models\Mood;
 use App\Models\MoodHistories;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class MoodController extends Controller
 {
     public function index()
     {
-        $moods = Mood::orderByDesc('created_at')->paginate(5);
-        return view('main.moods.index', compact('moods'));
+        $moods = MoodHistories::get();
+
+        $startOfWeek = Carbon::now()->startOfWeek();
+        $endOfWeek   = Carbon::now()->endOfWeek();
+        $weekly      = MoodHistories::whereBetween('created_at', [$startOfWeek, $endOfWeek])->get();
+
+        $startOfMonth = Carbon::now()->startOfMonth();
+        $endOfMonth   = Carbon::now()->endOfMonth();
+        $monthly      = MoodHistories::whereBetween('created_at', [$startOfMonth, $endOfMonth])->get();
+
+        $startOfYearly = Carbon::now()->startOfMonth();
+        $endOfYearly   = Carbon::now()->endOfMonth();
+        $yearly        = MoodHistories::whereBetween('created_at', [$startOfYearly, $endOfYearly])->get();
+        return view('main.moods.index', compact('weekly', 'monthly', 'yearly'));
     }
 
     public function moodStore(Request $request)

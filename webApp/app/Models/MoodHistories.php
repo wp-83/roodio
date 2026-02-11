@@ -2,6 +2,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\DB;
 
 class MoodHistories extends Model
@@ -9,6 +10,11 @@ class MoodHistories extends Model
     protected $fillable  = ['moodId', 'userId'];
     public $incrementing = false;
     protected $keyType   = 'string';
+
+    public function mood(): BelongsTo
+    {
+        return $this->belongsTo(Mood::class, 'moodId', 'id');
+    }
 
     protected static function booted()
     {
