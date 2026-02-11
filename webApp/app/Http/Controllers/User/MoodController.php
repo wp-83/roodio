@@ -23,7 +23,9 @@ class MoodController extends Controller
         $startOfYearly = Carbon::now()->startOfMonth();
         $endOfYearly   = Carbon::now()->endOfMonth();
         $yearly        = MoodHistories::whereBetween('created_at', [$startOfYearly, $endOfYearly])->get();
-        return view('main.moods.index', compact('weekly', 'monthly', 'yearly'));
+
+        $mood = session('chooseMood', 'happy');
+        return view('main.moods.index', compact('weekly', 'monthly', 'yearly', 'mood'));
     }
 
     public function moodStore(Request $request)
