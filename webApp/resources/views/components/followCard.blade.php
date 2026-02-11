@@ -75,7 +75,7 @@
     </div>
 </div>
 
-<div class='relative w-full h-84 rounded-lg overflow-hidden hidden group md:inline'>
+<div class='relative w-full min-h-90 rounded-lg overflow-hidden hidden group md:inline'>
     @if (!empty($profilePhoto))
         <img src="{{ config('filesystems.disks.azure.url') . '/' . $profilePhoto }}" alt="{{ $username }}" class='w-full h-full object-cover opacity-80'>
     @else
