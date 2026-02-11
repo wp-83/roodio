@@ -6,6 +6,7 @@ import joblib
 import tensorflow as tf
 import tensorflow_hub as hub
 import torch
+import torch.nn as nn # Tambahan untuk definisi class
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import logging
 
@@ -14,7 +15,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 logging.getLogger('tensorflow').setLevel(logging.ERROR)
 logging.getLogger('transformers').setLevel(logging.ERROR)
 
-print("🚀 MANUAL SAMPLE TESTING (Global System)")
+print("🚀 MANUAL SAMPLE TESTING (Global System - PyTorch Edition)")
 print("   Audio: Dari folder 'test_samples'")
 print("   Lirik: Input Manual di Script")
 print("="*60)
@@ -25,227 +26,37 @@ print("="*60)
 AUDIO_FOLDER = 'data/test_samples' 
 
 # 2. INPUT LIRIK MANUAL DISINI (Format: "nama_file.mp3": "lirik lagu...")
-# Pastikan nama file SAMA PERSIS dengan yang ada di folder audio
 MANUAL_DATA = {
     "Julien Baker - Appointments (Official Video).mp3": """
         I'm staying in tonight
-I won't stop you from leaving
-I know that I'm not what you wanted, am I?
-Wanted someone who I used to be like
-Now you think I'm not trying
-Well, don't argue, it's not worth the effort to lie
-You don't want to bring it up
-And I already know how we look
-You don't have to remind me so much
-How I disappoint you
-It's just that I talked to somebody again
-Who knows how to help me get better
-Until then I should just try not to miss anymore
-Appointments
-Ooh ooh ooh ooh
-Ooh ooh ooh
-I think if I ruin this
-That I know I can live with it
-Nothing turns out like I pictured it
-Maybe the emptiness is just a lesson in canvases
-I think if I fail again
-That I know you're still listening
-Maybe it's all gonna turn out alright
-And I know that it's not, but I have to believe that it is
-I have to believe that it is
-I have to believe that it is
-(I have to believe it)
-I have to believe that it is
-(Probably not, but I have to believe that it is)
-And when I tell you that you that it is
-Oh, it's not for my benefit
-Maybe it's all gonna turn out alright
-Oh, I know that it's not, but I have to believe that it is
+        I won't stop you from leaving
+        I know that I'm not what you wanted, am I?
+        Maybe it's all gonna turn out alright
+        And I know that it's not, but I have to believe that it is
     """,
     
     "Meghan Trainor - Made You Look (Official Music Video).mp3": """
         I could have my Gucci on
-I could wear my Louis Vuitton
-But even with nothing on
-Bet I made you look (I made you look)
-I'll make you double take soon as I walk away
-Call up your chiropractor just in case your neck break
-Ooh, tell me what you, what you, what you gon' do? Ooh
-'Cause I'm 'bout to make a scene, double up that sunscreen
-I'm 'bout to turn the heat up, gonna make your glasses steam
-Ooh, tell me what you, what you, what you gon' do? Ooh
-When I do my walk, walk
-I can guarantee your jaw will drop, drop
-'Cause they don't make a lot of what I got, got
-Ladies, if you feel me, this your bop, bop
-(Bop, bop, bop)
-I could have my Gucci on (Gucci on)
-I could wear my Louis Vuitton
-But even with nothing on
-Bet I made you look (I made you look)
-Yeah, I look good in my Versace dress (take it off)
-But I'm hotter when my morning hair's a mess
-But even with my hoodie on
-Bet I made you look (I made you look)
-(Hmm-hmm-hmm)
-And once you get a taste, you'll never be the same
-This ain't that ordinary, it's that 14 karat cake
-Ooh, tell me what you, what you
-What you gon' do? Ooh
-When I do my walk, walk
-I can guarantee your jaw will drop, drop
-'Cause they don't make a lot of what I got, got
-Ladies, if you feel me, this your bop, bop
-(Bop, bop, bop)
-I could have my Gucci on (Gucci on)
-I could wear my Louis Vuitton
-But even with nothing on
-Bet I made you look (said I made you look)
-Yeah, I look good in my Versace dress (take it off)
-But I'm hotter when my morning hair's a mess
-But even with my hoodie on
-Bet I made you look (said, I made you look)
+        I could wear my Louis Vuitton
+        But even with nothing on
+        Bet I made you look (I made you look)
     """,
     
     "Kesha - Praying (Official Video).mp3": """
         Well, you almost had me fooled
-Told me that I was nothing without you
-Oh, but after everything you've done
-I can thank you for how strong I have become
-'Cause you brought the flames and you put me through hell
-I had to learn how to fight for myself
-And we both know all the truth I could tell
-I'll just say this is I wish you farewell
-I hope you're somewhere praying, praying
-I hope your soul is changing, changing
-I hope you find your peace
-Falling on your knees, praying
-I'm proud of who I am
-No more monsters, I can breathe again
-And you said that I was done
-Well, you were wrong and now the best is yet to come
-'Cause I can make it on my own
-And I don't need you, I found a strength I've never known
-I've been thrown out, I've been burned
-When I'm finished, they won't even know your name
-You brought the flames and you put me through hell
-I had to learn how to fight for myself
-And we both know all the truth I could tell
-I'll just say this is I wish you farewell
-I hope you're somewhere praying, praying
-I hope your soul is changing, changing
-I hope you find your peace
-Falling on your knees, praying
-Oh, sometimes, I pray for you at night
-Someday, maybe you'll see the light
-Oh, some say, in life, you're gonna get what you give
-But some things, only God can forgive
-I hope you're somewhere praying, praying
-I hope your soul is changing, changing
-I hope you find your peace
-Falling on your knees, praying
+        Told me that I was nothing without you
+        I hope you're somewhere praying, praying
+        I hope your soul is changing, changing
     """,
     
     "In The End [Official HD Music Video] - Linkin Park.mp3": """
-        [Chester Bennington:]
-It starts with one
-[Mike Shinoda:]
-One thing I don't know why
-It doesn't even matter how hard you try
-Keep that in mind, I designed this rhyme
-To explain in due time
-
-[Chester Bennington:]
-All I know
-[Mike Shinoda:]
-Time is a valuable thing
-Watch it fly by as the pendulum swings
-Watch it count down to the end of the day
-The clock ticks life away
-
-[Chester Bennington:]
-It's so unreal
-[Mike Shinoda:]
-It's so unreal, didn't look out below
-Watch the time go right out the window
-Trying to hold on, but didn't even know
-I wasted it all just to watch you go
-
-[Chester Bennington:]
-Watch you go
-[Mike Shinoda:]
-I kept everything inside and even though I tried, it all fell apart
-What it meant to me will eventually be a memory of a time when I tried so hard
-
-[Chester Bennington:]
-I tried so hard
-And got so far
-But in the end
-It doesn't even matter
-I had to fall
-To lose it all
-But in the end
-It doesn't even matter
-
-[Mike Shinoda:]
-One thing, I don't know why
-It doesn't even matter how hard you try
-Keep that in mind, I designed this rhyme
-To remind myself how I tried so hard
-
-[Chester Bennington:]
-I tried so hard
-[Mike Shinoda:]
-In spite of the way you were mocking me
-Acting like I was part of your property
-Remembering all the times you fought with me
-I'm surprised it got so far
-
-[Chester Bennington:]
-Got so far
-[Mike Shinoda:]
-Things aren't the way they were before
-You wouldn't even recognize me anymore
-Not that you knew me back then
-But it all comes back to me in the end
-
-[Chester Bennington:]
-In the end
-[Mike Shinoda:]
-You kept everything inside and even though I tried, it all fell apart
-What it meant to me will eventually be a memory of a time when I tried so hard
-
-[Chester Bennington:]
-I tried so hard
-And got so far
-But in the end
-It doesn't even matter
-I had to fall
-To lose it all
-But in the end
-It doesn't even matter
-
-I've put my trust in you
-Pushed as far as I can go
-For all this
-There's only one thing you should know
-
-I've put my trust in you
-Pushed as far as I can go
-For all this
-There's only one thing you should know
-
-I tried so hard
-And got so far
-But in the end
-It doesn't even matter
-I had to fall
-To lose it all
-But in the end
-It doesn't even matter
+        It starts with one
+        One thing I don't know why
+        It doesn't even matter how hard you try
+        I tried so hard and got so far
+        But in the end it doesn't even matter
     """,
     
-    # Tambahkan lagu lain di sini...
     "lagu_galau_tapi_santai.mp3": """
         And I hate to say I love you
         When it's so hard for me
@@ -256,22 +67,63 @@ It doesn't even matter
 }
 
 # 3. Path Model
-MODEL_DIR = 'models/'
+MODEL_DIR = 'models/v2' # Sesuaikan dengan lokasi .pth
 BERT_PATH = 'models/model_hybrid_final' # Path Model BERT Stage 2B
+DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-# ================= 1. LOAD MODELS =================
+# ================= 1. DEFINISI ARSITEKTUR STAGE 1 (PYTORCH) =================
+# Wajib ada agar PyTorch bisa me-load bobot model
+class AudioClassifier(nn.Module):
+    def __init__(self, input_dim=3074): 
+        super(AudioClassifier, self).__init__()
+        self.layer1 = nn.Sequential(
+            nn.Linear(input_dim, 512),
+            nn.ReLU(),
+            nn.BatchNorm1d(512),
+            nn.Dropout(0.3)
+        )
+        self.layer2 = nn.Sequential(
+            nn.Linear(512, 256),
+            nn.ReLU(),
+            nn.BatchNorm1d(256),
+            nn.Dropout(0.2)
+        )
+        self.output = nn.Linear(256, 2)
+
+    def forward(self, x):
+        x = self.layer1(x)
+        x = self.layer2(x)
+        return self.output(x)
+
+# ================= 2. LOAD MODELS =================
 print("⏳ Loading AI Brains...")
 
 try:
-    # A. Audio Models
+    # A. Audio Feature Extractor (YAMNet)
     yamnet_model = hub.load("https://tfhub.dev/google/yamnet/1")
-    s1_model = tf.keras.models.load_model(os.path.join(MODEL_DIR, 'stage1_nn.h5'))
-    s2a_rf = joblib.load(os.path.join(MODEL_DIR, 'stage2a_rf.pkl'))
-    s2a_meta = joblib.load(os.path.join(MODEL_DIR, 'stage2a_meta.pkl'))
     
-    # B. Text Model (BERT Stage 2B)
+    # B. Stage 1: Audio Neural Network (PyTorch)
+    s1_path = os.path.join(MODEL_DIR, 'stage1_nn.pth')
+    s1_model = AudioClassifier().to(DEVICE)
+    s1_model.load_state_dict(torch.load(s1_path, map_location=DEVICE))
+    s1_model.eval()
+    
+    # Load Encoder Stage 1 (Untuk tahu 0=High atau Low)
+    # Jika file tidak ada, kita asumsi default training saya: 0=High, 1=Low
+    try:
+        s1_encoder = joblib.load(os.path.join(MODEL_DIR, 'stage1_encoder.pkl'))
+    except:
+        s1_encoder = None
+        print("⚠️ Warning: Encoder Stage 1 tidak ditemukan. Menggunakan default mapping.")
+
+    # C. Stage 2A: Random Forest
+    # Lokasi file ini mungkin beda, sesuaikan
+    s2a_rf = joblib.load(os.path.join('models', 'stage2a_rf.pkl'))
+    s2a_meta = joblib.load(os.path.join('models', 'stage2a_meta.pkl'))
+    
+    # D. Text Model (BERT Stage 2B)
     tokenizer = AutoTokenizer.from_pretrained(BERT_PATH)
-    bert_model = AutoModelForSequenceClassification.from_pretrained(BERT_PATH)
+    bert_model = AutoModelForSequenceClassification.from_pretrained(BERT_PATH).to(DEVICE)
     bert_model.eval()
     
     # ✅ FIX LABEL MAPPING (Sesuai temuan kamu: 0=sad, 1=relaxed)
@@ -283,7 +135,7 @@ except Exception as e:
     print(f"❌ Error Loading Models: {e}")
     exit()
 
-# ================= 2. HELPER FUNCTIONS =================
+# ================= 3. HELPER FUNCTIONS =================
 
 def clean_text(text):
     text = re.sub(r'\[.*?\]', '', str(text))
@@ -304,14 +156,16 @@ def extract_feat_s1(y, sr):
     else: y_norm = y_trim
     if len(y_norm) < 16000: y_norm = np.pad(y_norm, (0, 16000 - len(y_norm)))
     _, embeddings, _ = yamnet_model(y_norm)
-    yamnet_emb = tf.concat([
-        tf.reduce_mean(embeddings, axis=0),
-        tf.math.reduce_std(embeddings, axis=0),
-        tf.reduce_max(embeddings, axis=0)
-    ], axis=0).numpy()
+    
+    # Konversi Tensor TF ke Numpy
+    emb_mean = tf.reduce_mean(embeddings, axis=0).numpy()
+    emb_std = tf.math.reduce_std(embeddings, axis=0).numpy()
+    emb_max = tf.reduce_max(embeddings, axis=0).numpy()
+    
     rms = np.mean(librosa.feature.rms(y=y_trim))
     zcr = np.mean(librosa.feature.zero_crossing_rate(y=y_trim))
-    return np.concatenate([yamnet_emb, [rms, zcr]]).reshape(1, -1)
+    
+    return np.concatenate([emb_mean, emb_std, emb_max, [rms, zcr]])
 
 def extract_feat_s2a_audio(y, sr):
     if len(y) < 16000: y = np.pad(y, (0, 16000-len(y)))
@@ -321,7 +175,7 @@ def extract_feat_s2a_audio(y, sr):
     zcr = np.mean(librosa.feature.zero_crossing_rate(y=y))
     return np.concatenate([vec, [rms, zcr]]).reshape(1, -1)
 
-# ================= 3. TESTING LOGIC =================
+# ================= 4. TESTING LOGIC =================
 
 def predict_song(filename, lyrics_raw):
     path = os.path.join(AUDIO_FOLDER, filename)
@@ -332,20 +186,34 @@ def predict_song(filename, lyrics_raw):
 
     print("\n" + "-"*50)
     print(f"🎵 Playing: {filename}")
-    print(f"📝 Lyrics : {lyrics_raw[:50]}...") # Print dikit aja
+    print(f"📝 Lyrics : {lyrics_raw[:50].strip()}...") 
 
     try:
         # 1. Load Audio
         y, sr = librosa.load(path, sr=16000)
         
-        # 2. Stage 1: Energy Check
+        # 2. Stage 1: Energy Check (PyTorch Inference)
         feat_s1 = extract_feat_s1(y, sr)
-        p1 = s1_model.predict(feat_s1, verbose=0)[0]
+        feat_tensor = torch.tensor([feat_s1], dtype=torch.float32).to(DEVICE)
         
-        # Asumsi: 0=High, 1=Low
-        if p1[0] > p1[1]:
+        with torch.no_grad():
+            logits = s1_model(feat_tensor)
+            probs = torch.softmax(logits, dim=1).cpu().numpy()[0]
+            pred_idx = np.argmax(probs)
+            
+        # Decode Label (High/Low)
+        if s1_encoder:
+            stage1_label = s1_encoder.inverse_transform([pred_idx])[0].lower()
+        else:
+            # Fallback manual jika encoder hilang (Asumsi 0=High, 1=Low)
+            stage1_label = "high" if pred_idx == 0 else "low"
+            
+        # Cek High Energy
+        is_high = 'high' in stage1_label or 'angry' in stage1_label or 'happy' in stage1_label
+        
+        if is_high:
             # ---> HIGH ENERGY (Angry/Happy)
-            branch = "High Energy"
+            branch = "High Energy (Audio Focus)"
             f_aud = extract_feat_s2a_audio(y, sr)
             f_txt = np.array([[0.5, 0.5]]) # Dummy text
             
@@ -354,24 +222,25 @@ def predict_song(filename, lyrics_raw):
             idx = s2a_meta.predict(meta_in)[0]
             conf = s2a_meta.predict_proba(meta_in)[0][idx]
             
+            # Mapping Manual RF (Sesuaikan jika hasil terbalik)
             mood = "ANGRY 😡" if idx == 0 else "HAPPY 😄"
             
         else:
             # ---> LOW ENERGY (Sad/Relaxed) - BERT
-            branch = "Low Energy"
+            branch = "Low Energy (Lyrics Focus)"
             text_clean = clean_text(lyrics_raw)
             
             if len(text_clean) < 5:
                 mood = "UNKNOWN (No Lyrics)"
                 conf = 0.0
             else:
-                inputs = tokenizer(text_clean, return_tensors="pt", truncation=True, padding=True, max_length=512)
+                inputs = tokenizer(text_clean, return_tensors="pt", truncation=True, padding=True, max_length=512).to(DEVICE)
                 with torch.no_grad():
                     outputs = bert_model(**inputs)
                 
                 probs = torch.nn.functional.softmax(outputs.logits, dim=-1)[0]
-                # probs[0] = sad, probs[1] = relaxed (Sesuai mapping baru)
                 
+                # Mapping id2label = {0: 'sad', 1: 'relaxed'}
                 p_sad = probs[0].item()
                 p_rel = probs[1].item()
                 
@@ -397,9 +266,11 @@ def predict_song(filename, lyrics_raw):
         print(f"🎯 Conf   : {conf*100:.1f}% |{bar}|")
         
     except Exception as e:
+        import traceback
+        traceback.print_exc()
         print(f"❌ Error: {e}")
 
-# ================= 4. RUNNER =================
+# ================= 5. RUNNER =================
 
 if __name__ == "__main__":
     if not os.path.exists(AUDIO_FOLDER):
