@@ -87,7 +87,7 @@
         </div>
         <div class='w-full flex flex-col gap-1 items-start font-secondaryAndButton text-white px-3 pt-2'>
             <div class='flex flex-row items-center gap-2 w-full'>
-                <p class='font-bold {{ $textMoodStyle[$mood] }} text-body-size'>{{ Str::limit($fullname, 15) }}</p>
+                <p class='font-bold {{ $textMoodStyle[$mood] }} text-body-size'>{{ Str::limit($fullname, 13) }}</p>
                 <p class='font-bold {{ $pipeMoodStyle[$mood] }}'>|</p>
                 <p class='text-small italic'>{{ '@' . Str::limit($username, 15) }}</p>
             </div>

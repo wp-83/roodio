@@ -11,6 +11,7 @@ class Songs extends Model
     protected $fillable = [
         'userId',
         'moodId',
+        'confidence',
         'title',
         'lyrics',
         'artist',
