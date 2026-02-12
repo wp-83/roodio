@@ -83,7 +83,11 @@
                 <p class='text-micro lg:text-small'>{{ $createdAt }}</p>
             </div>
             @if (!($mainUser->id == $thread->userId))
-                <livewire:user.button-follow :thread="$thread"/>
+                <livewire:user.button-follow
+                    :userId="$thread->userId"
+                    :mood="$mood"
+                    :wire:key="'follow-thread-'.$thread->id"
+                />
             @endif
         </div>
     </div>

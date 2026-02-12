@@ -70,7 +70,15 @@
                 <div class='{{ $bgBasedMood[$mood] }} rounded-full w-2 h-2'></div>
                 <h1 class="">{{ $followingCount . ' Following' }}</h1>
             </div>
-            <x-button :mood='$mood' content='Following' class='w-max px-2' style="zoom:0.85;"></x-button>
+            @if ($user->id !== $mainUser->id)
+                <livewire:user.button-follow
+                    :userId="$user->id"
+                    :mood="$mood"
+                    customClass="w-max px-2"
+                    :wire:key="'mobile-follow-'.$user->id"
+                />
+            @endif
+            <!-- <x-button :mood='$mood' content='Following' class='w-max px-2' style="zoom:0.85;"></x-button> -->
         </div>
     </div>
 </div>
@@ -83,7 +91,15 @@
     @endif
     <div class='absolute flex flex-col gap-2 w-full h-2/5 bg-linear-to-t from-shadedOfGray-85 to-white/30 bottom-0 left-0 group-hover:border-t-4 group-hover:border-white duration-150' style="clip-path: polygon(0% 38%, 45% 38%, 55% 0%, 100% 0%, 100% 100%, 0% 100%);">
         <div class='w-full h-max flex justify-end' style="zoom:0.725;">
-            <x-button content='Following' :mood='$mood' class='w-max mr-3 mt-3.5'></x-button>
+            <!-- <x-button content='Following' :mood='$mood' class='w-max mr-3 mt-3.5'></x-button> -->
+             @if ($user->id !== $mainUser->id)
+                <livewire:user.button-follow
+                    :userId="$user->id"
+                    :mood="$mood"
+                    customClass="w-max mr-3 mt-3.5"
+                    :wire:key="'desktop-follow-'.$user->id"
+                />
+            @endif
         </div>
         <div class='w-full flex flex-col gap-1 items-start font-secondaryAndButton text-white px-3 pt-2'>
             <div class='flex flex-row items-center gap-2 w-full'>

@@ -2,43 +2,63 @@
 namespace App\Livewire\User;
 
 use App\Models\Follow;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
 class ButtonFollow extends Component
 {
+    public $userId;
+
     public $isFollowing = false;
     public $mood        = 'happy';
-    public $thread;
-    public function mount($thread)
+    public $customClass = '';
+
+    public function mount($userId, $mood = 'happy', $customClass = '')
     {
-        $this->thread      = $thread;
-        $this->mood        = session('chooseMood');
-        $this->isFollowing = Follow::where('followedId', $thread->user->id)->exists();
+        $this->userId      = $userId;
+        $this->mood        = $mood;
+        $this->customClass = $customClass;
+
+        if (Auth::check()) {
+            $this->isFollowing = Follow::where('userId', Auth::id())
+                ->where('followedId', $this->userId)
+                ->exists();
+        }
     }
 
     public function toggle()
     {
-        $following = Follow::where('followedId', $this->thread->user->id)->first();
+        if (! Auth::check()) {
+            return redirect()->route('login');
+        }
+
+        $currentUserId = Auth::id();
+
+        $following = Follow::where('userId', $currentUserId)
+            ->where('followedId', $this->userId)
+            ->first();
+
         if ($following) {
             $following->delete();
             $status = false;
         } else {
             Follow::create([
-                'userId'     => auth()->user()->id,
-                'followedId' => $this->thread->user->id,
+                'userId'     => $currentUserId,
+                'followedId' => $this->userId,
             ]);
             $status = true;
         }
 
         $this->isFollowing = $status;
-        $this->dispatch('follow-status-changed', followedId: $this->thread->user->id, status: $status);
+
+        $this->dispatch('follow-status-changed', followedId: $this->userId, status: $status);
     }
 
     #[On('follow-status-changed')]
     public function updateFollowStatus($followedId, $status)
     {
-        if ($this->thread->user->id == $followedId) {
+        if ($this->userId == $followedId) {
             $this->isFollowing = $status;
         }
     }
