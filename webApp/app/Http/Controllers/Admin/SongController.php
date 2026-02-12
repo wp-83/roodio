@@ -91,11 +91,14 @@ class SongController extends Controller
                 'file',
                 file_get_contents($song->getRealPath()),
                 $song->getClientOriginalName()
-            )->post($apiUrl);
+            )->post($apiUrl, [
+                'lyrics' => $validated['lyrics'],
+            ]);
 
             if ($response->successful()) {
-                $result = $response->json();
-                $moodId = $result['data']['mood_id'] ?? null;
+                $result         = $response->json();
+                $moodId         = $result['data']['mood_id'] ?? null;
+                $moodConfidence = $result['data']['confidence'] ?? null;
             } else {
                 return back()->withErrors(['api' => 'AI Server Error: ' . $response->body()]);
             }
@@ -110,7 +113,8 @@ class SongController extends Controller
         $datas['photoPath'] = $photoPath;
         $datas['userId']    = Auth::id();
 
-        $datas['moodId'] = $moodId;
+        $datas['moodId']     = $moodId;
+        $datas['confidence'] = $moodConfidence;
 
         unset($datas['song']);
         unset($datas['photo']);

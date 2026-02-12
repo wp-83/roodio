@@ -5,7 +5,6 @@ use App\Models\Reactions;
 use App\Models\Reply;
 use App\Models\Thread;
 use App\Models\User;
-
 use function Symfony\Component\Clock\now;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,13 +21,14 @@ class ThreadController extends Controller
         $user     = auth()->user();
 
         $filter = $request->get('filter', 'all');
-        $query = Thread::withCount('reactions')->orderByDesc('created_at');
-        
+        $query  = Thread::withCount('reactions')->orderByDesc('created_at');
+
         if ($filter == 'created') {
             $query->where('userId', $user->id);
-        } elseif ($filter == 'following'){
-
-        };
+        } else if ($filter == 'following') {
+            $followingIds = $user->followings()->pluck('users.id');
+            $query->whereIn('userId', $followingIds);
+        }
 
         $threads = $query->get();
         return view('main.threads.index', compact('threads', 'mood', 'fullname', 'user'));

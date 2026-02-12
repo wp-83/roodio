@@ -46,13 +46,13 @@
             <p class='text-white text-body-size font-secondaryAndButton w-max px-3 py-1 rounded-md '>Showing {{ $mainUser->followings()->count() . ' ' . (($mainUser->followings()->count() > 1 ? 'people' : 'person'))}} </p>
         @endif
 
-        <div class="w-full mt-4 grid grid-cols-1 justify-items-center md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-7 md:gap-9 contentFadeLoad">    
+        <div class="w-full mt-4 grid grid-cols-1 justify-items-center md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-7 md:gap-9 contentFadeLoad">
             @foreach($users as $user)
             @php
                     $username = $user->username;
-                    $fullname = $user->userDetail->fullname;
-                    $profilePhoto = $user->userDetail->profilePhoto;
-                    $createdAt = floor($user->userDetail->created_at->diffInYears(now()));
+                    $fullname = $user->userDetail?->fullname;
+                    $profilePhoto = $user->userDetail?->profilePhoto;
+                    $createdAt = floor($user->userDetail?->created_at->diffInYears(now()));
                     $followerCount = $user->followers()->count();
                     $followingCount = $user->followings()->count();
                     $checkSelfProfile = !($user->id == $mainUser->id);

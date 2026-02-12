@@ -25,6 +25,7 @@ return new class extends Migration
                 ->on('Moods')
                 ->noActionOnDelete()
                 ->noActionOnUpdate();
+            $table->integer('confidence');
             $table->string('title', 255);
             $table->text('lyrics');
             $table->string('artist', 255);
