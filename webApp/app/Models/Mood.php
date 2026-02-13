@@ -21,6 +21,11 @@ class Mood extends Model
         return $this->belongsToMany(User::class, 'mood_histories', 'moodId', 'userId');
     }
 
+    public function moods()
+    {
+        return $this->hasMany(MoodHistories::class, 'moodId');
+    }
+
     protected static function booted()
     {
         static::creating(function ($model) {

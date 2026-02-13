@@ -87,6 +87,7 @@
                     :userId="$thread->userId"
                     :mood="$mood"
                     :wire:key="'follow-thread-'.$thread->id"
+                    customStyle="zoom:0.75"
                 />
             @endif
         </div>

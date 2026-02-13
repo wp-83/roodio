@@ -11,6 +11,11 @@ class MoodHistories extends Model
     public $incrementing = false;
     protected $keyType   = 'string';
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'userId');
+    }
+
     public function mood(): BelongsTo
     {
         return $this->belongsTo(Mood::class, 'moodId', 'id');
