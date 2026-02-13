@@ -1,8 +1,6 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Models\Reactions;
-use App\Models\Reply;
 use App\Models\Thread;
 use App\Models\User;
 use function Symfony\Component\Clock\now;
@@ -87,52 +85,52 @@ class ThreadController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function reply(Request $request, Thread $thread)
-    {
-        $request->validate([
-            'content' => "required|min:2|max:255",
-        ]);
+    // public function reply(Request $request, Thread $thread)
+    // {
+    //     $request->validate([
+    //         'content' => "required|min:2|max:255",
+    //     ]);
 
-        $reply             = $request->all();
-        $reply['userId']   = Auth::id();
-        $reply['threadId'] = $thread->id;
+    //     $reply             = $request->all();
+    //     $reply['userId']   = Auth::id();
+    //     $reply['threadId'] = $thread->id;
 
-        Reply::create($reply);
-        return redirect()->route('threads.index', $thread)->with('succes', 'berhasil membuat reply');
-    }
+    //     Reply::create($reply);
+    //     return redirect()->route('threads.index', $thread)->with('succes', 'berhasil membuat reply');
+    // }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function react(string $threadId)
-    {
-        $userId = Auth::id();
+    // public function react(string $threadId)
+    // {
+    //     $userId = Auth::id();
 
-        $thread = Thread::where('id', $threadId)->first();
+    //     $thread = Thread::where('id', $threadId)->first();
 
-        if (! $thread) {
-            return response()->json([
-                'message' => 'Thread not found',
-            ], 404);
-        }
+    //     if (! $thread) {
+    //         return response()->json([
+    //             'message' => 'Thread not found',
+    //         ], 404);
+    //     }
 
-        $reaction = Reactions::where('userId', $userId)
-            ->where('threadId', $threadId)
-            ->first();
+    //     $reaction = Reactions::where('userId', $userId)
+    //         ->where('threadId', $threadId)
+    //         ->first();
 
-        if ($reaction) {
-            $reaction->delete();
-        } else {
-            Reactions::create([
-                'userId'   => $userId,
-                'threadId' => $threadId,
-            ]);
-        }
+    //     if ($reaction) {
+    //         $reaction->delete();
+    //     } else {
+    //         Reactions::create([
+    //             'userId'   => $userId,
+    //             'threadId' => $threadId,
+    //         ]);
+    //     }
 
-        $count = Reactions::where('threadId', $threadId)->count();
+    //     $count = Reactions::where('threadId', $threadId)->count();
 
-        return response()->json([
-            'count' => $count,
-        ]);
-    }
+    //     return response()->json([
+    //         'count' => $count,
+    //     ]);
+    // }
 }

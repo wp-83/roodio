@@ -156,7 +156,13 @@
     <div class='columns-1 md:columns-2 lg:columns-3 2xl:columns-4 gap-5 2xl:gap-3 contentFadeLoad'>
         @forelse($threads as $thread)
             <div class='break-inside-avoid mb-5'>
-                <x-threadBox mood='{{ $mood }}' creator="{{ $thread->user->userDetail->fullname }}" profilePicture='{{ $thread->user->userDetail->profilePhoto }}' createdAt="{{ \Carbon\Carbon::parse($thread->created_at)->diffForHumans() }}" title="{{ $thread->title }}" content="{{ $thread->content }}" :thread='$thread' :isReplyable='$thread->isReplyable' :mainUser='$user'></x-threadBox>
+                <livewire:user.thread-box
+                    :thread="$thread"
+                    :mainUser="$user"
+                    :mood="$mood"
+                    :isReplyable="$thread->isReplyable"
+                    :wire:key="'thread-box-'.$thread->id"
+                />
             </div>
         @empty
             <p class='text-white font-secondaryAndButton text-small md:text-body-size'>There is no thread posted.</p>
