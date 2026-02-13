@@ -64,7 +64,7 @@
             <p class='text-body-size font-bold {{ $textMoodStyle[$mood] }}'>{{ Str::limit($fullname, 18) }}</p>
             <p class='text-small italic'>{{ '@' . $username }}</p>
         </div>
-        <div class='flex flex-col'>
+        <div class='flex flex-col gap-1'>
             <div class='flex flex-row items-center justify-center gap-2 text-micro'>
                 <h1 class="">{{ $followerCount . ' Follower' . (($followerCount > 1) ? 's' : '') }}</h1>
                 <div class='{{ $bgBasedMood[$mood] }} rounded-full w-2 h-2'></div>
@@ -74,7 +74,7 @@
                 <livewire:user.button-follow
                     :userId="$user->id"
                     :mood="$mood"
-                    customClass="w-max px-2"
+                    customClass="w-max"
                     :wire:key="'mobile-follow-'.$user->id"
                 />
             @endif
@@ -90,8 +90,7 @@
         <img src="{{ asset('assets/defaults/user.jpg') }}" alt="userDefault" class='w-full h-full object-cover opacity-75'>
     @endif
     <div class='absolute flex flex-col gap-2 w-full h-2/5 bg-linear-to-t from-shadedOfGray-85 to-white/30 bottom-0 left-0 group-hover:border-t-4 group-hover:border-white duration-150' style="clip-path: polygon(0% 38%, 45% 38%, 55% 0%, 100% 0%, 100% 100%, 0% 100%);">
-        <div class='w-full h-max flex justify-end' style="zoom:0.725;">
-            <!-- <x-button content='Following' :mood='$mood' class='w-max mr-3 mt-3.5'></x-button> -->
+        <div class='w-full h-max flex justify-end' style="zoom:0.775;">
              @if ($user->id !== $mainUser->id)
                 <livewire:user.button-follow
                     :userId="$user->id"

@@ -13,12 +13,14 @@ class ButtonFollow extends Component
     public $isFollowing = false;
     public $mood        = 'happy';
     public $customClass = '';
+    public $customStyle = '';
 
-    public function mount($userId, $mood = 'happy', $customClass = '')
+    public function mount($userId, $mood = 'happy', $customClass = '', $customStyle = '')
     {
         $this->userId      = $userId;
         $this->mood        = $mood;
         $this->customClass = $customClass;
+        $this->customStyle = $customStyle;
 
         if (Auth::check()) {
             $this->isFollowing = Follow::where('userId', Auth::id())
