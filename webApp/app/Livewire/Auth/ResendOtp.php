@@ -10,7 +10,7 @@ class ResendOtp extends Component
     public $fullname;
     public $email;
     public $gender;
-    public $secondsRemaining = 60; // Default awal
+    public $secondsRemaining = 60;
 
     public function mount(OtpController $otpController)
     {
@@ -18,7 +18,7 @@ class ResendOtp extends Component
             $validated      = session('register.step1');
             $this->email    = $validated['email'];
             $this->fullname = $validated['fullname'];
-            $this->gender   = $validated['gender'];
+            $this->gender   = $validated['gender'] == "null" ? 9 : $validated['gender'];
         } else if (session('forgot.step1')) {
             $validated      = session('forgot.step1');
             $this->email    = $validated['email'];

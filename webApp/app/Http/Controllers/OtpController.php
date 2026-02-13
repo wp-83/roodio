@@ -3,7 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\EmailOtp;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Mail;
+use Mail;
 
 class OtpController extends Controller
 {
