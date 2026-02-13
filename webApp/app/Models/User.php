@@ -64,6 +64,11 @@ class User extends Authenticatable
         return $this->hasOne(userDetails::class, 'userId', 'id');
     }
 
+    public function moodHistories()
+    {
+        return $this->hasMany(MoodHistories::class, 'userId');
+    }
+
     public function moods()
     {
         return $this->belongsToMany(Mood::class, 'mood_histories', 'userId', 'moodId');

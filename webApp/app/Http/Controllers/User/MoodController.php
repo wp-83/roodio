@@ -5,6 +5,8 @@ use App\Http\Controllers\Controller;
 use App\Models\MoodHistories;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\Models\Mood;
+use Illuminate\Support\Facades\DB;
 
 class MoodController extends Controller
 {
@@ -14,11 +16,30 @@ class MoodController extends Controller
 
         $startOfWeek = Carbon::now()->startOfWeek();
         $endOfWeek   = Carbon::now()->endOfWeek();
-        $weekly      = MoodHistories::whereBetween('created_at', [$startOfWeek, $endOfWeek])->get();
+        // $weekly      = MoodHistories::whereBetween('created_at', [$startOfWeek, $endOfWeek])->get();
+        // $weekly      = auth()->user()->moods()->whereBetween('mood_histories.created_at', [$startOfWeek, $endOfWeek])->get();
+        $weekly = auth()->user()
+            ->moodHistories()
+            ->with('mood')
+            ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
+            ->select('moodId', DB::raw('COUNT(*) as total'))
+            ->groupBy('moodId')
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'id'    => $item->mood->id,
+                    'type'  => $item->mood->type,
+                    'total' => $item->total, 
+                ];
+            });
+
+        // dd($weekly);    
+        // $mood = new Mood();
+        // $weekly = $mood->moods();
 
         $startOfMonth = Carbon::now()->startOfMonth();
         $endOfMonth   = Carbon::now()->endOfMonth();
-        $monthly      = MoodHistories::whereBetween('created_at', [$startOfMonth, $endOfMonth])->get();
+        $monthly      = MoodHistories::whereBetween('created_at', [$startOfMonth, $endOfMonth])->get()->groupBy('moodId');
 
         $startOfYearly = Carbon::now()->startOfMonth();
         $endOfYearly   = Carbon::now()->endOfMonth();
