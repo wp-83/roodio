@@ -162,6 +162,7 @@
                 </a>
             </div>
         </div>
+        @if($showSearch)
         <div class='w-xl h-max hidden lg:inline relative transition-transform duration-500 ease-out group' id='searchbar'>
             <x-input type='search' :mood='$mood' id='search' placeholder='Search songs, artists, lyrics'></x-input>
             <div class='absolute top-1/2 right-4 flex flex-row -translate-y-1/2 opacity-50 group-focus-within:hidden' id='searchContent'>
@@ -170,7 +171,9 @@
                 <div class='border-[0.5px] border-shadedOfGray-50 bg-shadedOfGray-20 font-secondaryAndButton px-1 py-[0.25px] rounded-md text-micro text-shadedOfGray-85'>K</div>
             </div>
         </div>
+        @endif
         <div class=' flex flex-row items-center justify-end gap-5'>
+            @if($showSearch)
             <div class='w-8 h-8 lg:hidden cursor-pointer' id='searchIcon'>
                 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 
@@ -185,6 +188,7 @@
 
                     </svg>
             </div>
+            @endif
             <div class='flex flex-row items-center cursor-pointer' id='currentMood'>
                 <p class='text-primary-70 font-secondaryAndButton text-small {{ $softStyle[$mood] }} pr-5 relative -right-3 pl-2 rounded-md py-0.5 hidden lg:block'>{{ Str::ucfirst($mood) }}</p>
                 <div class='w-10 h-10 rounded-full p-0.5 relative z-5 {{ $contrastStyle[$mood] }}'>

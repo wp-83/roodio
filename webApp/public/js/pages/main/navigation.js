@@ -1,96 +1,86 @@
 const searchInput = document.getElementById('search');
+const searchbar = document.getElementById('searchbar');
 
-// shortcut for search bar in navbar
-document.addEventListener('keydown', (e) => {
-    // Check for Ctrl key (or Cmd key on macOS) and the K key
-    if ((e.ctrlKey || e.metaKey) && (e.key === 'K' || e.key === 'k')) {
-        // Prevent the default browser behavior for Ctrl+K (usually bookmarking)
-        e.preventDefault();
-
-        // If the input element exists, focus it
-        if (searchInput) {
+if (searchInput && searchbar) {
+    // shortcut for search bar in navbar
+    document.addEventListener('keydown', (e) => {
+        // Check for Ctrl key (or Cmd key on macOS) and the K key
+        if ((e.ctrlKey || e.metaKey) && (e.key === 'K' || e.key === 'k')) {
+            // Prevent the default browser behavior for Ctrl+K (usually bookmarking)
+            e.preventDefault();
             searchInput.focus();
         }
-    }
 
-    // Optional: Add an 'Escape' key listener to blur the input
-    if (e.key === 'Escape') {
-        if (searchInput) {
+        // Optional: Add an 'Escape' key listener to blur the input
+        if (e.key === 'Escape') {
             searchInput.blur();
         }
-    }
-});
+    });
 
-// remove input while the close icon click
-const deleteSearchIcon = document.getElementById('searchClose');
-deleteSearchIcon.addEventListener('mousedown', (e) => {
-    // prevent default browser behaviour
-    e.preventDefault();
+    // remove input while the close icon click
+    const deleteSearchIcon = document.getElementById('searchClose');
+    if (deleteSearchIcon) {
+        deleteSearchIcon.addEventListener('mousedown', (e) => {
+            // prevent default browser behaviour
+            e.preventDefault();
 
-    // set search bar value into empty
-    const searchBar = document.getElementById('search');
-    searchBar.value = '';
+            // set search bar value into empty
+            searchInput.value = '';
 
-    // make the search bar keep focus
-    setTimeout(() => {
-        searchBar.focus();
-    }, 0);
-});
-
-// search bar icon behaviour
-const searchbar = document.getElementById('searchbar');
-const searchIcon = document.getElementById('searchIcon');
-const searchAttr = searchbar.querySelector('#searchContent');
-let isSearchBarOpened = false;
-
-// open the search bar responsive
-function openSearchBar(){
-    isSearchBarOpened = true;
-    searchbar.classList.add("absolute", 'z-10', 'top-[10%]', 'left-1/2', '-translate-x-1/2', 'w-sm');
-    searchAttr.classList.add('hidden');
-    searchbar.classList.remove('hidden', 'relative', 'w-xl', 'h-max');
-
-    searchInput.focus();
-};
-
-// close the search bar responsive
-function closeSearchBar(){
-    isSearchBarOpened = false;
-    searchbar.classList.add('-z-1');
-    searchbar.classList.add('hidden', 'w-xl', 'relative', 'h-max');
-    searchbar.classList.remove('z-10', 'top-[10%]', 'left-1/2', '-translate-x-1/2', 'w-sm');
-    searchbar.classList.remove('absolute', '-z-1');
-    searchAttr.classList.remove('hidden');
-};
-
-// search bar responsive trigger
-searchIcon.addEventListener('click', () => {
-    (isSearchBarOpened) ? closeSearchBar() : openSearchBar();
-});
-
-// document.addEventListener('mousedown')
-document.addEventListener('mousedown', (e) => {
-    const isClickInsideSearch = (searchbar.contains(e.target) || searchIcon.contains(e.target));
-
-    if (!isClickInsideSearch && isSearchBarOpened) {
-        closeSearchBar();
+            // make the search bar keep focus
+            setTimeout(() => {
+                searchInput.focus();
+            }, 0);
+        });
     }
 
-    // profile popup close
-    if(!profileContent.contains(e.target)){
-        profilePopup.classList.add('opacity-0', 'invisible');
+    // search bar icon behaviour
+    const searchIcon = document.getElementById('searchIcon');
+    const searchAttr = searchbar.querySelector('#searchContent');
+    let isSearchBarOpened = false;
+
+    // open the search bar responsive
+    function openSearchBar() {
+        isSearchBarOpened = true;
+        searchbar.classList.add("absolute", 'z-10', 'top-[10%]', 'left-1/2', '-translate-x-1/2', 'w-sm');
+        if (searchAttr) searchAttr.classList.add('hidden');
+        searchbar.classList.remove('hidden', 'relative', 'w-xl', 'h-max');
+
+        searchInput.focus();
+    };
+
+    // close the search bar responsive
+    function closeSearchBar() {
+        isSearchBarOpened = false;
+        searchbar.classList.add('-z-1');
+        searchbar.classList.add('hidden', 'w-xl', 'relative', 'h-max');
+        searchbar.classList.remove('z-10', 'top-[10%]', 'left-1/2', '-translate-x-1/2', 'w-sm');
+        searchbar.classList.remove('absolute', '-z-1');
+        if (searchAttr) searchAttr.classList.remove('hidden');
+    };
+
+    // search bar responsive trigger
+    if (searchIcon) {
+        searchIcon.addEventListener('click', () => {
+            (isSearchBarOpened) ? closeSearchBar() : openSearchBar();
+        });
     }
 
-    // mood popup close
-    if(!moodContent.contains(e.target)){
-        moodPopup.classList.add('opacity-0', 'invisible');
-    }
-});
+    // document.addEventListener('mousedown')
+    document.addEventListener('mousedown', (e) => {
+        const isClickInsideSearch = (searchbar.contains(e.target) || (searchIcon && searchIcon.contains(e.target)));
 
-// back to the default style of searchbar after responsive behaviour
-window.addEventListener('resize', () => {
-    if(isSearchBarOpened && window.innerWidth >= 768) closeSearchBar();
-});
+        if (!isClickInsideSearch && isSearchBarOpened) {
+            closeSearchBar();
+        }
+    });
+
+    // back to the default style of searchbar after responsive behaviour
+    window.addEventListener('resize', () => {
+        if (isSearchBarOpened && window.innerWidth >= 768) closeSearchBar();
+    });
+}
+
 
 // sidebar elements
 const hamburgerBtn = document.getElementById('hamburgerBtn');
@@ -173,7 +163,7 @@ function isMobile() {
 function handleResponsive() {
     if (isMobile()) {
         sidebar.classList.add('absolute');
-        if(sidebar.classList.contains('relative')) sidebar.classList.remove('relative');
+        if (sidebar.classList.contains('relative')) sidebar.classList.remove('relative');
 
         if (!isSidebarOpen) {
             sidebar.classList.add('-translate-x-full');
@@ -193,8 +183,8 @@ hamburgerBtn.addEventListener('click', () => {
 window.addEventListener('resize', handleResponsive);
 
 // popup behaviour
-function popupBehaviour(element){
-    if(element.classList.contains('invisible')) element.classList.remove('opacity-0', 'invisible');
+function popupBehaviour(element) {
+    if (element.classList.contains('invisible')) element.classList.remove('opacity-0', 'invisible');
     else element.classList.add('opacity-0', 'invisible');
 }
 
@@ -221,4 +211,17 @@ const moodContent = moodPopup.querySelector('.popupContent');
 // event trigger for mood
 moodArea.addEventListener('click', () => {
     popupBehaviour(moodPopup);
+});
+
+// close popups on outside click
+document.addEventListener('mousedown', (e) => {
+    // profile popup close
+    if (!profileContent.contains(e.target)) {
+        profilePopup.classList.add('opacity-0', 'invisible');
+    }
+
+    // mood popup close
+    if (!moodContent.contains(e.target)) {
+        moodPopup.classList.add('opacity-0', 'invisible');
+    }
 });
