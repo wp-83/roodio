@@ -12,10 +12,14 @@ class MoodController extends Controller
 {
     public function index()
     {
+        $user = auth()->user();
         $moods = MoodHistories::get();
 
         $startOfWeek = Carbon::now()->startOfWeek();
         $endOfWeek   = Carbon::now()->endOfWeek();
+        $today = Carbon::now();
+
+        $endDate = $today->lessThan($endOfWeek) ? $today : $endOfWeek;
         // $weekly      = MoodHistories::whereBetween('created_at', [$startOfWeek, $endOfWeek])->get();
         // $weekly      = auth()->user()->moods()->whereBetween('mood_histories.created_at', [$startOfWeek, $endOfWeek])->get();
         $weekly = auth()->user()
@@ -25,13 +29,13 @@ class MoodController extends Controller
             ->select('moodId', DB::raw('COUNT(*) as total'))
             ->groupBy('moodId')
             ->get()
-            ->map(function ($item) {
-                return [
-                    'id'    => $item->mood->id,
-                    'type'  => $item->mood->type,
-                    'total' => $item->total, 
-                ];
-            });
+            ->map(fn($item) => [
+                'id'        => $item->mood->id,
+                'type'      => $item->mood->type,
+                'total'     => $item->total,
+                'startDate' => $startOfWeek->format('F jS, Y'),
+                'endDate'   => $endDate->format('F jS, Y')
+            ]);
 
         // dd($weekly);    
         // $mood = new Mood();
@@ -39,15 +43,66 @@ class MoodController extends Controller
 
         $startOfMonth = Carbon::now()->startOfMonth();
         $endOfMonth   = Carbon::now()->endOfMonth();
-        $monthly      = MoodHistories::whereBetween('created_at', [$startOfMonth, $endOfMonth])->get()->groupBy('moodId');
+        // $monthly      = MoodHistories::whereBetween('created_at', [$startOfMonth, $endOfMonth])->get()->groupBy('moodId');
+$monthly = auth()->user()
+    ->moodHistories()
+    ->join('moods', 'mood_histories.moodId', '=', 'moods.id')
+    ->whereBetween('mood_histories.created_at', [$startOfMonth, $endOfMonth])
+    ->select(
+        DB::raw('DATE(mood_histories.created_at) as date'),
+        'moods.id as mood_id',
+        'moods.type as mood_type',
+        DB::raw('COUNT(*) as total')
+    )
+    ->groupBy('date', 'moods.id', 'moods.type')
+    ->get()
+    ->groupBy('date')
+    ->map(function ($dayGroup) {
+
+        $dominant = $dayGroup->sortByDesc('total')->first();
+
+        return [
+            'date'  => $dominant->date,
+            'id'    => $dominant->mood_id,
+            'type'  => $dominant->mood_type,
+            'total' => $dominant->total,
+        ];
+    })
+    ->values();
 
         $startOfYearly = Carbon::now()->startOfMonth();
         $endOfYearly   = Carbon::now()->endOfMonth();
-        $yearly        = MoodHistories::whereBetween('created_at', [$startOfYearly, $endOfYearly])->get();
+        // $yearly        = MoodHistories::whereBetween('created_at', [$startOfYearly, $endOfYearly])->get();
+        $yearly = auth()->user()
+    ->moodHistories()
+    ->join('moods', 'mood_histories.moodId', '=', 'moods.id')
+    ->whereBetween('mood_histories.created_at', [$startOfYearly, $endOfYearly])
+    ->select(
+        DB::raw('MONTH(mood_histories.created_at) as month_number'),
+        DB::raw('DATE_FORMAT(mood_histories.created_at, "%M") as month'),
+        'moods.id as mood_id',
+        'moods.type as mood_type',
+        DB::raw('COUNT(*) as total')
+    )
+    ->groupBy('month_number', 'month', 'moods.id', 'moods.type')
+    ->get()
+    ->groupBy('month_number')
+    ->map(function ($monthGroup) {
+
+        $dominant = $monthGroup->sortByDesc('total')->first();
+
+        return [
+            'month' => $dominant->month,
+            'type'  => $dominant->mood_type,
+            'total' => $dominant->total,
+        ];
+    })
+    ->values();
+
 
         $mood = session('chooseMood', 'happy');
-        return view('main.moods.index', compact('weekly', 'monthly', 'yearly', 'mood'));
-    } 
+        return view('main.moods.index', compact('user', 'weekly', 'monthly', 'yearly', 'mood'));
+    }
 
     public function moodStore(Request $request)
     {
