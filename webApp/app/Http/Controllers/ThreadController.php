@@ -18,8 +18,12 @@ class ThreadController extends Controller
         $fullname = auth()->user()->userDetail->fullname;
         $user     = auth()->user();
 
+        $search = $request->get('search');
         $filter = $request->get('filter', 'all');
         $query  = Thread::withCount('reactions')->orderByDesc('created_at');
+
+        // Apply search if provided
+        $query->search($search);
 
         if ($filter == 'created') {
             $query->where('userId', $user->id);
@@ -29,7 +33,7 @@ class ThreadController extends Controller
         }
 
         $threads = $query->get();
-        return view('main.threads.index', compact('threads', 'mood', 'fullname', 'user'));
+        return view('main.threads.index', compact('threads', 'mood', 'fullname', 'user', 'search'));
     }
 
     /**
