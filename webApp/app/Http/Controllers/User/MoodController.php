@@ -47,7 +47,7 @@ class MoodController extends Controller
 
         $mood = session('chooseMood', 'happy');
         return view('main.moods.index', compact('weekly', 'monthly', 'yearly', 'mood'));
-    }
+    } 
 
     public function moodStore(Request $request)
     {
