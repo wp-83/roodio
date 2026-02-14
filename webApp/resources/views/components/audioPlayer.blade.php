@@ -65,7 +65,7 @@
 @endphp
 
 
-<x-modal modalId='audioControlPopup' additionalStyle='absolute right-5 bottom-18' :isNeedBg='true'>
+<x-modal modalId='audioControlPopup' additionalStyle='absolute right-5 bottom-0' :isNeedBg='true'>
     <x-slot name='body'>
         <div class='w-full flex flex-col gap-2.5 font-secondaryAndButton text-small'>
             @foreach ($audioControlOptions as $audioCtrlOpt)
@@ -80,11 +80,60 @@
     </x-slot>
 </x-modal>
 
-<div id='audioPlayer' class='relative'>
+<div id='audioPlayer' class='relative' x-data="{
+    isExpanded: false,
+    songTitle: '{{ $title }}',
+    songArtist: '{{ $artist }}',
+    songImage: '',
+    init() {
+        window.addEventListener('open-player-popup', () => { this.isExpanded = true; });
+        window.addEventListener('close-player-popup', () => { this.isExpanded = false; });
+        window.addEventListener('song-changed', (e) => {
+            this.songTitle = e.detail.title;
+            this.songArtist = e.detail.artist;
+            this.songImage = e.detail.image;
+        });
+        
+        // Initial sync from DOM if needed
+        const img = document.getElementById('playerImage');
+        if(img) this.songImage = img.src;
+        const ttl = document.getElementById('playerTitle');
+        if(ttl) this.songTitle = ttl.innerText;
+        const art = document.getElementById('playerArtist');
+        if(art) this.songArtist = art.innerText;
+        
+        // Close popup on navigation
+        document.addEventListener('livewire:navigated', () => { this.isExpanded = false; });
+    }
+}">
+
+    <!-- Full Screen Popup -->
+    <div
+        class="fixed left-0 right-0 z-[8] bg-primary-100 transition-all duration-500 ease-in-out flex flex-col"
+        :class="isExpanded ? 'top-16 bottom-[5.5rem] opacity-100 visible' : 'top-full bottom-0 opacity-0 invisible'"
+    >
+        <div class="flex-1 flex flex-col items-center justify-center p-10 gap-6 overflow-y-auto">
+             <div class="w-64 h-64 md:w-96 md:h-96 rounded-2xl overflow-hidden shadow-2xl relative group">
+                <img :src="songImage" alt="Album Art" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-black/20 hidden group-hover:block transition-all"></div>
+             </div>
+             <div class="text-center text-white space-y-2">
+                <h2 class="text-2xl md:text-3xl font-bold" x-text="songTitle"></h2>
+                <p class="text-lg md:text-xl text-primary-40" x-text="songArtist"></p>
+             </div>
+             
+             <!-- Close Button (Chevron Down) -->
+             <button @click="isExpanded = false" class="mt-4 p-2 rounded-full hover:bg-white/10 transition-colors">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6 9L12 15L18 9" stroke="{{ $elementStyle[$mood] }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+             </button>
+        </div>
+    </div>
     <div id='overlayNan' class='hidden absolute bottom-0 z-10 h-23.25 w-full bg-shadedOfGray-85/50 cursor-not-allowed'></div>
     <audio id='audio'></audio>
-    <!-- Increased hit area for progress bar -->
-    <div id="progressContainer" class="w-full h-4 -mt-2 bg-transparent cursor-pointer flex items-center group relative z-20">
+    <!-- Increased hit area for progress bar - Positioned Absolutely to prevent layout space -->
+    <div id="progressContainer" class="w-full h-4 absolute -top-2 left-0 bg-transparent cursor-pointer flex items-center group z-20">
         <div class="w-full h-1.25 bg-white group-hover:h-2 transition-all duration-200">
              <div id="progressBar" class="{{ 'h-full w-0 ' . $mainBtnStyle[$mood] . ' ' }}"></div>
         </div>
@@ -227,8 +276,15 @@
                     </div>
                     <input type="range" name="" id="volumeSlider" min='0' max='1' step='0.01' class='{{ 'w-28 ' . $sliderStyle[$mood] . ' ' }}'>
                 </div>
+                <!-- Expand Button - Placed INSIDE the hidden lg:flex div to align with other controls -->
+                <div class="flex items-center justify-center cursor-pointer p-0.5 rounded-full hover:bg-white/10 transition-all h-9 w-9" @click="isExpanded = !isExpanded" title="Expand Player">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" :class="isExpanded ? 'rotate-180' : ''" class="transition-transform duration-300">
+                        <path d="M18 15L12 9L6 15" stroke="{{ $elementStyle[$mood] }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
             </div>
             <x-iconButton type='kebab' :mood='$mood' class='lg:hidden' id='audioControlResponsive'></x-iconButton>
         </div>
     </div>
 </div>
+```

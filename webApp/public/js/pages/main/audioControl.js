@@ -30,6 +30,7 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
         let isMuted = false;
         let isLoop = false;
         let isShuffle = false;
+        let hasPlayedOnce = false;
 
         // load all songs in playlist
         function loadSong(index) {
@@ -46,6 +47,15 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
             if (playerTitle) playerTitle.textContent = song.title || 'Unknown Title';
             if (playerArtist) playerArtist.textContent = song.artist || 'Unknown Artist';
             if (playerImage) playerImage.src = song.image || '';
+
+            // Dispatch event for Alpine.js popup
+            window.dispatchEvent(new CustomEvent('song-changed', {
+                detail: {
+                    title: song.title || 'Unknown Title',
+                    artist: song.artist || 'Unknown Artist',
+                    image: song.image || ''
+                }
+            }));
 
             audio.load();
             if (!isSongNan() && overlayAudioPlay) overlayAudioPlay.classList.add('hidden');
@@ -87,6 +97,12 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
                     isPlay = true;
                     playBtn.classList.add('hidden');
                     pauseBtn.classList.remove('hidden');
+
+                    // Auto-open popup on first play
+                    if (!hasPlayedOnce) {
+                        hasPlayedOnce = true;
+                        window.dispatchEvent(new CustomEvent('open-player-popup'));
+                    }
                 }).catch(e => console.error("Play error:", e));
             }
         };
