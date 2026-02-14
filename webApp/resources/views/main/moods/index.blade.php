@@ -23,12 +23,27 @@
     $startDate = $weekly[0]['startDate']; 
     $endDate = $weekly[0]['endDate'];
 
+    $firstMonth = $yearly->first();  
+    $lastMonth = $yearly->last();           
+    $startMonth = $firstMonth['bulan'] ?? 'January';
+    $endMonth = $lastMonth['bulan'] ?? 'December';
+    $yearMonth = date('Y');         
+
     $calendarData = $monthly->map(function ($item) {
         return [
             'title' => $item['type'],
             'start' => $item['date'],   
             'total' => $item['total'],
             'type'  => $item['type'],
+        ];
+    });
+
+    $yearlyData = $yearly->map(function($item) {
+        return [
+            'mood' => $item['type'] ?? $item['mood'] ?? 'happy',
+            'bulan' => $item['bulan'] ?? $item['month'] ?? 'Unknown',
+            'total' => $item['total'] ?? 0,
+            'persentase' => $item['persentase'] ?? '0%'
         ];
     });
 
@@ -45,6 +60,13 @@
         'relaxed' => 'text-secondary-relaxed-50',
         'angry' => 'text-secondary-angry-50'
     ];
+
+    $borderMood = [
+        'happy' => 'border-secondary-happy-70',
+        'sad' => 'border-secondary-sad-70',
+        'relaxed' => 'border-secondary-relaxed-70',
+        'angry' => 'border-secondary-angry-70'
+    ];
 @endphp
 
 
@@ -57,6 +79,9 @@
     
     // monthly json data
     window.calendarData = @json($calendarData->values()->toArray());
+
+    // yearly json data
+    window.moodYearlyData = @json($yearlyData);
 
     window.moodIcons = {
         happy: "{{ asset('assets/moods/icons/happy.png') }}",
@@ -126,7 +151,7 @@
         </div>
     </div> --}}
 
-    <div id='monthlyMood' class='contentFadeLoad'>
+    {{-- <div id='monthlyMood' class='contentFadeLoad'>
         <p class='w-full flex justify-center font-primary text-body-size md:text-paragraph lg:text-subtitle font-bold {{ $textColorTitleChart[$mood] }}'>MONTHLY MOOD RECAP</p>
         <div id='timeCalendar' class='w-full flex flex-row items-center justify-center gap-2 mb-7 font-secondaryAndButton text-white text-micro md:text-body-size'>
             <p id='month'></p>
@@ -150,190 +175,13 @@
             </div>
         </div>
         <div id="calendar"></div>
+    </div> --}}
+
+    <div id='yearlyMood' class='contentFadeLoad'>
+        <div class='w-full flex flex-col items-center mb-10'>
+            <p class='font-primary text-body-size md:text-paragraph lg:text-subtitle font-bold {{ $textColorTitleChart[$mood] }}'>YEARLY MOOD RECAP</p>
+            <p class='font-secondaryAndButton text-white text-micro md:text-body-size'>{{ $startMonth . ' ' . $yearMonth }} - {{ $endMonth . ' ' . $yearMonth }}</p>
+        </div>
+        <div id="moodYear" class="w-full h-[70vh] sm:h-[60vh] md:h-[50vh] lg:h-[60vh] min-h-[320px] max-h-[650px] border-3 {{ $borderMood[$mood] }} rounded-lg overflow-hidden border-t-0"></div>
     </div>
-    
-    {{-- <div id="bubble-container" style="height:600px;"></div> --}}
-    {{-- <div id="bubble-container" style="width:90%; height:600px;"></div> --}}
-
-    {{-- <script>
-
-        // document.addEventListener("DOMContentLoaded", function () {
-
-        //     const { Engine, Render, Runner, Bodies, World, Mouse, MouseConstraint, Events, Body } = Matter;
-
-        //     const container = document.getElementById('bubble-container');
-        //     const width = container.clientWidth;
-        //     const height = container.clientHeight;
-
-        //     const engine = Engine.create();
-        //     const world = engine.world;
-        //     engine.gravity.y = 1;
-
-        //     const render = Render.create({
-        //         element: container,
-        //         engine: engine,
-        //         options: {
-        //             width: width,
-        //             height: height,
-        //             wireframes: false,
-        //             background: '#0b0f2a'
-        //         }
-        //     });
-
-        //     Render.run(render);
-        //     Runner.run(Runner.create(), engine);
-
-        //     // ===== WALLS =====
-        //     World.add(world, [
-        //         Bodies.rectangle(width/2, height+30, width, 60, { isStatic: true }),
-        //         Bodies.rectangle(-30, height/2, 60, height, { isStatic: true }),
-        //         Bodies.rectangle(width+30, height/2, 60, height, { isStatic: true })
-        //     ]);
-
-        //     // ===== DRAG MOUSE =====
-        //     const mouse = Mouse.create(render.canvas);
-        //     const mouseConstraint = MouseConstraint.create(engine, {
-        //         mouse: mouse,
-        //         constraint: { stiffness: 0.2, render: { visible: false } }
-        //     });
-
-        //     World.add(world, mouseConstraint);
-        //     render.mouse = mouse;
-
-        //     // ===== DATA DARI LARAVEL =====
-        //     const yearlyData = @json($yearly);
-
-        //     const moodImages = {
-        //         happy: "{{ asset('assets/moods/icons/happy.png') }}",
-        //         sad: "{{ asset('assets/moods/icons/sad.png') }}",
-        //         relaxed: "{{ asset('assets/moods/icons/relaxed.png') }}"
-        //     };
-
-        //     const textureSize = 512; // ukuran asli PNG kamu
-        //     let moodBodies = [];
-
-        //     // 🎈 BACKGROUND BALLS
-        //     for (let i = 0; i < 35; i++) {
-        //         const ball = Bodies.circle(
-        //             Math.random() * width,
-        //             Math.random() * -600,
-        //             20 + Math.random() * 25,
-        //             {
-        //                 restitution: 0.9,
-        //                 frictionAir: 0.01,
-        //                 render: {
-        //                     fillStyle: `hsl(${Math.random()*360},70%,60%)`
-        //                 }
-        //             }
-        //         );
-        //         World.add(world, ball);
-        //     }
-
-        //     // 😀 MOOD BALLS
-        //     yearlyData.forEach(item => {
-
-        //         const radius = 45;
-        //         const diameter = radius * 2;
-
-        //         const ball = Bodies.circle(
-        //             Math.random() * width,
-        //             -100,
-        //             radius,
-        //             {
-        //                 restitution: 0.9,
-        //                 frictionAir: 0.01,
-        //                 render: {
-        //                     sprite: {
-        //                         texture: moodImages[item.type] ?? '',
-        //                         xScale: 0.05,
-        //                         yScale: 0.05
-        //                     }
-        //                 }
-        //             }
-        //         );
-
-        //         ball.moodData = item;
-        //         moodBodies.push(ball);
-        //         World.add(world, ball);
-        //     });
-
-        //     // ===== BALIKIN KALO KELUAR AREA =====
-        //     Events.on(engine, "afterUpdate", function() {
-
-        //         moodBodies.forEach(body => {
-
-        //             if (body.position.y > height + 200) {
-        //                 Body.setPosition(body, { x: Math.random()*width, y: -100 });
-        //                 Body.setVelocity(body, { x: 0, y: 0 });
-        //             }
-
-        //             if (body.position.x < -200 || body.position.x > width + 200) {
-        //                 Body.setPosition(body, { x: Math.random()*width, y: -100 });
-        //                 Body.setVelocity(body, { x: 0, y: 0 });
-        //             }
-
-        //         });
-
-        //     });
-
-        //     // ===== TOOLTIP STABLE VERSION =====
-        //     let tooltip = null;
-
-        //     render.canvas.addEventListener('mousemove', function(event) {
-
-        //         const rect = render.canvas.getBoundingClientRect();
-        //         const mousePosition = {
-        //             x: event.clientX - rect.left,
-        //             y: event.clientY - rect.top
-        //         };
-
-        //         let hoveredBody = null;
-
-        //         moodBodies.forEach(body => {
-
-        //             const dx = body.position.x - mousePosition.x;
-        //             const dy = body.position.y - mousePosition.y;
-        //             const distance = Math.sqrt(dx*dx + dy*dy);
-
-        //             if (distance < body.circleRadius) {
-        //                 hoveredBody = body;
-        //             }
-
-        //         });
-
-        //         if (hoveredBody) {
-
-        //             const data = hoveredBody.moodData;
-
-        //             if (!tooltip) {
-
-        //                 tooltip = tippy(render.canvas, {
-        //                     content: `
-        //                         <strong>${data.month}</strong><br>
-        //                         Mood: ${data.type}<br>
-        //                         Total: ${data.total}
-        //                     `,
-        //                     allowHTML: true,
-        //                     trigger: 'manual',
-        //                     followCursor: true,
-        //                     placement: 'top'
-        //                 });
-
-        //                 tooltip.show();
-        //             }
-
-        //         } else {
-
-        //             if (tooltip) {
-        //                 tooltip.destroy();
-        //                 tooltip = null;
-        //             }
-
-        //         }
-
-        //     });
-
-        // });
-
-    </script> --}}
 @endsection
