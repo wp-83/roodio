@@ -57,7 +57,7 @@
 @endphp
 
 
-<x-modal modalId='audioControlPopup' additionalStyle='right-5 bottom-18' :isNeedBg='true'>
+<x-modal modalId='audioControlPopup' additionalStyle='absolute right-5 bottom-18' :isNeedBg='true'>
     <x-slot name='body'>
         <div class='w-full flex flex-col gap-2.5 font-secondaryAndButton text-small'>
             @foreach ($audioControlOptions as $audioCtrlOpt)
