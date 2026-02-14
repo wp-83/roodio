@@ -35,6 +35,9 @@
     </div>
 
     <form action="{{ route('socials.index') }}" method="GET">
+        @if(request('search'))
+            <input type="hidden" name="search" value="{{ request('search') }}">
+        @endif
         <div class='mb-7 flex flex-row gap-3 w-full lg:justify-end contentFadeLoad'>
             <x-filterButton id='all' name='filter' value='all' :mood='$mood' label='All Users' onchange="this.form.submit()"></x-filterButton>
             <x-filterButton id='following' name='filter' value='following' :mood='$mood' label='Following Only' onchange="this.form.submit()"></x-filterButton>
@@ -43,7 +46,7 @@
 
     @if (count($users) > 0)
         @if (request('filter') == 'following')
-            <p class='text-white text-body-size font-secondaryAndButton w-max px-3 py-1 rounded-md '>Showing {{ $mainUser->followings()->count() . ' ' . (($mainUser->followings()->count() > 1 ? 'people' : 'person'))}} </p>
+            <p class='text-white text-body-size font-secondaryAndButton w-max px-3 py-1 rounded-md '>Showing {{ count($users) . ' ' . ((count($users) > 1 ? 'people' : 'person'))}} </p>
         @endif
 
         <div class="w-full mt-4 grid grid-cols-1 justify-items-center md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-7 md:gap-9 contentFadeLoad">
