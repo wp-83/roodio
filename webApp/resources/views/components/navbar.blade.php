@@ -72,7 +72,7 @@
         </div>
         <hr class='my-2 border-primary-50'>
         <div class='w-full flex flex-col gap-2.5 font-secondaryAndButton text-small'>
-            <a href="{{ route('user.profile') }}">
+            <a href="{{ route('user.profile') }}" wire:navigate>
                 <div class='h-max rounded-sm px-2 py-1 flex flex-row items-center gap-2.5 {{ $hoverBgMoodStyle[$mood] }}'>
                     <img src="{{ asset('assets/icons/user.svg') }}" alt="user" class='w-7 h-7'>
                     <p class='text-primary-60'>Edit Your Profile</p>
@@ -157,7 +157,7 @@
             <x-iconButton type='hamburger' :mood='$mood'></x-iconButton>
             <div class='w-40'>
                 {{-- Route is not fixed --}}
-                <a href="{{ route('user.index') }}" class='cursor-default'>
+                <a href="{{ route('user.index') }}" wire:navigate class='cursor-default'>
                     <img src="{{ asset('assets/logo/logo-horizontal.png') }}" alt="logo">
                 </a>
             </div>

@@ -1,54 +1,53 @@
-// weekly mood
-document.addEventListener('DOMContentLoaded', function() {    
+const initMoodChart = () => {
     // get the chart container
     const canvas = document.getElementById('moodChart');
     if (!canvas) return;
-    
+
     const ctx = canvas.getContext('2d');
-    
+
     // Get data from window objects
     const moodIcons = window.moodIcons || {};
     const rawData = window.moodWeeklyData || [];
-    
+
     if (rawData.length === 0) return;
-    
+
     // Sort the data from highest to lowest
     rawData.sort((a, b) => b.total - a.total);
-    
+
     // Save the data into variable
     const moodTypes = rawData.map(item => item.type);
     const moodData = rawData.map(item => item.total);
-    
+
     // Load the images
     const images = {};
     let imagesLoaded = 0;
     const totalImages = moodTypes.length;
-    
+
     if (totalImages === 0) {
         renderChart();
         return;
     }
-    
+
     moodTypes.forEach((mood) => {
         const img = new Image();
         img.src = moodIcons[mood.toLowerCase()];
         images[mood] = img;
-        
-        img.onload = function() {
+
+        img.onload = function () {
             imagesLoaded++;
             if (imagesLoaded === totalImages) {
                 renderChart();
             }
         };
-        
-        img.onerror = function() {
+
+        img.onerror = function () {
             imagesLoaded++;
             if (imagesLoaded === totalImages) {
                 renderChart();
             }
         };
     });
-    
+
     // function for rendering chart
     function renderChart() {
         // remove old chart if exist
@@ -56,33 +55,33 @@ document.addEventListener('DOMContentLoaded', function() {
         if (existingChart) {
             existingChart.destroy();
         }
-        
+
         // image plugin in y-axis
         const imagePlugin = {
             id: 'imagePlugin',
-            afterDraw: function(chart) {
+            afterDraw: function (chart) {
                 const ctx = chart.ctx;
                 const xAxis = chart.scales.x;
                 const yAxis = chart.scales.y;
-                
+
                 ctx.save();
-                
+
                 moodTypes.forEach((mood, index) => {
                     const img = images[mood];
-                    
+
                     if (img && img.complete && img.naturalHeight > 0) {
                         const yPos = yAxis.getPixelForValue(index) - 20;
                         ctx.drawImage(img, 5, yPos - 15, 75, 75);
                     }
                 });
-                
+
                 ctx.restore();
-                
+
                 // grid style
                 ctx.save();
                 ctx.strokeStyle = '#ffffff';
                 ctx.lineWidth = 0.5;
-                
+
                 ctx.beginPath();
                 const xTicks = xAxis.ticks;
                 xTicks.forEach(tick => {
@@ -91,23 +90,23 @@ document.addEventListener('DOMContentLoaded', function() {
                     ctx.lineTo(xPos, yAxis.bottom);
                 });
                 ctx.stroke();
-                
+
                 ctx.restore();
             }
         };
-        
+
         new Chart(ctx, {
             type: 'bar',
             data: {
                 labels: moodTypes.map(() => ''),
                 datasets: [{
                     data: moodData,
-                    backgroundColor: function(context) {
+                    backgroundColor: function (context) {
                         const index = context.dataIndex;
                         const mood = moodTypes[index].toLowerCase();
                         return window.moodColors.default[mood];
                     },
-                    hoverBackgroundColor: function(context) {
+                    hoverBackgroundColor: function (context) {
                         const index = context.dataIndex;
                         const mood = moodTypes[index].toLowerCase();
                         return window.moodColors.hover[mood];
@@ -115,7 +114,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     borderRadius: 15,
                     barPercentage: 0.8,
                     categoryPercentage: 0.9,
-                    
+
                     animation: {
                         duration: 1500,
                         easing: 'easeInOutQuad'
@@ -126,20 +125,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 indexAxis: 'y',
                 responsive: true,
                 maintainAspectRatio: false,
-                
+
                 animation: {
                     duration: 1000,
                     easing: 'easeInOutQuad',
-                    
+
                     mode: 'all',
-                    
-                    onProgress: function(context) {
+
+                    onProgress: function (context) {
                         if (context.chart) {
                             context.chart.draw();
                         }
                     }
                 },
-                
+
                 transitions: {
                     show: {
                         animation: {
@@ -158,19 +157,19 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
                     }
                 },
-                
+
                 layout: {
                     padding: {
                         left: 85
                     }
                 },
-                
+
                 elements: {
                     bar: {
                         backgroundColor: 'transparent'
                     }
                 },
-                
+
                 plugins: {
                     legend: {
                         display: false
@@ -182,7 +181,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                         displayColors: false,
                         titleColor: '#1F3A98',
-                        bodyColor: '#000000',  
+                        bodyColor: '#000000',
 
                         titleFont: {
                             family: 'Poppins',
@@ -200,13 +199,13 @@ document.addEventListener('DOMContentLoaded', function() {
                         cornerRadius: 10,
 
                         callbacks: {
-                            title: function(context) {
+                            title: function (context) {
                                 const index = context[0].dataIndex;
                                 const mood = moodTypes[index];
                                 return mood.charAt(0).toUpperCase() + mood.slice(1);
                             },
 
-                            label: function(context) {
+                            label: function (context) {
                                 return `${context.raw} day(s)`;
                             }
                         }
@@ -218,11 +217,11 @@ document.addEventListener('DOMContentLoaded', function() {
                         title: {
                             display: true,
                             text: 'Mood Count',
-                            font: { family:'Aeonik', size: 16},
+                            font: { family: 'Aeonik', size: 16 },
                             color: '#ffffff'
                         },
 
-                        ticks: { 
+                        ticks: {
                             stepSize: 1,
                             color: '#ffffff'
                         },
@@ -240,4 +239,7 @@ document.addEventListener('DOMContentLoaded', function() {
             plugins: [imagePlugin]
         });
     }
-});
+};
+
+document.addEventListener('DOMContentLoaded', initMoodChart);
+document.addEventListener('livewire:navigated', initMoodChart);

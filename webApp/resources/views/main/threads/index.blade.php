@@ -10,7 +10,7 @@
 
 
 @push('script')
-    <script src="{{ asset('js/pages/main/thread.js') }}" defer></script>
+    <script src="{{ asset('js/pages/main/thread.js?v=2') }}" defer></script>
 @endpush
 
 

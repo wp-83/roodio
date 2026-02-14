@@ -84,7 +84,7 @@
 @endphp
 
 
-<a href="{{ route($route, $params) }}" class="{{ ($isActive) ? '' : 'group' }} w-fit inline-block " style="{{ ($isActive) ? 'pointer-events: none;' : '' }}">
+<a href="{{ route($route, $params) }}" wire:navigate class="{{ ($isActive) ? '' : 'group' }} w-fit inline-block " style="{{ ($isActive) ? 'pointer-events: none;' : '' }}">
     <div class="relative font-secondaryAndButton" id='notToggleSidebar'>
         <div
             {{ $attributes->merge([
