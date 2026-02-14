@@ -17,6 +17,9 @@ class MoodController extends Controller
 
         $startOfWeek = Carbon::now()->startOfWeek();
         $endOfWeek   = Carbon::now()->endOfWeek();
+        $today = Carbon::now();
+
+        $endDate = $today->lessThan($endOfWeek) ? $today : $endOfWeek;
         // $weekly      = MoodHistories::whereBetween('created_at', [$startOfWeek, $endOfWeek])->get();
         // $weekly      = auth()->user()->moods()->whereBetween('mood_histories.created_at', [$startOfWeek, $endOfWeek])->get();
         $weekly = auth()->user()
@@ -26,13 +29,13 @@ class MoodController extends Controller
             ->select('moodId', DB::raw('COUNT(*) as total'))
             ->groupBy('moodId')
             ->get()
-            ->map(function ($item) {
-                return [
-                    'id'    => $item->mood->id,
-                    'type'  => $item->mood->type,
-                    'total' => $item->total,
-                ];
-            });
+            ->map(fn($item) => [
+                'id'        => $item->mood->id,
+                'type'      => $item->mood->type,
+                'total'     => $item->total,
+                'startDate' => $startOfWeek->format('F jS, Y'),
+                'endDate'   => $endDate->format('F jS, Y')
+            ]);
 
         // dd($weekly);    
         // $mood = new Mood();

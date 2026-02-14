@@ -10,6 +10,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const moodIcons = window.moodIcons || {};
     const rawData = window.moodWeeklyData || [];
     
+    if (rawData.length === 0) return;
+    
     // Sort the data from highest to lowest
     rawData.sort((a, b) => b.total - a.total);
     
@@ -55,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
             existingChart.destroy();
         }
         
-        // iamge plugin in y-axis
+        // image plugin in y-axis
         const imagePlugin = {
             id: 'imagePlugin',
             afterDraw: function(chart) {
@@ -69,14 +71,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     const img = images[mood];
                     
                     if (img && img.complete && img.naturalHeight > 0) {
-                        // calculate y position for each image
                         const yPos = yAxis.getPixelForValue(index) - 20;
-                        
-                        // Background backup for the image
-                        ctx.fillStyle = 'transparent';
-                        ctx.fillRect(5, yPos - 15, 75, 75);
-                        
-                        // The image
                         ctx.drawImage(img, 5, yPos - 15, 75, 75);
                     }
                 });
@@ -88,7 +83,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 ctx.strokeStyle = '#ffffff';
                 ctx.lineWidth = 0.5;
                 
-                // Grid X-axis
                 ctx.beginPath();
                 const xTicks = xAxis.ticks;
                 xTicks.forEach(tick => {
@@ -102,7 +96,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         };
         
-        // New chart
         new Chart(ctx, {
             type: 'bar',
             data: {
@@ -121,37 +114,76 @@ document.addEventListener('DOMContentLoaded', function() {
                     },
                     borderRadius: 15,
                     barPercentage: 0.8,
-                    categoryPercentage: 0.9
+                    categoryPercentage: 0.9,
+                    
+                    animation: {
+                        duration: 1500,
+                        easing: 'easeInOutQuad'
+                    }
                 }]
             },
             options: {
                 indexAxis: 'y',
                 responsive: true,
                 maintainAspectRatio: false,
+                
                 animation: {
-                    duration: 1500,
-                    easing: 'easeInOutQuad'
+                    duration: 1000,
+                    easing: 'easeInOutQuad',
+                    
+                    mode: 'all',
+                    
+                    onProgress: function(context) {
+                        if (context.chart) {
+                            context.chart.draw();
+                        }
+                    }
                 },
+                
+                transitions: {
+                    show: {
+                        animation: {
+                            duration: 1750,
+                            easing: 'easeInOutQuad'
+                        }
+                    },
+                    active: {
+                        animation: {
+                            duration: 300
+                        }
+                    },
+                    resize: {
+                        animation: {
+                            duration: 0
+                        }
+                    }
+                },
+                
                 layout: {
                     padding: {
                         left: 85
                     }
                 },
+                
+                elements: {
+                    bar: {
+                        backgroundColor: 'transparent'
+                    }
+                },
+                
                 plugins: {
                     legend: {
                         display: false
                     },
-
                     tooltip: {
                         backgroundColor: '#ffffff',
-                        
                         borderColor: '#A4BEF2',
                         borderWidth: 2.75,
+
                         displayColors: false,
-                        
                         titleColor: '#1F3A98',
-                        bodyColor: '#000000',        
-                        
+                        bodyColor: '#000000',  
+
                         titleFont: {
                             family: 'Poppins',
                             size: 16,
@@ -163,24 +195,19 @@ document.addEventListener('DOMContentLoaded', function() {
                             size: 13,
                             weight: 'normal'
                         },
-                        
+
                         padding: 10,
                         cornerRadius: 10,
-                        
+
                         callbacks: {
-                            // tooltip title
                             title: function(context) {
                                 const index = context[0].dataIndex;
                                 const mood = moodTypes[index];
                                 return mood.charAt(0).toUpperCase() + mood.slice(1);
                             },
 
-                            // content
                             label: function(context) {
-                                const mood = moodTypes[context.dataIndex];
-                                const value = context.raw;
-                                
-                                return `${value} day(s)`;
+                                return `${context.raw} day(s)`;
                             }
                         }
                     }
@@ -194,9 +221,14 @@ document.addEventListener('DOMContentLoaded', function() {
                             font: { family:'Aeonik', size: 16},
                             color: '#ffffff'
                         },
+
                         ticks: { 
                             stepSize: 1,
                             color: '#ffffff'
+                        },
+
+                        grid: {
+                            color: 'rgba(255,255,255,0.2)'
                         }
                     },
                     y: {

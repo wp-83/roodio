@@ -11,23 +11,26 @@
 
 @push('script')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ asset('js/pages/main/mood.js') }}" defer></script>
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.20/index.global.min.js'></script>
     <script src="https://unpkg.com/@popperjs/core@2"></script>
     <script src="https://unpkg.com/tippy.js@6"></script>
     <script src="https://cdn.jsdelivr.net/npm/matter-js@0.19.0/build/matter.min.js"></script>
-    <script src="{{ asset('js/pages/main/mood.js') }}" defer></script>
 @endpush
 
 
 @php
     // dd($weekly, $monthly, $yearly);
     // dd($weekly[0]->mood->type);
+    $startDate = $weekly[0]['startDate']; 
+    $endDate = $weekly[0]['endDate'];
+
     $calendarData = $monthly->map(function ($item) {
     return [
-        'title' => $item['type'],   // WAJIB pakai title
-        'start' => $item['date'],   // WAJIB pakai start
-        'total' => $item['total'],  // ini masuk ke extendedProps
-        'type'  => $item['type'],   // kalau mau akses lagi
+        'title' => $item['type'],
+        'start' => $item['date'],   
+        'total' => $item['total'],
+        'type'  => $item['type'],
     ];
 });
     $textColor = [
@@ -36,7 +39,45 @@
         'relaxed' => 'text-secondary-relaxed-30',
         'angry' => 'text-secondary-angry-30'
     ];
+
+    $textColorTitleChart = [
+        'happy' => 'text-secondary-happy-50',
+        'sad' => 'text-secondary-sad-50',
+        'relaxed' => 'text-secondary-relaxed-50',
+        'angry' => 'text-secondary-angry-50'
+    ];
 @endphp
+
+
+<script>
+    window.moodWeeklyData = @json(collect($weekly)->map(fn($item) => [
+        'type' => $item['type'],
+        'total' => (int)$item['total']
+    ])->toArray());
+    
+    window.moodIcons = {
+        happy: "{{ asset('assets/moods/icons/happy.png') }}",
+        sad: "{{ asset('assets/moods/icons/sad.png') }}",
+        relaxed: "{{ asset('assets/moods/icons/relaxed.png') }}",
+        angry: "{{ asset('assets/moods/icons/angry.png') }}"
+    };
+
+    window.moodColors = {
+        default: {
+            happy: '#FF8E2B',
+            sad: '#6A4FBF',
+            relaxed: '#28C76F',
+            angry: '#E63946'
+        },
+
+        hover: {
+            happy: '#FFB775',
+            sad: '#A38FDF',
+            relaxed: '#78DAA3',
+            angry: '#F0858A'
+        }
+    };
+</script>
 
 
 @section('mainContent')
@@ -59,240 +100,32 @@
         </div>
     </form>
 
-    <div class='w-full h-96 contentFadeLoad'> <!-- h-96 = 384px -->
-        <canvas id='moodChart' class='w-full h-full'></canvas>
+    <div id='weeklyMood' class='contentFadeLoad'>
+        <div class='w-full flex flex-col items-center mb-10'>
+            <p class='font-primary text-body-size md:text-paragraph lg:text-subtitle font-bold {{ $textColorTitleChart[$mood] }}'>WEEKLY MOOD RECAP</p>
+            <p class='font-secondaryAndButton text-white text-micro md:text-body-size'>{{ $startDate }} - {{ $endDate }}</p>
+        </div>
+        <div class='w-full' style='height: 
+            @php 
+                $count = count($weekly); 
+                if ($count == 0){
+                    echo 0 . 'px';
+                } else if ($count <= 2) {
+                    echo $count * 115 . 'px';
+                } else {
+                    echo '375px';
+                }
+            @endphp
+        ;'>
+            <canvas id='moodChart' class='w-full h-full'></canvas>
+        </div>
     </div>
+
     {{-- <div id="calendar"></div> --}}
     {{-- <div id="bubble-container" style="height:600px;"></div> --}}
     {{-- <div id="bubble-container" style="width:90%; height:600px;"></div> --}}
 
     <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const ctx = document.getElementById('moodChart').getContext('2d');
-    
-    const moodIcons = {
-        happy: "{{ asset('assets/moods/happy.png') }}",
-        sad: "{{ asset('assets/moods/sad.png') }}",
-        relaxed: "{{ asset('assets/moods/relaxed.png') }}",
-        angry: "{{ asset('assets/moods/angry.png') }}"
-    };
-    
-// Data asli dari controller
-const rawData = @json(collect($weekly)->map(fn($item) => [
-    'type' => $item['type'],
-    'total' => (int)$item['total']
-])->toArray());
-
-// Sort dari terbanyak ke terkecil
-rawData.sort((a, b) => b.total - a.total);
-
-// Ambil data yang sudah di-sort
-const moodTypes = rawData.map(item => item.type);
-const moodData = rawData.map(item => item.total);
-    
-    // Pre-load semua gambar
-    const images = {};
-    let imagesLoaded = 0;
-    const totalImages = moodTypes.length;
-    
-    moodTypes.forEach((mood, index) => {
-        const img = new Image();
-        img.src = moodIcons[mood.toLowerCase()];
-        images[mood] = img;
-        
-        img.onload = function() {
-            imagesLoaded++;
-            // Jika semua gambar sudah load, render chart
-            if (imagesLoaded === totalImages) {
-                renderChart();
-            }
-        };
-        
-        img.onerror = function() {
-            imagesLoaded++;
-            if (imagesLoaded === totalImages) {
-                renderChart();
-            }
-        };
-    });
-    
-    // Fallback kalau gambar sudah di-cache
-    if (totalImages === 0) {
-        renderChart();
-    }
-    
-    function renderChart() {
-        // Hapus chart lama kalau ada
-        const existingChart = Chart.getChart('moodChart');
-        if (existingChart) {
-            existingChart.destroy();
-        }
-        
-        // Custom plugin untuk gambar di Y-axis
-        const imagePlugin = {
-            id: 'imagePlugin',
-            afterDraw: function(chart) {
-                const ctx = chart.ctx;
-                const xAxis = chart.scales.x;
-                const yAxis = chart.scales.y;
-                
-                ctx.save();
-                
-                moodTypes.forEach((mood, index) => {
-                    const img = images[mood];
-                    
-                    if (img && img.complete && img.naturalHeight > 0) {
-                        // Hitung posisi Y untuk setiap label
-                        const yPos = yAxis.getPixelForValue(index) - 25;
-                        
-                        // Gambar background putih untuk gambar
-                        ctx.fillStyle = 'white';
-                        ctx.fillRect(5, yPos - 2, 30, 30);
-                        
-                        // Gambar gambarnya
-                        ctx.drawImage(img, 5, yPos, 24, 24);
-                        
-                        // Gambar teks label
-                        ctx.font = 'bold 14px Arial';
-                        ctx.fillStyle = '#374151';
-                        ctx.textAlign = 'left';
-                        ctx.textBaseline = 'middle';
-                        ctx.fillText(mood.charAt(0).toUpperCase() + mood.slice(1), 35, yPos + 12);
-                    }
-                });
-                
-                ctx.restore();
-                
-                // Gambar garis grid dengan lebih jelas
-                ctx.save();
-                ctx.strokeStyle = '#e5e7eb';
-                ctx.lineWidth = 1;
-                
-                // // Grid Y-axis (horizontal lines)
-                // ctx.beginPath();
-                // moodTypes.forEach((_, index) => {
-                //     const yPos = yAxis.getPixelForValue(index) - 10;
-                //     ctx.moveTo(xAxis.left, yPos);
-                //     ctx.lineTo(xAxis.right, yPos);
-                // });
-                // ctx.stroke();
-                
-                // Grid X-axis (vertical lines)
-                ctx.beginPath();
-                const xTicks = xAxis.ticks;
-                xTicks.forEach(tick => {
-                    const xPos = xAxis.getPixelForValue(tick.value);
-                    ctx.moveTo(xPos, yAxis.top);
-                    ctx.lineTo(xPos, yAxis.bottom);
-                });
-                ctx.stroke();
-                
-                ctx.restore();
-            }
-        };
-        
-        // Buat chart baru
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: moodTypes.map(() => ''), // Label kosong karena kita gambar manual
-                datasets: [{
-                    label: 'Total Mood',
-                    data: moodData,
-                    backgroundColor: '#3b82f6',
-                    borderRadius: 4,
-                    barPercentage: 0.8,
-                    categoryPercentage: 0.9
-                }]
-            },
-            options: {
-                indexAxis: 'y',
-                responsive: true,
-                maintainAspectRatio: false,
-                    animation: {
-        duration: 1750, // Durasi dalam milidetik (1000 = 1 detik)
-        easing: 'easeInOutQuad' // Jenis easing
-    },
-                layout: {
-                    padding: {
-                        left: 80 // Ruang untuk gambar
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'top',
-                        labels: {
-                            font: {
-                                size: 14,
-                                weight: 'bold'
-                            }
-                        }
-                    },
-                    title: {
-                        display: true,
-                        text: 'Weekly Mood Chart',
-                        font: {
-                            size: 16,
-                            weight: 'bold'
-                        },
-                        padding: {
-                            bottom: 20
-                        }
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return context.raw + ' entries';
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'Total Mood',
-                            font: {
-                                size: 14,
-                                weight: 'bold'
-                            }
-                        },
-                        grid: {
-                            display: true,
-                            color: '#e5e7eb',
-                            lineWidth: 1
-                        },
-                        ticks: {
-                            stepSize: 1,
-                            callback: function(value) {
-                                return value;
-                            }
-                        }
-                    },
-                    y: {
-                        title: {
-                            display: true,
-                            text: 'Mood Type',
-                            font: {
-                                size: 14,
-                                weight: 'bold'
-                            }
-                        },
-                        grid: {
-                            display: false // Kita gambar manual biar lebih jelas
-                        },
-                        ticks: {
-                            display: false // Sembunyikan tick bawaan
-                        }
-                    }
-                }
-            },
-            plugins: [imagePlugin]
-        });
-    }
-});
 
 
  document.addEventListener('DOMContentLoaded', function () {
