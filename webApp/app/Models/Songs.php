@@ -23,6 +23,17 @@ class Songs extends Model
         'photoPath',
     ];
 
+    protected $casts = [
+        'datePublished' => 'datetime',
+    ];
+
+    protected $appends = ['duration_formatted'];
+
+    public function getDurationFormattedAttribute()
+    {
+        return gmdate("i:s", $this->duration);
+    }
+
     public $incrementing = false;
     protected $keyType   = 'string';
 

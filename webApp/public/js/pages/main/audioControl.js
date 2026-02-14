@@ -1,8 +1,7 @@
 if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
     window.HAS_RUN_AUDIO_CONTROL_JS = true;
 
-    // AUDIO CONTROL JS CONTENT FROM STEP 144
-    // take all audio play components
+    // AUDIO CONTROL JS CONTENT
     const player = document.getElementById('audioPlayer');
     const audio = document.getElementById('audio');
     const prevBtn = document.getElementById('prev');
@@ -14,15 +13,23 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
     const soundedBtn = document.getElementById('speaker');
     const mutedBtn = document.getElementById('muted');
     const volumeSlider = document.getElementById('volumeSlider');
-    // Check if player exists to avoid null reference error if accessing querySelector
+
+    // Metadata Elements
+    const playerTitle = document.getElementById('playerTitle');
+    const playerArtist = document.getElementById('playerArtist');
+    const playerImage = document.getElementById('playerImage');
+
     const overlayAudioPlay = player ? player.querySelector('#overlayNan') : null;
 
-    // Guard if player is missing (though it should be there)
     if (player && audio) {
 
-        // set audio path
+        // State
         let playlist = window.currentPlaylist || [];
         let currentIndex = 0;
+        let isPlay = false;
+        let isMuted = false;
+        let isLoop = false;
+        let isShuffle = false;
 
         // load all songs in playlist
         function loadSong(index) {
@@ -35,22 +42,55 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
             const song = playlist[currentIndex];
             audio.src = song.path;
 
+            // Sync Metadata
+            if (playerTitle) playerTitle.textContent = song.title || 'Unknown Title';
+            if (playerArtist) playerArtist.textContent = song.artist || 'Unknown Artist';
+            if (playerImage) playerImage.src = song.image || '';
+
             audio.load();
             if (!isSongNan() && overlayAudioPlay) overlayAudioPlay.classList.add('hidden');
+
+            updatePlaylistVisuals(index);
         };
 
-        // play audio
+        // Update Playlist Highlight
+        function updatePlaylistVisuals(index) {
+            // Remove active style from all
+            // We can't easily query all *potential* buttons if list is huge, but we can query by class or assume IDs.
+            // Since we use ID "song-X", let's loop or querySelectorAll.
+            const allSongs = document.querySelectorAll(`[id^="song-"]`);
+            allSongs.forEach(btn => {
+                const activeClass = btn.dataset.activeClass;
+                const innerDiv = btn.firstElementChild; // The div inside the button has the bg
+                if (activeClass && innerDiv) {
+                    activeClass.split(' ').forEach(c => c && innerDiv.classList.remove(c));
+                }
+            });
+
+            // Add active style to current
+            const currentBtn = document.getElementById(`song-${index}`);
+            if (currentBtn) {
+                const activeClass = currentBtn.dataset.activeClass;
+                const innerDiv = currentBtn.firstElementChild;
+                if (activeClass && innerDiv) {
+                    activeClass.split(' ').forEach(c => c && innerDiv.classList.add(c));
+                }
+            }
+        }
+
         function playAudio() {
             if (isSongNan()) return;
-
-            audio.play().then(() => {
-                isPlay = true;
-                playBtn.classList.add('hidden');
-                pauseBtn.classList.remove('hidden');
-            });
+            // Play promise to avoid interruption errors
+            const playPromise = audio.play();
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    isPlay = true;
+                    playBtn.classList.add('hidden');
+                    pauseBtn.classList.remove('hidden');
+                }).catch(e => console.error("Play error:", e));
+            }
         };
 
-        // pause audio
         function pauseAudio() {
             audio.pause();
             isPlay = false;
@@ -58,7 +98,6 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
             pauseBtn.classList.add('hidden');
         };
 
-        // toggle play
         function togglePlay() {
             if (isPlay) {
                 pauseAudio();
@@ -67,58 +106,104 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
             }
         };
 
-        // ensure the audio has been loaded
         function playAfterLoad() {
             const handler = () => {
                 playAudio();
                 audio.removeEventListener('loadeddata', handler);
             };
-
             audio.addEventListener('loadeddata', handler);
         };
 
-        // global function to play song based on the index
         window.playByIndex = (index) => {
             if (window.currentPlaylist) {
                 playlist = window.currentPlaylist;
             }
-
             loadSong(index);
-
             audio.onloadeddata = () => {
                 playAudio();
             };
         };
 
-        // Next Button
-        if (nextBtn) {
-            nextBtn.addEventListener('click', () => {
-                loadSong(currentIndex + 1);
-                playAfterLoad();
-            });
+        function getRandomIndex() {
+            if (playlist.length <= 1) return 0;
+            let newIndex;
+            do {
+                newIndex = Math.floor(Math.random() * playlist.length);
+            } while (newIndex === currentIndex);
+            return newIndex;
         }
 
-        // Prev Button
+        // NEXT
+        function playNext() {
+            if (isShuffle) {
+                loadSong(getRandomIndex());
+            } else {
+                let nextIndex = currentIndex + 1;
+                if (nextIndex >= playlist.length) nextIndex = 0;
+                loadSong(nextIndex);
+            }
+            playAfterLoad();
+        }
+
+        if (nextBtn) {
+            nextBtn.addEventListener('click', playNext);
+        }
+
+        // PREV
         if (prevBtn) {
             prevBtn.addEventListener('click', () => {
-                loadSong(currentIndex - 1);
+                let prevIndex = currentIndex - 1;
+                if (prevIndex < 0) prevIndex = playlist.length - 1;
+                loadSong(prevIndex);
                 playAfterLoad();
             });
         }
 
-        // current player condition
-        let isPlay = false;
-        let isMuted = false;
+        // VISUAL STATE
+        function toggleButtonState(btn, isActive) {
+            if (!btn) return;
+            const activeClass = btn.dataset.activeClass;
+            const inactiveClass = btn.dataset.inactiveClass;
 
-        // check if the song is NaN
-        function isSongNan() {
-            return (audio.src == '') ? true : false;
+            if (activeClass && inactiveClass) {
+                if (isActive) {
+                    inactiveClass.split(' ').forEach(c => c && btn.classList.remove(c));
+                    activeClass.split(' ').forEach(c => c && btn.classList.add(c));
+                } else {
+                    activeClass.split(' ').forEach(c => c && btn.classList.remove(c));
+                    inactiveClass.split(' ').forEach(c => c && btn.classList.add(c));
+                }
+            }
         }
 
-        //DOMContentLoaded Event
+        // LOOP
+        if (loopBtn) {
+            loopBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                isLoop = !isLoop;
+                audio.loop = isLoop;
+                toggleButtonState(loopBtn, isLoop);
+            });
+        }
+
+        // SHUFFLE
+        if (shuffleBtn) {
+            shuffleBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                isShuffle = !isShuffle;
+                toggleButtonState(shuffleBtn, isShuffle);
+            });
+        }
+
+        function isSongNan() {
+            return (audio.src == '' || audio.src.endsWith('undefined')) ? true : false;
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
-            if (playlist.length > 0) {
-                loadSong(0);
+            if (playlist && playlist.length > 0) {
+                if (isSongNan()) {
+                    loadSong(0);
+                }
             }
 
             if (overlayAudioPlay) {
@@ -130,55 +215,46 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
             }
         });
 
-        // play and pause trigger
         if (playBtn) playBtn.addEventListener('click', togglePlay);
         if (pauseBtn) pauseBtn.addEventListener('click', togglePlay);
 
-        // keyboard shorcut for some audio behaviour
+        // KEYBOARD SHORTCUTS
         document.addEventListener('keydown', (e) => {
-            // e.preventDefault();
-
-            if (isSongNan() || audio.readyState < 2 || isNaN(audio.duration)) return;
+            // Guard clauses: Must have audio source, ready state, and finite duration
+            if (isSongNan() || audio.readyState < 1 || !Number.isFinite(audio.duration)) return;
 
             if (e.code == 'Space') {
+                e.preventDefault();
                 togglePlay();
             }
 
             if (e.key == 'ArrowRight') {
-                audio.currentTime += 10;
+                e.preventDefault(); // Prevent scrolling
+                // Move forward 10s
+                let newTime = audio.currentTime + 10;
+                // Clamp to duration - 0.1 to avoid ending
+                if (newTime > audio.duration) newTime = audio.duration - 0.1;
+                if (Number.isFinite(newTime)) audio.currentTime = newTime;
             }
 
             if (e.key == 'ArrowLeft') {
-                audio.currentTime -= 10;
+                e.preventDefault(); // Prevent scrolling
+                // Move backward 10s
+                let newTime = audio.currentTime - 10;
+                if (newTime < 0) newTime = 0;
+                if (Number.isFinite(newTime)) audio.currentTime = newTime;
             }
         });
 
-        // loop button behaviour
-        let loopActive = false;
-        if (loopBtn) {
-            loopBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-            });
-        }
-
-        // shuffle button behaviour
-        if (shuffleBtn) {
-            shuffleBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-            });
-        }
-
-        // intial value for volume slider
+        // VOLUME
         if (volumeSlider) {
             document.addEventListener('DOMContentLoaded', () => {
                 volumeSlider.value = 1;
                 audio.volume = volumeSlider.value;
             });
 
-            // muted behaviour
             let currVol = volumeSlider.value;
 
-            // muted sound behaviour
             function mutedSound() {
                 let tempVol = volumeSlider.value;
 
@@ -199,7 +275,6 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
             if (soundedBtn) soundedBtn.addEventListener('click', mutedSound);
             if (mutedBtn) mutedBtn.addEventListener('click', mutedSound);
 
-            // slider volume behaviour
             volumeSlider.addEventListener('change', () => {
                 if (volumeSlider.value == 0) {
                     isMuted = true;
@@ -215,73 +290,85 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
             });
         }
 
-        // get the element of progress bar player
         const progressBar = document.getElementById("progressBar");
         const currentTimeEl = document.getElementById("currentDuration");
         const durationEl = document.getElementById("duration");
-        const progressContainer = document.querySelector('.progress-container') || progressBar?.parentElement; // Fallback
+        const progressContainer = document.getElementById('progressContainer');
 
-        // function to format time
         function formatTime(time) {
+            if (isNaN(time) || !Number.isFinite(time)) return "00:00";
             const minutes = Math.floor(time / 60).toString().padStart(2, '0');
             const seconds = Math.floor(time % 60).toString().padStart(2, "0");
             return `${minutes}:${seconds}`;
         }
 
         if (progressBar && currentTimeEl && durationEl) {
-            // format time
             audio.addEventListener("loadedmetadata", () => {
-                durationEl.textContent = formatTime(audio.duration);
+                if (Number.isFinite(audio.duration)) {
+                    durationEl.textContent = formatTime(audio.duration);
+                }
             });
 
             audio.addEventListener("timeupdate", () => {
-                const percent = (audio.currentTime / audio.duration) * 100;
-                progressBar.style.width = `${percent}%`;
-                currentTimeEl.textContent = formatTime(audio.currentTime);
+                if (Number.isFinite(audio.duration)) {
+                    const percent = (audio.currentTime / audio.duration) * 100;
+                    progressBar.style.width = `${percent}%`;
+                    currentTimeEl.textContent = formatTime(audio.currentTime);
+                }
             });
         }
 
+        // ENDED Listener
         audio.addEventListener("ended", () => {
-            pauseBtn.classList.add('hidden');
-            playBtn.classList.remove('hidden');
-            isPlay = false;
-
-            if (currentIndex < playlist.length - 1) {
-                playByIndex(currentIndex + 1);
-            };
+            if (!audio.loop) {
+                playNext();
+                if (!isPlay) {
+                    pauseBtn.classList.add('hidden');
+                    playBtn.classList.remove('hidden');
+                }
+            }
         });
 
+        // SEEK CLICK
         if (progressContainer) {
             progressContainer.addEventListener("click", (e) => {
-                const width = progressContainer.clientWidth;
-                const clickX = e.offsetX;
+                // STRICT CHECK: Duration must be finite and > 0
+                if (!audio.duration || !Number.isFinite(audio.duration) || audio.duration <= 0) return;
 
-                audio.currentTime = (clickX / width) * audio.duration;
+                const rect = progressContainer.getBoundingClientRect();
+                const clickX = e.clientX - rect.left;
+                const width = rect.width;
+
+                if (width > 0) {
+                    const percentage = clickX / width;
+                    // Clamp percentage 0-1
+                    const clampedPercentage = Math.max(0, Math.min(1, percentage));
+                    const newTime = clampedPercentage * audio.duration;
+
+                    if (Number.isFinite(newTime)) {
+                        audio.currentTime = newTime;
+                    }
+                }
             });
         }
 
-        // popup behaviour
         function popupBehaviour(element) {
             if (element.classList.contains('invisible')) element.classList.remove('opacity-0', 'invisible');
-            else element.classList.add('opacity', 'invisible');
+            else element.classList.add('opacity-0', 'invisible');
         }
 
-        //audio control pop-up behaviour
         const audioCtrlArea = document.getElementById('audioControlResponsive');
         const audioCtrlPopup = document.getElementById('audioControlPopup');
 
         if (audioCtrlArea && audioCtrlPopup) {
             const audioCtrlContent = audioCtrlPopup.querySelector('.popupContent');
 
-            // event trigger for mood
             audioCtrlArea.addEventListener('click', () => {
                 popupBehaviour(audioCtrlPopup);
-                popupBehaviour(audioCtrlContent);
             });
 
-            // close pop up when clicking outside
             document.addEventListener('mousedown', (e) => {
-                if (!audioCtrlContent.contains(e.target)) {
+                if (!audioCtrlContent.contains(e.target) && !audioCtrlArea.contains(e.target)) {
                     audioCtrlContent.classList.add('opacity-0', 'invisible');
                     audioCtrlPopup.classList.add('opacity-0', 'invisible');
                 }

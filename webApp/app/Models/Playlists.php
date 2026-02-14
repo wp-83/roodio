@@ -10,6 +10,25 @@ class Playlists extends Model
     public $incrementing = false;
     protected $keyType   = 'string';
 
+    protected $appends = ['total_duration'];
+
+    public function getTotalDurationAttribute()
+    {
+        $totalSeconds = $this->songs->sum('duration');
+        $hours = floor($totalSeconds / 3600);
+        $minutes = floor(($totalSeconds % 3600) / 60);
+        
+        $duration = [];
+        if ($hours > 0) {
+            $duration[] = $hours . ' hr';
+        }
+        if ($minutes > 0 || count($duration) == 0) {
+            $duration[] = $minutes . ' min';
+        }
+
+        return implode(' ', $duration);
+    }
+
     public function songs()
     {
         return $this->belongsToMany(Songs::class, 'Tracks', 'playlistId', 'songId');

@@ -138,7 +138,7 @@
                     <div class='flex flex-col w-full h-max gap-8 md:flex-row md:justify-between md:gap-5 md:w-max'>
                         @forelse($playlists as $playlist)
                             <a href="/{{ $playlist->id }}" wire:navigate>
-                                <x-albumCard :mood='$mood' :playlistName='$playlist->name' :playlistDesc='$playlist->description' :imageSource='$playlist->playlistPath' :totalSong="$playlist->songs->count()"></x-albumCard>
+                                <x-albumCard :mood='$mood' :playlistName='$playlist->name' :playlistDesc='$playlist->description' :imageSource='$playlist->playlistPath' :totalSong="$playlist->songs->count()" :totalTime="$playlist->total_duration"></x-albumCard>
                             </a>
                         @empty
                             <p class='text-white font-secondaryAndButton text-small md:text-body-size'>There is no playlist.</p>
@@ -155,7 +155,7 @@
                     <div class='flex flex-col w-full h-max gap-8 md:flex-row md:justify-between md:gap-5 md:w-max'>
                         @forelse($playlists as $playlist)
                             <a href="/{{ $playlist->id }}" wire:navigate>
-                                <x-albumCard :mood='$mood' :playlistName='$playlist->name' :playlistDesc='$playlist->description' :imageSource='$playlist->playlistPath' :totalSong="$playlist->songs->count()"></x-albumCard>
+                                <x-albumCard :mood='$mood' :playlistName='$playlist->name' :playlistDesc='$playlist->description' :imageSource='$playlist->playlistPath' :totalSong="$playlist->songs->count()" :totalTime="$playlist->total_duration"></x-albumCard>
                             </a>
                         @empty
                             <p class='text-white font-secondaryAndButton text-small md:text-body-size'>There is no playlist.</p>
@@ -172,7 +172,7 @@
                     <div class='flex flex-col w-full h-max gap-8 md:flex-row md:justify-between md:gap-5 md:w-max'>
                         @forelse($playlists as $playlist)
                             <a href="/{{ $playlist->id }}" wire:navigate>
-                                <x-albumCard :mood='$mood' :playlistName='$playlist->name' :playlistDesc='$playlist->description' :imageSource='$playlist->playlistPath' :totalSong="$playlist->songs->count()"></x-albumCard>
+                                <x-albumCard :mood='$mood' :playlistName='$playlist->name' :playlistDesc='$playlist->description' :imageSource='$playlist->playlistPath' :totalSong="$playlist->songs->count()" :totalTime="$playlist->total_duration"></x-albumCard>
                             </a>
                         @empty
                             <p class='text-white font-secondaryAndButton text-small md:text-body-size'>There is no playlist.</p>
