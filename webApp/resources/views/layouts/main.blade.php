@@ -82,7 +82,7 @@
         });
     </script>
 
-    <div class="shrink-0">
+    <div class="shrink-0 relative z-30">
         <x-navbar></x-navbar>
     </div>
     <div class='flex flex-col flex-1 min-h-0'>
