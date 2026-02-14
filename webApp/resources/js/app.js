@@ -2,7 +2,7 @@ import './bootstrap';
 import 'flowbite';
 
 // fade effect on the elements
-document.addEventListener('DOMContentLoaded', () => {
+const initFadeEffect = () => {
     const container = document.querySelector('#scrollContainer');
     const elements = document.querySelectorAll('.contentFadeLoad');
 
@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const elementOffset = element.offsetTop; //container height
             const containerScroll = container.scrollTop; //container top position
-            const containerHeight = container.clientHeight -25; //container that viewed - tolerance margin
+            const containerHeight = container.clientHeight - 25; //container that viewed - tolerance margin
 
             const relativePosition = elementOffset - containerScroll; // element position based on top position of container
 
@@ -27,8 +27,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // scroll trigger
+    // Remove previous listener to avoid duplicates if possible, OR just add.
+    // Since initFadeEffect runs on navigation, new container = new listener.
+    // Old container is gone. So simple addEventListener is fine.
     container.addEventListener('scroll', checkElements);
 
     // first trigger
     checkElements();
-});
+};
+
+document.addEventListener('DOMContentLoaded', initFadeEffect);
+document.addEventListener('livewire:navigated', initFadeEffect);

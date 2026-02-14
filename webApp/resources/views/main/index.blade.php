@@ -2,7 +2,6 @@
 
 
 @push('script')
-    <script src="{{ asset('js/pages/main/audioControl.js') }}" defer></script>
     <script src="{{ asset('js/pages/main/index.js') }}" defer></script>
 @endpush
 
@@ -138,7 +137,7 @@
                 <div class="md:w-full md:overflow-x-auto scrollbar pb-3 {{ $scrollbarTheme[$mood] }}">
                     <div class='flex flex-col w-full h-max gap-8 md:flex-row md:justify-between md:gap-5 md:w-max'>
                         @forelse($playlists as $playlist)
-                            <a href="/{{ $playlist->id }}">
+                            <a href="/{{ $playlist->id }}" wire:navigate>
                                 <x-albumCard :mood='$mood' :playlistName='$playlist->name' :playlistDesc='$playlist->description' :imageSource='$playlist->playlistPath' :totalSong="$playlist->songs->count()"></x-albumCard>
                             </a>
                         @empty
@@ -155,7 +154,7 @@
                 <div class="md:w-full md:overflow-x-auto scrollbar pb-3 {{ $scrollbarTheme[$mood] }}">
                     <div class='flex flex-col w-full h-max gap-8 md:flex-row md:justify-between md:gap-5 md:w-max'>
                         @forelse($playlists as $playlist)
-                            <a href="/{{ $playlist->id }}">
+                            <a href="/{{ $playlist->id }}" wire:navigate>
                                 <x-albumCard :mood='$mood' :playlistName='$playlist->name' :playlistDesc='$playlist->description' :imageSource='$playlist->playlistPath' :totalSong="$playlist->songs->count()"></x-albumCard>
                             </a>
                         @empty
@@ -172,7 +171,7 @@
                 <div class="md:w-full md:overflow-x-auto scrollbar pb-3 {{ $scrollbarTheme[$mood] }}">
                     <div class='flex flex-col w-full h-max gap-8 md:flex-row md:justify-between md:gap-5 md:w-max'>
                         @forelse($playlists as $playlist)
-                            <a href="/{{ $playlist->id }}">
+                            <a href="/{{ $playlist->id }}" wire:navigate>
                                 <x-albumCard :mood='$mood' :playlistName='$playlist->name' :playlistDesc='$playlist->description' :imageSource='$playlist->playlistPath' :totalSong="$playlist->songs->count()"></x-albumCard>
                             </a>
                         @empty
@@ -183,9 +182,4 @@
             </div>
         </div>
     </div>
-@endsection
-
-
-@section('bottomContent')
-    <x-audioPlayer :mood='$mood'></x-audioPlayer>
 @endsection

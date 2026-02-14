@@ -72,7 +72,7 @@
         </div>
         <hr class='my-2 border-primary-50'>
         <div class='w-full flex flex-col gap-2.5 font-secondaryAndButton text-small'>
-            <a href="{{ route('user.profile') }}">
+            <a href="{{ route('user.profile') }}" wire:navigate>
                 <div class='h-max rounded-sm px-2 py-1 flex flex-row items-center gap-2.5 {{ $hoverBgMoodStyle[$mood] }}'>
                     <img src="{{ asset('assets/icons/user.svg') }}" alt="user" class='w-7 h-7'>
                     <p class='text-primary-60'>Edit Your Profile</p>
@@ -157,20 +157,55 @@
             <x-iconButton type='hamburger' :mood='$mood'></x-iconButton>
             <div class='w-40'>
                 {{-- Route is not fixed --}}
-                <a href="{{ route('user.index') }}" class='cursor-default'>
+                <a href="{{ route('user.index') }}" wire:navigate class='cursor-default'>
                     <img src="{{ asset('assets/logo/logo-horizontal.png') }}" alt="logo">
                 </a>
             </div>
         </div>
-        <div class='w-xl h-max hidden lg:inline relative transition-transform duration-500 ease-out group' id='searchbar'>
-            <x-input type='search' :mood='$mood' id='search' placeholder='Search songs, artists, lyrics'></x-input>
-            <div class='absolute top-1/2 right-4 flex flex-row -translate-y-1/2 opacity-50 group-focus-within:hidden' id='searchContent'>
+        @if($showSearch)
+        <form action="{{ url()->current() }}" method="GET" id="searchForm" class='w-xl h-max hidden lg:inline relative transition-transform duration-500 ease-out group'>
+            <div class='flex flex-row items-center px-2 py-0.5 h-10 text-small rounded-full placeholder:text-micro placeholder:italic bg-shadedOfGray-10 hover:bg-white focus-within:bg-white ease-in-out duration-125 md:text-body-size md:placeholder:text-small md:h-9 group' id='searchbar'>
+                <img src="{{ asset('assets/icons/search.svg') }}" alt="search" class='w-8 h-8 pr-1 mr-2 border-r-2 border-primary-70'>
+                <input type="text" name="search" autocomplete="off" id='search' placeholder='Search...' class='w-full pr-2' value="{{ request('search') }}">
+                <div onclick="document.getElementById('search').value=''; document.getElementById('searchForm').submit();" class='cursor-pointer {{ request('search') ? '' : 'invisible' }}' style='zoom:0.8;' id='searchClose'>
+                    <x-iconButton type='cross' :mood='$mood'></x-iconButton>
+                </div>
+            </div>
+            <div class='absolute top-1/2 right-4 flex flex-row -translate-y-1/2 opacity-50 group-focus-within:hidden {{ request('search') ? 'hidden' : '' }}' id='searchContent'>
                 <div class='border-[0.5px] border-shadedOfGray-50 bg-shadedOfGray-20 font-secondaryAndButton px-1 py-[0.25px] rounded-md text-micro text-shadedOfGray-85'>CTRL</div>
                 <p class='mx-1'>+</p>
                 <div class='border-[0.5px] border-shadedOfGray-50 bg-shadedOfGray-20 font-secondaryAndButton px-1 py-[0.25px] rounded-md text-micro text-shadedOfGray-85'>K</div>
             </div>
-        </div>
+        </form>
+        <script>
+            // Auto-submit search form on input change with debounce
+            (function() {
+                const searchInput = document.getElementById('search');
+                const searchForm = document.getElementById('searchForm');
+                let debounceTimer;
+                
+                if (searchInput && searchForm) {
+                    searchInput.addEventListener('input', function() {
+                        clearTimeout(debounceTimer);
+                        debounceTimer = setTimeout(() => {
+                            searchForm.submit();
+                        }, 500);
+                    });
+                    
+                    // Submit on Enter key
+                    searchInput.addEventListener('keypress', function(e) {
+                        if (e.key === 'Enter') {
+                            e.preventDefault();
+                            clearTimeout(debounceTimer);
+                            searchForm.submit();
+                        }
+                    });
+                }
+            })();
+        </script>
+        @endif
         <div class=' flex flex-row items-center justify-end gap-5'>
+            @if($showSearch)
             <div class='w-8 h-8 lg:hidden cursor-pointer' id='searchIcon'>
                 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 
@@ -185,6 +220,7 @@
 
                     </svg>
             </div>
+            @endif
             <div class='flex flex-row items-center cursor-pointer' id='currentMood'>
                 <p class='text-primary-70 font-secondaryAndButton text-small {{ $softStyle[$mood] }} pr-5 relative -right-3 pl-2 rounded-md py-0.5 hidden lg:block'>{{ Str::ucfirst($mood) }}</p>
                 <div class='w-10 h-10 rounded-full p-0.5 relative z-5 {{ $contrastStyle[$mood] }}'>

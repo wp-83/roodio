@@ -84,6 +84,23 @@ class User extends Authenticatable
         return $this->belongsToMany(User::class, 'follows', 'followedId', 'userId');
     }
 
+    /**
+     * Scope to search users by username or fullname
+     */
+    public function scopeSearchUsers($query, $search)
+    {
+        if (!$search) {
+            return $query;
+        }
+
+        return $query->where(function ($q) use ($search) {
+            $q->where('username', 'LIKE', "%{$search}%")
+              ->orWhereHas('userDetail', function ($q) use ($search) {
+                  $q->where('fullname', 'LIKE', "%{$search}%");
+              });
+        });
+    }
+
     protected static function booted()
     {
         static::creating(function ($model) {

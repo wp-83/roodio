@@ -77,6 +77,22 @@ class Songs extends Model
         return $query->where('moodId', $map[$targetMood]);
     }
 
+    /**
+     * Scope to search songs by title, artist, or lyrics
+     */
+    public function scopeSearchSongs($query, $search)
+    {
+        if (!$search) {
+            return $query;
+        }
+
+        return $query->where(function ($q) use ($search) {
+            $q->where('title', 'LIKE', "%{$search}%")
+              ->orWhere('artist', 'LIKE', "%{$search}%")
+              ->orWhere('lyrics', 'LIKE', "%{$search}%");
+        });
+    }
+
     protected static function booted()
     {
         static::creating(function ($model) {

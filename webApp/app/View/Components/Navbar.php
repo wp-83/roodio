@@ -11,6 +11,7 @@ class Navbar extends Component
     public $fullname;
     public $profilePhoto;
     public $mood;
+    public $showSearch;
     /**
      * Create a new component instance.
      */
@@ -20,6 +21,7 @@ class Navbar extends Component
         $this->fullname     = auth()->user()->userDetail->fullname;
         $this->profilePhoto = auth()->user()->userDetail->profilePhoto;
         $this->mood         = session('chooseMood', 'happy');
+        $this->showSearch   = request()->routeIs('user.playlists', 'threads.index', 'socials.index');
     }
 
     /**

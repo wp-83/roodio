@@ -12,7 +12,7 @@
 
 @theme {
   --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-      'Segoe UI Symbol', 'Noto Color Emoji';
+    'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
 @font-face {
@@ -25,9 +25,9 @@
   src: url('../fonts/poppins.ttf');
 }
 
-input:focus, 
-textarea:focus, 
-select:focus, 
+input:focus,
+textarea:focus,
+select:focus,
 button:focus {
   outline: none;
 }
@@ -121,10 +121,21 @@ button:focus {
   }
 
   @keyframes float-vertical-soft {
-    0% { transform: translateY(0); }
-    40% { transform: translateY(-5px); }
-    60% { transform: translateY(-7px); }
-    100% { transform: translateY(0); }
+    0% {
+      transform: translateY(0);
+    }
+
+    40% {
+      transform: translateY(-5px);
+    }
+
+    60% {
+      transform: translateY(-7px);
+    }
+
+    100% {
+      transform: translateY(0);
+    }
   }
 
   .animate-float-soft {
@@ -132,17 +143,22 @@ button:focus {
   }
 
   @keyframes typing-text {
-      from {
-          width: 0%;
-      }
+    from {
+      width: 0%;
+    }
 
-      to {
-          width: 100%;
-      }
+    to {
+      width: 100%;
+    }
   }
 
   .typingTextAnimation {
     animation: typing-text 4s steps(60, end) forwards;
   }
 
+}
+
+/* Hide default Livewire progress bar */
+#nprogress {
+  display: none;
 }

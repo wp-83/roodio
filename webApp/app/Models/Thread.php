@@ -27,6 +27,24 @@ class Thread extends Model
         return $this->belongsTo(User::class, 'userId', 'id');
     }
 
+    /**
+     * Scope to search threads by fullname, title, or content
+     */
+    public function scopeSearch($query, $search)
+    {
+        if (!$search) {
+            return $query;
+        }
+
+        return $query->where(function ($q) use ($search) {
+            $q->where('title', 'LIKE', "%{$search}%")
+              ->orWhere('content', 'LIKE', "%{$search}%")
+              ->orWhereHas('user.userDetail', function ($q) use ($search) {
+                  $q->where('fullname', 'LIKE', "%{$search}%");
+              });
+        });
+    }
+
     protected static function booted()
     {
         static::creating(function ($model) {
