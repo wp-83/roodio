@@ -1,13 +1,35 @@
 if (!window.HAS_RUN_NAVIGATION_JS) {
     window.HAS_RUN_NAVIGATION_JS = true;
 
+    // Helper functions (Dynamic Lookup)
+    function getElement(id) {
+        return document.getElementById(id);
+    }
+
+    function togglePopup(popupId) {
+        const popup = getElement(popupId);
+        if (!popup) return;
+
+        if (popup.classList.contains('invisible')) {
+            popup.classList.remove('opacity-0', 'invisible');
+        } else {
+            popup.classList.add('opacity-0', 'invisible');
+        }
+    }
+
+    function closePopup(popupId) {
+        const popup = getElement(popupId);
+        if (popup) {
+            popup.classList.add('opacity-0', 'invisible');
+        }
+    }
+
     const initNavigation = () => {
         const searchInput = document.getElementById('search');
         const searchbar = document.getElementById('searchbar');
 
         if (searchInput && searchbar) {
             // shortcut for search bar in navbar
-            // Use a named function to avoid duplicate listeners if possible, or just accept it for now as low risk
             document.addEventListener('keydown', (e) => {
                 if ((e.ctrlKey || e.metaKey) && (e.key === 'K' || e.key === 'k')) {
                     e.preventDefault();
@@ -29,6 +51,9 @@ if (!window.HAS_RUN_NAVIGATION_JS) {
                 });
             }
 
+            // ==========================================
+            // SEARCH BAR LOGIC (Original Implementation)
+            // ==========================================
             const searchIcon = document.getElementById('searchIcon');
             const searchAttr = searchbar.querySelector('#searchContent');
             let isSearchBarOpened = false;
@@ -50,7 +75,12 @@ if (!window.HAS_RUN_NAVIGATION_JS) {
                 if (searchAttr) searchAttr.classList.remove('hidden');
             };
 
+            // Direct listener (User Preference)
             if (searchIcon) {
+                // Remove old listener if any (to prevent duplicates if init runs twice on same element)
+                // Note: Named functions are better for removal, but here we accept potential accumulation 
+                // if init runs multiple times on same element, though 'livewire:navigated' usually means new DOM.
+                // Ideally we'd clone or use named function. For now, simple standard addEventListener.
                 searchIcon.addEventListener('click', () => {
                     (isSearchBarOpened) ? closeSearchBar() : openSearchBar();
                 });
@@ -64,14 +94,13 @@ if (!window.HAS_RUN_NAVIGATION_JS) {
             });
 
             window.addEventListener('resize', () => {
+                // Check innerWidth to see if we are in desktop or mobile
                 if (isSearchBarOpened && window.innerWidth >= 768) closeSearchBar();
             });
         }
 
         // sidebar elements
         const hamburgerBtn = document.getElementById('hamburgerBtn');
-
-        // Only proceed if elements exist
         if (hamburgerBtn) {
             const hamburgerLines = hamburgerBtn.querySelectorAll('#hamburgerLine');
             const musicNote = hamburgerBtn.querySelector('#musicNote');
@@ -80,125 +109,103 @@ if (!window.HAS_RUN_NAVIGATION_JS) {
             if (sidebar) {
                 const notToggleSidebarBtns = sidebar.querySelectorAll('#notToggleSidebar');
                 const toggleSidebarBtns = sidebar.querySelectorAll('#toggleSidebar');
-
                 let isSidebarOpen = false;
                 const MOBILE_WIDTH = 768;
 
-                // initial animation
                 musicNote.classList.add('invisible');
                 handleResponsive();
 
                 function openSidebar() {
                     isSidebarOpen = true;
-                    hamburgerLines.forEach(h => {
-                        h.classList.add('expandWidth');
-                        h.classList.remove('collapseWidth');
-                    });
-                    musicNote.classList.remove('invisible');
-                    musicNote.classList.add('bouncyNote');
+                    hamburgerLines.forEach(h => { h.classList.add('expandWidth'); h.classList.remove('collapseWidth'); });
+                    musicNote.classList.remove('invisible'); musicNote.classList.add('bouncyNote');
                     toggleSidebarBtns.forEach(btn => btn.classList.remove('hidden'));
                     notToggleSidebarBtns.forEach(btn => btn.classList.add('hidden'));
                     sidebar.classList.add('pt-5', 'px-3');
-
-                    if (isMobile()) {
-                        sidebar.classList.add('translate-x-0', 'z-5');
-                        sidebar.classList.remove('-translate-x-full');
-                    }
+                    if (isMobile()) { sidebar.classList.add('translate-x-0', 'z-5'); sidebar.classList.remove('-translate-x-full'); }
                 }
 
                 function closeSidebar() {
                     isSidebarOpen = false;
-                    hamburgerLines.forEach(h => {
-                        h.classList.add('collapseWidth');
-                        h.classList.remove('expandWidth');
-                    });
-                    musicNote.classList.add('invisible');
-                    musicNote.classList.remove('bouncyNote');
+                    hamburgerLines.forEach(h => { h.classList.add('collapseWidth'); h.classList.remove('expandWidth'); });
+                    musicNote.classList.add('invisible'); musicNote.classList.remove('bouncyNote');
                     toggleSidebarBtns.forEach(btn => btn.classList.add('hidden'));
                     notToggleSidebarBtns.forEach(btn => btn.classList.remove('hidden'));
                     sidebar.classList.remove('pt-5', 'px-3');
-
-                    if (isMobile()) {
-                        sidebar.classList.add('-translate-x-full');
-                        sidebar.classList.remove('translate-x-0', 'z-5');
-                    }
+                    if (isMobile()) { sidebar.classList.add('-translate-x-full'); sidebar.classList.remove('translate-x-0', 'z-5'); }
                 }
 
-                function isMobile() {
-                    return window.innerWidth < MOBILE_WIDTH;
-                }
+                function isMobile() { return window.innerWidth < MOBILE_WIDTH; }
 
                 function handleResponsive() {
                     if (isMobile()) {
                         sidebar.classList.add('absolute');
                         if (sidebar.classList.contains('relative')) sidebar.classList.remove('relative');
-                        if (!isSidebarOpen) {
-                            sidebar.classList.add('-translate-x-full');
-                            sidebar.classList.remove('translate-x-0', 'z-5');
-                        }
+                        if (!isSidebarOpen) { sidebar.classList.add('-translate-x-full'); sidebar.classList.remove('translate-x-0', 'z-5'); }
                     } else {
-                        sidebar.classList.remove('absolute', '-translate-x-full');
-                        sidebar.classList.add('translate-x-0');
+                        sidebar.classList.remove('absolute', '-translate-x-full'); sidebar.classList.add('translate-x-0');
                     }
                 }
 
-                hamburgerBtn.addEventListener('click', () => {
-                    isSidebarOpen ? closeSidebar() : openSidebar();
-                });
-
+                hamburgerBtn.addEventListener('click', () => { isSidebarOpen ? closeSidebar() : openSidebar(); });
                 window.addEventListener('resize', handleResponsive);
             }
         }
 
-        // Popup behavior 
-        // We need to re-attach these listeners as the elements might be re-rendered
-        const popupBehaviour = (element) => {
-            if (element.classList.contains('invisible')) element.classList.remove('opacity-0', 'invisible');
-            else element.classList.add('opacity-0', 'invisible');
+        // ==========================================
+        // POPUP BEHAVIOR (EVENT DELEGATION) - FIXED
+        // ==========================================
+        // We MUST use delegation for Popups because changing Mood destroys the navbar buttons.
+
+        if (window.navClickHandler) {
+            document.removeEventListener('click', window.navClickHandler);
         }
 
-        const profileArea = document.getElementById('profileNavbar');
-        if (profileArea) {
-            const profilePopup = document.getElementById('profilePopup');
-            const profileContent = profilePopup.querySelector('.popupContent');
-
-            profileArea.addEventListener('click', () => {
-                popupBehaviour(profilePopup);
-            });
-
-            const closeProfileBtn = profilePopup.querySelector('#closeProfilePopup');
-            if (closeProfileBtn) {
-                closeProfileBtn.addEventListener('click', () => {
-                    profilePopup.classList.add('opacity-0', 'invisible');
-                });
+        window.navClickHandler = (e) => {
+            // 1. Profile Popup Toggle
+            const profileBtn = e.target.closest('#profileNavbar');
+            if (profileBtn) {
+                togglePopup('profilePopup');
+                closePopup('changeMood');
+                return;
             }
 
-            // Store references to remove listeners later if needed, or rely on garbage collection of replaced nodes
-            // For global document listeners, we should be careful.
-            // A simple way for now:
-            document.addEventListener('mousedown', (e) => {
-                if (!profileContent.contains(e.target) && !profilePopup.classList.contains('invisible')) {
-                    profilePopup.classList.add('opacity-0', 'invisible');
+            // 2. Mood Popup Toggle
+            const moodBtn = e.target.closest('#currentMood');
+            if (moodBtn) {
+                togglePopup('changeMood');
+                closePopup('profilePopup');
+                return;
+            }
+
+            // 3. Close Profile Popup Button
+            if (e.target.closest('#closeProfilePopup')) {
+                closePopup('profilePopup');
+                return;
+            }
+
+            // 4. Click Outside - Profile
+            const profilePopup = getElement('profilePopup');
+            if (profilePopup && !profilePopup.classList.contains('invisible')) {
+                const content = profilePopup.querySelector('.popupContent');
+                if (content && !content.contains(e.target) && !e.target.closest('#profileNavbar')) {
+                    closePopup('profilePopup');
                 }
-            });
-        }
+            }
 
-        const moodArea = document.getElementById('currentMood');
-        if (moodArea) {
-            const moodPopup = document.getElementById('changeMood');
-            const moodContent = moodPopup.querySelector('.popupContent');
-
-            moodArea.addEventListener('click', () => {
-                popupBehaviour(moodPopup);
-            });
-
-            // Combined document listener for popups could be optimized, but separate functional blocks are fine
-            document.addEventListener('mousedown', (e) => {
-                if (!moodContent.contains(e.target) && !moodPopup.classList.contains('invisible')) {
-                    moodPopup.classList.add('opacity-0', 'invisible');
+            // 5. Click Outside - Mood
+            const moodPopup = getElement('changeMood');
+            if (moodPopup && !moodPopup.classList.contains('invisible')) {
+                const content = moodPopup.querySelector('.popupContent');
+                if (content && !content.contains(e.target) && !e.target.closest('#currentMood')) {
+                    closePopup('changeMood');
                 }
-            });
-        }
+            }
+
+            // NOTE: Search bar click-outside is handled by the specific search listener above
+        };
+
+        document.addEventListener('click', window.navClickHandler);
     };
 
     // Initialize on load
