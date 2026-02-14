@@ -20,8 +20,6 @@ const initFadeEffect = () => {
 
             if (relativePosition < containerHeight) {
                 element.classList.add('show');
-            } else {
-                element.classList.remove('show');
             }
         });
     }
