@@ -1230,7 +1230,18 @@ function initYearlyMood() {
                 tooltipInstance = null;
             }
         }
-
     });
-
 }
+
+// Call functions on load and navigation
+function loadMoodScripts() {
+    initWeeklyMood();
+    initMonthlyMood();
+    initYearlyMood();
+}
+
+// Ensure init on first load
+document.addEventListener('DOMContentLoaded', loadMoodScripts);
+// Ensure init on Livewire navigation
+document.addEventListener('livewire:navigated', loadMoodScripts);
+
