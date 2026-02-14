@@ -1,5 +1,18 @@
-const initMoodChart = () => {
-    // get the chart container
+
+/**
+ * Mood Page Logic
+ * Handles Weekly (Chart.js), Monthly (FullCalendar), and Yearly (Matter.js) visualizations.
+ * Refactored to support Livewire navigation.
+ */
+
+window.moodHandlers = window.moodHandlers || {
+    resize: null
+};
+
+// ==========================================
+// WEEKLY MOOD (Chart.js)
+// ==========================================
+function initWeeklyMood() {
     const canvas = document.getElementById('moodChart');
     if (!canvas) return;
 
@@ -23,6 +36,12 @@ const initMoodChart = () => {
     let imagesLoaded = 0;
     const totalImages = moodTypes.length;
 
+    function tryRender() {
+        if (imagesLoaded === totalImages) {
+            renderChart();
+        }
+    }
+
     if (totalImages === 0) {
         renderChart();
         return;
@@ -35,16 +54,12 @@ const initMoodChart = () => {
 
         img.onload = function () {
             imagesLoaded++;
-            if (imagesLoaded === totalImages) {
-                renderChart();
-            }
+            tryRender();
         };
 
         img.onerror = function () {
             imagesLoaded++;
-            if (imagesLoaded === totalImages) {
-                renderChart();
-            }
+            tryRender();
         };
     });
 
@@ -239,15 +254,17 @@ const initMoodChart = () => {
             plugins: [imagePlugin]
         });
     }
-});
+}
 
-// monthly mood
-document.addEventListener('DOMContentLoaded', function () {
+// ==========================================
+// MONTHLY MOOD (FullCalendar)
+// ==========================================
+function initMonthlyMood() {
     // Get today's date for current month
     var today = new Date();
     var currentYear = today.getFullYear();
     var currentMonth = today.getMonth();
-    
+
     // Month names in English
     var monthNames = [
         'January', 'February', 'March', 'April', 'May', 'June',
@@ -258,13 +275,16 @@ document.addEventListener('DOMContentLoaded', function () {
     // ===== ISI ELEMENT MONTH DAN YEAR =====
     var monthEl = document.getElementById('month');
     var yearEl = document.getElementById('year');
-    
-    monthEl.innerHTML = currentMonthName;
-    yearEl.innerHTML = currentYear;
+
+    if (monthEl) monthEl.innerHTML = currentMonthName;
+    if (yearEl) yearEl.innerHTML = currentYear;
 
     // Make sure calendar element exists
     var calendarEl = document.getElementById('calendar');
     if (!calendarEl) return;
+
+    // Clear existing calendar content
+    calendarEl.innerHTML = '';
 
     // Get calendar data from window object
     var calendarData = window.calendarData || [];
@@ -281,7 +301,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         var moodCounts = {};
-        data.forEach(function(item) {
+        data.forEach(function (item) {
             var mood = item.type;
             if (moodCounts[mood]) {
                 moodCounts[mood] += item.total || 1;
@@ -292,7 +312,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         var dominantMood = null;
         var maxCount = 0;
-        
+
         for (var mood in moodCounts) {
             if (moodCounts[mood] > maxCount) {
                 maxCount = moodCounts[mood];
@@ -313,348 +333,357 @@ document.addEventListener('DOMContentLoaded', function () {
 
     var dominantMood = calculateDominantMood(calendarData);
     var summaryEl = document.getElementById('calendarSummary');
-    
+
     if (summaryEl) {
         const moodEl = summaryEl.querySelector("#moodDominant");
         const totalEl = summaryEl.querySelector("#totalMoodDominant");
         const percentageEl = summaryEl.querySelector("#percentageMoodDominant");
         const imgEl = summaryEl.querySelector("#dominantMoodImage");
-        
-        if (moodEl) moodEl.innerHTML = dominantMood.type.toUpperCase();
+
+        if (moodEl) moodEl.innerHTML = dominantMood.type ? dominantMood.type.toUpperCase() : 'NO DATA';
         if (totalEl) totalEl.innerHTML = dominantMood.total;
         if (percentageEl) percentageEl.innerHTML = dominantMood.percentage + '%';
-        if (imgEl) imgEl.src = window.baseUrl + 'assets/moods/icons/' + dominantMood.type.toLowerCase() + '.png';
+        if (imgEl && dominantMood.type && dominantMood.type !== 'No Data') {
+            imgEl.src = window.baseUrl + 'assets/moods/icons/' + dominantMood.type.toLowerCase() + '.png';
+            imgEl.style.display = 'block';
+        } else if (imgEl) {
+            imgEl.style.display = 'none';
+        }
     }
-    
-    var style = document.createElement('style');
-    style.textContent = `
-        /* ===== RESET ALL BACKGROUNDS ===== */
-        .fc,
-        .fc *,
-        .fc-scrollgrid,
-        .fc-scrollgrid *,
-        .fc-daygrid-day,
-        .fc-daygrid-day *,
-        .fc-col-header-cell,
-        .fc-col-header-cell *,
-        .fc-daygrid-body,
-        .fc-daygrid-body *,
-        .fc-daygrid-day-frame,
-        .fc-daygrid-day-events,
-        .fc-daygrid-day-top,
-        .fc-daygrid-day-bottom,
-        .fc-daygrid-event,
-        .fc-event,
-        .fc-event *,
-        table, tr, td, th, tbody, thead {
-            background: transparent !important;
-            background-color: transparent !important;
-            outline: none !important;
-        }
-        
-        /* ===== BACKGROUND KOTAK UNTUK SEMUA CELL ===== */
-        .fc-daygrid-day {
-            background-color: rgba(255, 255, 255, 0.05) !important;
-            border-radius: 8px !important;
-            margin: 2px !important;
-            transition: background-color 0.2s ease !important;
-        }
-        
-        /* ===== HIGHLIGHT UNTUK TANGGAL AKTIF (HARI INI) ===== */
-        .fc-day-today {
-            background-color: rgba(164, 190, 242, 0.25) !important;
-            border: 2px solid #A4BEF2 !important;
-            box-shadow: 0 0 10px rgba(164, 190, 242, 0.3) !important;
-        }
-        
-        /* ===== RESPONSIVE CONTAINER ===== */
-        #calendar {
-            width: 100% !important;
-            height: auto !important;
-        }
-        
-        .fc {
-            width: 100% !important;
-            height: auto !important;
-            max-width: 100% !important;
-        }
-        
-        .fc-view-harness {
-            height: auto !important;
-        }
-        
-        .fc-scrollgrid {
-            width: 100% !important;
-            table-layout: fixed !important;
-            border-collapse: separate !important;
-            border-spacing: 2px !important;
-        }
-        
-        /* ===== HEADER STATIC - TAPI TETAP JADI TABLE ===== */
-        .fc-col-header {
-            width: 100% !important;
-            background: transparent !important;
-        }
-        
-        .fc-col-header-cell {
-            border-bottom: 2px solid rgba(255, 255, 255, 0.3) !important;
-            background: transparent !important;
-            height: 45px !important;
-            vertical-align: middle !important;
-            text-align: center !important;
-            padding: 0 !important;
-        }
-        
-        .fc-col-header-cell-cushion {
-            color: white !important;
-            font-size: 1.25rem !important;
-            font-weight: 600 !important;
-            font-family: 'Poppins'!important;
-            text-transform: uppercase !important;
-            letter-spacing: 0.5px !important;
-            padding: 12px 0 !important;
-            display: inline-block !important;
-            text-decoration: none !important;
-        }
-        
-        /* ===== SEMBUNYIKAN BARIS KOSONG ===== */
-        .fc-daygrid-body > table > tbody > tr:has(> td > .fc-day-other:only-child) {
-            display: none !important;
-        }
-        
-        .fc-daygrid-body > table > tbody > tr:last-child:has(.fc-day-other) {
-            display: none !important;
-        }
-        
-        .fc-daygrid-body > table > tbody > tr:first-child:has(.fc-day-other) {
-            display: none !important;
-        }
-        
-        .fc-daygrid-body > table > tbody > tr:has(.fc-daygrid-day:not(.fc-day-other)) {
-            display: table-row !important;
-        }
-        
-        /* ===== BORDER MENGGUNAKAN PSEUDO-ELEMENTS ===== */
-        .fc-daygrid-day {
-            position: relative !important;
-        }
 
-        .fc-daygrid-day-bg {
-            height: 0px !important;
-        }
-        
-        .fc-daygrid-day::after {
-            content: '' !important;
-            position: absolute !important;
-            top: 0 !important;
-            right: 0 !important;
-            width: 1px !important;
-            height: 100% !important;
-            background-color: rgba(255, 255, 255, 0.2) !important;
-            z-index: 1000 !important;
-            pointer-events: none !important;
-        }
-        
-        .fc-daygrid-day::before {
-            content: '' !important;
-            position: absolute !important;
-            bottom: 0 !important;
-            left: 0 !important;
-            width: 100% !important;
-            height: 1px !important;
-            background-color: rgba(255, 255, 255, 0.2) !important;
-            z-index: 1000 !important;
-            pointer-events: none !important;
-        }
-        
-        .fc-daygrid-day:last-child::after {
-            display: none !important;
-        }
-        
-        .fc-daygrid-body tr:last-child .fc-daygrid-day::before {
-            display: none !important;
-        }
+    // Add styles if not already present
+    if (!document.getElementById('calendar-styles')) {
+        var style = document.createElement('style');
+        style.id = 'calendar-styles';
+        style.textContent = `
+            /* ===== RESET ALL BACKGROUNDS ===== */
+            .fc,
+            .fc *,
+            .fc-scrollgrid,
+            .fc-scrollgrid *,
+            .fc-daygrid-day,
+            .fc-daygrid-day *,
+            .fc-col-header-cell,
+            .fc-col-header-cell *,
+            .fc-daygrid-body,
+            .fc-daygrid-body *,
+            .fc-daygrid-day-frame,
+            .fc-daygrid-day-events,
+            .fc-daygrid-day-top,
+            .fc-daygrid-day-bottom,
+            .fc-daygrid-event,
+            .fc-event,
+            .fc-event *,
+            table, tr, td, th, tbody, thead {
+                background: transparent !important;
+                background-color: transparent !important;
+                outline: none !important;
+            }
+            
+            /* ===== BACKGROUND KOTAK UNTUK SEMUA CELL ===== */
+            .fc-daygrid-day {
+                background-color: rgba(255, 255, 255, 0.05) !important;
+                border-radius: 8px !important;
+                margin: 2px !important;
+                transition: background-color 0.2s ease !important;
+            }
+            
+            /* ===== HIGHLIGHT UNTUK TANGGAL AKTIF (HARI INI) ===== */
+            .fc-day-today {
+                background-color: rgba(164, 190, 242, 0.25) !important;
+                border: 2px solid #A4BEF2 !important;
+                box-shadow: 0 0 10px rgba(164, 190, 242, 0.3) !important;
+            }
+            
+            /* ===== RESPONSIVE CONTAINER ===== */
+            #calendar {
+                width: 100% !important;
+                height: auto !important;
+            }
+            
+            .fc {
+                width: 100% !important;
+                height: auto !important;
+                max-width: 100% !important;
+            }
+            
+            .fc-view-harness {
+                height: auto !important;
+            }
+            
+            .fc-scrollgrid {
+                width: 100% !important;
+                table-layout: fixed !important;
+                border-collapse: separate !important;
+                border-spacing: 2px !important;
+            }
+            
+            /* ===== HEADER STATIC - TAPI TETAP JADI TABLE ===== */
+            .fc-col-header {
+                width: 100% !important;
+                background: transparent !important;
+            }
+            
+            .fc-col-header-cell {
+                border-bottom: 2px solid rgba(255, 255, 255, 0.3) !important;
+                background: transparent !important;
+                height: 45px !important;
+                vertical-align: middle !important;
+                text-align: center !important;
+                padding: 0 !important;
+            }
+            
+            .fc-col-header-cell-cushion {
+                color: white !important;
+                font-size: 1.25rem !important;
+                font-weight: 600 !important;
+                font-family: 'Poppins'!important;
+                text-transform: uppercase !important;
+                letter-spacing: 0.5px !important;
+                padding: 12px 0 !important;
+                display: inline-block !important;
+                text-decoration: none !important;
+            }
+            
+            /* ===== SEMBUNYIKAN BARIS KOSONG ===== */
+            .fc-daygrid-body > table > tbody > tr:has(> td > .fc-day-other:only-child) {
+                display: none !important;
+            }
+            
+            .fc-daygrid-body > table > tbody > tr:last-child:has(.fc-day-other) {
+                display: none !important;
+            }
+            
+            .fc-daygrid-body > table > tbody > tr:first-child:has(.fc-day-other) {
+                display: none !important;
+            }
+            
+            .fc-daygrid-body > table > tbody > tr:has(.fc-daygrid-day:not(.fc-day-other)) {
+                display: table-row !important;
+            }
+            
+            /* ===== BORDER MENGGUNAKAN PSEUDO-ELEMENTS ===== */
+            .fc-daygrid-day {
+                position: relative !important;
+            }
 
-        /* ===== DAY NUMBERS - TANPA HIGHLIGHT ===== */
-        .fc-daygrid-day:not(.fc-day-other) .fc-daygrid-day-number {
-            display: block !important;
-            color: white !important;
-            font-size: 1rem !important;
-            font-family: 'Poppins', sans-serif !important;
-            padding: 4px !important;
-            text-decoration: none !important;
-            text-align: center !important;
-            background: transparent !important;
-            border-radius: 0 !important;
-        }
-        
-        .fc-day-other .fc-daygrid-day-number,
-        .fc-day-other .fc-daygrid-day-events {
-            display: none !important;
-        }
-        
-        .fc-day-other {
-            visibility: visible !important;
-            background-color: rgba(255, 255, 255, 0.05) !important;
-        }
-        
-        /* ===== EVENT STYLING - RESPONSIF ===== */
-        .fc-event {
-            background: transparent !important;
-            border: none !important;
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
-            width: 100% !important;
-            height: 100% !important;
-            padding: 0 !important;
-            margin: 0 !important;
-        }
-        
-        .fc-event img {
-            width: 90px !important;
-            height: 90px !important;
-            object-fit: contain !important;
-            margin: 0 auto !important;
-            display: block !important;
-        }
-        
-        .fc-daygrid-day-events .fc-event:only-child img {
-            width: 110px !important;
-            height: 110px !important;
-        }
+            .fc-daygrid-day-bg {
+                height: 0px !important;
+            }
+            
+            .fc-daygrid-day::after {
+                content: '' !important;
+                position: absolute !important;
+                top: 0 !important;
+                right: 0 !important;
+                width: 1px !important;
+                height: 100% !important;
+                background-color: rgba(255, 255, 255, 0.2) !important;
+                z-index: 1000 !important;
+                pointer-events: none !important;
+            }
+            
+            .fc-daygrid-day::before {
+                content: '' !important;
+                position: absolute !important;
+                bottom: 0 !important;
+                left: 0 !important;
+                width: 100% !important;
+                height: 1px !important;
+                background-color: rgba(255, 255, 255, 0.2) !important;
+                z-index: 1000 !important;
+                pointer-events: none !important;
+            }
+            
+            .fc-daygrid-day:last-child::after {
+                display: none !important;
+            }
+            
+            .fc-daygrid-body tr:last-child .fc-daygrid-day::before {
+                display: none !important;
+            }
 
-        /* ===== HAPUS SEMUA BORDER LUAR ===== */
-        .fc-scrollgrid, 
-        .fc-scrollgrid *,
-        .fc-daygrid-body table,
-        .fc-daygrid-body table * {
-            border-top: none !important;
-            border-left: none !important;
-            border-right: none !important;
-            border-bottom: none !important;
-            border-width: 0 !important;
-        }
-
-        /* Pastikan border dalam (pseudo-elements) tetap jalan */
-        .fc-daygrid-day::after,
-        .fc-daygrid-day::before {
-            display: block !important;
-        }
-        
-        /* ===== CELL SIZING ===== */
-        .fc-daygrid-day-frame {
-            min-height: 160px !important;
-            height: auto !important;
-            display: flex !important;
-            flex-direction: column !important;
-            padding: 4px !important;
-        }
-        
-        .fc-daygrid-day-events {
-            flex: 1 !important;
-            display: flex !important;
-            flex-direction: column !important;
-            justify-content: center !important;
-            align-items: center !important;
-            gap: 4px !important;
-            min-height: 100px !important;
-        }
-
-        /* ===== TOOLTIP CUSTOM-WHITE ===== */
-        .tippy-box[data-theme~='custom-white'] {
-            background-color: #ffffff !important;
-            color: #333333 !important;
-            border: 1px solid #dddddd !important;
-            border-radius: 8px !important;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
-        }
-
-        .tippy-box[data-theme~='custom-white'] .tippy-arrow {
-            color: #ffffff !important;
-        }
-
-        .tippy-box[data-theme~='custom-white'] .tippy-content {
-            padding: 8px 12px !important;
-            font-family: 'Poppins', sans-serif !important;
-        }
-
-        .tippy-box[data-theme~='custom-white'] strong {
-            color: #1F3A98 !important;
-        }
-        
-        /* ===== RESPONSIVE BREAKPOINTS ===== */
-        @media (min-width: 1200px) {
+            /* ===== DAY NUMBERS - TANPA HIGHLIGHT ===== */
+            .fc-daygrid-day:not(.fc-day-other) .fc-daygrid-day-number {
+                display: block !important;
+                color: white !important;
+                font-size: 1rem !important;
+                font-family: 'Poppins', sans-serif !important;
+                padding: 4px !important;
+                text-decoration: none !important;
+                text-align: center !important;
+                background: transparent !important;
+                border-radius: 0 !important;
+            }
+            
+            .fc-day-other .fc-daygrid-day-number,
+            .fc-day-other .fc-daygrid-day-events {
+                display: none !important;
+            }
+            
+            .fc-day-other {
+                visibility: visible !important;
+                background-color: rgba(255, 255, 255, 0.05) !important;
+            }
+            
+            /* ===== EVENT STYLING - RESPONSIF ===== */
+            .fc-event {
+                background: transparent !important;
+                border: none !important;
+                display: flex !important;
+                justify-content: center !important;
+                align-items: center !important;
+                width: 100% !important;
+                height: 100% !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            
             .fc-event img {
                 width: 90px !important;
                 height: 90px !important;
+                object-fit: contain !important;
+                margin: 0 auto !important;
+                display: block !important;
             }
+            
             .fc-daygrid-day-events .fc-event:only-child img {
                 width: 110px !important;
                 height: 110px !important;
             }
+
+            /* ===== HAPUS SEMUA BORDER LUAR ===== */
+            .fc-scrollgrid, 
+            .fc-scrollgrid *,
+            .fc-daygrid-body table,
+            .fc-daygrid-body table * {
+                border-top: none !important;
+                border-left: none !important;
+                border-right: none !important;
+                border-bottom: none !important;
+                border-width: 0 !important;
+            }
+
+            /* Pastikan border dalam (pseudo-elements) tetap jalan */
+            .fc-daygrid-day::after,
+            .fc-daygrid-day::before {
+                display: block !important;
+            }
+            
+            /* ===== CELL SIZING ===== */
             .fc-daygrid-day-frame {
                 min-height: 160px !important;
+                height: auto !important;
+                display: flex !important;
+                flex-direction: column !important;
+                padding: 4px !important;
             }
-        }
-        
-        @media (min-width: 992px) and (max-width: 1199px) {
-            .fc-event img {
-                width: 75px !important;
-                height: 75px !important;
+            
+            .fc-daygrid-day-events {
+                flex: 1 !important;
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: center !important;
+                align-items: center !important;
+                gap: 4px !important;
+                min-height: 100px !important;
             }
-            .fc-daygrid-day-events .fc-event:only-child img {
-                width: 90px !important;
-                height: 90px !important;
+
+            /* ===== TOOLTIP CUSTOM-WHITE ===== */
+            .tippy-box[data-theme~='custom-white'] {
+                background-color: #ffffff !important;
+                color: #333333 !important;
+                border: 1px solid #dddddd !important;
+                border-radius: 8px !important;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
             }
-            .fc-daygrid-day-frame {
-                min-height: 140px !important;
+
+            .tippy-box[data-theme~='custom-white'] .tippy-arrow {
+                color: #ffffff !important;
             }
-        }
-        
-        @media (min-width: 768px) and (max-width: 991px) {
-            .fc-event img {
-                width: 60px !important;
-                height: 60px !important;
+
+            .tippy-box[data-theme~='custom-white'] .tippy-content {
+                padding: 8px 12px !important;
+                font-family: 'Poppins', sans-serif !important;
             }
-            .fc-daygrid-day-events .fc-event:only-child img {
-                width: 75px !important;
-                height: 75px !important;
+
+            .tippy-box[data-theme~='custom-white'] strong {
+                color: #1F3A98 !important;
             }
-            .fc-daygrid-day-frame {
-                min-height: 130px !important;
+            
+            /* ===== RESPONSIVE BREAKPOINTS ===== */
+            @media (min-width: 1200px) {
+                .fc-event img {
+                    width: 90px !important;
+                    height: 90px !important;
+                }
+                .fc-daygrid-day-events .fc-event:only-child img {
+                    width: 110px !important;
+                    height: 110px !important;
+                }
+                .fc-daygrid-day-frame {
+                    min-height: 160px !important;
+                }
             }
-        }
-        
-        @media (max-width: 767px) {
-            .fc-event img {
-                width: 45px !important;
-                height: 45px !important;
+            
+            @media (min-width: 992px) and (max-width: 1199px) {
+                .fc-event img {
+                    width: 75px !important;
+                    height: 75px !important;
+                }
+                .fc-daygrid-day-events .fc-event:only-child img {
+                    width: 90px !important;
+                    height: 90px !important;
+                }
+                .fc-daygrid-day-frame {
+                    min-height: 140px !important;
+                }
             }
-            .fc-daygrid-day-events .fc-event:only-child img {
-                width: 55px !important;
-                height: 55px !important;
+            
+            @media (min-width: 768px) and (max-width: 991px) {
+                .fc-event img {
+                    width: 60px !important;
+                    height: 60px !important;
+                }
+                .fc-daygrid-day-events .fc-event:only-child img {
+                    width: 75px !important;
+                    height: 75px !important;
+                }
+                .fc-daygrid-day-frame {
+                    min-height: 130px !important;
+                }
             }
-            .fc-daygrid-day-frame {
-                min-height: 110px !important;
+            
+            @media (max-width: 767px) {
+                .fc-event img {
+                    width: 45px !important;
+                    height: 45px !important;
+                }
+                .fc-daygrid-day-events .fc-event:only-child img {
+                    width: 55px !important;
+                    height: 55px !important;
+                }
+                .fc-daygrid-day-frame {
+                    min-height: 110px !important;
+                }
             }
-        }
-        
-        @media (max-width: 480px) {
-            .fc-event img {
-                width: 35px !important;
-                height: 35px !important;
+            
+            @media (max-width: 480px) {
+                .fc-event img {
+                    width: 35px !important;
+                    height: 35px !important;
+                }
+                .fc-daygrid-day-events .fc-event:only-child img {
+                    width: 45px !important;
+                    height: 45px !important;
+                }
+                .fc-daygrid-day-frame {
+                    min-height: 90px !important;
+                }
             }
-            .fc-daygrid-day-events .fc-event:only-child img {
-                width: 45px !important;
-                height: 45px !important;
-            }
-            .fc-daygrid-day-frame {
-                min-height: 90px !important;
-            }
-        }
-    `;
-    document.head.appendChild(style);
+        `;
+        document.head.appendChild(style);
+    }
 
     // Initialize calendar
     var calendar = new FullCalendar.Calendar(
@@ -665,62 +694,62 @@ document.addEventListener('DOMContentLoaded', function () {
             contentHeight: "auto",
             aspectRatio: 1.2,
             initialDate: today,
-            
+
             // MATIKAN STICKY HEADER
             headerToolbar: false,
             stickyHeaderDates: false,
-            
-            datesSet: function(info) {
-                if (info.view.currentStart.getMonth() !== currentMonth || 
+
+            datesSet: function (info) {
+                if (info.view.currentStart.getMonth() !== currentMonth ||
                     info.view.currentStart.getFullYear() !== currentYear) {
-                    
-                    setTimeout(function() {
+
+                    setTimeout(function () {
                         calendar.gotoDate(new Date(currentYear, currentMonth, 1));
                     }, 10);
                 }
-                
-                setTimeout(function() {
-                    document.querySelectorAll('.fc-daygrid-body table tbody tr').forEach(function(row) {
+
+                setTimeout(function () {
+                    document.querySelectorAll('.fc-daygrid-body table tbody tr').forEach(function (row) {
                         var hasCurrentMonthCell = false;
-                        row.querySelectorAll('.fc-daygrid-day').forEach(function(cell) {
+                        row.querySelectorAll('.fc-daygrid-day').forEach(function (cell) {
                             if (!cell.classList.contains('fc-day-other')) {
                                 hasCurrentMonthCell = true;
                             }
                         });
-                        
+
                         if (!hasCurrentMonthCell) {
                             row.style.display = 'none';
                         }
                     });
                 }, 100);
             },
-            
+
             events: calendarData,
 
-            eventDidMount: function(info) {
+            eventDidMount: function (info) {
                 var mood = info.event.extendedProps.type;
                 var total = info.event.extendedProps.total;
-                
+
                 info.el.innerHTML = '';
-                
+
                 if (mood && window.moodIcons && window.moodIcons[mood]) {
                     var img = document.createElement('img');
                     img.src = window.moodIcons[mood];
                     img.alt = mood;
-                    
+
                     img.style.display = 'block';
                     img.style.margin = '0 auto';
                     img.style.objectFit = 'contain';
-                    
+
                     info.el.appendChild(img);
-                    
-                    img.onerror = function() {
+
+                    img.onerror = function () {
                         info.el.innerHTML = mood;
                     };
                 } else {
                     info.el.innerHTML = mood || 'event';
                 }
-                
+
                 if (typeof tippy !== 'undefined') {
                     tippy(info.el, {
                         content: `
@@ -735,41 +764,45 @@ document.addEventListener('DOMContentLoaded', function () {
                     });
                 }
             },
-            
-            dayCellDidMount: function(info) {
+
+            dayCellDidMount: function (info) {
                 info.el.style.cursor = 'default';
             }
         }
     );
 
     calendar.render();
-    
-    setTimeout(function() {
-        document.querySelectorAll('.fc-daygrid-body table tbody tr').forEach(function(row) {
+
+    setTimeout(function () {
+        document.querySelectorAll('.fc-daygrid-body table tbody tr').forEach(function (row) {
             var hasCurrentMonthCell = false;
-            row.querySelectorAll('.fc-daygrid-day').forEach(function(cell) {
+            row.querySelectorAll('.fc-daygrid-day').forEach(function (cell) {
                 if (!cell.classList.contains('fc-day-other')) {
                     hasCurrentMonthCell = true;
                 }
             });
-            
+
             if (!hasCurrentMonthCell) {
                 row.style.display = 'none';
             }
         });
     }, 200);
-});
+}
 
-// yearly mood
-window.addEventListener('load', function () {
-    initializeYearlyMood();
-});
-
-function initializeYearlyMood() {
-
+// ==========================================
+// YEARLY MOOD (Matter.js)
+// ==========================================
+function initYearlyMood() {
     const container = document.getElementById('moodYear');
     if (!container) return;
     if (typeof Matter === 'undefined') return;
+
+    // Clean up previous simulation
+    container.innerHTML = ''; // Clear canvas
+    if (window.moodHandlers.resize) {
+        window.removeEventListener('resize', window.moodHandlers.resize);
+        window.moodHandlers.resize = null;
+    }
 
     const { Engine, Render, Runner, Bodies, World, Mouse, MouseConstraint, Events, Body } = Matter;
 
@@ -778,29 +811,32 @@ function initializeYearlyMood() {
     if (width === 0 || height === 0) return;
 
     // =============================
-    // INJECT CSS UNTUK TIPPY THEME
+    // INJECT CSS UNTUK TIPPY THEME (once)
     // =============================
-    const style = document.createElement('style');
-    style.textContent = `
-        /* ===== TIPPY CUSTOM THEME UNTUK YEARLY MOOD ===== */
-        .tippy-box[data-theme~='yearly-white'] {
-            background-color: #ffffff !important;
-            color: #333333 !important;
-            border: 2px solid #1F3A98 !important;
-            border-radius: 16px !important;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
-        }
+    if (!document.getElementById('yearly-mood-tippy-style')) {
+        const style = document.createElement('style');
+        style.id = 'yearly-mood-tippy-style';
+        style.textContent = `
+            /* ===== TIPPY CUSTOM THEME UNTUK YEARLY MOOD ===== */
+            .tippy-box[data-theme~='yearly-white'] {
+                background-color: #ffffff !important;
+                color: #333333 !important;
+                border: 2px solid #1F3A98 !important;
+                border-radius: 16px !important;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+            }
 
-        .tippy-box[data-theme~='yearly-white'] .tippy-arrow {
-            color: #ffffff !important;
-        }
+            .tippy-box[data-theme~='yearly-white'] .tippy-arrow {
+                color: #ffffff !important;
+            }
 
-        .tippy-box[data-theme~='yearly-white'] .tippy-content {
-            padding: 0 !important;
-            font-family: 'Poppins' !important;
-        }
-    `;
-    document.head.appendChild(style);
+            .tippy-box[data-theme~='yearly-white'] .tippy-content {
+                padding: 0 !important;
+                font-family: 'Poppins' !important;
+            }
+        `;
+        document.head.appendChild(style);
+    }
 
     // =============================
     // ENGINE SETUP
@@ -824,7 +860,8 @@ function initializeYearlyMood() {
     });
 
     Render.run(render);
-    Runner.run(Runner.create(), engine);
+    const runner = Runner.create();
+    Runner.run(runner, engine);
 
     // =============================
     // WALLS
@@ -845,7 +882,7 @@ function initializeYearlyMood() {
         ceilingY,
         width + 200,
         wallThickness,
-        { 
+        {
             isStatic: true,
             restitution: 0.8
         }
@@ -891,22 +928,10 @@ function initializeYearlyMood() {
 
     let moodBodies = [];
     const ballColors = [
-        '#FFA350',
-        '#FFC48D',
-        '#FFD1A6',
-        '#FFF2E5',
-        '#876FD0',
-        '#B6A5E7',
-        '#C9BCF0',
-        '#EEE8FB',
-        '#50D189',
-        '#8EE0B1',
-        '#A4E6C0',
-        '#E0F7EB',
-        '#F49DA0',
-        '#EB5F68',
-        '#F7B5B7',
-        '#FDEAE9'
+        '#FFA350', '#FFC48D', '#FFD1A6', '#FFF2E5',
+        '#876FD0', '#B6A5E7', '#C9BCF0', '#EEE8FB',
+        '#50D189', '#8EE0B1', '#A4E6C0', '#E0F7EB',
+        '#F49DA0', '#EB5F68', '#F7B5B7', '#FDEAE9'
     ];
 
     // =============================
@@ -914,33 +939,33 @@ function initializeYearlyMood() {
     // =============================
     function getResponsiveSizes() {
         const screenWidth = window.innerWidth;
-        
+
         // Ukuran untuk background balls
         let bgBallMinRadius, bgBallMaxRadius, bgBallCount;
         // Ukuran untuk mood balls
         let moodBallRadius, moodBallScale;
-        
+
         if (screenWidth >= 1200) { // Desktop besar
             bgBallMinRadius = 15;
             bgBallMaxRadius = 35;
             bgBallCount = 75;
             moodBallRadius = 70;
             moodBallScale = 0.0325;
-        } 
+        }
         else if (screenWidth >= 768) { // Tablet
             bgBallMinRadius = 12;
             bgBallMaxRadius = 28;
             bgBallCount = 60;
             moodBallRadius = 55;
             moodBallScale = 0.028;
-        } 
+        }
         else if (screenWidth >= 480) { // Mobile besar
             bgBallMinRadius = 10;
             bgBallMaxRadius = 22;
             bgBallCount = 45;
             moodBallRadius = 45;
             moodBallScale = 0.024;
-        } 
+        }
         else { // Mobile kecil
             bgBallMinRadius = 8;
             bgBallMaxRadius = 18;
@@ -948,7 +973,7 @@ function initializeYearlyMood() {
             moodBallRadius = 38;
             moodBallScale = 0.02;
         }
-        
+
         return {
             bgBallMinRadius,
             bgBallMaxRadius,
@@ -962,10 +987,10 @@ function initializeYearlyMood() {
     // BACKGROUND BALLS - RESPONSIVE
     // =============================
     const sizes = getResponsiveSizes();
-    
+
     for (let i = 0; i < sizes.bgBallCount; i++) {
         const ballRadius = sizes.bgBallMinRadius + Math.random() * (sizes.bgBallMaxRadius - sizes.bgBallMinRadius);
-        
+
         const ball = Bodies.circle(
             Math.random() * width,
             -50 - Math.random() * 150,
@@ -1015,26 +1040,25 @@ function initializeYearlyMood() {
     // =============================
     // RESIZE HANDLER - UPDATE UKURAN KETIKA LAYAR DIUBAH
     // =============================
-    window.addEventListener('resize', function() {
+    const resizeHandler = function () {
         // Hapus semua balls yang ada
         world.bodies.forEach(body => {
             if (!body.isStatic) {
                 World.remove(world, body);
             }
         });
-        
+
         // Reset moodBodies array
         moodBodies = [];
-        
+
         // Dapatkan ukuran baru
         const newSizes = getResponsiveSizes();
         const newWidth = container.clientWidth;
-        const newHeight = container.clientHeight;
-        
+
         // Buat ulang background balls dengan ukuran baru
         for (let i = 0; i < newSizes.bgBallCount; i++) {
             const ballRadius = newSizes.bgBallMinRadius + Math.random() * (newSizes.bgBallMaxRadius - newSizes.bgBallMinRadius);
-            
+
             const ball = Bodies.circle(
                 Math.random() * newWidth,
                 -50 - Math.random() * 150,
@@ -1052,7 +1076,7 @@ function initializeYearlyMood() {
 
             World.add(world, ball);
         }
-        
+
         // Buat ulang mood balls dengan ukuran baru
         yearlyData.forEach((item) => {
             const moodBall = Bodies.circle(
@@ -1078,16 +1102,17 @@ function initializeYearlyMood() {
             moodBodies.push(moodBall);
             World.add(world, moodBall);
         });
-    });
+    };
+
+    window.addEventListener('resize', resizeHandler);
+    window.moodHandlers.resize = resizeHandler;
 
     Events.on(engine, 'beforeUpdate', function () {
-
         const topHardLimit = -600;
         const bottomHardLimit = height + 500;
         const sideLimit = 300;
 
         world.bodies.forEach(body => {
-
             if (body.isStatic) return;
 
             const radius = body.circleRadius || 0;
@@ -1135,9 +1160,7 @@ function initializeYearlyMood() {
                     y: body.velocity.y
                 });
             }
-
         });
-
     });
 
     // =============================
@@ -1146,7 +1169,6 @@ function initializeYearlyMood() {
     let tooltipInstance = null;
 
     render.canvas.addEventListener('mousemove', function (event) {
-
         const rect = render.canvas.getBoundingClientRect();
         const mouseX = event.clientX - rect.left;
         const mouseY = event.clientY - rect.top;
@@ -1154,7 +1176,6 @@ function initializeYearlyMood() {
         let hoveredBody = null;
 
         for (let body of moodBodies) {
-
             const dx = body.position.x - mouseX;
             const dy = body.position.y - mouseY;
             const distance = Math.sqrt(dx * dx + dy * dy);
@@ -1166,7 +1187,6 @@ function initializeYearlyMood() {
         }
 
         if (hoveredBody) {
-
             const data = hoveredBody.moodData;
 
             if (!tooltipInstance) {
@@ -1210,11 +1230,18 @@ function initializeYearlyMood() {
                 tooltipInstance = null;
             }
         }
-
     });
-
 }
-};
 
-document.addEventListener('DOMContentLoaded', initMoodChart);
-document.addEventListener('livewire:navigated', initMoodChart);
+// Call functions on load and navigation
+function loadMoodScripts() {
+    initWeeklyMood();
+    initMonthlyMood();
+    initYearlyMood();
+}
+
+// Ensure init on first load
+document.addEventListener('DOMContentLoaded', loadMoodScripts);
+// Ensure init on Livewire navigation
+document.addEventListener('livewire:navigated', loadMoodScripts);
+
