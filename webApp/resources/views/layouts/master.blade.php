@@ -7,9 +7,10 @@
     <title>@yield('title', 'ROODIO')</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('head')
-    @livewireStyles
+    @stack('head')
+    {{-- @livewireStyles --}}
     @stack('style')
-    @livewireScripts
+    {{-- @livewireScripts --}}
     @stack('script')
 </head>
 <body class="container-body @yield('bodyClass', '')">

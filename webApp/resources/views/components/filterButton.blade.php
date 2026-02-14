@@ -43,7 +43,7 @@
         'angry' => 'text-secondary-angry-100'
     ];
 
-    $activeFilter = request('filter');
+    $activeFilter = request('filter', 'all'); // Default to 'all' if no filter specified
     $isActive = ($activeFilter == $value);
 @endphp
 

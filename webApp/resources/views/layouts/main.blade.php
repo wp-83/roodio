@@ -4,8 +4,10 @@
 @section('title', 'Roodio - Get The MOO-DIES, Listen The Music')
 
 
+
+
 @push('script')
-    <script src="{{ asset('js/pages/main/navigation.js') }}" defer></script>
+    <script src="{{ asset('js/pages/main/navigation.js?v=2') }}" defer></script>
 @endpush
 
 
@@ -25,5 +27,11 @@
             </div>
         </div>
     </div>
-    @yield('bottomContent')
+    @persist('player')
+        <x-audioPlayer :mood='$mood'></x-audioPlayer>
+    @endpersist
 @endsection
+
+@push('script')
+    <script src="{{ asset('js/pages/main/audioControl.js?v=2') }}" defer></script>
+@endpush
