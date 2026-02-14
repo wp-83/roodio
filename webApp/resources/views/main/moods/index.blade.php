@@ -184,4 +184,4 @@
         </div>
         <div id="moodYear" class="w-full h-[70vh] sm:h-[60vh] md:h-[50vh] lg:h-[60vh] min-h-[320px] max-h-[650px] border-3 {{ $borderMood[$mood] }} rounded-lg overflow-hidden border-t-0"></div>
     </div>
-@endsection
+@endsection 
