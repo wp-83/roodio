@@ -3,7 +3,8 @@
     'id',
     'name',
     'value',
-    'label'
+    'label',
+    'active' => null
 ])
 
 
@@ -43,15 +44,17 @@
         'angry' => 'text-secondary-angry-100'
     ];
 
-    $activeFilter = request('filter', 'all'); // Default to 'all' if no filter specified
-    $isActive = ($activeFilter == $value);
+    if ($active !== null) {
+        $isActive = $active;
+    } else {
+        $activeFilter = request('filter', 'all'); // Default to 'all' if no filter specified
+        $isActive = ($activeFilter == $value);
+    }
 @endphp
 
 
-<button type='submit' class="{{ ($isActive) ? 'cursor-default' : 'group cursor-pointer' }}" id='{{ $id }}' name='{{ $name }}' value='{{ $value }}' {{ ($isActive) ? 'disabled' : ''}}>
-    <div {{ $attributes->merge([
-        "class" => "font-secondaryAndButton text-small py-1 px-2 rounded-md md:px-3 md:text-body-size duration-100 " . $moodHoverStyle[$mood] . ' ' . (($isActive) ? $activeStyle[$mood] : $moodStyle[$mood]) . ' '
-    ]) }}>
+<button {{ $attributes->merge(['type' => 'submit']) }} class="{{ ($isActive) ? 'cursor-default' : 'group cursor-pointer' }}" id='{{ $id }}' name='{{ $name }}' value='{{ $value }}' {{ ($isActive) ? 'disabled' : ''}}>
+    <div class="font-secondaryAndButton text-small py-1 px-2 rounded-md md:px-3 md:text-body-size duration-100 {{ $moodHoverStyle[$mood] }} {{ ($isActive) ? $activeStyle[$mood] : $moodStyle[$mood] }}">
         <p class="group-hover:font-bold {{ $textStyle[$mood] . ' ' . (($isActive) ? ($textActiveStyle[$mood] . ' font-bold') : 'text-white') }}">{{ $label }}</p>
     </div>
 </button>

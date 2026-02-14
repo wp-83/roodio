@@ -14,26 +14,8 @@ class ThreadController extends Controller
      */
     public function index(Request $request)
     {
-        $mood     = session('chooseMood', 'happy');
-        $fullname = auth()->user()->userDetail->fullname;
-        $user     = auth()->user();
-
-        $search = $request->get('search');
-        $filter = $request->get('filter', 'all');
-        $query  = Thread::withCount('reactions')->orderByDesc('created_at');
-
-        // Apply search if provided
-        $query->search($search);
-
-        if ($filter == 'created') {
-            $query->where('userId', $user->id);
-        } else if ($filter == 'following') {
-            $followingIds = $user->followings()->pluck('users.id');
-            $query->whereIn('userId', $followingIds);
-        }
-
-        $threads = $query->get();
-        return view('main.threads.index', compact('threads', 'mood', 'fullname', 'user', 'search'));
+        $mood = session('chooseMood', 'happy');
+        return view('main.threads.index', compact('mood'));
     }
 
     /**
