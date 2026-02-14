@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\MoodHistories;
 use App\Models\Playlists;
+use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Session;
 
@@ -52,10 +53,20 @@ class SongController extends Controller
         return view('main.index', compact('playlists', 'username', 'fullname', 'profilePhoto', 'mood'));
     }
 
-    public function playlists(Playlists $playlists)
+
+    public function playlists(Request $request, Playlists $playlists)
     {
-        $songs = $playlists->songs()->applyUserMood()->get();
+        $search = $request->get('search');
+        $query  = $playlists->songs()->applyUserMood();
+        
+        // Apply search if provided
+        if ($search) {
+            $query->searchSongs($search);
+        }
+        
+        $songs = $query->get();
         $mood  = session('chooseMood', 'happy');
-        return view('main.playlists.index', compact('songs', 'mood'));
+        
+        return view('main.playlists.index', compact('songs', 'mood', 'search', 'playlists'));
     }
 }
