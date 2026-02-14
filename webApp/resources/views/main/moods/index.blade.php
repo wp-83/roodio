@@ -20,19 +20,18 @@
 
 
 @php
-    // dd($weekly, $monthly, $yearly);
-    // dd($weekly[0]->mood->type);
     $startDate = $weekly[0]['startDate']; 
     $endDate = $weekly[0]['endDate'];
 
     $calendarData = $monthly->map(function ($item) {
-    return [
-        'title' => $item['type'],
-        'start' => $item['date'],   
-        'total' => $item['total'],
-        'type'  => $item['type'],
-    ];
-});
+        return [
+            'title' => $item['type'],
+            'start' => $item['date'],   
+            'total' => $item['total'],
+            'type'  => $item['type'],
+        ];
+    });
+
     $textColor = [
         'happy' => 'text-secondary-happy-30',
         'sad' => 'text-secondary-sad-30',
@@ -50,11 +49,15 @@
 
 
 <script>
+    // weekly json data
     window.moodWeeklyData = @json(collect($weekly)->map(fn($item) => [
         'type' => $item['type'],
         'total' => (int)$item['total']
     ])->toArray());
     
+    // monthly json data
+    window.calendarData = @json($calendarData->values()->toArray());
+
     window.moodIcons = {
         happy: "{{ asset('assets/moods/icons/happy.png') }}",
         sad: "{{ asset('assets/moods/icons/sad.png') }}",
@@ -77,6 +80,8 @@
             angry: '#F0858A'
         }
     };
+
+    window.baseUrl = "{{ asset('') }}";
 </script>
 
 
@@ -100,7 +105,7 @@
         </div>
     </form>
 
-    <div id='weeklyMood' class='contentFadeLoad'>
+    {{-- <div id='weeklyMood' class='contentFadeLoad'>
         <div class='w-full flex flex-col items-center mb-10'>
             <p class='font-primary text-body-size md:text-paragraph lg:text-subtitle font-bold {{ $textColorTitleChart[$mood] }}'>WEEKLY MOOD RECAP</p>
             <p class='font-secondaryAndButton text-white text-micro md:text-body-size'>{{ $startDate }} - {{ $endDate }}</p>
@@ -119,220 +124,216 @@
         ;'>
             <canvas id='moodChart' class='w-full h-full'></canvas>
         </div>
-    </div>
+    </div> --}}
 
-    {{-- <div id="calendar"></div> --}}
+    <div id='monthlyMood' class='contentFadeLoad'>
+        <p class='w-full flex justify-center font-primary text-body-size md:text-paragraph lg:text-subtitle font-bold {{ $textColorTitleChart[$mood] }}'>MONTHLY MOOD RECAP</p>
+        <div id='timeCalendar' class='w-full flex flex-row items-center justify-center gap-2 mb-7 font-secondaryAndButton text-white text-micro md:text-body-size'>
+            <p id='month'></p>
+            <p id='year'></p>
+        </div>
+        <div id='calendarSummary' class='font-secondaryAndButton text-white bg-white/20 w-max p-3 rounded-md mb-6'>
+            <p class='text-sma;; lg:text-body-size font-bold {{ $textColorTitleChart[$mood] }}'>This Month Dominant</p>
+            <div class='flex flex-row gap-2 items-center'>
+                <img src="" alt="dominantMood" id='dominantMoodImage' class='w-16 h-16'>
+                <div>
+                    <p id='moodDominant' class='text-small lg:text-body-size font-bold'></p>
+                    <div class='flex flex-row gap-2 text-micro'>
+                        <p id='percentageMoodDominant'></p>
+                        <p>|</p>
+                        <div class='flex flex-row gap-1'>
+                            <p id='totalMoodDominant'></p>
+                            <p>day(s)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="calendar"></div>
+    </div>
+    
     {{-- <div id="bubble-container" style="height:600px;"></div> --}}
     {{-- <div id="bubble-container" style="width:90%; height:600px;"></div> --}}
 
-    <script>
+    {{-- <script>
 
+        // document.addEventListener("DOMContentLoaded", function () {
 
- document.addEventListener('DOMContentLoaded', function () {
+        //     const { Engine, Render, Runner, Bodies, World, Mouse, MouseConstraint, Events, Body } = Matter;
 
-    var calendar = new FullCalendar.Calendar(
-        document.getElementById('calendar'),
-        {
-            initialView: 'dayGridMonth',
-            height: 650,
-            events: @json($calendarData),
+        //     const container = document.getElementById('bubble-container');
+        //     const width = container.clientWidth;
+        //     const height = container.clientHeight;
 
-            eventDidMount: function(info) {
+        //     const engine = Engine.create();
+        //     const world = engine.world;
+        //     engine.gravity.y = 1;
 
-                tippy(info.el, {
-                    content: `
-                        <strong>${info.event.title}</strong><br>
-                        Total: ${info.event.extendedProps.total}
-                    `,
-                    allowHTML: true,
-                    theme: 'light-border',
-                    animation: 'scale',
-                });
+        //     const render = Render.create({
+        //         element: container,
+        //         engine: engine,
+        //         options: {
+        //             width: width,
+        //             height: height,
+        //             wireframes: false,
+        //             background: '#0b0f2a'
+        //         }
+        //     });
 
-            }
-        }
-    );
+        //     Render.run(render);
+        //     Runner.run(Runner.create(), engine);
 
-    calendar.render();
-});
+        //     // ===== WALLS =====
+        //     World.add(world, [
+        //         Bodies.rectangle(width/2, height+30, width, 60, { isStatic: true }),
+        //         Bodies.rectangle(-30, height/2, 60, height, { isStatic: true }),
+        //         Bodies.rectangle(width+30, height/2, 60, height, { isStatic: true })
+        //     ]);
 
-document.addEventListener("DOMContentLoaded", function () {
+        //     // ===== DRAG MOUSE =====
+        //     const mouse = Mouse.create(render.canvas);
+        //     const mouseConstraint = MouseConstraint.create(engine, {
+        //         mouse: mouse,
+        //         constraint: { stiffness: 0.2, render: { visible: false } }
+        //     });
 
-    const { Engine, Render, Runner, Bodies, World, Mouse, MouseConstraint, Events, Body } = Matter;
+        //     World.add(world, mouseConstraint);
+        //     render.mouse = mouse;
 
-    const container = document.getElementById('bubble-container');
-    const width = container.clientWidth;
-    const height = container.clientHeight;
+        //     // ===== DATA DARI LARAVEL =====
+        //     const yearlyData = @json($yearly);
 
-    const engine = Engine.create();
-    const world = engine.world;
-    engine.gravity.y = 1;
+        //     const moodImages = {
+        //         happy: "{{ asset('assets/moods/icons/happy.png') }}",
+        //         sad: "{{ asset('assets/moods/icons/sad.png') }}",
+        //         relaxed: "{{ asset('assets/moods/icons/relaxed.png') }}"
+        //     };
 
-    const render = Render.create({
-        element: container,
-        engine: engine,
-        options: {
-            width: width,
-            height: height,
-            wireframes: false,
-            background: '#0b0f2a'
-        }
-    });
+        //     const textureSize = 512; // ukuran asli PNG kamu
+        //     let moodBodies = [];
 
-    Render.run(render);
-    Runner.run(Runner.create(), engine);
+        //     // 🎈 BACKGROUND BALLS
+        //     for (let i = 0; i < 35; i++) {
+        //         const ball = Bodies.circle(
+        //             Math.random() * width,
+        //             Math.random() * -600,
+        //             20 + Math.random() * 25,
+        //             {
+        //                 restitution: 0.9,
+        //                 frictionAir: 0.01,
+        //                 render: {
+        //                     fillStyle: `hsl(${Math.random()*360},70%,60%)`
+        //                 }
+        //             }
+        //         );
+        //         World.add(world, ball);
+        //     }
 
-    // ===== WALLS =====
-    World.add(world, [
-        Bodies.rectangle(width/2, height+30, width, 60, { isStatic: true }),
-        Bodies.rectangle(-30, height/2, 60, height, { isStatic: true }),
-        Bodies.rectangle(width+30, height/2, 60, height, { isStatic: true })
-    ]);
+        //     // 😀 MOOD BALLS
+        //     yearlyData.forEach(item => {
 
-    // ===== DRAG MOUSE =====
-    const mouse = Mouse.create(render.canvas);
-    const mouseConstraint = MouseConstraint.create(engine, {
-        mouse: mouse,
-        constraint: { stiffness: 0.2, render: { visible: false } }
-    });
+        //         const radius = 45;
+        //         const diameter = radius * 2;
 
-    World.add(world, mouseConstraint);
-    render.mouse = mouse;
+        //         const ball = Bodies.circle(
+        //             Math.random() * width,
+        //             -100,
+        //             radius,
+        //             {
+        //                 restitution: 0.9,
+        //                 frictionAir: 0.01,
+        //                 render: {
+        //                     sprite: {
+        //                         texture: moodImages[item.type] ?? '',
+        //                         xScale: 0.05,
+        //                         yScale: 0.05
+        //                     }
+        //                 }
+        //             }
+        //         );
 
-    // ===== DATA DARI LARAVEL =====
-    const yearlyData = @json($yearly);
+        //         ball.moodData = item;
+        //         moodBodies.push(ball);
+        //         World.add(world, ball);
+        //     });
 
-    const moodImages = {
-        happy: "{{ asset('assets/moods/icons/happy.png') }}",
-        sad: "{{ asset('assets/moods/icons/sad.png') }}",
-        relaxed: "{{ asset('assets/moods/icons/relaxed.png') }}"
-    };
+        //     // ===== BALIKIN KALO KELUAR AREA =====
+        //     Events.on(engine, "afterUpdate", function() {
 
-    const textureSize = 512; // ukuran asli PNG kamu
-    let moodBodies = [];
+        //         moodBodies.forEach(body => {
 
-    // 🎈 BACKGROUND BALLS
-    for (let i = 0; i < 35; i++) {
-        const ball = Bodies.circle(
-            Math.random() * width,
-            Math.random() * -600,
-            20 + Math.random() * 25,
-            {
-                restitution: 0.9,
-                frictionAir: 0.01,
-                render: {
-                    fillStyle: `hsl(${Math.random()*360},70%,60%)`
-                }
-            }
-        );
-        World.add(world, ball);
-    }
+        //             if (body.position.y > height + 200) {
+        //                 Body.setPosition(body, { x: Math.random()*width, y: -100 });
+        //                 Body.setVelocity(body, { x: 0, y: 0 });
+        //             }
 
-    // 😀 MOOD BALLS
-    yearlyData.forEach(item => {
+        //             if (body.position.x < -200 || body.position.x > width + 200) {
+        //                 Body.setPosition(body, { x: Math.random()*width, y: -100 });
+        //                 Body.setVelocity(body, { x: 0, y: 0 });
+        //             }
 
-        const radius = 45;
-        const diameter = radius * 2;
+        //         });
 
-        const ball = Bodies.circle(
-            Math.random() * width,
-            -100,
-            radius,
-            {
-                restitution: 0.9,
-                frictionAir: 0.01,
-                render: {
-                    sprite: {
-                        texture: moodImages[item.type] ?? '',
-                        xScale: 0.05,
-                        yScale: 0.05
-                    }
-                }
-            }
-        );
+        //     });
 
-        ball.moodData = item;
-        moodBodies.push(ball);
-        World.add(world, ball);
-    });
+        //     // ===== TOOLTIP STABLE VERSION =====
+        //     let tooltip = null;
 
-    // ===== BALIKIN KALO KELUAR AREA =====
-    Events.on(engine, "afterUpdate", function() {
+        //     render.canvas.addEventListener('mousemove', function(event) {
 
-        moodBodies.forEach(body => {
+        //         const rect = render.canvas.getBoundingClientRect();
+        //         const mousePosition = {
+        //             x: event.clientX - rect.left,
+        //             y: event.clientY - rect.top
+        //         };
 
-            if (body.position.y > height + 200) {
-                Body.setPosition(body, { x: Math.random()*width, y: -100 });
-                Body.setVelocity(body, { x: 0, y: 0 });
-            }
+        //         let hoveredBody = null;
 
-            if (body.position.x < -200 || body.position.x > width + 200) {
-                Body.setPosition(body, { x: Math.random()*width, y: -100 });
-                Body.setVelocity(body, { x: 0, y: 0 });
-            }
+        //         moodBodies.forEach(body => {
 
-        });
+        //             const dx = body.position.x - mousePosition.x;
+        //             const dy = body.position.y - mousePosition.y;
+        //             const distance = Math.sqrt(dx*dx + dy*dy);
 
-    });
+        //             if (distance < body.circleRadius) {
+        //                 hoveredBody = body;
+        //             }
 
-    // ===== TOOLTIP STABLE VERSION =====
-    let tooltip = null;
+        //         });
 
-    render.canvas.addEventListener('mousemove', function(event) {
+        //         if (hoveredBody) {
 
-        const rect = render.canvas.getBoundingClientRect();
-        const mousePosition = {
-            x: event.clientX - rect.left,
-            y: event.clientY - rect.top
-        };
+        //             const data = hoveredBody.moodData;
 
-        let hoveredBody = null;
+        //             if (!tooltip) {
 
-        moodBodies.forEach(body => {
+        //                 tooltip = tippy(render.canvas, {
+        //                     content: `
+        //                         <strong>${data.month}</strong><br>
+        //                         Mood: ${data.type}<br>
+        //                         Total: ${data.total}
+        //                     `,
+        //                     allowHTML: true,
+        //                     trigger: 'manual',
+        //                     followCursor: true,
+        //                     placement: 'top'
+        //                 });
 
-            const dx = body.position.x - mousePosition.x;
-            const dy = body.position.y - mousePosition.y;
-            const distance = Math.sqrt(dx*dx + dy*dy);
+        //                 tooltip.show();
+        //             }
 
-            if (distance < body.circleRadius) {
-                hoveredBody = body;
-            }
+        //         } else {
 
-        });
+        //             if (tooltip) {
+        //                 tooltip.destroy();
+        //                 tooltip = null;
+        //             }
 
-        if (hoveredBody) {
+        //         }
 
-            const data = hoveredBody.moodData;
+        //     });
 
-            if (!tooltip) {
+        // });
 
-                tooltip = tippy(render.canvas, {
-                    content: `
-                        <strong>${data.month}</strong><br>
-                        Mood: ${data.type}<br>
-                        Total: ${data.total}
-                    `,
-                    allowHTML: true,
-                    trigger: 'manual',
-                    followCursor: true,
-                    placement: 'top'
-                });
-
-                tooltip.show();
-            }
-
-        } else {
-
-            if (tooltip) {
-                tooltip.destroy();
-                tooltip = null;
-            }
-
-        }
-
-    });
-
-});
-
-    </script>
+    </script> --}}
 @endsection

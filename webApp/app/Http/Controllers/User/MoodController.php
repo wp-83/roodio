@@ -23,19 +23,19 @@ class MoodController extends Controller
         // $weekly      = MoodHistories::whereBetween('created_at', [$startOfWeek, $endOfWeek])->get();
         // $weekly      = auth()->user()->moods()->whereBetween('mood_histories.created_at', [$startOfWeek, $endOfWeek])->get();
         $weekly = auth()->user()
-            ->moodHistories()
-            ->with('mood')
-            ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
-            ->select('moodId', DB::raw('COUNT(*) as total'))
-            ->groupBy('moodId')
-            ->get()
-            ->map(fn($item) => [
-                'id'        => $item->mood->id,
-                'type'      => $item->mood->type,
-                'total'     => $item->total,
-                'startDate' => $startOfWeek->format('F jS, Y'),
-                'endDate'   => $endDate->format('F jS, Y')
-            ]);
+                    ->moodHistories()
+                    ->with('mood')
+                    ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
+                    ->select('moodId', DB::raw('COUNT(*) as total'))
+                    ->groupBy('moodId')
+                    ->get()
+                    ->map(fn($item) => [
+                        'id'        => $item->mood->id,
+                        'type'      => $item->mood->type,
+                        'total'     => $item->total,
+                        'startDate' => $startOfWeek->format('F jS, Y'),
+                        'endDate'   => $endDate->format('F jS, Y')
+                    ]);
 
         // dd($weekly);    
         // $mood = new Mood();
@@ -44,31 +44,31 @@ class MoodController extends Controller
         $startOfMonth = Carbon::now()->startOfMonth();
         $endOfMonth   = Carbon::now()->endOfMonth();
         // $monthly      = MoodHistories::whereBetween('created_at', [$startOfMonth, $endOfMonth])->get()->groupBy('moodId');
-$monthly = auth()->user()
-    ->moodHistories()
-    ->join('moods', 'mood_histories.moodId', '=', 'moods.id')
-    ->whereBetween('mood_histories.created_at', [$startOfMonth, $endOfMonth])
-    ->select(
-        DB::raw('DATE(mood_histories.created_at) as date'),
-        'moods.id as mood_id',
-        'moods.type as mood_type',
-        DB::raw('COUNT(*) as total')
-    )
-    ->groupBy('date', 'moods.id', 'moods.type')
-    ->get()
-    ->groupBy('date')
-    ->map(function ($dayGroup) {
-
-        $dominant = $dayGroup->sortByDesc('total')->first();
-
-        return [
-            'date'  => $dominant->date,
-            'id'    => $dominant->mood_id,
-            'type'  => $dominant->mood_type,
-            'total' => $dominant->total,
-        ];
-    })
-    ->values();
+        $monthly = auth()->user()
+                    ->moodHistories()
+                    ->join('moods', 'mood_histories.moodId', '=', 'moods.id')
+                    ->whereBetween('mood_histories.created_at', [$startOfMonth, $endOfMonth])
+                    ->select(
+                        DB::raw('DATE(mood_histories.created_at) as date'),
+                        'moods.id as mood_id',
+                        'moods.type as mood_type',
+                        DB::raw('COUNT(*) as total')
+                    )
+                    ->groupBy('date', 'moods.id', 'moods.type')
+                    ->get()
+                    ->groupBy('date')
+                    ->map(function ($dayGroup) {
+                        // Ambil mood yang paling dominan (total tertinggi) untuk setiap tanggal
+                        $dominantMood = $dayGroup->sortByDesc('total')->first();
+                        
+                        return [
+                            'date'  => $dominantMood->date,
+                            'id'    => $dominantMood->mood_id,
+                            'type'  => $dominantMood->mood_type,
+                            'total' => $dominantMood->total,
+                        ];
+                    })
+                    ->values(); // Reset array keys ke numeric index
 
         $startOfYearly = Carbon::now()->startOfMonth();
         $endOfYearly   = Carbon::now()->endOfMonth();
