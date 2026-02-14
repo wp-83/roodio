@@ -20,19 +20,33 @@
 
 
 @php
-    // dd($weekly, $monthly, $yearly);
-    // dd($weekly[0]->mood->type);
     $startDate = $weekly[0]['startDate']; 
     $endDate = $weekly[0]['endDate'];
 
+    $firstMonth = $yearly->first();  
+    $lastMonth = $yearly->last();           
+    $startMonth = $firstMonth['bulan'] ?? 'January';
+    $endMonth = $lastMonth['bulan'] ?? 'December';
+    $yearMonth = date('Y');         
+
     $calendarData = $monthly->map(function ($item) {
-    return [
-        'title' => $item['type'],
-        'start' => $item['date'],   
-        'total' => $item['total'],
-        'type'  => $item['type'],
-    ];
-});
+        return [
+            'title' => $item['type'],
+            'start' => $item['date'],   
+            'total' => $item['total'],
+            'type'  => $item['type'],
+        ];
+    });
+
+    $yearlyData = $yearly->map(function($item) {
+        return [
+            'mood' => $item['type'] ?? $item['mood'] ?? 'happy',
+            'bulan' => $item['bulan'] ?? $item['month'] ?? 'Unknown',
+            'total' => $item['total'] ?? 0,
+            'persentase' => $item['persentase'] ?? '0%'
+        ];
+    });
+
     $textColor = [
         'happy' => 'text-secondary-happy-30',
         'sad' => 'text-secondary-sad-30',
@@ -46,15 +60,29 @@
         'relaxed' => 'text-secondary-relaxed-50',
         'angry' => 'text-secondary-angry-50'
     ];
+
+    $borderMood = [
+        'happy' => 'border-secondary-happy-70',
+        'sad' => 'border-secondary-sad-70',
+        'relaxed' => 'border-secondary-relaxed-70',
+        'angry' => 'border-secondary-angry-70'
+    ];
 @endphp
 
 
 <script>
+    // weekly json data
     window.moodWeeklyData = @json(collect($weekly)->map(fn($item) => [
         'type' => $item['type'],
         'total' => (int)$item['total']
     ])->toArray());
     
+    // monthly json data
+    window.calendarData = @json($calendarData->values()->toArray());
+
+    // yearly json data
+    window.moodYearlyData = @json($yearlyData);
+
     window.moodIcons = {
         happy: "{{ asset('assets/moods/icons/happy.png') }}",
         sad: "{{ asset('assets/moods/icons/sad.png') }}",
@@ -77,6 +105,8 @@
             angry: '#F0858A'
         }
     };
+
+    window.baseUrl = "{{ asset('') }}";
 </script>
 
 
@@ -100,7 +130,7 @@
         </div>
     </form>
 
-    <div id='weeklyMood' class='contentFadeLoad'>
+    {{-- <div id='weeklyMood' class='contentFadeLoad'>
         <div class='w-full flex flex-col items-center mb-10'>
             <p class='font-primary text-body-size md:text-paragraph lg:text-subtitle font-bold {{ $textColorTitleChart[$mood] }}'>WEEKLY MOOD RECAP</p>
             <p class='font-secondaryAndButton text-white text-micro md:text-body-size'>{{ $startDate }} - {{ $endDate }}</p>
@@ -119,6 +149,33 @@
         ;'>
             <canvas id='moodChart' class='w-full h-full'></canvas>
         </div>
+    </div> --}}
+
+    {{-- <div id='monthlyMood' class='contentFadeLoad'>
+        <p class='w-full flex justify-center font-primary text-body-size md:text-paragraph lg:text-subtitle font-bold {{ $textColorTitleChart[$mood] }}'>MONTHLY MOOD RECAP</p>
+        <div id='timeCalendar' class='w-full flex flex-row items-center justify-center gap-2 mb-7 font-secondaryAndButton text-white text-micro md:text-body-size'>
+            <p id='month'></p>
+            <p id='year'></p>
+        </div>
+        <div id='calendarSummary' class='font-secondaryAndButton text-white bg-white/20 w-max p-3 rounded-md mb-6'>
+            <p class='text-sma;; lg:text-body-size font-bold {{ $textColorTitleChart[$mood] }}'>This Month Dominant</p>
+            <div class='flex flex-row gap-2 items-center'>
+                <img src="" alt="dominantMood" id='dominantMoodImage' class='w-16 h-16'>
+                <div>
+                    <p id='moodDominant' class='text-small lg:text-body-size font-bold'></p>
+                    <div class='flex flex-row gap-2 text-micro'>
+                        <p id='percentageMoodDominant'></p>
+                        <p>|</p>
+                        <div class='flex flex-row gap-1'>
+                            <p id='totalMoodDominant'></p>
+                            <p>day(s)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="calendar"></div>
+    </div> --}}
     </div>
 
     {{-- <div id="calendar"></div> --}}
@@ -342,5 +399,11 @@
     document.addEventListener('livewire:navigated', initBubble);
 
 
-    </script>
+    <div id='yearlyMood' class='contentFadeLoad'>
+        <div class='w-full flex flex-col items-center mb-10'>
+            <p class='font-primary text-body-size md:text-paragraph lg:text-subtitle font-bold {{ $textColorTitleChart[$mood] }}'>YEARLY MOOD RECAP</p>
+            <p class='font-secondaryAndButton text-white text-micro md:text-body-size'>{{ $startMonth . ' ' . $yearMonth }} - {{ $endMonth . ' ' . $yearMonth }}</p>
+        </div>
+        <div id="moodYear" class="w-full h-[70vh] sm:h-[60vh] md:h-[50vh] lg:h-[60vh] min-h-[320px] max-h-[650px] border-3 {{ $borderMood[$mood] }} rounded-lg overflow-hidden border-t-0"></div>
+    </div>
 @endsection
