@@ -10,7 +10,7 @@
 
 
 @push('script')
-    <script src="{{ asset('js/pages/main/thread.js') }}" defer></script>
+    <script src="{{ asset('js/pages/main/thread.js?v=2') }}" defer></script>
 @endpush
 
 
@@ -147,6 +147,9 @@
         </div>
     </a>
     <form action="{{ route('threads.index') }}" method="GET">
+        @if(request('search'))
+            <input type="hidden" name="search" value="{{ request('search') }}">
+        @endif
         <div class='mb-7 flex flex-row gap-3 w-full lg:justify-end contentFadeLoad'>
             <x-filterButton id='allFilter' name='filter' value='all' :mood='$mood' label='All' onchange="this.form.submit()"></x-filterButton>
             <x-filterButton id='followingFilter' name='filter' value='following' :mood='$mood' label='Following' onchange="this.form.submit()"></x-filterButton>

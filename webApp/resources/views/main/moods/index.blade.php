@@ -11,7 +11,7 @@
 
 @push('script')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="{{ asset('js/pages/main/mood.js') }}" defer></script>
+    <script src="{{ asset('js/pages/main/mood.js?v=2') }}" defer></script>
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.20/index.global.min.js'></script>
     <script src="https://unpkg.com/@popperjs/core@2"></script>
     <script src="https://unpkg.com/tippy.js@6"></script>
@@ -128,11 +128,12 @@
     <script>
 
 
- document.addEventListener('DOMContentLoaded', function () {
 
-    var calendar = new FullCalendar.Calendar(
-        document.getElementById('calendar'),
-        {
+    function initCalendar() {
+        const calendarEl = document.getElementById('calendar');
+        if (!calendarEl) return;
+
+        var calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
             height: 650,
             events: @json($calendarData),
@@ -150,189 +151,196 @@
                 });
 
             }
-        }
-    );
+        });
 
-    calendar.render();
-});
-
-document.addEventListener("DOMContentLoaded", function () {
-
-    const { Engine, Render, Runner, Bodies, World, Mouse, MouseConstraint, Events, Body } = Matter;
-
-    const container = document.getElementById('bubble-container');
-    const width = container.clientWidth;
-    const height = container.clientHeight;
-
-    const engine = Engine.create();
-    const world = engine.world;
-    engine.gravity.y = 1;
-
-    const render = Render.create({
-        element: container,
-        engine: engine,
-        options: {
-            width: width,
-            height: height,
-            wireframes: false,
-            background: '#0b0f2a'
-        }
-    });
-
-    Render.run(render);
-    Runner.run(Runner.create(), engine);
-
-    // ===== WALLS =====
-    World.add(world, [
-        Bodies.rectangle(width/2, height+30, width, 60, { isStatic: true }),
-        Bodies.rectangle(-30, height/2, 60, height, { isStatic: true }),
-        Bodies.rectangle(width+30, height/2, 60, height, { isStatic: true })
-    ]);
-
-    // ===== DRAG MOUSE =====
-    const mouse = Mouse.create(render.canvas);
-    const mouseConstraint = MouseConstraint.create(engine, {
-        mouse: mouse,
-        constraint: { stiffness: 0.2, render: { visible: false } }
-    });
-
-    World.add(world, mouseConstraint);
-    render.mouse = mouse;
-
-    // ===== DATA DARI LARAVEL =====
-    const yearlyData = @json($yearly);
-
-    const moodImages = {
-        happy: "{{ asset('assets/moods/icons/happy.png') }}",
-        sad: "{{ asset('assets/moods/icons/sad.png') }}",
-        relaxed: "{{ asset('assets/moods/icons/relaxed.png') }}"
-    };
-
-    const textureSize = 512; // ukuran asli PNG kamu
-    let moodBodies = [];
-
-    // 🎈 BACKGROUND BALLS
-    for (let i = 0; i < 35; i++) {
-        const ball = Bodies.circle(
-            Math.random() * width,
-            Math.random() * -600,
-            20 + Math.random() * 25,
-            {
-                restitution: 0.9,
-                frictionAir: 0.01,
-                render: {
-                    fillStyle: `hsl(${Math.random()*360},70%,60%)`
-                }
-            }
-        );
-        World.add(world, ball);
+        calendar.render();
     }
 
-    // 😀 MOOD BALLS
-    yearlyData.forEach(item => {
+    document.addEventListener('DOMContentLoaded', initCalendar);
+    document.addEventListener('livewire:navigated', initCalendar);
 
-        const radius = 45;
-        const diameter = radius * 2;
 
-        const ball = Bodies.circle(
-            Math.random() * width,
-            -100,
-            radius,
-            {
-                restitution: 0.9,
-                frictionAir: 0.01,
-                render: {
-                    sprite: {
-                        texture: moodImages[item.type] ?? '',
-                        xScale: 0.05,
-                        yScale: 0.05
-                    }
-                }
+    function initBubble() {
+        const container = document.getElementById('bubble-container');
+        if (!container) return;
+
+        const { Engine, Render, Runner, Bodies, World, Mouse, MouseConstraint, Events, Body } = Matter;
+
+        const width = container.clientWidth;
+        const height = container.clientHeight;
+
+        const engine = Engine.create();
+        const world = engine.world;
+        engine.gravity.y = 1;
+
+        const render = Render.create({
+            element: container,
+            engine: engine,
+            options: {
+                width: width,
+                height: height,
+                wireframes: false,
+                background: '#0b0f2a'
             }
-        );
-
-        ball.moodData = item;
-        moodBodies.push(ball);
-        World.add(world, ball);
-    });
-
-    // ===== BALIKIN KALO KELUAR AREA =====
-    Events.on(engine, "afterUpdate", function() {
-
-        moodBodies.forEach(body => {
-
-            if (body.position.y > height + 200) {
-                Body.setPosition(body, { x: Math.random()*width, y: -100 });
-                Body.setVelocity(body, { x: 0, y: 0 });
-            }
-
-            if (body.position.x < -200 || body.position.x > width + 200) {
-                Body.setPosition(body, { x: Math.random()*width, y: -100 });
-                Body.setVelocity(body, { x: 0, y: 0 });
-            }
-
         });
 
-    });
+        Render.run(render);
+        Runner.run(Runner.create(), engine);
 
-    // ===== TOOLTIP STABLE VERSION =====
-    let tooltip = null;
+        // ===== WALLS =====
+        World.add(world, [
+            Bodies.rectangle(width/2, height+30, width, 60, { isStatic: true }),
+            Bodies.rectangle(-30, height/2, 60, height, { isStatic: true }),
+            Bodies.rectangle(width+30, height/2, 60, height, { isStatic: true })
+        ]);
 
-    render.canvas.addEventListener('mousemove', function(event) {
+        // ===== DRAG MOUSE =====
+        const mouse = Mouse.create(render.canvas);
+        const mouseConstraint = MouseConstraint.create(engine, {
+            mouse: mouse,
+            constraint: { stiffness: 0.2, render: { visible: false } }
+        });
 
-        const rect = render.canvas.getBoundingClientRect();
-        const mousePosition = {
-            x: event.clientX - rect.left,
-            y: event.clientY - rect.top
+        World.add(world, mouseConstraint);
+        render.mouse = mouse;
+
+        // ===== DATA DARI LARAVEL =====
+        const yearlyData = @json($yearly);
+
+        const moodImages = {
+            happy: "{{ asset('assets/moods/icons/happy.png') }}",
+            sad: "{{ asset('assets/moods/icons/sad.png') }}",
+            relaxed: "{{ asset('assets/moods/icons/relaxed.png') }}"
         };
 
-        let hoveredBody = null;
+        const textureSize = 512; // ukuran asli PNG kamu
+        let moodBodies = [];
 
-        moodBodies.forEach(body => {
+        // 🎈 BACKGROUND BALLS
+        for (let i = 0; i < 35; i++) {
+            const ball = Bodies.circle(
+                Math.random() * width,
+                Math.random() * -600,
+                20 + Math.random() * 25,
+                {
+                    restitution: 0.9,
+                    frictionAir: 0.01,
+                    render: {
+                        fillStyle: `hsl(${Math.random()*360},70%,60%)`
+                    }
+                }
+            );
+            World.add(world, ball);
+        }
 
-            const dx = body.position.x - mousePosition.x;
-            const dy = body.position.y - mousePosition.y;
-            const distance = Math.sqrt(dx*dx + dy*dy);
+        // 😀 MOOD BALLS
+        yearlyData.forEach(item => {
 
-            if (distance < body.circleRadius) {
-                hoveredBody = body;
-            }
+            const radius = 45;
+            const diameter = radius * 2;
+
+            const ball = Bodies.circle(
+                Math.random() * width,
+                -100,
+                radius,
+                {
+                    restitution: 0.9,
+                    frictionAir: 0.01,
+                    render: {
+                        sprite: {
+                            texture: moodImages[item.type] ?? '',
+                            xScale: 0.05,
+                            yScale: 0.05
+                        }
+                    }
+                }
+            );
+
+            ball.moodData = item;
+            moodBodies.push(ball);
+            World.add(world, ball);
+        });
+
+        // ===== BALIKIN KALO KELUAR AREA =====
+        Events.on(engine, "afterUpdate", function() {
+
+            moodBodies.forEach(body => {
+
+                if (body.position.y > height + 200) {
+                    Body.setPosition(body, { x: Math.random()*width, y: -100 });
+                    Body.setVelocity(body, { x: 0, y: 0 });
+                }
+
+                if (body.position.x < -200 || body.position.x > width + 200) {
+                    Body.setPosition(body, { x: Math.random()*width, y: -100 });
+                    Body.setVelocity(body, { x: 0, y: 0 });
+                }
+
+            });
 
         });
 
-        if (hoveredBody) {
+        // ===== TOOLTIP STABLE VERSION =====
+        let tooltip = null;
 
-            const data = hoveredBody.moodData;
+        render.canvas.addEventListener('mousemove', function(event) {
 
-            if (!tooltip) {
+            const rect = render.canvas.getBoundingClientRect();
+            const mousePosition = {
+                x: event.clientX - rect.left,
+                y: event.clientY - rect.top
+            };
 
-                tooltip = tippy(render.canvas, {
-                    content: `
-                        <strong>${data.month}</strong><br>
-                        Mood: ${data.type}<br>
-                        Total: ${data.total}
-                    `,
-                    allowHTML: true,
-                    trigger: 'manual',
-                    followCursor: true,
-                    placement: 'top'
-                });
+            let hoveredBody = null;
 
-                tooltip.show();
+            moodBodies.forEach(body => {
+
+                const dx = body.position.x - mousePosition.x;
+                const dy = body.position.y - mousePosition.y;
+                const distance = Math.sqrt(dx*dx + dy*dy);
+
+                if (distance < body.circleRadius) {
+                    hoveredBody = body;
+                }
+
+            });
+
+            if (hoveredBody) {
+
+                const data = hoveredBody.moodData;
+
+                if (!tooltip) {
+
+                    tooltip = tippy(render.canvas, {
+                        content: `
+                            <strong>${data.month}</strong><br>
+                            Mood: ${data.type}<br>
+                            Total: ${data.total}
+                        `,
+                        allowHTML: true,
+                        trigger: 'manual',
+                        followCursor: true,
+                        placement: 'top'
+                    });
+
+                    tooltip.show();
+                }
+
+            } else {
+
+                if (tooltip) {
+                    tooltip.destroy();
+                    tooltip = null;
+                }
+
             }
 
-        } else {
+        });
+    }
 
-            if (tooltip) {
-                tooltip.destroy();
-                tooltip = null;
-            }
+    document.addEventListener('DOMContentLoaded', initBubble);
+    document.addEventListener('livewire:navigated', initBubble);
 
-        }
-
-    });
-
-});
 
     </script>
 @endsection
