@@ -760,3 +760,458 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }, 200);
 });
+
+// yearly mood
+window.addEventListener('load', function () {
+    initializeYearlyMood();
+});
+
+function initializeYearlyMood() {
+
+    const container = document.getElementById('moodYear');
+    if (!container) return;
+    if (typeof Matter === 'undefined') return;
+
+    const { Engine, Render, Runner, Bodies, World, Mouse, MouseConstraint, Events, Body } = Matter;
+
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+    if (width === 0 || height === 0) return;
+
+    // =============================
+    // INJECT CSS UNTUK TIPPY THEME
+    // =============================
+    const style = document.createElement('style');
+    style.textContent = `
+        /* ===== TIPPY CUSTOM THEME UNTUK YEARLY MOOD ===== */
+        .tippy-box[data-theme~='yearly-white'] {
+            background-color: #ffffff !important;
+            color: #333333 !important;
+            border: 2px solid #1F3A98 !important;
+            border-radius: 16px !important;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        .tippy-box[data-theme~='yearly-white'] .tippy-arrow {
+            color: #ffffff !important;
+        }
+
+        .tippy-box[data-theme~='yearly-white'] .tippy-content {
+            padding: 0 !important;
+            font-family: 'Poppins' !important;
+        }
+    `;
+    document.head.appendChild(style);
+
+    // =============================
+    // ENGINE SETUP
+    // =============================
+    const engine = Engine.create();
+    const world = engine.world;
+
+    engine.gravity.y = 1.4;
+    engine.positionIterations = 8;
+    engine.velocityIterations = 6;
+
+    const render = Render.create({
+        element: container,
+        engine: engine,
+        options: {
+            width: width,
+            height: height,
+            wireframes: false,
+            background: '#06134D'
+        }
+    });
+
+    Render.run(render);
+    Runner.run(Runner.create(), engine);
+
+    // =============================
+    // WALLS
+    // =============================
+    const wallThickness = 120;
+
+    const ground = Bodies.rectangle(
+        width / 2,
+        height + wallThickness / 2,
+        width + 200,
+        wallThickness,
+        { isStatic: true }
+    );
+
+    const ceilingY = -400;
+    const ceiling = Bodies.rectangle(
+        width / 2,
+        ceilingY,
+        width + 200,
+        wallThickness,
+        { 
+            isStatic: true,
+            restitution: 0.8
+        }
+    );
+
+    const leftWall = Bodies.rectangle(
+        -wallThickness / 2,
+        height / 2,
+        wallThickness,
+        height + 400,
+        { isStatic: true }
+    );
+
+    const rightWall = Bodies.rectangle(
+        width + wallThickness / 2,
+        height / 2,
+        wallThickness,
+        height + 400,
+        { isStatic: true }
+    );
+
+    World.add(world, [ground, ceiling, leftWall, rightWall]);
+
+    // =============================
+    // DRAG
+    // =============================
+    const mouse = Mouse.create(render.canvas);
+
+    const mouseConstraint = MouseConstraint.create(engine, {
+        mouse: mouse,
+        constraint: {
+            stiffness: 0.05,
+            damping: 0.2,
+            render: { visible: false }
+        }
+    });
+
+    World.add(world, mouseConstraint);
+    render.mouse = mouse;
+
+    const yearlyData = window.moodYearlyData || [];
+    const moodImages = window.moodIcons || {};
+
+    let moodBodies = [];
+    const ballColors = [
+        '#FFA350',
+        '#FFC48D',
+        '#FFD1A6',
+        '#FFF2E5',
+        '#876FD0',
+        '#B6A5E7',
+        '#C9BCF0',
+        '#EEE8FB',
+        '#50D189',
+        '#8EE0B1',
+        '#A4E6C0',
+        '#E0F7EB',
+        '#F49DA0',
+        '#EB5F68',
+        '#F7B5B7',
+        '#FDEAE9'
+    ];
+
+    // =============================
+    // FUNGSI UNTUK MENDAPATKAN UKURAN RESPONSIVE
+    // =============================
+    function getResponsiveSizes() {
+        const screenWidth = window.innerWidth;
+        
+        // Ukuran untuk background balls
+        let bgBallMinRadius, bgBallMaxRadius, bgBallCount;
+        // Ukuran untuk mood balls
+        let moodBallRadius, moodBallScale;
+        
+        if (screenWidth >= 1200) { // Desktop besar
+            bgBallMinRadius = 15;
+            bgBallMaxRadius = 35;
+            bgBallCount = 75;
+            moodBallRadius = 70;
+            moodBallScale = 0.0325;
+        } 
+        else if (screenWidth >= 768) { // Tablet
+            bgBallMinRadius = 12;
+            bgBallMaxRadius = 28;
+            bgBallCount = 60;
+            moodBallRadius = 55;
+            moodBallScale = 0.028;
+        } 
+        else if (screenWidth >= 480) { // Mobile besar
+            bgBallMinRadius = 10;
+            bgBallMaxRadius = 22;
+            bgBallCount = 45;
+            moodBallRadius = 45;
+            moodBallScale = 0.024;
+        } 
+        else { // Mobile kecil
+            bgBallMinRadius = 8;
+            bgBallMaxRadius = 18;
+            bgBallCount = 35;
+            moodBallRadius = 38;
+            moodBallScale = 0.02;
+        }
+        
+        return {
+            bgBallMinRadius,
+            bgBallMaxRadius,
+            bgBallCount,
+            moodBallRadius,
+            moodBallScale
+        };
+    }
+
+    // =============================
+    // BACKGROUND BALLS - RESPONSIVE
+    // =============================
+    const sizes = getResponsiveSizes();
+    
+    for (let i = 0; i < sizes.bgBallCount; i++) {
+        const ballRadius = sizes.bgBallMinRadius + Math.random() * (sizes.bgBallMaxRadius - sizes.bgBallMinRadius);
+        
+        const ball = Bodies.circle(
+            Math.random() * width,
+            -50 - Math.random() * 150,
+            ballRadius,
+            {
+                restitution: 0.85,
+                friction: 0.001,
+                frictionAir: 0.005,
+                density: 0.001,
+                render: {
+                    fillStyle: ballColors[Math.floor(Math.random() * ballColors.length)]
+                }
+            }
+        );
+
+        World.add(world, ball);
+    }
+
+    // =============================
+    // MOOD BALLS - RESPONSIVE
+    // =============================
+    yearlyData.forEach((item) => {
+        const moodBall = Bodies.circle(
+            150 + Math.random() * (width - 300),
+            -50 - Math.random() * 150,
+            sizes.moodBallRadius,
+            {
+                restitution: 0.85,
+                friction: 0.001,
+                frictionAir: 0.01,
+                density: 0.002,
+                render: {
+                    sprite: {
+                        texture: moodImages[item.mood],
+                        xScale: sizes.moodBallScale,
+                        yScale: sizes.moodBallScale
+                    }
+                }
+            }
+        );
+
+        moodBall.moodData = item;
+        moodBodies.push(moodBall);
+        World.add(world, moodBall);
+    });
+
+    // =============================
+    // RESIZE HANDLER - UPDATE UKURAN KETIKA LAYAR DIUBAH
+    // =============================
+    window.addEventListener('resize', function() {
+        // Hapus semua balls yang ada
+        world.bodies.forEach(body => {
+            if (!body.isStatic) {
+                World.remove(world, body);
+            }
+        });
+        
+        // Reset moodBodies array
+        moodBodies = [];
+        
+        // Dapatkan ukuran baru
+        const newSizes = getResponsiveSizes();
+        const newWidth = container.clientWidth;
+        const newHeight = container.clientHeight;
+        
+        // Buat ulang background balls dengan ukuran baru
+        for (let i = 0; i < newSizes.bgBallCount; i++) {
+            const ballRadius = newSizes.bgBallMinRadius + Math.random() * (newSizes.bgBallMaxRadius - newSizes.bgBallMinRadius);
+            
+            const ball = Bodies.circle(
+                Math.random() * newWidth,
+                -50 - Math.random() * 150,
+                ballRadius,
+                {
+                    restitution: 0.85,
+                    friction: 0.001,
+                    frictionAir: 0.005,
+                    density: 0.001,
+                    render: {
+                        fillStyle: ballColors[Math.floor(Math.random() * ballColors.length)]
+                    }
+                }
+            );
+
+            World.add(world, ball);
+        }
+        
+        // Buat ulang mood balls dengan ukuran baru
+        yearlyData.forEach((item) => {
+            const moodBall = Bodies.circle(
+                150 + Math.random() * (newWidth - 300),
+                -50 - Math.random() * 150,
+                newSizes.moodBallRadius,
+                {
+                    restitution: 0.85,
+                    friction: 0.001,
+                    frictionAir: 0.01,
+                    density: 0.002,
+                    render: {
+                        sprite: {
+                            texture: moodImages[item.mood],
+                            xScale: newSizes.moodBallScale,
+                            yScale: newSizes.moodBallScale
+                        }
+                    }
+                }
+            );
+
+            moodBall.moodData = item;
+            moodBodies.push(moodBall);
+            World.add(world, moodBall);
+        });
+    });
+
+    Events.on(engine, 'beforeUpdate', function () {
+
+        const topHardLimit = -600;
+        const bottomHardLimit = height + 500;
+        const sideLimit = 300;
+
+        world.bodies.forEach(body => {
+
+            if (body.isStatic) return;
+
+            const radius = body.circleRadius || 0;
+
+            if (body.position.y < topHardLimit) {
+                Body.setPosition(body, {
+                    x: body.position.x,
+                    y: topHardLimit + radius
+                });
+                Body.setVelocity(body, {
+                    x: body.velocity.x * 0.8,
+                    y: 5 + Math.abs(body.velocity.y) * 0.5
+                });
+            }
+
+            if (body.position.y > bottomHardLimit) {
+                Body.setPosition(body, {
+                    x: body.position.x,
+                    y: height - radius
+                });
+                Body.setVelocity(body, {
+                    x: body.velocity.x * 0.8,
+                    y: -5
+                });
+            }
+
+            if (body.position.x < -sideLimit) {
+                Body.setPosition(body, {
+                    x: radius,
+                    y: body.position.y
+                });
+                Body.setVelocity(body, {
+                    x: Math.abs(body.velocity.x),
+                    y: body.velocity.y
+                });
+            }
+
+            if (body.position.x > width + sideLimit) {
+                Body.setPosition(body, {
+                    x: width - radius,
+                    y: body.position.y
+                });
+                Body.setVelocity(body, {
+                    x: -Math.abs(body.velocity.x),
+                    y: body.velocity.y
+                });
+            }
+
+        });
+
+    });
+
+    // =============================
+    // TOOLTIP
+    // =============================
+    let tooltipInstance = null;
+
+    render.canvas.addEventListener('mousemove', function (event) {
+
+        const rect = render.canvas.getBoundingClientRect();
+        const mouseX = event.clientX - rect.left;
+        const mouseY = event.clientY - rect.top;
+
+        let hoveredBody = null;
+
+        for (let body of moodBodies) {
+
+            const dx = body.position.x - mouseX;
+            const dy = body.position.y - mouseY;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+
+            if (distance <= body.circleRadius) {
+                hoveredBody = body;
+                break;
+            }
+        }
+
+        if (hoveredBody) {
+
+            const data = hoveredBody.moodData;
+
+            if (!tooltipInstance) {
+                tooltipInstance = tippy(render.canvas, {
+                    content: `
+                        <div style="text-align:center; padding:6px 10px;">
+                            <div style="font-size:1.25rem; font-weight:bold; color:#142C80; margin-bottom:6px; border-bottom:3px solid #1F3A98; padding-bottom:8px;">
+                                ${data.bulan}
+                            </div>
+                            <div style="font-size:0.9rem; color:#333; margin-bottom:10px; display:flex; align-items:center; justify-content:center; gap:8px;">
+                                <span style="color:#1F3A98; text-transform:capitalize;">${data.mood} | ${data.persentase}</span>
+                            </div>
+                        </div>
+                    `,
+                    allowHTML: true,
+                    trigger: 'manual',
+                    followCursor: true,
+                    placement: 'top',
+                    theme: 'yearly-white',
+                    animation: 'scale',
+                    duration: [300, 200],
+                    maxWidth: 350,
+                    popperOptions: {
+                        modifiers: [
+                            {
+                                name: 'offset',
+                                options: {
+                                    offset: [0, 15],
+                                },
+                            },
+                        ],
+                    },
+                });
+
+                tooltipInstance.show();
+            }
+
+        } else {
+            if (tooltipInstance) {
+                tooltipInstance.destroy();
+                tooltipInstance = null;
+            }
+        }
+
+    });
+
+}
