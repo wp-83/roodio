@@ -57,7 +57,15 @@ class SongController extends Controller
     public function playlists(Request $request, Playlists $playlists)
     {
         $search = $request->get('search');
-        $query  = $playlists->songs()->applyUserMood();
+        
+        // 1. Get songs filtered by Mood ONLY (for Playlist Header Stats)
+        $moodSongs = $playlists->songs()->applyUserMood()->get();
+        // Manually set the relation so $playlists->total_duration uses this Filtered Collection
+        $playlists->setRelation('songs', $moodSongs);
+
+        // 2. Get songs for the List View (Apply Search if needed)
+        // We need a fresh query builder here
+        $query = $playlists->songs()->applyUserMood();
         
         // Apply search if provided
         if ($search) {

@@ -61,15 +61,20 @@ button:focus {
     @apply text-error-moderate w-[inherit] h-3 pt-0.5 text-micro md:text-small;
   }
 
-  .contentFadeLoad {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.75s ease-in-out, transform 0.75s ease-in-out;
+  @keyframes contentFadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
-  .contentFadeLoad.show {
-    opacity: 1;
-    transform: translateY(0);
+  .contentFadeLoad {
+    animation: contentFadeUp 0.75s ease-in-out forwards;
   }
 }
 

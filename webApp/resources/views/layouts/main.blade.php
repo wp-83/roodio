@@ -16,6 +16,72 @@
 
 @section('bodyContent')
     @yield('overlayContent')
+    
+    {{-- Top Loading Progress Bar --}}
+    @php
+        $loadingInfos = [
+            'happy' => 'bg-secondary-happy-50',
+            'sad' => 'bg-secondary-sad-50',
+            'relaxed' => 'bg-secondary-relaxed-50',
+            'angry' => 'bg-secondary-angry-50'
+        ];
+        $loadingColor = $loadingInfos[$mood] ?? 'bg-primary-50';
+    @endphp
+    
+    <div id="top-loading-bar" class="fixed top-0 left-0 w-full h-0.5 z-[9999] hidden">
+        <div class="h-full {{ $loadingColor }} transition-all duration-300 ease-out" style="width: 0%" id="top-loading-progress"></div>
+    </div>
+
+    <script>
+        function showLoadingBar() {
+            const bar = document.getElementById('top-loading-bar');
+            const progress = document.getElementById('top-loading-progress');
+            if(bar && progress) {
+                bar.classList.remove('hidden');
+                // Small delay to ensure transition works if it was just hidden
+                requestAnimationFrame(() => {
+                    progress.style.width = '30%';
+                });
+                
+                // Auto increment slightly to show activity
+                if (!window.loadingTimer) {
+                    window.loadingTimer = setTimeout(() => { 
+                        if(progress.style.width === '30%') progress.style.width = '70%'; 
+                    }, 500);
+                }
+            }
+        }
+
+        function hideLoadingBar() {
+            const bar = document.getElementById('top-loading-bar');
+            const progress = document.getElementById('top-loading-progress');
+            if(bar && progress) {
+                progress.style.width = '100%';
+                if (window.loadingTimer) {
+                     clearTimeout(window.loadingTimer);
+                     window.loadingTimer = null;
+                }
+                setTimeout(() => {
+                    bar.classList.add('hidden');
+                    progress.style.width = '0%';
+                }, 400); 
+            }
+        }
+
+        // Handle page navigation (SPA)
+        document.addEventListener('livewire:navigating', showLoadingBar);
+        document.addEventListener('livewire:navigated', hideLoadingBar);
+
+        // Handle component updates (Filters, Forms)
+        document.addEventListener('livewire:init', () => {
+             Livewire.hook('request', ({ fail, succeed }) => {
+                showLoadingBar();
+                succeed(() => hideLoadingBar());
+                fail(() => hideLoadingBar());
+            });
+        });
+    </script>
+
     <div class="shrink-0">
         <x-navbar></x-navbar>
     </div>

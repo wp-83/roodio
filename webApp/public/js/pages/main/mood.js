@@ -1234,14 +1234,39 @@ function initYearlyMood() {
 }
 
 // Call functions on load and navigation
-function loadMoodScripts() {
-    initWeeklyMood();
-    initMonthlyMood();
-    initYearlyMood();
+// ==========================================
+// INITIALIZATION & EXPORTS
+// ==========================================
+
+function initAllMoodComponents() {
+    if (document.getElementById('moodChart')) {
+        initWeeklyMood();
+    }
+    if (document.getElementById('calendar')) {
+        initMonthlyMood();
+    }
+    if (document.getElementById('moodYear')) {
+        initYearlyMood();
+    }
 }
 
-// Ensure init on first load
-document.addEventListener('DOMContentLoaded', loadMoodScripts);
-// Ensure init on Livewire navigation
-document.addEventListener('livewire:navigated', loadMoodScripts);
+// Expose globally
+window.initWeeklyMood = initWeeklyMood;
+window.initMonthlyMood = initMonthlyMood;
+window.initYearlyMood = initYearlyMood;
+window.initAllMoodComponents = initAllMoodComponents;
+
+// Initial Load
+document.addEventListener('DOMContentLoaded', initAllMoodComponents);
+
+// Livewire SPA Navigation
+document.addEventListener('livewire:navigated', initAllMoodComponents);
+
+// Custom Event from Livewire Filter Update
+document.addEventListener('mood-filter-updated', () => {
+    // Wait slightly for DOM to be ready (hidden classes removed)
+    setTimeout(() => {
+        initAllMoodComponents();
+    }, 50);
+});
 

@@ -54,10 +54,18 @@
         'relaxed' => 'hover:bg-secondary-relaxed-20',
         'angry' => 'hover:bg-secondary-angry-20'
     ];
+
+    // Soft background for Active State (Same as hover but persistent)
+    $activeBgStyle = [
+        'happy' => 'bg-secondary-happy-10/30',
+        'sad' => 'bg-secondary-sad-10/30',
+        'relaxed' => 'bg-secondary-relaxed-10/30',
+        'angry' => 'bg-secondary-angry-10/30'
+    ];
 @endphp
 
 
-<x-modal modalId='audioControlPopup' additionalStyle='right-5 bottom-18' :isNeedBg='true'>
+<x-modal modalId='audioControlPopup' additionalStyle='absolute right-5 bottom-18' :isNeedBg='true'>
     <x-slot name='body'>
         <div class='w-full flex flex-col gap-2.5 font-secondaryAndButton text-small'>
             @foreach ($audioControlOptions as $audioCtrlOpt)
@@ -75,17 +83,20 @@
 <div id='audioPlayer' class='relative'>
     <div id='overlayNan' class='hidden absolute bottom-0 z-10 h-23.25 w-full bg-shadedOfGray-85/50 cursor-not-allowed'></div>
     <audio id='audio'></audio>
-    <div id="progressContainer" class="w-full h-1.25 bg-white cursor-pointer">
-        <div id="progressBar" class="{{ 'h-1.25 w-0 ' . $mainBtnStyle[$mood] . ' ' }}"></div>
+    <!-- Increased hit area for progress bar -->
+    <div id="progressContainer" class="w-full h-4 -mt-2 bg-transparent cursor-pointer flex items-center group relative z-20">
+        <div class="w-full h-1.25 bg-white group-hover:h-2 transition-all duration-200">
+             <div id="progressBar" class="{{ 'h-full w-0 ' . $mainBtnStyle[$mood] . ' ' }}"></div>
+        </div>
     </div>
-    <div class='w-full h-22 bg-primary-85 relative flex flex-row items-center justify-between px-5'>
+    <div class='w-full h-22 bg-primary-85 relative flex flex-row items-center justify-between px-5 -mt-2'>
         <div class='flex flex-row items-center gap-2'>
-            <div class='h-14 w-14 bg-shadedOfGray-20 rounded-md'>
-                <img src="" alt="music">
+            <div class='h-14 w-14 bg-shadedOfGray-20 rounded-md overflow-hidden'>
+                <img src="" alt="music" id="playerImage" class="w-full h-full object-cover">
             </div>
             <div class='text-white font-secondaryAndButton hidden md:inline'>
-                <p class='{{ 'text-body-size font-bold ' . $textStyle[$mood] . ' ' }}'>{{ Str::limit($title, 35) }}</p>
-                <p class='text-micro'>{{ Str::limit($artist, 30) }}</p>
+                <p class='{{ 'text-body-size font-bold ' . $textStyle[$mood] . ' ' }}' id="playerTitle">{{ Str::limit($title, 35) }}</p>
+                <p class='text-micro' id="playerArtist">{{ Str::limit($artist, 30) }}</p>
             </div>
         </div>
         <div class='flex flex-row items-center gap-4 absolute left-1/2 top-1/2 -translate-1/2'>
@@ -156,7 +167,7 @@
             </div>
             <div class='flex-row hidden lg:flex gap-2'>
                 <div>
-                    <div class='{{ 'w-9 h-9 p-1 rounded-full cursor-pointer ' . $bgStyle[$mood] . ' ' }}' id='loop'>
+                    <div class='{{ 'w-9 h-9 p-1 rounded-full cursor-pointer ' . $bgStyle[$mood] . ' ' }}' id='loop' data-active-class="{{ $activeBgStyle[$mood] }}" data-inactive-class="{{ $bgStyle[$mood] }}">
                         <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 
                             <!-- Uploaded to: SVG Repo, www.svgrepo.com, Transformed by: SVG Repo Mixer Tools -->
@@ -171,7 +182,7 @@
                             </svg>
                     </div>
                 </div>
-                <div class='{{ 'w-9 h-9 p-1 rounded-full cursor-pointer ' . $bgStyle[$mood] . ' ' }}' id='shuffle'>
+                <div class='{{ 'w-9 h-9 p-1 rounded-full cursor-pointer ' . $bgStyle[$mood] . ' ' }}' id='shuffle' data-active-class="{{ $activeBgStyle[$mood] }}" data-inactive-class="{{ $bgStyle[$mood] }}">
                     <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 
                         <!-- Uploaded to: SVG Repo, www.svgrepo.com, Transformed by: SVG Repo Mixer Tools -->

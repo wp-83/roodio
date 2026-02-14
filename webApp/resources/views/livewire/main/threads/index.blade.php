@@ -69,7 +69,7 @@
     @endphp
 
     
-    <x-modal modalId='createThreadPopup' additionalStyle='relative z-1000 top-1/2 left-1/2 -translate-1/2 w-xs overflow-hidden border-3 {{ $popupBorder[$mood] }} md:w-md'>
+    <x-modal modalId='createThreadPopup' :centered='true' additionalStyle='z-1000 w-xs overflow-hidden border-3 {{ $popupBorder[$mood] }} md:w-md'>
         <x-slot name='header'>
             <div id='closeCreateThread' class='mb-3 w-max px-3 py-1 flex flex-row gap-2 {{ $bgPlusIcon[$mood] }} rounded-full cursor-pointer' wire:click="$dispatch('close-modal', {id: 'createThreadPopup'})"> {{-- Added wire:click for consistency if needed, though simple JS works too. Actually, let's stick to existing JS if possible, but form submit is now Livewire --}}
                 <x-iconButton :mood='$mood' type='arrow'></x-iconButton>
