@@ -79,7 +79,7 @@
         </div>
         <div class='flex flex-row justify-between items-center flex-1 w-full font-secondaryAndButton'>
             <div class='flex flex-col'>
-                <p class='text-body-size font-bold {{ $textMood[$mood] }}'>{{ ($mainUser->id == $thread->userId) ? 'You' : $creator }}</p>
+                <p class='text-body-size font-bold {{ $textMood[$mood] }}'>{{ ($mainUser->id == $thread->userId) ? 'You' : Str::limit($creator, 18) }}</p>
                 <p class='text-micro lg:text-small'>{{ $createdAt }}</p>
             </div>
             @if (!($mainUser->id == $thread->userId))
