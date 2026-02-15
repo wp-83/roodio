@@ -8,9 +8,10 @@
             'id' => $song->id,
             'title' => $song->title,
             'artist' => $song->artist,
-            'cover' => $song->cover_path ?? asset('assets/images/default-music.png'), // default image
+            'cover' => $song->photoPath ? config('filesystems.disks.azure.url') . '/' . $song->photoPath : asset('assets/defaults/songCover.png'),
             'path' => config('filesystems.disks.azure.url') . '/' . $song->songPath,
             'lyrics' => $song->lyrics ?? '',
+            'date' => $song->datePublished ? $song->datePublished->format('Y') : 'UNKNOWN',
         ];
     });
 
@@ -76,7 +77,7 @@
             <button onclick="playByIndex({{ $index }})" class="text-left group/btn" id="song-{{ $index }}" data-active-class="{{ $activeRowStyle[$mood] }}">
                 <div class='min-h-2 w-full h-max p-3 flex flex-row gap-3 hover:bg-shadedOfGray-10/10 rounded-md group cursor-pointer transition-colors duration-200'>
                     <div class='w-20 h-20 bg-shadedOfGray-10 rounded-md overflow-hidden relative'>
-                        <img src="{{ config('filesystems.disks.azure.url') . '/' . $song->photoPath }}" alt="{{ $song->title }}" class='w-full h-full object-cover relative'>
+                        <img src="{{ $song->photoPath ? config('filesystems.disks.azure.url') . '/' . $song->photoPath : asset('assets/defaults/songCover.png') }}" alt="{{ $song->title }}" class='w-full h-full object-cover relative'>
                         <div class='{{ $hoverPlayStyle[$mood] }} w-full h-full absolute top-0 left-0 invisible flex items-center justify-center group-hover:visible'>
                             <img src="{{ asset('assets/icons/play-dark.svg') }}" alt="play-btn" class='w-9 h-9 opacity-80'>
                         </div>

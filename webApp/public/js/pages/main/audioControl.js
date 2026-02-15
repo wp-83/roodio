@@ -65,6 +65,11 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
             const container = document.getElementById('popupTracksList');
             if (!container) return;
 
+            // Get mood styles from data attributes
+            const activeClass = container.dataset.activeClass || 'bg-primary-70';
+            const hoverClass = container.dataset.hoverClass || 'hover:bg-primary-85';
+            const textClass = container.dataset.textClass || 'text-white';
+
             container.innerHTML = '';
             if (playlist.length === 0) {
                 container.innerHTML = '<p class="text-primary-40 text-small text-center py-4">No tracks in queue</p>';
@@ -77,18 +82,17 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
                 const isActive = songIdx === currentIndex;
 
                 const item = document.createElement('div');
-                item.className = `flex flex-row items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition-colors duration-150 ${isActive ? 'bg-primary-70' : 'hover:bg-primary-85'
-                    }`;
+                item.className = `flex flex-row items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition-colors duration-150 ${isActive ? activeClass : hoverClass}`;
                 item.dataset.songIndex = songIdx;
 
                 item.innerHTML = `
-                    <span class="text-small font-secondaryAndButton ${isActive ? 'text-white' : 'text-primary-40'} w-6 text-center shrink-0">${orderIdx + 1}</span>
+                    <span class="text-small font-secondaryAndButton ${isActive ? textClass + ' font-bold' : 'text-primary-40'} w-6 text-center shrink-0">${orderIdx + 1}</span>
                     <div class="w-10 h-10 rounded-md overflow-hidden bg-primary-70 shrink-0">
                         <img src="${song.cover || song.image || ''}" alt="" class="w-full h-full object-cover">
                     </div>
                     <div class="flex-1 min-w-0">
-                        <p class="text-small font-secondaryAndButton truncate ${isActive ? 'text-white font-bold' : 'text-primary-20'}">${song.title || 'Unknown'}</p>
-                        <p class="text-micro truncate ${isActive ? 'text-primary-30' : 'text-primary-40'}">${song.artist || 'Unknown'}</p>
+                        <p class="text-small font-secondaryAndButton truncate ${isActive ? textClass + ' font-bold' : 'text-primary-20'}">${song.title || 'Unknown'}</p>
+                        <p class="text-micro truncate ${isActive ? textClass + ' opacity-80' : 'text-primary-40'}">${song.artist || 'Unknown'}</p>
                     </div>
                 `;
 
@@ -282,14 +286,15 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
             // Sync Metadata
             if (playerTitle) playerTitle.textContent = song.title || 'Unknown Title';
             if (playerArtist) playerArtist.textContent = song.artist || 'Unknown Artist';
-            if (playerImage) playerImage.src = song.image || '';
+            if (playerImage) playerImage.src = song.cover || song.image || '';
 
             // Dispatch event for Alpine.js popup and media session
             window.dispatchEvent(new CustomEvent('song-changed', {
                 detail: {
                     title: song.title || 'Unknown Title',
                     artist: song.artist || 'Unknown Artist',
-                    image: song.image || ''
+                    image: song.cover || song.image || '',
+                    date: song.date || ''
                 }
             }));
 
@@ -919,7 +924,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 ctx.beginPath();
                 ctx.moveTo(x1, y1);
                 ctx.lineTo(x2, y2);
-                ctx.strokeStyle = `hsla(${hue}, 100%, 65%, ${alpha})`;
+
+                // Get color from canvas data attribute or fallback
+                const beatColor = canvas.dataset.beatColor || `hsla(${hue}, 100%, 65%, ${alpha})`;
+                ctx.strokeStyle = beatColor;
 
                 // Wider bars
                 ctx.lineWidth = (2 * Math.PI * innerRadius / barCount) - 1;
