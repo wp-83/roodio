@@ -141,28 +141,18 @@
     {{-- <form action="{{ route('threads.index') }}" method="GET">  REMOVE FORM --}}
         
         <div class='mb-7 flex flex-row gap-3 w-full lg:justify-end contentFadeLoad'>
-             {{-- Using standard inputs or updating filter buttons to use Livewire --}}
-             {{-- Since x-filterButton uses standard input radio logic, we can stick to that but bind it to wire:model --}}
-             
-             {{-- We might need to adjust x-filterButton to support wire:click or wire:model --}}
-             {{-- let's try direct wire:click on the component call if it accepts attributes, or wrapping it --}}
-             
-             <div wire:click="$set('filter', 'all')" class="cursor-pointer">
-                <x-filterButton id='allFilter' name='filter' value='all' :mood='$mood' label='All' :active="$filter === 'all'"></x-filterButton>
+             <div class="flex flex-row gap-3">
+                 <div wire:click="$set('filter', 'all')" class="cursor-pointer">
+                    <x-filterButton id='allFilter' name='filter' value='all' :mood='$mood' label='All' :active="$filter === 'all'"></x-filterButton>
+                 </div>
+                 <div wire:click="$set('filter', 'following')" class="cursor-pointer">
+                     <x-filterButton id='followingFilter' name='filter' value='following' :mood='$mood' label='Following' :active="$filter === 'following'"></x-filterButton>
+                 </div>
+                 <div wire:click="$set('filter', 'created')" class="cursor-pointer">
+                     <x-filterButton id='createdFilter' name='filter' value='created' :mood='$mood' label='My Threads' :active="$filter === 'created'"></x-filterButton>
+                 </div>
              </div>
-             <div wire:click="$set('filter', 'following')" class="cursor-pointer">
-                 <x-filterButton id='followingFilter' name='filter' value='following' :mood='$mood' label='Following' :active="$filter === 'following'"></x-filterButton>
-             </div>
-             <div wire:click="$set('filter', 'created')" class="cursor-pointer">
-                 <x-filterButton id='createdFilter' name='filter' value='created' :mood='$mood' label='My Threads' :active="$filter === 'created'"></x-filterButton>
-             </div>
-
-             {{-- Hidden search input to bind to query string if needed --}}
-             @if($search)
-                 <input type="hidden" wire:model="search" value="{{ $search }}">
-             @endif
         </div>
-    {{-- </form> --}}
 
     <div class='columns-1 md:columns-2 lg:columns-3 2xl:columns-4 gap-5 2xl:gap-3 contentFadeLoad'>
         @forelse($threads as $thread)

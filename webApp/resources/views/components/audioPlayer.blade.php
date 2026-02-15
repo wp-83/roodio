@@ -55,13 +55,28 @@
         'angry' => 'hover:bg-secondary-angry-20'
     ];
 
-    // Soft background for Active State (Same as hover but persistent)
     $activeBgStyle = [
-        'happy' => 'bg-secondary-happy-10/30',
-        'sad' => 'bg-secondary-sad-10/30',
-        'relaxed' => 'bg-secondary-relaxed-10/30',
-        'angry' => 'bg-secondary-angry-10/30'
+        'happy' => 'bg-secondary-happy-20',
+        'sad' => 'bg-secondary-sad-20',
+        'relaxed' => 'bg-secondary-relaxed-20',
+        'angry' => 'bg-secondary-angry-20'
     ];
+
+    $cassetteStyle = [
+        'happy' => 'bg-secondary-happy-85',
+        'sad' => 'bg-secondary-sad-85',
+        'relaxed' => 'bg-secondary-relaxed-85',
+        'angry' => 'bg-secondary-angry-85'
+    ];
+
+    $visualizerColors = [
+        'happy' => '#FFA350',
+        'sad' => '#876FD0',
+        'relaxed' => '#50D189',
+        'angry' => '#EB5F68'
+    ];
+
+
 @endphp
 
 
@@ -69,12 +84,16 @@
     <x-slot name='body'>
         <div class='w-full flex flex-col gap-2.5 font-secondaryAndButton text-small'>
             @foreach ($audioControlOptions as $audioCtrlOpt)
-            <a href="#">
-                <div class='h-max rounded-sm px-2 pr-8 py-1 flex flex-row items-center gap-2.5 {{ $hoverBgMoodStyle[$mood] }}'>
-                    <img src="{{ asset('assets/icons/' . $audioCtrlOpt . '.svg') }}" alt="{{ $audioCtrlOpt }}" class='w-7 h-7'>
-                    <p class='text-primary-60'>{{ Str::ucfirst($audioControlLabel[$audioCtrlOpt]) }}</p>
-                </div>
-            </a>
+            @php
+                $optId = $audioCtrlOpt === 'speaker-muted' ? 'speaker-mobile' : $audioCtrlOpt . '-mobile';
+            @endphp
+            <button id="{{ $optId }}" 
+                class='w-full text-left cursor-pointer h-max rounded-md px-2 py-1.5 flex flex-row items-center gap-2.5 transition-all duration-200' 
+                data-active-class="{{ $activeBgStyle[$mood] }}" 
+                data-inactive-class="bg-transparent {{ $hoverBgMoodStyle[$mood] }}">
+                <img src="{{ asset('assets/icons/' . $audioCtrlOpt . '.svg') }}" alt="{{ $audioCtrlOpt }}" class='w-7 h-7 pointer-events-none'>
+                <p class='text-primary-60 pointer-events-none'>{{ Str::ucfirst($audioControlLabel[$audioCtrlOpt]) }}</p>
+            </button>
             @endforeach
         </div>
     </x-slot>
@@ -112,33 +131,87 @@
 
     <!-- Full Screen Popup -->
     <div
-        class="fixed left-0 right-0 bottom-0 bg-primary-100 transition-all duration-500 ease-in-out flex flex-col"
+        class="fixed right-0 left-0 md:left-[5rem] bottom-[5.75rem] bg-primary-100 transition-all duration-500 ease-in-out flex flex-col overflow-hidden"
         :class="isExpanded ? 'top-16 opacity-100 visible' : 'top-full opacity-0 invisible'"
-        style="z-index: 0;"
+        style="z-index: 5;"
     >
-        <div class="flex-1 flex flex-col items-center justify-center p-10 gap-6 overflow-y-auto">
-             <div class="w-64 h-64 md:w-96 md:h-96 rounded-2xl overflow-hidden shadow-2xl relative group">
-                <img :src="songImage" alt="Album Art" class="w-full h-full object-cover">
-                <div class="absolute inset-0 bg-black/20 hidden group-hover:block transition-all"></div>
-             </div>
-             <div class="text-center text-white space-y-2">
-                <h2 class="text-2xl md:text-3xl font-bold" x-text="songTitle"></h2>
-                <p class="text-lg md:text-xl text-primary-40" x-text="songArtist"></p>
-             </div>
-                <div id="audioVisualizerContainer" class="w-full h-[300px] md:h-[400px] border-2 border-yellow-400">
-                    <canvas id="audioVisualizer" class="w-full h-full"></canvas>
+        <div class="flex-1 flex flex-col md:flex-row min-h-0 overflow-y-auto md:overflow-hidden scrollbar-hide">
+            <!-- Left Section (Unified Spinning Disc) -->
+            <div class="w-full md:w-3/5 relative aspect-square md:aspect-none max-h-[60vh] md:max-h-none md:min-h-0 shrink-0 overflow-hidden flex items-center justify-center bg-transparent">
+                
+                <!-- Vinyl Disc Container -->
+                <div id="vinylDisc" class="relative w-[50%] aspect-square rounded-full border-[4px] border-primary-40/30 flex items-center justify-center shadow-2xl vinyl-spin vinyl-paused">
+                    
+                    <!-- Visualizer Canvas (Behind) -->
+                    <canvas id="audioVisualizer" class="absolute inset-[-60%] w-[220%] h-[220%] rounded-full pointer-events-none opacity-80" 
+                            style="mix-blend-mode: screen;"
+                            data-beat-color="{{ $visualizerColors[$mood] }}"></canvas>
+
+                    <!-- Vinyl Grooves/Body -->
+                    <div class="absolute inset-0 rounded-full bg-[#101010] shadow-xl border border-black/50 flex items-center justify-center overflow-hidden z-10">
+                         <div class="absolute inset-0 rounded-full bg-[repeating-radial-gradient(#111_0,#111_2px,#222_3px)] opacity-50"></div>
+                         <div class="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent pointer-events-none z-10"></div>
+                    </div>
+
+                    <!-- Center Label (Full Image) -->
+                    <div class="w-[65%] h-[65%] rounded-full flex items-center justify-center relative z-20 shadow-inner overflow-hidden border-[4px] border-[#151515] group">
+                         <img :src="songImage" class="w-full h-full object-cover opacity-95 group-hover:scale-105 transition-transform duration-700">
+                         
+                         <!-- Spinner Center Hole -->
+                         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-[#111] rounded-full shadow-inner border border-white/10"></div>
+                         
+                         <!-- Shine/glare on label -->
+                         <div class="absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent pointer-events-none"></div>
+                    </div>
                 </div>
 
-
-
-
-             
-             <!-- Close Button (Chevron Down) -->
-             <button @click="isExpanded = false" class="mt-4 p-2 rounded-full hover:bg-white/10 transition-colors">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M18 15L12 9L6 15" stroke="{{ $elementStyle[$mood] }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-             </button>
+                <style>
+                    @keyframes vinyl-rotate {
+                        from { transform: rotate(0deg); }
+                        to { transform: rotate(360deg); }
+                    }
+                    .vinyl-spin {
+                        animation: vinyl-rotate 8s linear infinite;
+                    }
+                    .vinyl-paused {
+                        animation-play-state: paused;
+                    }
+                    .vinyl-playing {
+                        animation-play-state: running;
+                    }
+                </style>
+            </div>
+            <!-- Right Section (Tracks & Lyrics) -->
+            <div class="w-full md:w-2/5 border-t md:border-t-0 md:border-l border-primary-70 flex flex-col min-h-[40vh] md:min-h-0" x-data="{ activeTab: 'lyrics' }">
+                <!-- Tab Headers -->
+                <div class="flex flex-row shrink-0 border-b border-primary-70">
+                    <button
+                        @click="activeTab = 'tracks'"
+                        :class="activeTab === 'tracks' ? 'border-b-2 border-white text-white' : 'text-primary-40 hover:text-white'"
+                        class="flex-1 py-3 text-center font-secondaryAndButton text-body-size transition-colors duration-200"
+                    >Tracks</button>
+                    <button
+                        @click="activeTab = 'lyrics'"
+                        :class="activeTab === 'lyrics' ? 'border-b-2 border-white text-white' : 'text-primary-40 hover:text-white'"
+                        class="flex-1 py-3 text-center font-secondaryAndButton text-body-size transition-colors duration-200"
+                    >Lyrics</button>
+                </div>
+                <!-- Tab Content -->
+                <div class="flex-1 md:overflow-y-auto p-4 scrollbar scrollbar-thumb-primary-10/75 scrollbar-track-transparent">
+                    <!-- Lyrics Content -->
+                    <div x-show="activeTab === 'lyrics'" class="w-full md:h-full">
+                        <div id="popupLyricsContent" class="text-primary-20 text-small font-secondaryAndButton whitespace-pre-line leading-relaxed">
+                            <!-- Lyrics will be rendered here by JS -->
+                        </div>
+                    </div>
+                    <!-- Tracks Content -->
+                    <div x-show="activeTab === 'tracks'" class="w-full md:h-full">
+                        <div id="popupTracksList" class="flex flex-col gap-1">
+                            <!-- Tracks will be rendered here by JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     
@@ -146,7 +219,7 @@
     <div id='overlayNan' class='hidden absolute bottom-0 z-10 h-23.25 w-full bg-shadedOfGray-85/50 cursor-not-allowed'></div>
     
     <!-- Audio Element -->
-    <audio id='audio' preload="metadata"></audio>
+    <audio id='audio' preload="metadata" crossorigin="anonymous"></audio>
     
     <!-- Main Player Bar -->
     <div class='relative bg-primary-85 w-full'>
@@ -163,7 +236,7 @@
                 <div class='h-14 w-14 bg-shadedOfGray-20 rounded-md overflow-hidden shrink-0'>
                     <img src="" alt="music" id="playerImage" class="w-full h-full object-cover">
                 </div>
-                <div class='text-white font-secondaryAndButton hidden md:block truncate max-w-[150px] lg:max-w-[200px]'>
+                <div class='text-white font-secondaryAndButton block truncate max-[768px]:hidden max-w-[120px] xs:max-w-[150px] lg:max-w-[200px]'>
                     <p class='{{ 'text-body-size font-bold ' . $textStyle[$mood] . ' truncate' }}' id="playerTitle">{{ Str::limit($title, 35) }}</p>
                     <p class='text-micro truncate' id="playerArtist">{{ Str::limit($artist, 30) }}</p>
                 </div>
@@ -199,7 +272,7 @@
             </div>
             
             <div class='flex flex-row gap-3 items-center'>
-                <div class='flex flex-row items-center text-white text-small'>
+                <div class='flex flex-row items-center text-white text-small max-[768px]:hidden'>
                     <span id='currentDuration'>--:--</span>
                     <span class="mx-0.5">/</span>
                     <span id='duration'>--:--</span>
@@ -235,7 +308,13 @@
                         </svg>
                     </button>
                 </div>
-                <x-iconButton type='kebab' :mood='$mood' class='lg:hidden' id='audioControlResponsive'></x-iconButton>
+                    <!-- Mobile Expand/Collapse Arrow -->
+                    <button class="flex lg:hidden items-center justify-center cursor-pointer p-0.5 rounded-full hover:bg-white/10 transition-all h-9 w-9" @click="isExpanded = !isExpanded" title="Toggle Player">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" :class="isExpanded ? 'rotate-180' : ''" class="transition-transform duration-300">
+                            <path d="M6 9L12 15L18 9" stroke="{{ $elementStyle[$mood] }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                    <x-iconButton type='kebab' :mood='$mood' class='lg:hidden' id='audioControlResponsive'></x-iconButton>
             </div>
         </div>
     </div>

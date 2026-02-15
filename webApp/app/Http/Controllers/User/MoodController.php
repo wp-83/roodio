@@ -52,7 +52,7 @@ class MoodController extends Controller
         ];
 
         MoodHistories::where('userId', auth()->id())->latest()->first()->update(['moodId' => $moodMap[$validated['mood']]]);
-        return back();
+        return redirect()->route('user.index');
     }
 
     public function preferenceUpdate(Request $request)
@@ -61,6 +61,6 @@ class MoodController extends Controller
             'preferenceMood' => 'required|in:match,mismatch',
         ]);
         session()->put('preferenceMood', $validated['preferenceMood']);
-        return back();
+        return redirect()->route('user.index');
     }
 }

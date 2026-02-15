@@ -90,6 +90,7 @@
             <x-sidebar :mood='$mood' class='relative z-10'></x-sidebar>
             <div id='scrollContainer' class='w-full bg-primary-100 overflow-x-hidden overflow-y-auto min-h-0 p-10 scrollbar scrollbar-thumb-primary-10/75 scrollbar-track-transparent @yield('mainContentContainerClass')'>
                 @yield('mainContent')
+                {{ $slot ?? '' }}
             </div>
         </div>
     </div>

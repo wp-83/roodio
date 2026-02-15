@@ -5,6 +5,7 @@ namespace App\Livewire\Main\Socials;
 use App\Models\User;
 use Livewire\Component;
 use Livewire\Attributes\Url;
+use Livewire\Attributes\On;
 
 class Index extends Component
 {
@@ -19,6 +20,19 @@ class Index extends Component
     public function mount()
     {
         $this->mood = session('chooseMood', 'happy');
+    }
+
+
+    #[On('follow-status-changed')]
+    public function handleFollowChange()
+    {
+        // No logic needed, just triggering a re-render
+    }
+
+    #[On('update-search')]
+    public function updateSearch($query)
+    {
+        $this->search = $query;
     }
 
     public function render()
@@ -52,8 +66,7 @@ class Index extends Component
         }
 
         return view('livewire.main.socials.index', [
-            'users' => $users,
-            'mood' => $this->mood
-        ]);
+            'users' => $users
+        ])->layout('layouts.main', ['mood' => $this->mood]);
     }
 }

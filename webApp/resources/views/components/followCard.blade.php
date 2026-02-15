@@ -49,7 +49,7 @@
 @endphp
 
 
-<div class='w-full h-max text-white py-3 px-4 flex flex-row items-center rounded-md overflow-hidden font-secondaryAndButton hover:bg-white/15 md:hidden'>
+<div class='flex md:hidden w-full h-max text-white py-3 px-4 flex-row items-center rounded-md overflow-hidden font-secondaryAndButton hover:bg-white/15'>
     <div class='mr-2.5'>
         <div class='w-30 h-30 overflow-hidden {{ $bgPhotoStyle[$mood] }}' style="clip-path: polygon(50% 0%, 83% 12%, 100% 43%, 94% 78%, 68% 100%, 32% 100%, 6% 78%, 0% 43%, 17% 12%);">
             @if (!empty($profilePhoto))
@@ -78,12 +78,12 @@
                     :wire:key="'mobile-follow-'.$user->id"
                 />
             @endif
-            <!-- <x-button :mood='$mood' content='Following' class='w-max px-2' style="zoom:0.85;"></x-button> -->
+
         </div>
     </div>
 </div>
 
-<div class='relative w-full min-h-90 rounded-lg overflow-hidden hidden group md:inline'>
+<div class='hidden md:block relative w-full min-h-90 rounded-lg overflow-hidden group'>
     @if (!empty($profilePhoto))
         <img src="{{ config('filesystems.disks.azure.url') . '/' . $profilePhoto }}" alt="{{ $username }}" class='w-full h-full object-cover opacity-80'>
     @else

@@ -32,19 +32,15 @@
      {{-- <form action="{{ route('socials.index') }}" method="GET"> --}}
         
         <div class='mb-7 flex flex-row gap-3 w-full lg:justify-end contentFadeLoad'>
-             <div wire:click="$set('filter', 'all')" class="cursor-pointer">
-                <x-filterButton id='all' name='filter' value='all' :mood='$mood' label='All Users' :active="$filter === 'all'"></x-filterButton>
+             <div class="flex flex-row gap-3">
+                 <div wire:click="$set('filter', 'all')" class="cursor-pointer">
+                    <x-filterButton id='all' name='filter' value='all' :mood='$mood' label='All Users' :active="$filter === 'all'"></x-filterButton>
+                 </div>
+                 <div wire:click="$set('filter', 'following')" class="cursor-pointer">
+                    <x-filterButton id='following' name='filter' value='following' :mood='$mood' label='Following Only' :active="$filter === 'following'"></x-filterButton>
+                 </div>
              </div>
-             <div wire:click="$set('filter', 'following')" class="cursor-pointer">
-                <x-filterButton id='following' name='filter' value='following' :mood='$mood' label='Following Only' :active="$filter === 'following'"></x-filterButton>
-             </div>
-             
-             {{-- Hidden search input to bind to query string if needed --}}
-             @if($search)
-                 <input type="hidden" wire:model="search" value="{{ $search }}">
-             @endif
         </div>
-    {{-- </form> --}}
 
     @if (count($users) > 0)
         @if ($filter == 'following')

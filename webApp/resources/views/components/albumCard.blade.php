@@ -33,12 +33,16 @@
 
 
 <div class='min-w-5 min-h-5 w-full h-max p-4 flex flex-row justify-start gap-3 rounded-md relative overflow-hidden duration-200 group {{ $bgSoftOpacityMood[$mood] }} cursor-pointer md:w-lg'>
-    <div class='h-26 w-26 shrink-0 relative z-100 rounded-sm object-fit overflow-hidden {{ $bgBasedMood[$mood] }} md:w-48 md:h-48'>
-        <img src="{{ config('filesystems.disks.azure.url') . '/' . $imageSource }}" alt="{{ $playlistName }}" class='w-full'>
+    <div class='h-26 w-26 shrink-0 relative z-100 rounded-sm object-fit overflow-hidden flex items-center justify-center {{ $bgBasedMood[$mood] }} md:w-48 md:h-48'>
+    @if (empty($imageSource))
+            <img src="{{ asset('assets/moods/icons/' . $mood . '.png') }}" alt="{{ $mood }}" class='w-[90%] h-[90%] object-cover'>
+        @else
+            <img src="{{ config('filesystems.disks.azure.url') . '/' . $imageSource }}" alt="{{ $playlistName }}" class='w-full h-full object-cover'>
+        @endif
     </div>
     <div class='font-secondaryAndButton flex flex-col justify-between relative z-1000 w-full'>
         <div>
-            <p class='text-body-size font-bold {{ $textMood[$mood] }} md:text-paragraph'>{{ Str::upper($playlistName) }}</p>
+            <p class='text-body-size font-bold {{ $textMood[$mood] }} md:text-paragraph'>{{ $playlistName }}</p>
             <p class='text-small text-primary-70 md:text-body-size'>{{ $playlistDesc }}</p>
         </div>
         <div class='flex flex-row h-max items-center gap-2 text-micro md:text-body-size'>

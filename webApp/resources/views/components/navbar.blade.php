@@ -163,20 +163,89 @@
             </div>
         </div>
         @if($showSearch)
-        <form action="{{ url()->current() }}" method="GET" id="searchForm" class='w-xl h-max hidden lg:inline relative transition-transform duration-500 ease-out group'>
-            <div class='flex flex-row items-center px-2 py-0.5 h-10 text-small rounded-full placeholder:text-micro placeholder:italic bg-shadedOfGray-10 hover:bg-white focus-within:bg-white ease-in-out duration-125 md:text-body-size md:placeholder:text-small md:h-9 group' id='searchbar'>
+        @if(request()->routeIs('user.index', 'user.playlists'))
+        <form 
+            action="{{ request()->routeIs('user.playlists') ? url()->current() : route('user.index') }}" 
+            method="GET" 
+            id="searchForm" 
+            class='w-xl h-max relative transition-transform duration-500 ease-out group'
+            x-data="{ searchQuery: @js(request('search') ?? '') }"
+            @submit.prevent="
+                let url = new URL('{{ request()->routeIs('user.playlists') ? url()->current() : route('user.index') }}');
+                url.searchParams.set('search', searchQuery);
+                Livewire.navigate(url.toString());
+            "
+        >
+            <div class='hidden lg:flex flex-row items-center px-2 py-0.5 h-10 text-small rounded-full placeholder:text-micro placeholder:italic bg-shadedOfGray-10 hover:bg-white focus-within:bg-white ease-in-out duration-125 md:text-body-size md:placeholder:text-small md:h-9 group' id='searchbar'>
                 <img src="{{ asset('assets/icons/search.svg') }}" alt="search" class='w-8 h-8 pr-1 mr-2 border-r-2 border-primary-70'>
-                <input type="text" name="search" autocomplete="off" id='search' placeholder='Search...' class='w-full pr-2' value="{{ request('search') }}">
-                <div onclick="document.getElementById('search').value=''; document.getElementById('searchForm').submit();" class='cursor-pointer {{ request('search') ? '' : 'invisible' }}' style='zoom:0.8;' id='searchClose'>
+                <input 
+                    type="text" 
+                    name="search" 
+                    autocomplete="off" 
+                    id='search' 
+                    placeholder='{{ request()->routeIs('user.playlists') ? 'Search Playlist...' : 'Search Songs...' }}' 
+                    class='w-full pr-2' 
+                    x-model="searchQuery"
+                >
+                <div 
+                    onclick="
+                        document.getElementById('search').value=''; 
+                        Livewire.navigate('{{ url()->current() }}');
+                    " 
+                    class='cursor-pointer' 
+                    :class="searchQuery ? '' : 'invisible'"
+                    style='zoom:0.8;' 
+                    id='searchClose'
+                >
                     <x-iconButton type='cross' :mood='$mood'></x-iconButton>
                 </div>
             </div>
-            <div class='absolute top-1/2 right-4 flex flex-row -translate-y-1/2 opacity-50 group-focus-within:hidden {{ request('search') ? 'hidden' : '' }}' id='searchContent'>
+            <div 
+                class='absolute top-1/2 right-4 hidden lg:flex flex-row -translate-y-1/2 opacity-50 group-focus-within:hidden' 
+                x-show="!searchQuery"
+                id='searchContent'
+            >
                 <div class='border-[0.5px] border-shadedOfGray-50 bg-shadedOfGray-20 font-secondaryAndButton px-1 py-[0.25px] rounded-md text-micro text-shadedOfGray-85'>CTRL</div>
                 <p class='mx-1'>+</p>
                 <div class='border-[0.5px] border-shadedOfGray-50 bg-shadedOfGray-20 font-secondaryAndButton px-1 py-[0.25px] rounded-md text-micro text-shadedOfGray-85'>K</div>
             </div>
         </form>
+        @else
+        {{-- Content Search (Threads/Socials) - Dispatch Event --}}
+        <div 
+            id="searchForm" 
+            class='w-xl h-max relative transition-transform duration-500 ease-out group'
+            x-data="{ query: '' }"
+        >
+            <div class='hidden lg:flex flex-row items-center px-2 py-0.5 h-10 text-small rounded-full placeholder:text-micro placeholder:italic bg-shadedOfGray-10 hover:bg-white focus-within:bg-white ease-in-out duration-125 md:text-body-size md:placeholder:text-small md:h-9 group' id='searchbar'>
+                <img src="{{ asset('assets/icons/search.svg') }}" alt="search" class='w-8 h-8 pr-1 mr-2 border-r-2 border-primary-70'>
+                <input 
+                    type="text" 
+                    name="search" 
+                    autocomplete="off" 
+                    id='search' 
+                    placeholder='Search {{ request()->routeIs('threads.index') ? 'Threads' : 'Users' }}...' 
+                    class='w-full pr-2 bg-transparent focus:outline-none' 
+                    x-model="query"
+                    @input.debounce.300ms="Livewire.dispatch('update-search', { query: query })"
+                >
+                <div 
+                    @click="query = ''; Livewire.dispatch('update-search', { query: '' })" 
+                    class='cursor-pointer' 
+                    x-show="query.length > 0"
+                    style='zoom:0.8; display: none;' 
+                    id='searchClose'
+                >
+                    <x-iconButton type='cross' :mood='$mood'></x-iconButton>
+                </div>
+            </div>
+             <div class='absolute top-1/2 right-4 hidden lg:flex flex-row -translate-y-1/2 opacity-50 group-focus-within:hidden' x-show="query.length === 0" id='searchContent'>
+                <div class='border-[0.5px] border-shadedOfGray-50 bg-shadedOfGray-20 font-secondaryAndButton px-1 py-[0.25px] rounded-md text-micro text-shadedOfGray-85'>CTRL</div>
+                <p class='mx-1'>+</p>
+                <div class='border-[0.5px] border-shadedOfGray-50 bg-shadedOfGray-20 font-secondaryAndButton px-1 py-[0.25px] rounded-md text-micro text-shadedOfGray-85'>K</div>
+            </div>
+        </div>
+        @endif
         <script>
             // Auto-submit search form on input change with debounce
             (function() {

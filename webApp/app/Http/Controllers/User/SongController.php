@@ -10,9 +10,10 @@ use Illuminate\Support\Facades\Session;
 
 class SongController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $user = auth()->user();
+        $search = $request->get('search');
 
         $todaysMood = MoodHistories::where('userId', $user->id)
             ->whereDate('created_at', Carbon::today())
@@ -38,19 +39,27 @@ class SongController extends Controller
             session()->forget('preferenceMood');
         }
 
-        $playlists = Playlists::with(['songs' => function ($query) {
+        $playlists = Playlists::with(['songs' => function ($query) use ($search) {
             $query->applyUserMood();
+            if ($search) {
+                $query->searchSongs($search);
+            }
         }])
-            ->whereHas('songs', function ($query) {
+            ->whereHas('songs', function ($query) use ($search) {
                 $query->applyUserMood();
+                if ($search) {
+                    $query->searchSongs($search);
+                }
             })
             ->orderByDesc('created_at')
             ->get();
+            
         $username     = auth()->user()->username;
         $fullname     = auth()->user()->userDetail->fullname;
         $profilePhoto = auth()->user()->userDetail->profilePhoto;
         $mood         = session('chooseMood', 'happy');
-        return view('main.index', compact('playlists', 'username', 'fullname', 'profilePhoto', 'mood'));
+        
+        return view('main.index', compact('playlists', 'username', 'fullname', 'profilePhoto', 'mood', 'search'));
     }
 
 
