@@ -54,6 +54,8 @@
 <script>
     // give data to global window
     window.currentPlaylist = @json($playlistData);
+    // Notify audioControl.js to re-sync playlist
+    window.dispatchEvent(new CustomEvent('playlist-updated'));
 </script>
 
 

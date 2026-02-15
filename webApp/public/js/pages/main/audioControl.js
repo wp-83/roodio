@@ -81,7 +81,7 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
                 item.innerHTML = `
                     <span class="text-small font-secondaryAndButton ${isActive ? 'text-white' : 'text-primary-40'} w-6 text-center shrink-0">${orderIdx + 1}</span>
                     <div class="w-10 h-10 rounded-md overflow-hidden bg-primary-70 shrink-0">
-                        <img src="${song.image || ''}" alt="" class="w-full h-full object-cover">
+                        <img src="${song.cover || song.image || ''}" alt="" class="w-full h-full object-cover">
                     </div>
                     <div class="flex-1 min-w-0">
                         <p class="text-small font-secondaryAndButton truncate ${isActive ? 'text-white font-bold' : 'text-primary-20'}">${song.title || 'Unknown'}</p>
@@ -709,6 +709,20 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
             updateMediaSessionMetadata();
         });
 
+        // Listen for playlist updates (e.g., after navigating to a new playlist page)
+        window.addEventListener('playlist-updated', () => {
+            playlist = window.currentPlaylist || [];
+            currentIndex = 0;
+            isShuffle = false;
+            if (shuffleBtn) toggleButtonState(shuffleBtn, false);
+            buildPlayOrder();
+            renderPopupTracks();
+            renderPopupLyrics();
+            if (playlist.length > 0) {
+                loadSong(0);
+            }
+        });
+
         // Debugging events (optional)
         audio.addEventListener('error', (e) => {
             console.error('Audio error:', e);
@@ -722,65 +736,133 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!audio || !playBtn) return;
 
-    // =================== BEAT VISUALIZER ===================
+    // =================== BEAT VISUALIZER & VINYL SPIN ===================
     (function (audio, playBtn) {
         const canvas = document.querySelector('#audioVisualizer');
+        const vinylDisc = document.getElementById('vinylDisc');
         if (!canvas) return;
         const ctx = canvas.getContext('2d');
 
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        const analyser = audioCtx.createAnalyser();
-        analyser.fftSize = 256;
-
-        const bufferLength = analyser.frequencyBinCount;
-        const dataArray = new Uint8Array(bufferLength);
-
+        let audioCtx = null;
+        let analyser = null;
+        let bufferLength = 0;
+        let dataArray = null;
         let sourceCreated = false;
+        let animationId = null;
 
         function resizeCanvas() {
-            canvas.width = canvas.clientWidth;
-            canvas.height = canvas.clientHeight;
+            if (canvas.clientWidth > 0 && canvas.clientHeight > 0) {
+                canvas.width = canvas.clientWidth;
+                canvas.height = canvas.clientHeight;
+            }
         }
+
         window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
 
+        // Resize when popup becomes visible
+        const popupContainer = canvas.closest('[x-data]');
+        if (popupContainer) {
+            const observer = new MutationObserver(() => {
+                if (!popupContainer.classList.contains('invisible')) {
+                    setTimeout(resizeCanvas, 100);
+                }
+            });
+            observer.observe(popupContainer, { attributes: true, attributeFilter: ['class'] });
+        }
+
+        if (window.ResizeObserver) {
+            const ro = new ResizeObserver(() => resizeCanvas());
+            ro.observe(canvas.parentElement);
+        }
+
+        // Vinyl spin control
+        function setVinylSpin(playing) {
+            if (!vinylDisc) return;
+            if (playing) {
+                vinylDisc.classList.remove('vinyl-paused');
+                vinylDisc.classList.add('vinyl-playing');
+            } else {
+                vinylDisc.classList.remove('vinyl-playing');
+                vinylDisc.classList.add('vinyl-paused');
+            }
+        }
+
+        audio.addEventListener('play', () => setVinylSpin(true));
+        audio.addEventListener('pause', () => setVinylSpin(false));
+        audio.addEventListener('ended', () => setVinylSpin(false));
+
+        // Draw circular beat visualization
         function drawVisualizer() {
-            requestAnimationFrame(drawVisualizer);
-            analyser.getByteFrequencyData(dataArray);
+            animationId = requestAnimationFrame(drawVisualizer);
+            if (!analyser || canvas.width === 0 || canvas.height === 0) return;
 
+            analyser.getByteFrequencyData(dataArray);
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            const barWidth = (canvas.width / bufferLength) * 2.5;
-            let x = 0;
+            const cx = canvas.width / 2;
+            const cy = canvas.height / 2;
+            const radius = Math.min(cx, cy);
+            const innerRadius = radius * 0.28;  // inside album art
+            const outerRadius = radius * 0.88;  // near the edge
+            const barCount = 64;
 
-            for (let i = 0; i < bufferLength; i++) {
-                const barHeight = dataArray[i];
-                const r = barHeight + 25 * (i / bufferLength);
-                const g = 250 * (i / bufferLength);
-                const b = 50;
+            for (let i = 0; i < barCount; i++) {
+                const angle = (i / barCount) * Math.PI * 2 - Math.PI / 2;
+                const dataIndex = Math.floor(i * bufferLength / barCount);
+                const value = dataArray[dataIndex] / 255;
 
-                ctx.fillStyle = `rgb(${r},${g},${b})`;
-                ctx.fillRect(x, canvas.height - barHeight / 2, barWidth, barHeight / 2);
+                const barInner = innerRadius + (outerRadius - innerRadius) * 0.3;
+                const barLength = (outerRadius - barInner) * value;
 
-                x += barWidth + 1;
+                const x1 = cx + Math.cos(angle) * barInner;
+                const y1 = cy + Math.sin(angle) * barInner;
+                const x2 = cx + Math.cos(angle) * (barInner + barLength);
+                const y2 = cy + Math.sin(angle) * (barInner + barLength);
+
+                const hue = (i / barCount) * 60 + 180;
+                const alpha = 0.4 + value * 0.6;
+
+                ctx.beginPath();
+                ctx.moveTo(x1, y1);
+                ctx.lineTo(x2, y2);
+                ctx.strokeStyle = `hsla(${hue}, 70%, ${50 + value * 30}%, ${alpha})`;
+                ctx.lineWidth = Math.max(2, (2 * Math.PI * barInner / barCount) * 0.6);
+                ctx.lineCap = 'round';
+                ctx.stroke();
             }
-
-            const avg = dataArray.reduce((a, b) => a + b, 0) / bufferLength;
-            canvas.parentElement.style.backgroundColor = avg > 150 ? 'rgba(255,255,255,0.05)' : 'black';
         }
 
         function initVisualizer() {
-            if (!sourceCreated) {
-                const source = audioCtx.createMediaElementSource(audio);
-                source.connect(analyser);
-                analyser.connect(audioCtx.destination);
-                sourceCreated = true;
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                analyser = audioCtx.createAnalyser();
+                analyser.fftSize = 256;
+                bufferLength = analyser.frequencyBinCount;
+                dataArray = new Uint8Array(bufferLength);
             }
+
+            if (!sourceCreated) {
+                try {
+                    const source = audioCtx.createMediaElementSource(audio);
+                    source.connect(analyser);
+                    analyser.connect(audioCtx.destination);
+                    sourceCreated = true;
+                } catch (e) {
+                    console.warn('Visualizer source error:', e);
+                }
+            }
+
             if (audioCtx.state === 'suspended') audioCtx.resume();
-            drawVisualizer();
+            resizeCanvas();
+            if (!animationId) drawVisualizer();
         }
 
         playBtn.addEventListener('click', initVisualizer, { once: true });
+
+        audio.addEventListener('play', () => {
+            if (!sourceCreated) initVisualizer();
+            if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+        });
 
     })(audio, playBtn);
 });

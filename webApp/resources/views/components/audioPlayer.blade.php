@@ -117,23 +117,51 @@
         style="z-index: 5;"
     >
         <div class="flex-1 flex flex-row min-h-0">
-            <!-- Left Section (3/4) -->
-            <div class="w-3/5 flex flex-col items-center justify-center p-10 gap-6 overflow-y-auto">
+            <!-- Left Section (3/5) -->
+            <div class="w-3/5 relative">
+                <!-- Box 1/2 of section -->
+                <div class="w-1/2 h-full py-4">
+                    <div class="w-full h-full rounded-xl border-r border-primary-70 bg-black/30 flex flex-col overflow-hidden">
+                        <!-- Title & Artist - top right -->
+                        <div class="text-right p-4 shrink-0">
+                            <h2 class="text-lg font-bold text-white truncate" x-text="songTitle"></h2>
+                            <p class="text-sm text-primary-40 truncate" x-text="songArtist"></p>
+                        </div>
+                        <!-- Cover Image -->
+                        <div class="flex-1 min-h-0 px-4 pb-4">
+                            <img :src="songImage" alt="" class="w-full h-full object-cover rounded-lg">
+                        </div>
+                    </div>
+                </div>
+                <!-- Vinyl Circle - spinning with beat visualization -->
+                <div class="absolute top-1/2 -translate-y-1/2 left-[50%] -translate-x-1/2 w-[56%] aspect-square" style="clip-path: inset(0 0 0 50%);">
+                    <div id="vinylDisc" class="w-full h-full rounded-full border-[6px] border-primary-40/30 relative vinyl-spin vinyl-paused">
+                        <!-- Canvas for circular beat visualization -->
+                        <canvas id="audioVisualizer" class="absolute inset-0 w-full h-full rounded-full"></canvas>
+                        <!-- Album art center -->
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40%] aspect-square rounded-full overflow-hidden border-2 border-primary-40/30 z-10">
+                            <img :src="songImage" alt="" class="w-full h-full object-cover">
+                        </div>
+                        <!-- Center hole -->
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[8%] aspect-square rounded-full bg-primary-100 z-20"></div>
+                    </div>
+                </div>
 
-                 <div class="text-center text-white space-y-2">
-                    <h2 class="text-2xl md:text-3xl font-bold" x-text="songTitle"></h2>
-                    <p class="text-lg md:text-xl text-primary-40" x-text="songArtist"></p>
-                 </div>
-                 <div id="audioVisualizerContainer" class="w-full h-[300px] md:h-[400px] border-2 border-yellow-400">
-                     <canvas id="audioVisualizer" class="w-full h-full"></canvas>
-                 </div>
-
-                 <!-- Close Button (Chevron Down) -->
-                 <button @click="isExpanded = false" class="mt-4 p-2 rounded-full hover:bg-white/10 transition-colors">
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M18 15L12 9L6 15" stroke="{{ $elementStyle[$mood] }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                 </button>
+                <style>
+                    @keyframes vinyl-rotate {
+                        from { transform: rotate(0deg); }
+                        to { transform: rotate(360deg); }
+                    }
+                    .vinyl-spin {
+                        animation: vinyl-rotate 4s linear infinite;
+                    }
+                    .vinyl-paused {
+                        animation-play-state: paused;
+                    }
+                    .vinyl-playing {
+                        animation-play-state: running;
+                    }
+                </style>
             </div>
             <!-- Right Section (2/5) -->
             <div class="w-2/5 border-l border-primary-70 flex flex-col" x-data="{ activeTab: 'lyrics' }">
@@ -173,7 +201,7 @@
     <div id='overlayNan' class='hidden absolute bottom-0 z-10 h-23.25 w-full bg-shadedOfGray-85/50 cursor-not-allowed'></div>
     
     <!-- Audio Element -->
-    <audio id='audio' preload="metadata"></audio>
+    <audio id='audio' preload="metadata" crossorigin="anonymous"></audio>
     
     <!-- Main Player Bar -->
     <div class='relative bg-primary-85 w-full'>
