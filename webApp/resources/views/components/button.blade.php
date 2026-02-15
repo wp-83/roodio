@@ -10,7 +10,7 @@
 ])
 
 @php
-    $navLink ??= route('welcome');
+    $navLink ??= route('roodio');
 
     $baseStyle = 'relative overflow-hidden w-full px-4 py-1 my-1 font-secondaryAndButton rounded-3xl cursor-pointer text-mediumBtn text-center font-bold before:absolute before:inset-0 before:-translate-x-full before:transition-transform before:duration-400 hover:before:translate-x-0 md:text-largeBtn md:px-5 md:py-1.5 disabled:hover:before:-translate-x-full disabled:opacity-70 disabled:cursor-not-allowed disabled:bg-shadedOfGray-30';
 
