@@ -212,8 +212,18 @@
     <!-- Main Player Bar -->
     <div class='relative bg-primary-85 w-full'>
         <!-- Progress Bar Container -->
-        <div id="progressContainer" class="absolute -top-2 left-0 w-full h-4 bg-transparent cursor-pointer flex items-center group z-20">
-            <div class="w-full h-1.25 bg-white group-hover:h-2 transition-all duration-200">
+        <!-- Progress Bar Container -->
+        <div 
+            id="progressContainer" 
+            class="absolute -top-2 left-0 w-full h-4 bg-transparent cursor-pointer flex items-center group z-20 outline-none" 
+            tabindex="0"
+            role="slider" 
+            aria-label="Seek Slider" 
+            aria-valuemin="0" 
+            aria-valuemax="100" 
+            aria-valuenow="0"
+        >
+            <div class="w-full h-1.25 bg-white group-hover:h-2 transition-all duration-200 pointer-events-none">
                 <div id="progressBar" class="{{ 'h-full w-0 ' . $mainBtnStyle[$mood] . ' ' }}"></div>
             </div>
         </div>

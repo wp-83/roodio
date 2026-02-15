@@ -527,8 +527,11 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
         }
 
         // PROGRESS BAR EVENT HANDLERS
-        if (progressBar && currentTimeEl && durationEl) {
-            // Define named handlers
+        // PROGRESS BAR EVENT HANDLERS
+        if (progressBar && currentTimeEl && durationEl && progressContainer) {
+            let isDragging = false;
+
+            // Update UI from Audio Event
             function handleLoadedMetadata() {
                 if (Number.isFinite(audio.duration) && audio.duration > 0) {
                     durationEl.textContent = formatTime(audio.duration);
@@ -537,10 +540,17 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
             }
 
             function handleTimeUpdate() {
+                // Prevent UI update if user is dragging
+                if (isDragging) return;
+
                 if (Number.isFinite(audio.duration) && audio.duration > 0) {
                     const percent = (audio.currentTime / audio.duration) * 100;
                     progressBar.style.width = `${percent}%`;
                     currentTimeEl.textContent = formatTime(audio.currentTime);
+
+                    // Update ARIA
+                    progressContainer.setAttribute('aria-valuenow', percent);
+
                     updatePositionState();
                 }
             }
@@ -550,67 +560,94 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
             audio.removeEventListener('timeupdate', handleTimeUpdate);
             audio.addEventListener('loadedmetadata', handleLoadedMetadata);
             audio.addEventListener('timeupdate', handleTimeUpdate);
-        }
 
-        // ENDED Listener - FIXED
-        audio.addEventListener("ended", () => {
-            if (!audio.loop) {
-                playNext(); // Akan otomatis loop ke 0 jika di akhir
-                if (!isPlay) {
-                    if (pauseBtn) pauseBtn.classList.add('hidden');
-                    if (playBtn) playBtn.classList.remove('hidden');
-                }
-            }
-        });
+            // --- DRAG / SCRUBBING LOGIC --- //
 
-        // Audio Event Listeners untuk Media Session
-        audio.addEventListener('play', () => {
-            if ('mediaSession' in navigator) {
-                navigator.mediaSession.playbackState = 'playing';
-            }
-        });
+            let dragPercentage = 0; // Store exact percentage
 
-        audio.addEventListener('pause', () => {
-            if ('mediaSession' in navigator) {
-                navigator.mediaSession.playbackState = 'paused';
-            }
-        });
-
-        // SEEK CLICK - FIXED
-        if (progressContainer) {
-            progressContainer.addEventListener("click", (e) => {
-                // Validasi lengkap
-                if (isSongNan()) {
-                    return;
-                }
-
-                if (audio.readyState < 1) {
-                    return;
-                }
-
-                if (!Number.isFinite(audio.duration) || audio.duration <= 0) {
-                    return;
-                }
-
+            const updateDragUI = (clientX) => {
                 const rect = progressContainer.getBoundingClientRect();
-                const clickX = e.clientX - rect.left;
-                const width = rect.width;
+                let clickX = (clientX || 0) - rect.left;
 
+                // Clamp within bounds
+                if (clickX < 0) clickX = 0;
+                if (clickX > rect.width) clickX = rect.width;
+
+                const width = rect.width;
                 if (width > 0) {
                     const percentage = clickX / width;
                     const clampedPercentage = Math.max(0, Math.min(1, percentage));
-                    const newTime = clampedPercentage * audio.duration;
+
+                    dragPercentage = clampedPercentage; // Store for commit
+
+                    // Visual update
+                    progressBar.style.width = `${clampedPercentage * 100}%`;
+
+                    // Time preview update
+                    if (Number.isFinite(audio.duration) && audio.duration > 0) {
+                        const previewTime = clampedPercentage * audio.duration;
+                        currentTimeEl.textContent = formatTime(previewTime);
+                    }
+
+                    return clampedPercentage;
+                }
+                return 0;
+            };
+
+            const commitDrag = () => {
+                if (Number.isFinite(audio.duration) && audio.duration > 0) {
+                    // Ensure dragPercentage is safe
+                    const safePercentage = (Number.isFinite(dragPercentage)) ? dragPercentage : 0;
+                    const newTime = safePercentage * audio.duration;
 
                     if (Number.isFinite(newTime)) {
                         audio.currentTime = newTime;
-
-                        // Update UI manual untuk respons lebih cepat
-                        if (progressBar && currentTimeEl) {
-                            const percent = (newTime / audio.duration) * 100;
-                            progressBar.style.width = `${percent}%`;
-                            currentTimeEl.textContent = formatTime(newTime);
-                        }
                     }
+                }
+
+                // Keep 'isDragging' true briefly to prevent flash of old time from timeupdate
+                setTimeout(() => {
+                    isDragging = false;
+                }, 200);
+            };
+
+            // MOUSE EVENTS
+            progressContainer.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                updateDragUI(e.clientX); // Jump immediately on click
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (isDragging) {
+                    e.preventDefault(); // Prevent selection
+                    updateDragUI(e.clientX);
+                }
+            });
+
+            document.addEventListener('mouseup', (e) => {
+                if (isDragging) {
+                    commitDrag(); // No need for clientX, uses stored percentage
+                }
+            });
+
+            // TOUCH EVENTS
+            progressContainer.addEventListener('touchstart', (e) => {
+                isDragging = true;
+                const touch = e.touches[0];
+                updateDragUI(touch.clientX);
+            }, { passive: false });
+
+            document.addEventListener('touchmove', (e) => {
+                if (isDragging) {
+                    // e.preventDefault(); 
+                    const touch = e.touches[0];
+                    updateDragUI(touch.clientX);
+                }
+            }, { passive: false });
+
+            document.addEventListener('touchend', (e) => {
+                if (isDragging) {
+                    commitDrag();
                 }
             });
         }
