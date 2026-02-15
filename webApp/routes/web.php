@@ -55,7 +55,7 @@ Route::prefix('/')->middleware(['auth', 'role:0', 'prevent-back-history'])->grou
 
     // Threads
     Route::prefix('threads')->group(function () {
-        Route::get('', [ThreadController::class, 'index'])->name('threads.index');
+        Route::get('', App\Livewire\Main\Threads\Index::class)->name('threads.index');
         Route::get('/create', [ThreadController::class, 'create'])->name('threads.create');
         Route::post('', [ThreadController::class, 'store'])->name('threads.store');
         Route::post('/{thread}/reply', [ThreadController::class, 'reply'])->name('threads.reply');
@@ -63,7 +63,7 @@ Route::prefix('/')->middleware(['auth', 'role:0', 'prevent-back-history'])->grou
         
     // Social
     Route::prefix('/socials')->group(function () {
-        Route::get('', [SocialController::class, 'index'])->name('socials.index');
+        Route::get('', App\Livewire\Main\Socials\Index::class)->name('socials.index');
     });
         
     // Moods

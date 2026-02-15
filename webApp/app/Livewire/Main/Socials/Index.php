@@ -29,6 +29,12 @@ class Index extends Component
         // No logic needed, just triggering a re-render
     }
 
+    #[On('update-search')]
+    public function updateSearch($query)
+    {
+        $this->search = $query;
+    }
+
     public function render()
     {
         $search = $this->search;
@@ -60,8 +66,7 @@ class Index extends Component
         }
 
         return view('livewire.main.socials.index', [
-            'users' => $users,
-            'mood' => $this->mood
-        ]);
+            'users' => $users
+        ])->layout('layouts.main', ['mood' => $this->mood]);
     }
 }

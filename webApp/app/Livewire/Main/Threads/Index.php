@@ -8,8 +8,16 @@ use Livewire\Component;
 use Livewire\Attributes\Url;
 use Livewire\Attributes\Validate;
 
+use Livewire\Attributes\On;
+
 class Index extends Component
 {
+    #[On('update-search')]
+    public function updateSearch($query)
+    {
+        $this->search = $query;
+    }
+
     #[Url]
     public $filter = 'all';
 
@@ -74,6 +82,6 @@ class Index extends Component
             'threads' => $threads,
             'user' => $user,
             'fullname' => $fullname
-        ]);
+        ])->layout('layouts.main', ['mood' => $this->mood]);
     }
 }
