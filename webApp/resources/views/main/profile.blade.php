@@ -1,8 +1,11 @@
 @extends('layouts.master')
 
-@section('title', 'My Profile')
 
-@section('bodyClass', 'bg-shadedOfGray-10 min-h-screen py-10 px-4 font-secondaryAndButton text-shadedOfGray-85')
+@section('title', 'ROODIO - My Profile')
+
+
+@section('bodyClass', 'bg-primary-100 font-secondaryAndButton')
+
 
 @section('bodyContent')
     @livewire('user.profile');
