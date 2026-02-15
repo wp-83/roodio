@@ -9,7 +9,8 @@
             'title' => $song->title,
             'artist' => $song->artist,
             'cover' => $song->cover_path ?? asset('assets/images/default-music.png'), // default image
-            'path' => config('filesystems.disks.azure.url') . '/' . $song->songPath
+            'path' => config('filesystems.disks.azure.url') . '/' . $song->songPath,
+            'lyrics' => $song->lyrics ?? '',
         ];
     });
 

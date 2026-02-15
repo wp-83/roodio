@@ -112,33 +112,60 @@
 
     <!-- Full Screen Popup -->
     <div
-        class="fixed left-0 right-0 bottom-0 bg-primary-100 transition-all duration-500 ease-in-out flex flex-col"
+        class="fixed right-0 left-0 md:left-[5rem] bottom-[5.75rem] bg-primary-100 transition-all duration-500 ease-in-out flex flex-col overflow-hidden"
         :class="isExpanded ? 'top-16 opacity-100 visible' : 'top-full opacity-0 invisible'"
-        style="z-index: 0;"
+        style="z-index: 5;"
     >
-        <div class="flex-1 flex flex-col items-center justify-center p-10 gap-6 overflow-y-auto">
-             <div class="w-64 h-64 md:w-96 md:h-96 rounded-2xl overflow-hidden shadow-2xl relative group">
-                <img :src="songImage" alt="Album Art" class="w-full h-full object-cover">
-                <div class="absolute inset-0 bg-black/20 hidden group-hover:block transition-all"></div>
-             </div>
-             <div class="text-center text-white space-y-2">
-                <h2 class="text-2xl md:text-3xl font-bold" x-text="songTitle"></h2>
-                <p class="text-lg md:text-xl text-primary-40" x-text="songArtist"></p>
-             </div>
-                <div id="audioVisualizerContainer" class="w-full h-[300px] md:h-[400px] border-2 border-yellow-400">
-                    <canvas id="audioVisualizer" class="w-full h-full"></canvas>
+        <div class="flex-1 flex flex-row min-h-0">
+            <!-- Left Section (3/4) -->
+            <div class="w-3/5 flex flex-col items-center justify-center p-10 gap-6 overflow-y-auto">
+
+                 <div class="text-center text-white space-y-2">
+                    <h2 class="text-2xl md:text-3xl font-bold" x-text="songTitle"></h2>
+                    <p class="text-lg md:text-xl text-primary-40" x-text="songArtist"></p>
+                 </div>
+                 <div id="audioVisualizerContainer" class="w-full h-[300px] md:h-[400px] border-2 border-yellow-400">
+                     <canvas id="audioVisualizer" class="w-full h-full"></canvas>
+                 </div>
+
+                 <!-- Close Button (Chevron Down) -->
+                 <button @click="isExpanded = false" class="mt-4 p-2 rounded-full hover:bg-white/10 transition-colors">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18 15L12 9L6 15" stroke="{{ $elementStyle[$mood] }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                 </button>
+            </div>
+            <!-- Right Section (2/5) -->
+            <div class="w-2/5 border-l border-primary-70 flex flex-col" x-data="{ activeTab: 'lyrics' }">
+                <!-- Tab Headers -->
+                <div class="flex flex-row shrink-0 border-b border-primary-70">
+                    <button
+                        @click="activeTab = 'tracks'"
+                        :class="activeTab === 'tracks' ? 'border-b-2 border-white text-white' : 'text-primary-40 hover:text-white'"
+                        class="flex-1 py-3 text-center font-secondaryAndButton text-body-size transition-colors duration-200"
+                    >Tracks</button>
+                    <button
+                        @click="activeTab = 'lyrics'"
+                        :class="activeTab === 'lyrics' ? 'border-b-2 border-white text-white' : 'text-primary-40 hover:text-white'"
+                        class="flex-1 py-3 text-center font-secondaryAndButton text-body-size transition-colors duration-200"
+                    >Lyrics</button>
                 </div>
-
-
-
-
-             
-             <!-- Close Button (Chevron Down) -->
-             <button @click="isExpanded = false" class="mt-4 p-2 rounded-full hover:bg-white/10 transition-colors">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M18 15L12 9L6 15" stroke="{{ $elementStyle[$mood] }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-             </button>
+                <!-- Tab Content -->
+                <div class="flex-1 overflow-y-auto p-4 scrollbar scrollbar-thumb-primary-10/75 scrollbar-track-transparent">
+                    <!-- Lyrics Content -->
+                    <div x-show="activeTab === 'lyrics'" class="w-full h-full">
+                        <div id="popupLyricsContent" class="text-primary-20 text-small font-secondaryAndButton whitespace-pre-line leading-relaxed">
+                            <!-- Lyrics will be rendered here by JS -->
+                        </div>
+                    </div>
+                    <!-- Tracks Content -->
+                    <div x-show="activeTab === 'tracks'" class="w-full h-full">
+                        <div id="popupTracksList" class="flex flex-col gap-1">
+                            <!-- Tracks will be rendered here by JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     

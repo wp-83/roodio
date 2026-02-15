@@ -37,6 +37,88 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
         let isLoop = false;
         let isShuffle = false;
         let hasPlayedOnce = false;
+        let playOrder = []; // track indices in play order
+
+        // Build play order array (normal or shuffled)
+        function buildPlayOrder() {
+            playOrder = Array.from({ length: playlist.length }, (_, i) => i);
+            if (isShuffle) {
+                // Fisher-Yates shuffle, but keep currentIndex at top
+                for (let i = playOrder.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [playOrder[i], playOrder[j]] = [playOrder[j], playOrder[i]];
+                }
+                // Move current song to top of the list
+                const curPos = playOrder.indexOf(currentIndex);
+                if (curPos > 0) {
+                    playOrder.splice(curPos, 1);
+                    playOrder.unshift(currentIndex);
+                }
+            }
+        }
+
+        // Render tracks in the popup panel
+        function renderPopupTracks() {
+            const container = document.getElementById('popupTracksList');
+            if (!container) return;
+
+            container.innerHTML = '';
+            if (playlist.length === 0) {
+                container.innerHTML = '<p class="text-primary-40 text-small text-center py-4">No tracks in queue</p>';
+                return;
+            }
+
+            playOrder.forEach((songIdx, orderIdx) => {
+                const song = playlist[songIdx];
+                if (!song) return;
+                const isActive = songIdx === currentIndex;
+
+                const item = document.createElement('div');
+                item.className = `flex flex-row items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition-colors duration-150 ${isActive ? 'bg-primary-70' : 'hover:bg-primary-85'
+                    }`;
+                item.dataset.songIndex = songIdx;
+
+                item.innerHTML = `
+                    <span class="text-small font-secondaryAndButton ${isActive ? 'text-white' : 'text-primary-40'} w-6 text-center shrink-0">${orderIdx + 1}</span>
+                    <div class="w-10 h-10 rounded-md overflow-hidden bg-primary-70 shrink-0">
+                        <img src="${song.image || ''}" alt="" class="w-full h-full object-cover">
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-small font-secondaryAndButton truncate ${isActive ? 'text-white font-bold' : 'text-primary-20'}">${song.title || 'Unknown'}</p>
+                        <p class="text-micro truncate ${isActive ? 'text-primary-30' : 'text-primary-40'}">${song.artist || 'Unknown'}</p>
+                    </div>
+                `;
+
+                item.addEventListener('click', () => {
+                    window.playByIndex(songIdx);
+                });
+
+                container.appendChild(item);
+            });
+        }
+
+        // Render lyrics for the current song in the popup panel
+        function renderPopupLyrics() {
+            const container = document.getElementById('popupLyricsContent');
+            if (!container) return;
+
+            if (playlist.length === 0 || !playlist[currentIndex]) {
+                container.textContent = 'No lyrics available';
+                return;
+            }
+
+            const song = playlist[currentIndex];
+            const lyrics = song.lyrics || '';
+
+            if (!lyrics || lyrics.trim() === '') {
+                container.innerHTML = '<p class="text-primary-40 text-center py-4">No lyrics available for this song</p>';
+            } else {
+                // Escape HTML and preserve line breaks
+                const escaped = lyrics.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                container.textContent = '';
+                container.innerText = lyrics;
+            }
+        }
 
         // ============= HELPER FUNCTIONS =============
         function formatTime(time) {
@@ -81,40 +163,40 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
             if ('mediaSession' in navigator) {
                 // Set metadata awal
                 updateMediaSessionMetadata();
-                
+
                 // Set action handlers
                 navigator.mediaSession.setActionHandler('play', () => {
                     playAudio();
                 });
-                
+
                 navigator.mediaSession.setActionHandler('pause', () => {
                     pauseAudio();
                 });
-                
+
                 navigator.mediaSession.setActionHandler('previoustrack', () => {
                     playPrevious();
                 });
-                
+
                 navigator.mediaSession.setActionHandler('nexttrack', () => {
                     playNext();
                 });
-                
+
                 navigator.mediaSession.setActionHandler('seekbackward', (details) => {
                     const skipTime = details.seekOffset || 10;
                     audio.currentTime = Math.max(audio.currentTime - skipTime, 0);
                 });
-                
+
                 navigator.mediaSession.setActionHandler('seekforward', (details) => {
                     const skipTime = details.seekOffset || 10;
                     audio.currentTime = Math.min(audio.currentTime + skipTime, audio.duration);
                 });
-                
+
                 navigator.mediaSession.setActionHandler('seekto', (details) => {
                     if (details.fastSeek !== undefined && !isNaN(details.seekTime)) {
                         audio.currentTime = details.seekTime;
                     }
                 });
-                
+
                 // Update position state
                 updatePositionState();
             }
@@ -125,7 +207,7 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
                 const title = playerTitle?.textContent || 'Unknown Title';
                 const artist = playerArtist?.textContent || 'Unknown Artist';
                 const imageUrl = playerImage?.src || '';
-                
+
                 navigator.mediaSession.metadata = new MediaMetadata({
                     title: title,
                     artist: artist,
@@ -190,7 +272,7 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
 
             currentIndex = index;
             const song = playlist[currentIndex];
-            
+
             // Update audio source
             audio.src = song.path;
 
@@ -217,10 +299,12 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
             if (durationEl) durationEl.textContent = '00:00';
 
             audio.load();
-            
+
             if (!isSongNan() && overlayAudioPlay) overlayAudioPlay.classList.add('hidden');
 
             updatePlaylistVisuals(index);
+            renderPopupTracks();
+            renderPopupLyrics();
         }
 
         function updatePlaylistVisuals(index) {
@@ -245,7 +329,7 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
 
         function playAudio() {
             if (isSongNan()) return;
-            
+
             const playPromise = audio.play();
             if (playPromise !== undefined) {
                 playPromise.then(() => {
@@ -305,43 +389,36 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
             }, { once: true });
         };
 
-        // ============= FIXED: NEXT FUNCTION =============
+        // ============= NEXT FUNCTION =============
         function playNext() {
             if (playlist.length === 0) return;
-            
-            if (isShuffle) {
-                // Mode shuffle: pilih random
-                if (playlist.length <= 1) {
-                    loadSong(0);
-                } else {
-                    let randomIndex = Math.floor(Math.random() * playlist.length);
-                    loadSong(randomIndex);
-                }
-            } else {
-                // Mode normal: next index, loop ke 0 jika di akhir
-                let nextIndex = currentIndex + 1;
-                if (nextIndex >= playlist.length) {
-                    nextIndex = 0; // Loop ke awal playlist
-                }
-                loadSong(nextIndex);
+
+            // Find current position in playOrder
+            const currentPos = playOrder.indexOf(currentIndex);
+            let nextPos = currentPos + 1;
+            if (nextPos >= playOrder.length) {
+                nextPos = 0; // Loop ke awal
             }
+            loadSong(playOrder[nextPos]);
             playAfterLoad();
         }
 
-        // ============= FIXED: PREV FUNCTION =============
+        // ============= PREV FUNCTION =============
         function playPrevious() {
             if (playlist.length === 0) return;
-            
-            let prevIndex = currentIndex - 1;
-            if (prevIndex < 0) {
-                prevIndex = playlist.length - 1; // Loop ke akhir playlist
+
+            // Find current position in playOrder
+            const currentPos = playOrder.indexOf(currentIndex);
+            let prevPos = currentPos - 1;
+            if (prevPos < 0) {
+                prevPos = playOrder.length - 1; // Loop ke akhir
             }
-            loadSong(prevIndex);
+            loadSong(playOrder[prevPos]);
             playAfterLoad();
         }
 
         // ============= EVENT LISTENERS SETUP =============
-        
+
         // Playback controls
         if (nextBtn) {
             nextBtn.addEventListener('click', playNext);
@@ -370,6 +447,8 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
                 e.preventDefault();
                 isShuffle = !isShuffle;
                 toggleButtonState(shuffleBtn, isShuffle);
+                buildPlayOrder();
+                renderPopupTracks();
             });
         }
 
@@ -425,7 +504,7 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
                     updatePositionState();
                 }
             }
-            
+
             function handleTimeUpdate() {
                 if (Number.isFinite(audio.duration) && audio.duration > 0) {
                     const percent = (audio.currentTime / audio.duration) * 100;
@@ -434,7 +513,7 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
                     updatePositionState();
                 }
             }
-            
+
             // Remove old listeners and add new ones
             audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
             audio.removeEventListener('timeupdate', handleTimeUpdate);
@@ -473,11 +552,11 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
                 if (isSongNan()) {
                     return;
                 }
-                
+
                 if (audio.readyState < 1) {
                     return;
                 }
-                
+
                 if (!Number.isFinite(audio.duration) || audio.duration <= 0) {
                     return;
                 }
@@ -493,7 +572,7 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
 
                     if (Number.isFinite(newTime)) {
                         audio.currentTime = newTime;
-                        
+
                         // Update UI manual untuk respons lebih cepat
                         if (progressBar && currentTimeEl) {
                             const percent = (newTime / audio.duration) * 100;
@@ -523,19 +602,19 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
                 if (!Number.isFinite(audio.duration) || audio.duration <= 0) {
                     return;
                 }
-                
+
                 e.preventDefault();
-                
+
                 if (e.key === 'ArrowRight') {
                     let newTime = audio.currentTime + 10;
-                    
+
                     // Jika melebihi duration, pindah ke next atau wrap
                     if (newTime >= audio.duration) {
                         // Pindah ke lagu berikutnya
                         playNext();
                         return;
                     }
-                    
+
                     if (Number.isFinite(newTime)) {
                         audio.currentTime = newTime;
                         // Update UI
@@ -549,17 +628,17 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
 
                 if (e.key === 'ArrowLeft') {
                     let newTime = audio.currentTime - 10;
-                    
+
                     // Jika kurang dari 0, bisa ke previous atau tetap 0
                     if (newTime < 0) {
                         // Opsi 1: Pindah ke lagu sebelumnya
                         // playPrevious();
                         // return;
-                        
+
                         // Opsi 2: Tetap di 0 (default)
                         newTime = 0;
                     }
-                    
+
                     if (Number.isFinite(newTime)) {
                         audio.currentTime = newTime;
                         // Update UI
@@ -618,6 +697,11 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
 
             // Setup Media Session
             setupMediaSession();
+
+            // Build initial play order and render tracks
+            buildPlayOrder();
+            renderPopupTracks();
+            renderPopupLyrics();
         });
 
         // Listen for song changes to update media session
@@ -639,7 +723,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!audio || !playBtn) return;
 
     // =================== BEAT VISUALIZER ===================
-    (function(audio, playBtn) {
+    (function (audio, playBtn) {
         const canvas = document.querySelector('#audioVisualizer');
         if (!canvas) return;
         const ctx = canvas.getContext('2d');
