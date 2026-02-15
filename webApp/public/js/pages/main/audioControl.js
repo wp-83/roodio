@@ -845,7 +845,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Canvas is 210% of the vinyl size.
             // Radius = Canvas Radius.
             // Vinyl Radius = Canvas Radius / 2.1.
-            const vinylRatio = 1 / 2.1;
+            const vinylRatio = 0.25;
             const innerRadius = radius * vinylRatio;
             const outerRadius = radius;
             const barCount = 80;
@@ -866,8 +866,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const value = Math.min(1.0, (dataArray[dataIndex] / 255) * boost);
 
                 // Minimum height logic
-                // 0.1 (base) + (value * 0.4) -> range is roughly 1/2 of previous
-                const effectiveValue = 0 + (value * 0.5);
+                // Ensure there are no zero heights, and base is higher
+                const effectiveValue = 0.15 + (value * 0.35);
 
                 const barLength = (outerRadius - innerRadius) * effectiveValue;
 
@@ -882,7 +882,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 ctx.beginPath();
                 ctx.moveTo(x1, y1);
                 ctx.lineTo(x2, y2);
-                ctx.strokeStyle = `hsla(${hue}, 100%, 65%, ${alpha})`;
+                // Calculate endpoints for gradient (radial direction)
+                // Center of canvas is (centerX, centerY)
+                // But we are drawing a line from (x1,y1) to (x2,y2)
+                // We want the gradient to be along the line length
+                const gradient = ctx.createLinearGradient(x1, y1, x2, y2);
+
+                // Get color from canvas data attribute
+                const baseColor = canvas.dataset.beatColor || '#ffffff'; // Fallback
+
+                // create gradient: Base Color -> Transparent
+                gradient.addColorStop(0, baseColor); // Inner part (intense)
+                gradient.addColorStop(1, baseColor); // Outer part (solid)
+
+                ctx.strokeStyle = gradient;
 
                 // Wider bars
                 ctx.lineWidth = (2 * Math.PI * innerRadius / barCount) - 1;

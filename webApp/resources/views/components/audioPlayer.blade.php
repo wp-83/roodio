@@ -69,6 +69,14 @@
         'angry' => 'bg-secondary-angry-85'
     ];
 
+    $visualizerColors = [
+        'happy' => '#FFA350',
+        'sad' => '#876FD0',
+        'relaxed' => '#50D189',
+        'angry' => '#EB5F68'
+    ];
+
+
 @endphp
 
 
@@ -132,11 +140,12 @@
             <div class="w-full md:w-3/5 relative aspect-square md:aspect-none max-h-[60vh] md:max-h-none md:min-h-0 shrink-0 overflow-hidden flex items-center justify-center bg-transparent">
                 
                 <!-- Vinyl Disc Container -->
-                <div id="vinylDisc" class="relative w-[70%] aspect-square rounded-full border-[4px] border-primary-40/30 flex items-center justify-center shadow-2xl vinyl-spin vinyl-paused">
+                <div id="vinylDisc" class="relative w-[50%] aspect-square rounded-full border-[4px] border-primary-40/30 flex items-center justify-center shadow-2xl vinyl-spin vinyl-paused">
                     
                     <!-- Visualizer Canvas (Behind) -->
                     <canvas id="audioVisualizer" class="absolute inset-[-60%] w-[220%] h-[220%] rounded-full pointer-events-none opacity-80" 
-                            style="mix-blend-mode: screen;"></canvas>
+                            style="mix-blend-mode: screen;"
+                            data-beat-color="{{ $visualizerColors[$mood] }}"></canvas>
 
                     <!-- Vinyl Grooves/Body -->
                     <div class="absolute inset-0 rounded-full bg-[#101010] shadow-xl border border-black/50 flex items-center justify-center overflow-hidden z-10">
@@ -144,18 +153,15 @@
                          <div class="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent pointer-events-none z-10"></div>
                     </div>
 
-                    <!-- Center Label -->
-                    <div class="w-[55%] h-[55%] rounded-full {{ $cassetteStyle[$mood] }} flex flex-col items-center justify-center text-center p-3 relative z-20 shadow-inner border-[4px] border-[#111]">
-                         <!-- Cover Art (Small) -->
-                         <div class="w-16 h-16 md:w-20 md:h-20 rounded-md shadow-md overflow-hidden mb-2 border-2 border-white/20 relative shrink-0">
-                             <img :src="songImage" class="w-full h-full object-cover">
-                         </div>
+                    <!-- Center Label (Full Image) -->
+                    <div class="w-[65%] h-[65%] rounded-full flex items-center justify-center relative z-20 shadow-inner overflow-hidden border-[4px] border-[#151515] group">
+                         <img :src="songImage" class="w-full h-full object-cover opacity-95 group-hover:scale-105 transition-transform duration-700">
                          
-                         <!-- Song Info -->
-                         <div class="flex flex-col items-center justify-center max-w-full overflow-hidden px-1">
-                             <h2 class="text-white font-bold text-sm md:text-base leading-tight line-clamp-1 drop-shadow-md" x-text="songTitle"></h2>
-                             <p class="text-white/80 text-xs md:text-sm mt-0.5 line-clamp-1 font-secondaryAndButton tracking-wide" x-text="songArtist"></p>
-                         </div>
+                         <!-- Spinner Center Hole -->
+                         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-[#111] rounded-full shadow-inner border border-white/10"></div>
+                         
+                         <!-- Shine/glare on label -->
+                         <div class="absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent pointer-events-none"></div>
                     </div>
                 </div>
 
