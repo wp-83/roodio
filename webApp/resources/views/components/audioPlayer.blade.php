@@ -184,9 +184,9 @@
                 </div>
                 
                 <button class='{{ 'w-9 h-9 p-1 rounded-full cursor-pointer ' . $bgStyle[$mood] . ' ' }}' id='next'>
-                    <svg width="100%" height="100%" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" fill="{{ $elementStyle[$mood] }}">
-                        <path d="M15.3371,12.4218 L5.76844,18.511 C5.43558,18.7228 5,18.4837 5,18.0892 L5,5.91084 C5,5.51629 5.43558,5.27718 5.76844,5.48901 L15.3371,11.5782 C15.6459,11.7746 15.6459,12.2254 15.3371,12.4218 Z" stroke="{{ $elementStyle[$mood] }}" stroke-width="2" stroke-linecap="round"></path> 
-                        <line x1="19" y1="5" x2="19" y2="19" stroke="{{ $elementStyle[$mood] }}" stroke-width="2" stroke-linecap="round"></line> 
+                    <svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15.3371,12.4218 L5.76844,18.511 C5.43558,18.7228 5,18.4837 5,18.0892 L5,5.91084 C5,5.51629 5.43558,5.27718 5.76844,5.48901 L15.3371,11.5782 C15.6459,11.7746 15.6459,12.2254 15.3371,12.4218 Z" stroke="{{ $elementStyle[$mood] }}" stroke-width="2" stroke-linecap="round" fill="none"/>
+                        <line x1="19" y1="5" x2="19" y2="19" stroke="{{ $elementStyle[$mood] }}" stroke-width="2" stroke-linecap="round"/>
                     </svg>
                 </button>
             </div>
