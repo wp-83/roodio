@@ -125,6 +125,13 @@
                 <h2 class="text-2xl md:text-3xl font-bold" x-text="songTitle"></h2>
                 <p class="text-lg md:text-xl text-primary-40" x-text="songArtist"></p>
              </div>
+                <div id="audioVisualizerContainer" class="w-full h-[300px] md:h-[400px] border-2 border-yellow-400">
+                    <canvas id="audioVisualizer" class="w-full h-full"></canvas>
+                </div>
+
+
+
+
              
              <!-- Close Button (Chevron Down) -->
              <button @click="isExpanded = false" class="mt-4 p-2 rounded-full hover:bg-white/10 transition-colors">

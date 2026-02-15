@@ -631,3 +631,72 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
         });
     }
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    const audio = document.getElementById('audio');
+    const playBtn = document.getElementById('play');
+
+    if (!audio || !playBtn) return;
+
+    // =================== BEAT VISUALIZER ===================
+    (function(audio, playBtn) {
+        const canvas = document.querySelector('#audioVisualizer');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const analyser = audioCtx.createAnalyser();
+        analyser.fftSize = 256;
+
+        const bufferLength = analyser.frequencyBinCount;
+        const dataArray = new Uint8Array(bufferLength);
+
+        let sourceCreated = false;
+
+        function resizeCanvas() {
+            canvas.width = canvas.clientWidth;
+            canvas.height = canvas.clientHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function drawVisualizer() {
+            requestAnimationFrame(drawVisualizer);
+            analyser.getByteFrequencyData(dataArray);
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const barWidth = (canvas.width / bufferLength) * 2.5;
+            let x = 0;
+
+            for (let i = 0; i < bufferLength; i++) {
+                const barHeight = dataArray[i];
+                const r = barHeight + 25 * (i / bufferLength);
+                const g = 250 * (i / bufferLength);
+                const b = 50;
+
+                ctx.fillStyle = `rgb(${r},${g},${b})`;
+                ctx.fillRect(x, canvas.height - barHeight / 2, barWidth, barHeight / 2);
+
+                x += barWidth + 1;
+            }
+
+            const avg = dataArray.reduce((a, b) => a + b, 0) / bufferLength;
+            canvas.parentElement.style.backgroundColor = avg > 150 ? 'rgba(255,255,255,0.05)' : 'black';
+        }
+
+        function initVisualizer() {
+            if (!sourceCreated) {
+                const source = audioCtx.createMediaElementSource(audio);
+                source.connect(analyser);
+                analyser.connect(audioCtx.destination);
+                sourceCreated = true;
+            }
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            drawVisualizer();
+        }
+
+        playBtn.addEventListener('click', initVisualizer, { once: true });
+
+    })(audio, playBtn);
+});
