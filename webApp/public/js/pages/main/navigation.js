@@ -60,18 +60,16 @@ if (!window.HAS_RUN_NAVIGATION_JS) {
 
             function openSearchBar() {
                 isSearchBarOpened = true;
-                searchbar.classList.add("absolute", 'z-10', 'top-[10%]', 'left-1/2', '-translate-x-1/2', 'w-sm');
+                searchbar.classList.add("absolute", 'z-30', 'top-14', 'left-1/2', '-translate-x-1/2', 'w-[20rem]', '!flex');
                 if (searchAttr) searchAttr.classList.add('hidden');
-                searchbar.classList.remove('hidden', 'relative', 'w-xl', 'h-max');
+                searchbar.classList.remove('hidden', 'lg:flex', 'relative', 'w-xl', 'h-max');
                 searchInput.focus();
             };
 
             function closeSearchBar() {
                 isSearchBarOpened = false;
-                searchbar.classList.add('-z-1');
-                searchbar.classList.add('hidden', 'w-xl', 'relative', 'h-max');
-                searchbar.classList.remove('z-10', 'top-[10%]', 'left-1/2', '-translate-x-1/2', 'w-sm');
-                searchbar.classList.remove('absolute', '-z-1');
+                searchbar.classList.remove('absolute', 'z-30', 'top-14', 'left-1/2', '-translate-x-1/2', 'w-[20rem]', '!flex');
+                searchbar.classList.add('hidden', 'lg:flex', 'relative', 'w-xl', 'h-max');
                 if (searchAttr) searchAttr.classList.remove('hidden');
             };
 
