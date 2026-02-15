@@ -11,9 +11,9 @@ use App\Http\Controllers\User\MoodController;
 use App\Http\Controllers\User\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/welcome', function () {
-    return view('errors.503');
-})->name('welcome');
+Route::get('/roodio', function () {
+    return view('roodio');
+})->name('roodio');
 
 // Auth Route
 Route::prefix('auth')->group(function () {
@@ -124,8 +124,3 @@ Route::prefix('superadmin')->middleware(['auth', 'role:2', 'prevent-back-history
 // Route::get('/moods/{mood}/edit', [MoodController::class, 'edit'])->name('moods.edit');
 // Route::put('/moods/{mood}', [MoodController::class, 'update'])->name('moods.update');
 // Route::delete('/moods/{mood}', [MoodController::class, 'destroy'])->name('moods.destroy');
-
-//unit test route
-Route::get('/test/component', function () {
-    return view('components.threadBox');
-});

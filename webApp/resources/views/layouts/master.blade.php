@@ -7,7 +7,6 @@
     <title>@yield('title', 'ROODIO')</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('head')
-    @stack('head')
     {{-- @livewireStyles --}}
     @stack('style')
     {{-- @livewireScripts --}}
