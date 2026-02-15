@@ -134,10 +134,12 @@
                     </div>
                 </div>
                 <!-- Vinyl Circle - spinning with beat visualization -->
-                <div class="absolute top-1/2 -translate-y-1/2 left-[50%] -translate-x-1/2 w-[56%] aspect-square" style="clip-path: inset(0 0 0 50%);">
-                    <div id="vinylDisc" class="w-full h-full rounded-full border-[6px] border-primary-40/30 relative vinyl-spin vinyl-paused">
-                        <!-- Canvas for circular beat visualization -->
-                        <canvas id="audioVisualizer" class="absolute inset-0 w-full h-full rounded-full"></canvas>
+                <!-- Container enlarged to 85% to allow overflow visualization, clipped at 50% of THIS container -->
+                <div class="absolute top-1/2 -translate-y-1/2 left-[50%] -translate-x-1/2 w-[85%] aspect-square flex items-center justify-center" style="clip-path: inset(0 0 0 50%);">
+                    <!-- Vinyl Disc (approx 56% original size -> 66% of 85%) -->
+                    <div id="vinylDisc" class="w-[66%] h-[66%] rounded-full border-[6px] border-primary-40/30 relative vinyl-spin vinyl-paused">
+                        <!-- Canvas for circular beat visualization - Enlarged to radiate OUTWARDS -->
+                        <canvas id="audioVisualizer" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[210%] h-[210%] rounded-full pointer-events-none"></canvas>
                         <!-- Album art center -->
                         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40%] aspect-square rounded-full overflow-hidden border-2 border-primary-40/30 z-10">
                             <img :src="songImage" alt="" class="w-full h-full object-cover">

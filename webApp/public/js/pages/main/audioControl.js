@@ -802,31 +802,50 @@ document.addEventListener('DOMContentLoaded', () => {
             const cx = canvas.width / 2;
             const cy = canvas.height / 2;
             const radius = Math.min(cx, cy);
-            const innerRadius = radius * 0.28;  // inside album art
-            const outerRadius = radius * 0.88;  // near the edge
-            const barCount = 64;
+            // Canvas is 210% of the vinyl size.
+            // Radius = Canvas Radius.
+            // Vinyl Radius = Canvas Radius / 2.1.
+            const vinylRatio = 1 / 2.1;
+            const innerRadius = radius * vinylRatio;
+            const outerRadius = radius;
+            const barCount = 80;
 
             for (let i = 0; i < barCount; i++) {
                 const angle = (i / barCount) * Math.PI * 2 - Math.PI / 2;
-                const dataIndex = Math.floor(i * bufferLength / barCount);
-                const value = dataArray[dataIndex] / 255;
 
-                const barInner = innerRadius + (outerRadius - innerRadius) * 0.3;
-                const barLength = (outerRadius - barInner) * value;
+                // Use only the first 60% of the frequency data (bass/mids) where most energy is
+                // This prevents "dead" bars at the end of the spectrum
+                const effectiveBufferLength = Math.floor(bufferLength * 0.6);
+                const dataIndex = Math.floor(i * effectiveBufferLength / barCount);
 
-                const x1 = cx + Math.cos(angle) * barInner;
-                const y1 = cy + Math.sin(angle) * barInner;
-                const x2 = cx + Math.cos(angle) * (barInner + barLength);
-                const y2 = cy + Math.sin(angle) * (barInner + barLength);
+                // Add a boost to higher frequencies (which are naturally quieter)
+                // Linear boost from 1.0 (at i=0) to 2.5 (at i=max)
+                const boost = 1 + (i / barCount) * 1.5;
+
+                // Clamp value to 0-1 range after boost
+                const value = Math.min(1.0, (dataArray[dataIndex] / 255) * boost);
+
+                // Minimum height logic
+                // 0.1 (base) + (value * 0.4) -> range is roughly 1/2 of previous
+                const effectiveValue = 0 + (value * 0.5);
+
+                const barLength = (outerRadius - innerRadius) * effectiveValue;
+
+                const x1 = cx + Math.cos(angle) * innerRadius;
+                const y1 = cy + Math.sin(angle) * innerRadius;
+                const x2 = cx + Math.cos(angle) * (innerRadius + barLength);
+                const y2 = cy + Math.sin(angle) * (innerRadius + barLength);
 
                 const hue = (i / barCount) * 60 + 180;
-                const alpha = 0.4 + value * 0.6;
+                const alpha = 1.0;
 
                 ctx.beginPath();
                 ctx.moveTo(x1, y1);
                 ctx.lineTo(x2, y2);
-                ctx.strokeStyle = `hsla(${hue}, 70%, ${50 + value * 30}%, ${alpha})`;
-                ctx.lineWidth = Math.max(2, (2 * Math.PI * barInner / barCount) * 0.6);
+                ctx.strokeStyle = `hsla(${hue}, 100%, 65%, ${alpha})`;
+
+                // Wider bars
+                ctx.lineWidth = (2 * Math.PI * innerRadius / barCount) - 1;
                 ctx.lineCap = 'round';
                 ctx.stroke();
             }
