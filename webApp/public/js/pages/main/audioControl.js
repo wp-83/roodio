@@ -1,3 +1,135 @@
+// Di dalam file audioControl.js, tambahkan fungsi ini
+
+function setupMediaSession() {
+    if ('mediaSession' in navigator) {
+        // Set metadata awal
+        updateMediaSessionMetadata();
+        
+        // Set action handlers
+        navigator.mediaSession.setActionHandler('play', () => {
+            window.playAudio();
+        });
+        
+        navigator.mediaSession.setActionHandler('pause', () => {
+            window.pauseAudio();
+        });
+        
+        navigator.mediaSession.setActionHandler('previoustrack', () => {
+            window.playPrevious();
+        });
+        
+        navigator.mediaSession.setActionHandler('nexttrack', () => {
+            window.playNext();
+        });
+        
+        navigator.mediaSession.setActionHandler('seekbackward', (details) => {
+            const audio = document.getElementById('audio');
+            if (audio) {
+                const skipTime = details.seekOffset || 10;
+                audio.currentTime = Math.max(audio.currentTime - skipTime, 0);
+            }
+        });
+        
+        navigator.mediaSession.setActionHandler('seekforward', (details) => {
+            const audio = document.getElementById('audio');
+            if (audio) {
+                const skipTime = details.seekOffset || 10;
+                audio.currentTime = Math.min(audio.currentTime + skipTime, audio.duration);
+            }
+        });
+        
+        navigator.mediaSession.setActionHandler('seekto', (details) => {
+            const audio = document.getElementById('audio');
+            if (audio && details.fastSeek !== undefined && !isNaN(details.seekTime)) {
+                audio.currentTime = details.seekTime;
+            }
+        });
+        
+        // Update position state periodically
+        audio.addEventListener('timeupdate', updatePositionState);
+        audio.addEventListener('loadedmetadata', updatePositionState);
+    }
+}
+
+function updateMediaSessionMetadata() {
+    const audio = document.getElementById('audio');
+    const title = document.getElementById('playerTitle')?.textContent || 'Unknown Title';
+    const artist = document.getElementById('playerArtist')?.textContent || 'Unknown Artist';
+    const imageUrl = document.getElementById('playerImage')?.src || '';
+    
+    if ('mediaSession' in navigator) {
+        navigator.mediaSession.metadata = new MediaMetadata({
+            title: title,
+            artist: artist,
+            album: 'Roodio',
+            artwork: [
+                {
+                    src: imageUrl || '/assets/default-album-art.png',
+                    sizes: '96x96',
+                    type: 'image/png'
+                },
+                {
+                    src: imageUrl || '/assets/default-album-art.png',
+                    sizes: '128x128',
+                    type: 'image/png'
+                },
+                {
+                    src: imageUrl || '/assets/default-album-art.png',
+                    sizes: '192x192',
+                    type: 'image/png'
+                },
+                {
+                    src: imageUrl || '/assets/default-album-art.png',
+                    sizes: '256x256',
+                    type: 'image/png'
+                },
+                {
+                    src: imageUrl || '/assets/default-album-art.png',
+                    sizes: '384x384',
+                    type: 'image/png'
+                },
+                {
+                    src: imageUrl || '/assets/default-album-art.png',
+                    sizes: '512x512',
+                    type: 'image/png'
+                }
+            ]
+        });
+    }
+}
+
+function updatePositionState() {
+    const audio = document.getElementById('audio');
+    if ('mediaSession' in navigator && audio && Number.isFinite(audio.duration) && audio.duration > 0) {
+        navigator.mediaSession.setPositionState({
+            duration: audio.duration,
+            playbackRate: audio.playbackRate || 1,
+            position: audio.currentTime
+        });
+    }
+}
+
+// Panggil setup saat lagu berganti
+window.addEventListener('song-changed', (e) => {
+    updateMediaSessionMetadata();
+});
+
+// Setup play/pause state
+audio.addEventListener('play', () => {
+    if ('mediaSession' in navigator) {
+        navigator.mediaSession.playbackState = 'playing';
+    }
+});
+
+audio.addEventListener('pause', () => {
+    if ('mediaSession' in navigator) {
+        navigator.mediaSession.playbackState = 'paused';
+    }
+});
+
+// Panggil setup saat inisialisasi
+document.addEventListener('DOMContentLoaded', setupMediaSession);
+
 if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
     window.HAS_RUN_AUDIO_CONTROL_JS = true;
 
