@@ -5,6 +5,7 @@ namespace App\Livewire\Main\Socials;
 use App\Models\User;
 use Livewire\Component;
 use Livewire\Attributes\Url;
+use Livewire\Attributes\On;
 
 class Index extends Component
 {
@@ -19,6 +20,13 @@ class Index extends Component
     public function mount()
     {
         $this->mood = session('chooseMood', 'happy');
+    }
+
+
+    #[On('follow-status-changed')]
+    public function handleFollowChange()
+    {
+        // No logic needed, just triggering a re-render
     }
 
     public function render()
