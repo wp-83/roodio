@@ -234,7 +234,7 @@
                 <div class='h-14 w-14 bg-shadedOfGray-20 rounded-md overflow-hidden shrink-0'>
                     <img src="" alt="music" id="playerImage" class="w-full h-full object-cover">
                 </div>
-                <div class='text-white font-secondaryAndButton block truncate max-w-[120px] xs:max-w-[150px] lg:max-w-[200px]'>
+                <div class='hidden md:block text-white font-secondaryAndButton truncate max-w-[120px] xs:max-w-[150px] lg:max-w-[200px]'>
                     <p class='{{ 'text-body-size font-bold ' . $textStyle[$mood] . ' truncate' }}' id="playerTitle">{{ Str::limit($title, 35) }}</p>
                     <p class='text-micro truncate' id="playerArtist">{{ Str::limit($artist, 30) }}</p>
                 </div>
@@ -270,7 +270,7 @@
             </div>
             
             <div class='flex flex-row gap-3 items-center'>
-                <div class='flex flex-row items-center text-white text-small'>
+                <div class='hidden md:flex flex-row items-center text-white text-small'>
                     <span id='currentDuration'>--:--</span>
                     <span class="mx-0.5">/</span>
                     <span id='duration'>--:--</span>
