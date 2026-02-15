@@ -65,11 +65,6 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
             const container = document.getElementById('popupTracksList');
             if (!container) return;
 
-            // Get mood styles from data attributes
-            const activeClass = container.dataset.activeClass || 'bg-primary-70';
-            const hoverClass = container.dataset.hoverClass || 'hover:bg-primary-85';
-            const textClass = container.dataset.textClass || 'text-white';
-
             container.innerHTML = '';
             if (playlist.length === 0) {
                 container.innerHTML = '<p class="text-primary-40 text-small text-center py-4">No tracks in queue</p>';
@@ -82,17 +77,18 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
                 const isActive = songIdx === currentIndex;
 
                 const item = document.createElement('div');
-                item.className = `flex flex-row items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition-colors duration-150 ${isActive ? activeClass : hoverClass}`;
+                item.className = `flex flex-row items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition-colors duration-150 ${isActive ? 'bg-primary-70' : 'hover:bg-primary-85'
+                    }`;
                 item.dataset.songIndex = songIdx;
 
                 item.innerHTML = `
-                    <span class="text-small font-secondaryAndButton ${isActive ? textClass + ' font-bold' : 'text-primary-40'} w-6 text-center shrink-0">${orderIdx + 1}</span>
+                    <span class="text-small font-secondaryAndButton ${isActive ? 'text-white' : 'text-primary-40'} w-6 text-center shrink-0">${orderIdx + 1}</span>
                     <div class="w-10 h-10 rounded-md overflow-hidden bg-primary-70 shrink-0">
                         <img src="${song.cover || song.image || ''}" alt="" class="w-full h-full object-cover">
                     </div>
                     <div class="flex-1 min-w-0">
-                        <p class="text-small font-secondaryAndButton truncate ${isActive ? textClass + ' font-bold' : 'text-primary-20'}">${song.title || 'Unknown'}</p>
-                        <p class="text-micro truncate ${isActive ? textClass + ' opacity-80' : 'text-primary-40'}">${song.artist || 'Unknown'}</p>
+                        <p class="text-small font-secondaryAndButton truncate ${isActive ? 'text-white font-bold' : 'text-primary-20'}">${song.title || 'Unknown'}</p>
+                        <p class="text-micro truncate ${isActive ? 'text-primary-30' : 'text-primary-40'}">${song.artist || 'Unknown'}</p>
                     </div>
                 `;
 
@@ -293,8 +289,7 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
                 detail: {
                     title: song.title || 'Unknown Title',
                     artist: song.artist || 'Unknown Artist',
-                    image: song.cover || song.image || '',
-                    date: song.date || ''
+                    image: song.cover || song.image || ''
                 }
             }));
 
@@ -532,11 +527,8 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
         }
 
         // PROGRESS BAR EVENT HANDLERS
-        // PROGRESS BAR EVENT HANDLERS
-        if (progressBar && currentTimeEl && durationEl && progressContainer) {
-            let isDragging = false;
-
-            // Update UI from Audio Event
+        if (progressBar && currentTimeEl && durationEl) {
+            // Define named handlers
             function handleLoadedMetadata() {
                 if (Number.isFinite(audio.duration) && audio.duration > 0) {
                     durationEl.textContent = formatTime(audio.duration);
@@ -545,17 +537,10 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
             }
 
             function handleTimeUpdate() {
-                // Prevent UI update if user is dragging
-                if (isDragging) return;
-
                 if (Number.isFinite(audio.duration) && audio.duration > 0) {
                     const percent = (audio.currentTime / audio.duration) * 100;
                     progressBar.style.width = `${percent}%`;
                     currentTimeEl.textContent = formatTime(audio.currentTime);
-
-                    // Update ARIA
-                    progressContainer.setAttribute('aria-valuenow', percent);
-
                     updatePositionState();
                 }
             }
@@ -565,94 +550,67 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
             audio.removeEventListener('timeupdate', handleTimeUpdate);
             audio.addEventListener('loadedmetadata', handleLoadedMetadata);
             audio.addEventListener('timeupdate', handleTimeUpdate);
+        }
 
-            // --- DRAG / SCRUBBING LOGIC --- //
+        // ENDED Listener - FIXED
+        audio.addEventListener("ended", () => {
+            if (!audio.loop) {
+                playNext(); // Akan otomatis loop ke 0 jika di akhir
+                if (!isPlay) {
+                    if (pauseBtn) pauseBtn.classList.add('hidden');
+                    if (playBtn) playBtn.classList.remove('hidden');
+                }
+            }
+        });
 
-            let dragPercentage = 0; // Store exact percentage
+        // Audio Event Listeners untuk Media Session
+        audio.addEventListener('play', () => {
+            if ('mediaSession' in navigator) {
+                navigator.mediaSession.playbackState = 'playing';
+            }
+        });
 
-            const updateDragUI = (clientX) => {
+        audio.addEventListener('pause', () => {
+            if ('mediaSession' in navigator) {
+                navigator.mediaSession.playbackState = 'paused';
+            }
+        });
+
+        // SEEK CLICK - FIXED
+        if (progressContainer) {
+            progressContainer.addEventListener("click", (e) => {
+                // Validasi lengkap
+                if (isSongNan()) {
+                    return;
+                }
+
+                if (audio.readyState < 1) {
+                    return;
+                }
+
+                if (!Number.isFinite(audio.duration) || audio.duration <= 0) {
+                    return;
+                }
+
                 const rect = progressContainer.getBoundingClientRect();
-                let clickX = (clientX || 0) - rect.left;
-
-                // Clamp within bounds
-                if (clickX < 0) clickX = 0;
-                if (clickX > rect.width) clickX = rect.width;
-
+                const clickX = e.clientX - rect.left;
                 const width = rect.width;
+
                 if (width > 0) {
                     const percentage = clickX / width;
                     const clampedPercentage = Math.max(0, Math.min(1, percentage));
-
-                    dragPercentage = clampedPercentage; // Store for commit
-
-                    // Visual update
-                    progressBar.style.width = `${clampedPercentage * 100}%`;
-
-                    // Time preview update
-                    if (Number.isFinite(audio.duration) && audio.duration > 0) {
-                        const previewTime = clampedPercentage * audio.duration;
-                        currentTimeEl.textContent = formatTime(previewTime);
-                    }
-
-                    return clampedPercentage;
-                }
-                return 0;
-            };
-
-            const commitDrag = () => {
-                if (Number.isFinite(audio.duration) && audio.duration > 0) {
-                    // Ensure dragPercentage is safe
-                    const safePercentage = (Number.isFinite(dragPercentage)) ? dragPercentage : 0;
-                    const newTime = safePercentage * audio.duration;
+                    const newTime = clampedPercentage * audio.duration;
 
                     if (Number.isFinite(newTime)) {
                         audio.currentTime = newTime;
+
+                        // Update UI manual untuk respons lebih cepat
+                        if (progressBar && currentTimeEl) {
+                            const percent = (newTime / audio.duration) * 100;
+                            progressBar.style.width = `${percent}%`;
+                            currentTimeEl.textContent = formatTime(newTime);
+                        }
                     }
-                }
-
-                // Keep 'isDragging' true briefly to prevent flash of old time from timeupdate
-                setTimeout(() => {
-                    isDragging = false;
-                }, 200);
-            };
-
-            // MOUSE EVENTS
-            progressContainer.addEventListener('mousedown', (e) => {
-                isDragging = true;
-                updateDragUI(e.clientX); // Jump immediately on click
-            });
-
-            document.addEventListener('mousemove', (e) => {
-                if (isDragging) {
-                    e.preventDefault(); // Prevent selection
-                    updateDragUI(e.clientX);
-                }
-            });
-
-            document.addEventListener('mouseup', (e) => {
-                if (isDragging) {
-                    commitDrag(); // No need for clientX, uses stored percentage
-                }
-            });
-
-            // TOUCH EVENTS
-            progressContainer.addEventListener('touchstart', (e) => {
-                isDragging = true;
-                const touch = e.touches[0];
-                updateDragUI(touch.clientX);
-            }, { passive: false });
-
-            document.addEventListener('touchmove', (e) => {
-                if (isDragging) {
-                    // e.preventDefault(); 
-                    const touch = e.touches[0];
-                    updateDragUI(touch.clientX);
-                }
-            }, { passive: false });
-
-            document.addEventListener('touchend', (e) => {
-                if (isDragging) {
-                    commitDrag();
                 }
             });
         }
@@ -924,10 +882,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 ctx.beginPath();
                 ctx.moveTo(x1, y1);
                 ctx.lineTo(x2, y2);
-
-                // Get color from canvas data attribute or fallback
-                const beatColor = canvas.dataset.beatColor || `hsla(${hue}, 100%, 65%, ${alpha})`;
-                ctx.strokeStyle = beatColor;
+                ctx.strokeStyle = `hsla(${hue}, 100%, 65%, ${alpha})`;
 
                 // Wider bars
                 ctx.lineWidth = (2 * Math.PI * innerRadius / barCount) - 1;

@@ -55,13 +55,20 @@
         'angry' => 'hover:bg-secondary-angry-20'
     ];
 
-    // Soft background for Active State (Same as hover but persistent)
     $activeBgStyle = [
         'happy' => 'bg-secondary-happy-20',
         'sad' => 'bg-secondary-sad-20',
         'relaxed' => 'bg-secondary-relaxed-20',
         'angry' => 'bg-secondary-angry-20'
     ];
+
+    $cassetteStyle = [
+        'happy' => 'bg-secondary-happy-85',
+        'sad' => 'bg-secondary-sad-85',
+        'relaxed' => 'bg-secondary-relaxed-85',
+        'angry' => 'bg-secondary-angry-85'
+    ];
+
 @endphp
 
 
@@ -121,35 +128,34 @@
         style="z-index: 5;"
     >
         <div class="flex-1 flex flex-col md:flex-row min-h-0 overflow-y-auto md:overflow-hidden scrollbar-hide">
-            <!-- Left Section (Song Info & Vinyl Disc) -->
-            <div class="w-full md:w-3/5 relative aspect-square md:aspect-none max-h-[60vh] md:max-h-none md:min-h-0 shrink-0 overflow-hidden">
-                <!-- Box 1/2 of section (Info Card) -->
-                <div class="w-1/2 h-full py-2 md:py-4 md:px-0">
-                    <div class="w-full h-full rounded-r-xl md:rounded-xl border-r border-primary-70 bg-black/30 flex flex-col overflow-hidden">
-                        <!-- Title & Artist - top right -->
-                        <div class="text-right p-4 shrink-0">
-                            <h2 class="text-lg font-bold text-white truncate" x-text="songTitle"></h2>
-                            <p class="text-sm text-primary-40 truncate" x-text="songArtist"></p>
-                        </div>
-                        <!-- Cover Image -->
-                        <div class="flex-1 min-h-0 px-4 pb-4">
-                            <img :src="songImage" alt="" class="w-full h-full object-cover rounded-lg">
-                        </div>
+            <!-- Left Section (Unified Spinning Disc) -->
+            <div class="w-full md:w-3/5 relative aspect-square md:aspect-none max-h-[60vh] md:max-h-none md:min-h-0 shrink-0 overflow-hidden flex items-center justify-center bg-transparent">
+                
+                <!-- Vinyl Disc Container -->
+                <div id="vinylDisc" class="relative w-[70%] aspect-square rounded-full border-[4px] border-primary-40/30 flex items-center justify-center shadow-2xl vinyl-spin vinyl-paused">
+                    
+                    <!-- Visualizer Canvas (Behind) -->
+                    <canvas id="audioVisualizer" class="absolute inset-[-60%] w-[220%] h-[220%] rounded-full pointer-events-none opacity-80" 
+                            style="mix-blend-mode: screen;"></canvas>
+
+                    <!-- Vinyl Grooves/Body -->
+                    <div class="absolute inset-0 rounded-full bg-[#101010] shadow-xl border border-black/50 flex items-center justify-center overflow-hidden z-10">
+                         <div class="absolute inset-0 rounded-full bg-[repeating-radial-gradient(#111_0,#111_2px,#222_3px)] opacity-50"></div>
+                         <div class="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent pointer-events-none z-10"></div>
                     </div>
-                </div>
-                <!-- Vinyl Circle - spinning with beat visualization -->
-                <!-- Container enlarged to allow overflow visualization, clipped at 50% of THIS container -->
-                <div class="absolute inset-0 w-full h-full flex items-center justify-center md:h-auto md:w-[85%] md:left-[50%] md:-translate-x-1/2 md:top-1/2 md:-translate-y-1/2 md:aspect-square" style="clip-path: inset(0 0 0 50%);">
-                    <!-- Vinyl Disc (approx 56% original size -> 66% of 85%) -->
-                    <div id="vinylDisc" class="h-[80%] aspect-square md:w-[66%] md:h-[66%] md:aspect-none rounded-full border-[6px] border-primary-40/30 relative vinyl-spin vinyl-paused">
-                        <!-- Canvas for circular beat visualization - Enlarged to radiate OUTWARDS -->
-                        <canvas id="audioVisualizer" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[210%] h-[210%] rounded-full pointer-events-none"></canvas>
-                        <!-- Album art center -->
-                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40%] aspect-square rounded-full overflow-hidden border-2 border-primary-40/30 z-10">
-                            <img :src="songImage" alt="" class="w-full h-full object-cover">
-                        </div>
-                        <!-- Center hole -->
-                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[8%] aspect-square rounded-full bg-primary-100 z-20"></div>
+
+                    <!-- Center Label -->
+                    <div class="w-[55%] h-[55%] rounded-full {{ $cassetteStyle[$mood] }} flex flex-col items-center justify-center text-center p-3 relative z-20 shadow-inner border-[4px] border-[#111]">
+                         <!-- Cover Art (Small) -->
+                         <div class="w-16 h-16 md:w-20 md:h-20 rounded-md shadow-md overflow-hidden mb-2 border-2 border-white/20 relative shrink-0">
+                             <img :src="songImage" class="w-full h-full object-cover">
+                         </div>
+                         
+                         <!-- Song Info -->
+                         <div class="flex flex-col items-center justify-center max-w-full overflow-hidden px-1">
+                             <h2 class="text-white font-bold text-sm md:text-base leading-tight line-clamp-1 drop-shadow-md" x-text="songTitle"></h2>
+                             <p class="text-white/80 text-xs md:text-sm mt-0.5 line-clamp-1 font-secondaryAndButton tracking-wide" x-text="songArtist"></p>
+                         </div>
                     </div>
                 </div>
 
@@ -159,7 +165,7 @@
                         to { transform: rotate(360deg); }
                     }
                     .vinyl-spin {
-                        animation: vinyl-rotate 4s linear infinite;
+                        animation: vinyl-rotate 8s linear infinite;
                     }
                     .vinyl-paused {
                         animation-play-state: paused;
@@ -212,18 +218,8 @@
     <!-- Main Player Bar -->
     <div class='relative bg-primary-85 w-full'>
         <!-- Progress Bar Container -->
-        <!-- Progress Bar Container -->
-        <div 
-            id="progressContainer" 
-            class="absolute -top-2 left-0 w-full h-4 bg-transparent cursor-pointer flex items-center group z-20 outline-none" 
-            tabindex="0"
-            role="slider" 
-            aria-label="Seek Slider" 
-            aria-valuemin="0" 
-            aria-valuemax="100" 
-            aria-valuenow="0"
-        >
-            <div class="w-full h-1.25 bg-white group-hover:h-2 transition-all duration-200 pointer-events-none">
+        <div id="progressContainer" class="absolute -top-2 left-0 w-full h-4 bg-transparent cursor-pointer flex items-center group z-20">
+            <div class="w-full h-1.25 bg-white group-hover:h-2 transition-all duration-200">
                 <div id="progressBar" class="{{ 'h-full w-0 ' . $mainBtnStyle[$mood] . ' ' }}"></div>
             </div>
         </div>
@@ -234,7 +230,7 @@
                 <div class='h-14 w-14 bg-shadedOfGray-20 rounded-md overflow-hidden shrink-0'>
                     <img src="" alt="music" id="playerImage" class="w-full h-full object-cover">
                 </div>
-                <div class='hidden md:block text-white font-secondaryAndButton truncate max-w-[120px] xs:max-w-[150px] lg:max-w-[200px]'>
+                <div class='text-white font-secondaryAndButton block truncate max-w-[120px] xs:max-w-[150px] lg:max-w-[200px]'>
                     <p class='{{ 'text-body-size font-bold ' . $textStyle[$mood] . ' truncate' }}' id="playerTitle">{{ Str::limit($title, 35) }}</p>
                     <p class='text-micro truncate' id="playerArtist">{{ Str::limit($artist, 30) }}</p>
                 </div>
@@ -270,7 +266,7 @@
             </div>
             
             <div class='flex flex-row gap-3 items-center'>
-                <div class='hidden md:flex flex-row items-center text-white text-small'>
+                <div class='flex flex-row items-center text-white text-small'>
                     <span id='currentDuration'>--:--</span>
                     <span class="mx-0.5">/</span>
                     <span id='duration'>--:--</span>
