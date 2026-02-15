@@ -13,6 +13,9 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
     const soundedBtn = document.getElementById('speaker');
     const mutedBtn = document.getElementById('muted');
     const volumeSlider = document.getElementById('volumeSlider');
+    const loopMobileBtn = document.getElementById('loop-mobile');
+    const shuffleMobileBtn = document.getElementById('shuffle-mobile');
+    const speakerMobileBtn = document.getElementById('speaker-mobile');
 
     // Metadata Elements
     const playerTitle = document.getElementById('playerTitle');
@@ -432,23 +435,45 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
         if (pauseBtn) pauseBtn.addEventListener('click', togglePlay);
 
         // LOOP
+        function toggleLoop() {
+            isLoop = !isLoop;
+            audio.loop = isLoop;
+            toggleButtonState(loopBtn, isLoop);
+            toggleButtonState(loopMobileBtn, isLoop);
+        }
+
         if (loopBtn) {
             loopBtn.addEventListener('click', (e) => {
                 e.preventDefault();
-                isLoop = !isLoop;
-                audio.loop = isLoop;
-                toggleButtonState(loopBtn, isLoop);
+                toggleLoop();
+            });
+        }
+        if (loopMobileBtn) {
+            loopMobileBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                toggleLoop();
             });
         }
 
         // SHUFFLE
+        function toggleShuffle() {
+            isShuffle = !isShuffle;
+            toggleButtonState(shuffleBtn, isShuffle);
+            toggleButtonState(shuffleMobileBtn, isShuffle);
+            buildPlayOrder();
+            renderPopupTracks();
+        }
+
         if (shuffleBtn) {
             shuffleBtn.addEventListener('click', (e) => {
                 e.preventDefault();
-                isShuffle = !isShuffle;
-                toggleButtonState(shuffleBtn, isShuffle);
-                buildPlayOrder();
-                renderPopupTracks();
+                toggleShuffle();
+            });
+        }
+        if (shuffleMobileBtn) {
+            shuffleMobileBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                toggleShuffle();
             });
         }
 
@@ -471,10 +496,16 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
                 audio.volume = volumeSlider.value;
                 if (soundedBtn) soundedBtn.classList.toggle('hidden');
                 if (mutedBtn) mutedBtn.classList.toggle('hidden');
+                toggleButtonState(speakerMobileBtn, isMuted);
             }
 
             if (soundedBtn) soundedBtn.addEventListener('click', mutedSound);
             if (mutedBtn) mutedBtn.addEventListener('click', mutedSound);
+            if (speakerMobileBtn) {
+                speakerMobileBtn.addEventListener('click', (e) => {
+                    mutedSound();
+                });
+            }
 
             volumeSlider.addEventListener('input', () => {
                 if (volumeSlider.value == 0) {
@@ -667,13 +698,22 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
         if (audioCtrlArea && audioCtrlPopup) {
             const audioCtrlContent = audioCtrlPopup.querySelector('.popupContent');
 
-            audioCtrlArea.addEventListener('click', () => {
+            function syncMobileMenuState() {
+                toggleButtonState(loopMobileBtn, isLoop);
+                toggleButtonState(shuffleMobileBtn, isShuffle);
+                toggleButtonState(speakerMobileBtn, isMuted);
+            }
+
+            audioCtrlArea.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (audioCtrlPopup.classList.contains('invisible')) {
+                    syncMobileMenuState();
+                }
                 popupBehaviour(audioCtrlPopup);
             });
 
             document.addEventListener('mousedown', (e) => {
                 if (audioCtrlContent && !audioCtrlContent.contains(e.target) && !audioCtrlArea.contains(e.target)) {
-                    audioCtrlContent.classList.add('opacity-0', 'invisible');
                     audioCtrlPopup.classList.add('opacity-0', 'invisible');
                 }
             });

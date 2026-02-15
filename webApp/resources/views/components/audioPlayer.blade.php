@@ -57,10 +57,10 @@
 
     // Soft background for Active State (Same as hover but persistent)
     $activeBgStyle = [
-        'happy' => 'bg-secondary-happy-10/30',
-        'sad' => 'bg-secondary-sad-10/30',
-        'relaxed' => 'bg-secondary-relaxed-10/30',
-        'angry' => 'bg-secondary-angry-10/30'
+        'happy' => 'bg-secondary-happy-20',
+        'sad' => 'bg-secondary-sad-20',
+        'relaxed' => 'bg-secondary-relaxed-20',
+        'angry' => 'bg-secondary-angry-20'
     ];
 @endphp
 
@@ -69,12 +69,16 @@
     <x-slot name='body'>
         <div class='w-full flex flex-col gap-2.5 font-secondaryAndButton text-small'>
             @foreach ($audioControlOptions as $audioCtrlOpt)
-            <a href="#">
-                <div class='h-max rounded-sm px-2 pr-8 py-1 flex flex-row items-center gap-2.5 {{ $hoverBgMoodStyle[$mood] }}'>
-                    <img src="{{ asset('assets/icons/' . $audioCtrlOpt . '.svg') }}" alt="{{ $audioCtrlOpt }}" class='w-7 h-7'>
-                    <p class='text-primary-60'>{{ Str::ucfirst($audioControlLabel[$audioCtrlOpt]) }}</p>
-                </div>
-            </a>
+            @php
+                $optId = $audioCtrlOpt === 'speaker-muted' ? 'speaker-mobile' : $audioCtrlOpt . '-mobile';
+            @endphp
+            <button id="{{ $optId }}" 
+                class='w-full text-left cursor-pointer h-max rounded-md px-2 py-1.5 flex flex-row items-center gap-2.5 transition-all duration-200' 
+                data-active-class="{{ $activeBgStyle[$mood] }}" 
+                data-inactive-class="bg-transparent {{ $hoverBgMoodStyle[$mood] }}">
+                <img src="{{ asset('assets/icons/' . $audioCtrlOpt . '.svg') }}" alt="{{ $audioCtrlOpt }}" class='w-7 h-7 pointer-events-none'>
+                <p class='text-primary-60 pointer-events-none'>{{ Str::ucfirst($audioControlLabel[$audioCtrlOpt]) }}</p>
+            </button>
             @endforeach
         </div>
     </x-slot>
@@ -116,12 +120,12 @@
         :class="isExpanded ? 'top-16 opacity-100 visible' : 'top-full opacity-0 invisible'"
         style="z-index: 5;"
     >
-        <div class="flex-1 flex flex-row min-h-0">
-            <!-- Left Section (3/5) -->
-            <div class="w-3/5 relative">
-                <!-- Box 1/2 of section -->
-                <div class="w-1/2 h-full py-4">
-                    <div class="w-full h-full rounded-xl border-r border-primary-70 bg-black/30 flex flex-col overflow-hidden">
+        <div class="flex-1 flex flex-col md:flex-row min-h-0 overflow-y-auto md:overflow-hidden scrollbar-hide">
+            <!-- Left Section (Song Info & Vinyl Disc) -->
+            <div class="w-full md:w-3/5 relative aspect-square md:aspect-none max-h-[60vh] md:max-h-none md:min-h-0 shrink-0 overflow-hidden">
+                <!-- Box 1/2 of section (Info Card) -->
+                <div class="w-1/2 h-full py-2 md:py-4 md:px-0">
+                    <div class="w-full h-full rounded-r-xl md:rounded-xl border-r border-primary-70 bg-black/30 flex flex-col overflow-hidden">
                         <!-- Title & Artist - top right -->
                         <div class="text-right p-4 shrink-0">
                             <h2 class="text-lg font-bold text-white truncate" x-text="songTitle"></h2>
@@ -134,10 +138,10 @@
                     </div>
                 </div>
                 <!-- Vinyl Circle - spinning with beat visualization -->
-                <!-- Container enlarged to 85% to allow overflow visualization, clipped at 50% of THIS container -->
-                <div class="absolute top-1/2 -translate-y-1/2 left-[50%] -translate-x-1/2 w-[85%] aspect-square flex items-center justify-center" style="clip-path: inset(0 0 0 50%);">
+                <!-- Container enlarged to allow overflow visualization, clipped at 50% of THIS container -->
+                <div class="absolute inset-0 w-full h-full flex items-center justify-center md:h-auto md:w-[85%] md:left-[50%] md:-translate-x-1/2 md:top-1/2 md:-translate-y-1/2 md:aspect-square" style="clip-path: inset(0 0 0 50%);">
                     <!-- Vinyl Disc (approx 56% original size -> 66% of 85%) -->
-                    <div id="vinylDisc" class="w-[66%] h-[66%] rounded-full border-[6px] border-primary-40/30 relative vinyl-spin vinyl-paused">
+                    <div id="vinylDisc" class="h-[80%] aspect-square md:w-[66%] md:h-[66%] md:aspect-none rounded-full border-[6px] border-primary-40/30 relative vinyl-spin vinyl-paused">
                         <!-- Canvas for circular beat visualization - Enlarged to radiate OUTWARDS -->
                         <canvas id="audioVisualizer" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[210%] h-[210%] rounded-full pointer-events-none"></canvas>
                         <!-- Album art center -->
@@ -165,8 +169,8 @@
                     }
                 </style>
             </div>
-            <!-- Right Section (2/5) -->
-            <div class="w-2/5 border-l border-primary-70 flex flex-col" x-data="{ activeTab: 'lyrics' }">
+            <!-- Right Section (Tracks & Lyrics) -->
+            <div class="w-full md:w-2/5 border-t md:border-t-0 md:border-l border-primary-70 flex flex-col min-h-[40vh] md:min-h-0" x-data="{ activeTab: 'lyrics' }">
                 <!-- Tab Headers -->
                 <div class="flex flex-row shrink-0 border-b border-primary-70">
                     <button
@@ -181,15 +185,15 @@
                     >Lyrics</button>
                 </div>
                 <!-- Tab Content -->
-                <div class="flex-1 overflow-y-auto p-4 scrollbar scrollbar-thumb-primary-10/75 scrollbar-track-transparent">
+                <div class="flex-1 md:overflow-y-auto p-4 scrollbar scrollbar-thumb-primary-10/75 scrollbar-track-transparent">
                     <!-- Lyrics Content -->
-                    <div x-show="activeTab === 'lyrics'" class="w-full h-full">
+                    <div x-show="activeTab === 'lyrics'" class="w-full md:h-full">
                         <div id="popupLyricsContent" class="text-primary-20 text-small font-secondaryAndButton whitespace-pre-line leading-relaxed">
                             <!-- Lyrics will be rendered here by JS -->
                         </div>
                     </div>
                     <!-- Tracks Content -->
-                    <div x-show="activeTab === 'tracks'" class="w-full h-full">
+                    <div x-show="activeTab === 'tracks'" class="w-full md:h-full">
                         <div id="popupTracksList" class="flex flex-col gap-1">
                             <!-- Tracks will be rendered here by JS -->
                         </div>
@@ -220,7 +224,7 @@
                 <div class='h-14 w-14 bg-shadedOfGray-20 rounded-md overflow-hidden shrink-0'>
                     <img src="" alt="music" id="playerImage" class="w-full h-full object-cover">
                 </div>
-                <div class='text-white font-secondaryAndButton hidden md:block truncate max-w-[150px] lg:max-w-[200px]'>
+                <div class='text-white font-secondaryAndButton block truncate max-w-[120px] xs:max-w-[150px] lg:max-w-[200px]'>
                     <p class='{{ 'text-body-size font-bold ' . $textStyle[$mood] . ' truncate' }}' id="playerTitle">{{ Str::limit($title, 35) }}</p>
                     <p class='text-micro truncate' id="playerArtist">{{ Str::limit($artist, 30) }}</p>
                 </div>
@@ -292,7 +296,13 @@
                         </svg>
                     </button>
                 </div>
-                <x-iconButton type='kebab' :mood='$mood' class='lg:hidden' id='audioControlResponsive'></x-iconButton>
+                    <!-- Mobile Expand/Collapse Arrow -->
+                    <button class="flex lg:hidden items-center justify-center cursor-pointer p-0.5 rounded-full hover:bg-white/10 transition-all h-9 w-9" @click="isExpanded = !isExpanded" title="Toggle Player">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" :class="isExpanded ? 'rotate-180' : ''" class="transition-transform duration-300">
+                            <path d="M6 9L12 15L18 9" stroke="{{ $elementStyle[$mood] }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                    <x-iconButton type='kebab' :mood='$mood' class='lg:hidden' id='audioControlResponsive'></x-iconButton>
             </div>
         </div>
     </div>
