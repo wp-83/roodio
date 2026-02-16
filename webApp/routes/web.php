@@ -15,6 +15,7 @@ Route::get('/', function () {
     return view('roodio');
 })->name('roodio');
 
+
 // Auth Route
 Route::prefix('auth')->group(function () {
     Route::get('/login', [AuthController::class, 'loginView'])->middleware('guest')->name('login');

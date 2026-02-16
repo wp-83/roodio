@@ -238,7 +238,7 @@ class SongsSeeder extends Seeder
                 'publisher' => 'Various Publishers',
                 'datePublished' => now()->subDays(rand(1, 365)),
                 'songPath' => $encodedPath,
-                'photoPath' => 'default-album.jpg', // Default photo path
+                'photoPath' => null, // Default photo path
             ]);
         }
     }
