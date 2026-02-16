@@ -489,6 +489,7 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
         const sleepTimerStatusMobile = document.getElementById('sleep-timer-status-mobile'); // Mobile Status Text
         const sleepTimerOptions = document.querySelectorAll('.sleep-timer-opt'); // Desktop dropdown options
         const sleepTimerOptionsMobile = document.querySelectorAll('.sleep-timer-opt-mobile'); // Mobile dropdown options (New)
+        const audioSleepTimerPopup = document.getElementById('audioSleepTimerPopup');
 
         function updateSleepTimerUI() {
             // Update Active State on Desktop Button
