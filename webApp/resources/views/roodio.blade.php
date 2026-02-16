@@ -108,11 +108,10 @@
         .swiper-pagination-bullet-active {
             background-color: #06134D !important;
         }
-        /* HACK: Hide duplicated pagination bullets (Assuming Swiper creates 8 bullets for 8 slides) */
-        /* Actually Swiper loop:true creates duplicate slides but pagination usually corresponds to original size if configured right. */
-        /* If Swiper creates 8 dots, we hide the last 4. */
+        /* HACK: Hide duplicated pagination bullets (Since we manually duplicate slides for robust loop) */
         .swiper-pagination-bullet:nth-child(n+5) {
             display: none;
+        }
         }
 
         /* Carousel Scaling Effect */
@@ -150,15 +149,38 @@
             var swiper = new Swiper(".featuresSwiper", {
                 centeredSlides: true,
                 loop: true,
+                // Loop mode with manual duplication works best without 'loopedSlides' explicit setting
                 speed: 600,
                 autoplay: {
-                    delay: 2500, // Faster delay for continuous feel
-                    disableOnInteraction: false,
-                    // removed pauseOnMouseEnter for consistent scrolling
+                    delay: 2500, // Faster, continuous feel
+                    disableOnInteraction: false, // Continue after interaction
+                    pauseOnMouseEnter: true, // Pause to let user click arrows
                 },
                 pagination: {
                     el: ".swiper-pagination",
                     clickable: true,
+                    // Custom render for control? No, default is fine if we manage classes.
+                },
+                on: {
+                    slideChange: function () {
+                        // Custom logic to handle pagination for duplicated slides (0-3 are originals, 4-7 are duplicates)
+                        var realIndex = this.realIndex; 
+                        var slidesCount = 4; // Original count
+
+                        // Calculate the logical index using realIndex!
+                        // In manual duplicate mode, Swiper's realIndex goes 0-7.
+                        var logicalIndex = realIndex % slidesCount;
+
+                        // Manually update pagination bullets
+                        var bullets = document.querySelectorAll('.featuresSwiper .swiper-pagination-bullet');
+                        bullets.forEach(function(bullet, index) {
+                            if (index === logicalIndex) {
+                                bullet.classList.add('swiper-pagination-bullet-active');
+                            } else {
+                                bullet.classList.remove('swiper-pagination-bullet-active');
+                            }
+                        });
+                    }
                 },
                 navigation: {
                     nextEl: ".swiper-button-next",
@@ -384,7 +406,7 @@
                     </div>
 
                     <!-- Swiper -->
-                    <div class="swiper featuresSwiper px-4 pb-12" data-aos="fade-up" data-aos-delay="200">
+                    <div class="swiper featuresSwiper px-4 pb-16" data-aos="fade-up" data-aos-delay="200">
                         <div class="swiper-wrapper">
                             <!-- Feature 1 -->
                             <div class="swiper-slide h-auto">
@@ -428,9 +450,80 @@
                                 </div>
                             </div>
                             
+                            <!-- Feature 4 (Restored) -->
+                            <div class="swiper-slide h-auto">
+                                <div class="h-full group bg-white p-6 md:p-8 shadow-md hover:shadow-xl transition-all duration-300 border-t-4 border-secondary-angry-85 relative overflow-hidden rounded-xl cursor-grab active:cursor-grabbing">
+                                    <div class="absolute top-0 right-0 w-20 h-20 md:w-24 md:h-24 bg-secondary-angry-10 rounded-bl-[80px] md:rounded-bl-[100px] -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
+                                    <div class="relative z-10">
+                                        <div class="w-12 h-12 md:w-14 md:h-14 bg-secondary-angry-85 text-white flex items-center justify-center text-xl md:text-2xl mb-4 md:mb-6 shadow-md skew-x-[-10deg] rounded-sm transform group-hover:rotate-6 transition-transform">
+                                            <span class="block skew-x-[10deg]">🚀</span>
+                                        </div>
+                                        <h3 class="font-primary text-lg md:text-xl font-bold text-primary-85 mb-2 md:mb-3">High Performance</h3>
+                                        <p class="font-secondaryAndButton text-sm md:text-base text-gray-600 leading-relaxed">Lightning fast playback with minimal latency, ensuring your vibe is never interrupted.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- DUPLICATED SLIDES (for Gap-Free Loop) -->
+                            <!-- Feature 1 Copy -->
+                            <div class="swiper-slide h-auto">
+                                <div class="h-full group bg-white p-6 md:p-8 shadow-md hover:shadow-xl transition-all duration-300 border-t-4 border-secondary-happy-85 relative overflow-hidden rounded-xl cursor-grab active:cursor-grabbing">
+                                    <div class="absolute top-0 right-0 w-20 h-20 md:w-24 md:h-24 bg-secondary-happy-10 rounded-bl-[80px] md:rounded-bl-[100px] -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
+                                    <div class="relative z-10">
+                                        <div class="w-12 h-12 md:w-14 md:h-14 bg-secondary-happy-85 text-white flex items-center justify-center text-xl md:text-2xl mb-4 md:mb-6 shadow-md skew-x-[-10deg] rounded-sm transform group-hover:rotate-6 transition-transform">
+                                            <span class="block skew-x-[10deg]">🎭</span>
+                                        </div>
+                                        <h3 class="font-primary text-lg md:text-xl font-bold text-primary-85 mb-2 md:mb-3">Mood Detection</h3>
+                                        <p class="font-secondaryAndButton text-sm md:text-base text-gray-600 leading-relaxed">Advanced algorithms analyze your mood input to deliver the most relevant tracks instantly.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Feature 2 Copy -->
+                            <div class="swiper-slide h-auto">
+                                <div class="h-full group bg-white p-6 md:p-8 shadow-md hover:shadow-xl transition-all duration-300 border-t-4 border-secondary-relaxed-85 relative overflow-hidden rounded-xl cursor-grab active:cursor-grabbing">
+                                    <div class="absolute top-0 right-0 w-20 h-20 md:w-24 md:h-24 bg-secondary-relaxed-10 rounded-bl-[80px] md:rounded-bl-[100px] -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
+                                    <div class="relative z-10">
+                                        <div class="w-12 h-12 md:w-14 md:h-14 bg-secondary-relaxed-85 text-white flex items-center justify-center text-xl md:text-2xl mb-4 md:mb-6 shadow-md skew-x-[-10deg] rounded-sm transform group-hover:rotate-6 transition-transform">
+                                            <span class="block skew-x-[10deg]">🌊</span>
+                                        </div>
+                                        <h3 class="font-primary text-lg md:text-xl font-bold text-primary-85 mb-2 md:mb-3">Immersive Visuals</h3>
+                                        <p class="font-secondaryAndButton text-sm md:text-base text-gray-600 leading-relaxed">Dynamic, real-time visualizers that react to the beat, creating a complete sensory experience.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Feature 3 Copy -->
+                            <div class="swiper-slide h-auto">
+                                <div class="h-full group bg-white p-6 md:p-8 shadow-md hover:shadow-xl transition-all duration-300 border-t-4 border-secondary-sad-85 relative overflow-hidden rounded-xl cursor-grab active:cursor-grabbing">
+                                    <div class="absolute top-0 right-0 w-20 h-20 md:w-24 md:h-24 bg-secondary-sad-10 rounded-bl-[80px] md:rounded-bl-[100px] -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
+                                    <div class="relative z-10">
+                                        <div class="w-12 h-12 md:w-14 md:h-14 bg-secondary-sad-85 text-white flex items-center justify-center text-xl md:text-2xl mb-4 md:mb-6 shadow-md skew-x-[-10deg] rounded-sm transform group-hover:rotate-6 transition-transform">
+                                            <span class="block skew-x-[10deg]">🎧</span>
+                                        </div>
+                                        <h3 class="font-primary text-lg md:text-xl font-bold text-primary-85 mb-2 md:mb-3">Curated Playlists</h3>
+                                        <p class="font-secondaryAndButton text-sm md:text-base text-gray-600 leading-relaxed">Hand-selected tracks across genres, perfectly categorized to match every shade of emotion.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Feature 4 Copy -->
+                            <div class="swiper-slide h-auto">
+                                <div class="h-full group bg-white p-6 md:p-8 shadow-md hover:shadow-xl transition-all duration-300 border-t-4 border-secondary-angry-85 relative overflow-hidden rounded-xl cursor-grab active:cursor-grabbing">
+                                    <div class="absolute top-0 right-0 w-20 h-20 md:w-24 md:h-24 bg-secondary-angry-10 rounded-bl-[80px] md:rounded-bl-[100px] -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
+                                    <div class="relative z-10">
+                                        <div class="w-12 h-12 md:w-14 md:h-14 bg-secondary-angry-85 text-white flex items-center justify-center text-xl md:text-2xl mb-4 md:mb-6 shadow-md skew-x-[-10deg] rounded-sm transform group-hover:rotate-6 transition-transform">
+                                            <span class="block skew-x-[10deg]">🚀</span>
+                                        </div>
+                                        <h3 class="font-primary text-lg md:text-xl font-bold text-primary-85 mb-2 md:mb-3">High Performance</h3>
+                                        <p class="font-secondaryAndButton text-sm md:text-base text-gray-600 leading-relaxed">Lightning fast playback with minimal latency, ensuring your vibe is never interrupted.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
 
                         </div>
-                        <div class="swiper-pagination !bottom-0"></div>
+                        <div class="swiper-pagination !-bottom-2"></div>
                         <div class="swiper-button-next !text-primary-85 opacity-0 md:opacity-100 transition-opacity"></div>
                         <div class="swiper-button-prev !text-primary-85 opacity-0 md:opacity-100 transition-opacity"></div>
                     </div>
