@@ -62,7 +62,17 @@ The `webApp` serves as the core platform for users, admins, and super admins. It
 
 The `machineLearning` module is the brain behind Roodio's mood detection capabilities. It utilizes a **Multi-Modal Hybrid Model** that processes both audio signals (spectrograms) and textual data (lyrics) to predict emotional valence and arousal.
 
-### 🔬 Technical Approach
+### � Core Module (`machineLearning/finished`)
+
+The production-ready models and training scripts are located in the `machineLearning/finished` directory. Key files include:
+
+*   **`train_stage1_pytorch.py`**: Training script for **Stage 1**, focusing on initial audio feature extraction and classification using PyTorch.
+*   **`train_stage2a_angry_happy.py`**: Training script for **Stage 2A**, refining predictions for specific mood quadrants (Angry/Happy).
+*   **`lyrics_stage2b.ipynb`**: Jupyter Notebook for **Stage 2B**, handling the NLP pipeline and sentiment analysis of lyrics using RoBERTa.
+*   **`17_final_combined_cv.py`**: The **Final Combined Model** script that integrates outputs from all stages and performs cross-validation for robust mood prediction.
+*   **`test_manual_input.py`**: A utility script for manually testing the model with custom inputs to verify predictions.
+
+### �🔬 Technical Approach
 
 The system employs a multi-stage pipeline:
 
@@ -132,10 +142,23 @@ cd machineLearning
 
 # Create a Virtual Environment (Recommended)
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+# Windows
+venv\Scripts\activate
+# Mac/Linux
+source venv/bin/activate
 
 # Install Dependencies
 pip install -r requirements.txt
+
+# 🚀 Running the Models
+# IMPORTANT: Execute scripts from the 'machineLearning' root directory
+# to ensure correct path resolution for 'data/' and 'models/'
+
+# Example: Run Stage 1 Training
+python finished/train_stage1_pytorch.py
+
+# Example: Run Manual Testing
+python finished/test_manual_input.py
 
 # (Optional) Start MLflow UI to view experiments
 mlflow ui
