@@ -40,16 +40,16 @@
 
             {{-- 1. Search Input --}}
             <div class="relative w-full group">
-                <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-shadedOfGray-40 group-focus-within:text-secondary-happy-100 transition-colors">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-[#9CA3AF] group-focus-within:text-secondary-happy-100 transition-colors">
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </span>
                 <input type="text" name="search" value="{{ request('search') }}"
-                       class="w-full bg-primary-85 border border-primary-70 rounded-xl py-3 pl-11 pr-12 text-white placeholder-shadedOfGray-40 focus:outline-none focus:border-secondary-happy-100 focus:ring-1 focus:ring-secondary-happy-100 transition-all shadow-md text-sm font-secondaryAndButton"
+                       class="w-full bg-primary-85 border border-primary-70 rounded-xl py-3 pl-11 pr-12 text-white placeholder-[#9CA3AF] focus:outline-none focus:border-secondary-happy-100 focus:ring-1 focus:ring-secondary-happy-100 transition-all shadow-md text-sm font-secondaryAndButton"
                        placeholder="Search playlist name..."
                        onkeydown="if(event.key === 'Enter'){ this.form.submit(); }">
 
                 @if(request('search'))
-                    <a href="{{ route('admin.playlists.index', request()->except('search')) }}" class="absolute inset-y-0 right-0 flex items-center pr-4 text-shadedOfGray-40 hover:text-white transition-colors">
+                    <a href="{{ route('admin.playlists.index', request()->except('search')) }}" class="absolute inset-y-0 right-0 flex items-center pr-4 text-[#9CA3AF] hover:text-white transition-colors">
                         <i class="fa-solid fa-xmark"></i>
                     </a>
                 @endif
@@ -59,7 +59,7 @@
             <div class="flex flex-col sm:flex-row gap-3 w-full xl:w-auto flex-shrink-0">
                 {{-- Status Filter --}}
                 <div class="relative w-full sm:w-48">
-                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-shadedOfGray-40 pointer-events-none">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-[#9CA3AF] pointer-events-none">
                         <i class="fa-solid fa-music text-xs"></i>
                     </span>
                     <select name="status" onchange="this.form.submit()" class="w-full appearance-none bg-primary-85 border border-primary-70 text-white text-sm rounded-xl py-3 pl-9 pr-8 focus:outline-none focus:border-secondary-happy-100 cursor-pointer hover:border-primary-60 transition-colors shadow-md font-secondaryAndButton">
@@ -74,7 +74,7 @@
 
                 {{-- Date Filter --}}
                 <div class="relative w-full sm:w-44">
-                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-shadedOfGray-40 pointer-events-none">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-[#9CA3AF] pointer-events-none">
                         <i class="fa-regular fa-calendar text-xs"></i>
                     </span>
                     <select name="sort" onchange="this.form.submit()" class="w-full appearance-none bg-primary-85 border border-primary-70 text-white text-sm rounded-xl py-3 pl-9 pr-8 focus:outline-none focus:border-secondary-happy-100 cursor-pointer hover:border-primary-60 transition-colors shadow-md font-secondaryAndButton">
@@ -97,7 +97,7 @@
 
         {{-- Info Result Count --}}
         @if(request('search') || request('status') || request('sort') == 'oldest')
-            <div class="mt-3 text-xs text-shadedOfGray-40 font-secondaryAndButton px-1 flex items-center gap-1">
+            <div class="mt-3 text-xs text-[#9CA3AF] font-secondaryAndButton px-1 flex items-center gap-1">
                 <i class="fa-solid fa-filter text-[10px]"></i>
                 <span>Found <span class="text-white font-bold">{{ $playlists->total() }}</span> playlists</span>
             </div>
@@ -178,7 +178,7 @@
                             </span>
                         </div>
 
-                        <p class="font-secondaryAndButton text-xs text-shadedOfGray-40 line-clamp-2 leading-snug mb-3 flex-grow h-8">
+                        <p class="font-secondaryAndButton text-xs text-[#9CA3AF] line-clamp-2 leading-snug mb-3 flex-grow h-8">
                             {{ $playlist->description ?: 'No description.' }}
                         </p>
 
@@ -205,7 +205,7 @@
                 </div>
             @empty
                 <div class="col-span-full py-16 flex flex-col items-center justify-center text-center border-2 border-dashed border-primary-70 rounded-2xl bg-primary-85/30">
-                    <div class="w-16 h-16 bg-primary-70/50 rounded-full flex items-center justify-center mb-4 text-shadedOfGray-40">
+                    <div class="w-16 h-16 bg-primary-70/50 rounded-full flex items-center justify-center mb-4 text-[#9CA3AF]">
                         <i class="fa-solid fa-folder-open text-3xl"></i>
                     </div>
                     <h3 class="font-primary text-lg text-white font-bold">No Playlists Found</h3>

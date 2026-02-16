@@ -24,12 +24,12 @@
 
             {{-- Title & Desc --}}
             <h3 class="font-primary text-xl font-bold text-white mb-1">Superadmin</h3>
-            <p class="text-sm text-shadedOfGray-40 mb-6 font-secondaryAndButton h-10">Full access to all system features, user management, and configuration.</p>
+            <p class="text-sm text-[#9CA3AF] mb-6 font-secondaryAndButton h-10">Full access to all system features, user management, and configuration.</p>
 
             {{-- Footer (Total Only) --}}
             <div class="border-t border-primary-70 pt-4">
                 <div>
-                    <p class="text-xs text-shadedOfGray-40 font-bold uppercase tracking-wider">Total Accounts</p>
+                    <p class="text-xs text-[#9CA3AF] font-bold uppercase tracking-wider">Total Accounts</p>
                     <p class="font-primary font-bold text-white text-2xl mt-1">{{ $role2 ?? 0 }}</p>
                 </div>
             </div>
@@ -48,11 +48,11 @@
             </div>
 
             <h3 class="font-primary text-xl font-bold text-white mb-1">Admin</h3>
-            <p class="text-sm text-shadedOfGray-40 mb-6 font-secondaryAndButton h-10">Manage content (Songs, Playlists), view users, and day-to-day operations.</p>
+            <p class="text-sm text-[#9CA3AF] mb-6 font-secondaryAndButton h-10">Manage content (Songs, Playlists), view users, and day-to-day operations.</p>
 
             <div class="border-t border-primary-70 pt-4">
                 <div>
-                    <p class="text-xs text-shadedOfGray-40 font-bold uppercase tracking-wider">Total Accounts</p>
+                    <p class="text-xs text-[#9CA3AF] font-bold uppercase tracking-wider">Total Accounts</p>
                     <p class="font-primary font-bold text-white text-2xl mt-1">{{ $role1 ?? 0 }}</p>
                 </div>
             </div>
@@ -71,11 +71,11 @@
             </div>
 
             <h3 class="font-primary text-xl font-bold text-white mb-1">User</h3>
-            <p class="text-sm text-shadedOfGray-40 mb-6 font-secondaryAndButton h-10">Standard access to stream music, create playlists, and manage profile.</p>
+            <p class="text-sm text-[#9CA3AF] mb-6 font-secondaryAndButton h-10">Standard access to stream music, create playlists, and manage profile.</p>
 
             <div class="border-t border-primary-70 pt-4">
                 <div>
-                    <p class="text-xs text-shadedOfGray-40 font-bold uppercase tracking-wider">Total Accounts</p>
+                    <p class="text-xs text-[#9CA3AF] font-bold uppercase tracking-wider">Total Accounts</p>
                     <p class="font-primary font-bold text-white text-2xl mt-1">{{ $role0 ?? 0 }}</p>
                 </div>
             </div>
@@ -87,7 +87,7 @@
         {{-- Header --}}
         <div class="p-6 border-b border-primary-70 bg-primary-85/50 backdrop-blur-sm">
             <h3 class="font-primary text-lg font-bold text-white">Access Matrix</h3>
-            <p class="text-sm text-shadedOfGray-40">Detailed breakdown of permissions per role</p>
+            <p class="text-sm text-[#9CA3AF]">Detailed breakdown of permissions per role</p>
         </div>
 
         <div class="overflow-x-auto">
@@ -164,7 +164,7 @@
         </div>
 
         <div class="p-6 bg-primary-70/20 border-t border-primary-70">
-            <p class="text-xs text-shadedOfGray-40 italic flex items-center gap-2">
+            <p class="text-xs text-[#9CA3AF] italic flex items-center gap-2">
                 <i class="fa-solid fa-circle-info text-primary-30"></i>
                 Permissions are updated globally. Changes affect all users assigned to the role immediately.
             </p>

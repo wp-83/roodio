@@ -7,7 +7,7 @@
 
         <div>
             <h2 class="font-primary text-xl lg:text-2xl text-white font-bold tracking-tight">@yield('page_title', 'Dashboard')</h2>
-            <p class="hidden sm:block text-sm text-shadedOfGray-40 font-secondaryAndButton">@yield('page_subtitle', 'Manage your application')</p>
+            <p class="hidden sm:block text-sm text-[#9CA3AF] font-secondaryAndButton">@yield('page_subtitle', 'Manage your application')</p>
         </div>
     </div>
 

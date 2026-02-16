@@ -40,7 +40,7 @@
                                 {{-- Placeholder (Hanya muncul jika tidak ada gambar lama & baru) --}}
                                 <div class="flex flex-col items-center justify-center text-center p-6 {{ $playlist->playlistPath ? 'hidden' : '' }}" id="photo-placeholder">
                                     <div class="w-14 h-14 rounded-full bg-primary-70 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-                                        <i class="fa-regular fa-image text-2xl text-shadedOfGray-40 group-hover:text-secondary-happy-100 transition-colors"></i>
+                                        <i class="fa-regular fa-image text-2xl text-[#9CA3AF] group-hover:text-secondary-happy-100 transition-colors"></i>
                                     </div>
                                     <span class="text-xs text-shadedOfGray-30 font-medium">Change Cover</span>
                                 </div>
@@ -158,7 +158,7 @@
                         {{-- Modal Header --}}
                         <div class="px-6 py-4 border-b border-primary-70 flex justify-between items-center bg-primary-85 sticky top-0 z-10">
                             <h3 class="text-lg leading-6 font-bold text-white font-primary">Browse Library</h3>
-                            <button type="button" @click="showSongModal = false" class="text-shadedOfGray-40 hover:text-white transition-colors">
+                            <button type="button" @click="showSongModal = false" class="text-[#9CA3AF] hover:text-white transition-colors">
                                 <i class="fa-solid fa-xmark text-xl"></i>
                             </button>
                         </div>

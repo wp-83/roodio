@@ -6,13 +6,13 @@
 
             {{-- TOMBOL MOBILE SIDEBAR (Visible only on Mobile) --}}
             <button @click="sidebarOpen = true"
-                    class="md:hidden text-shadedOfGray-40 hover:text-white transition-colors p-1 focus:outline-none">
+                    class="md:hidden text-[#9CA3AF] hover:text-white transition-colors p-1 focus:outline-none">
                 <i class="fa-solid fa-bars text-xl"></i>
             </button>
 
             <div>
                 <h2 class="text-lg font-bold text-white font-primary tracking-tight">@yield('page_title', 'Dashboard')</h2>
-                <p class="hidden md:block text-[10px] text-shadedOfGray-40 font-secondaryAndButton uppercase tracking-wider">@yield('page_subtitle', 'Overview')</p>
+                <p class="hidden md:block text-[10px] text-[#9CA3AF] font-secondaryAndButton uppercase tracking-wider">@yield('page_subtitle', 'Overview')</p>
             </div>
         </div>
 
@@ -23,7 +23,7 @@
             <div class="flex items-center gap-3 select-none">
                 <div class="text-right hidden md:block">
                     <p class="text-sm font-bold text-white font-primary leading-tight">{{ Auth::user()->fullname ?? 'Admin' }}</p>
-                    <p class="text-[10px] text-shadedOfGray-40 font-secondaryAndButton group-hover:text-secondary-happy-100 transition-colors">
+                    <p class="text-[10px] text-[#9CA3AF] font-secondaryAndButton group-hover:text-secondary-happy-100 transition-colors">
                         {{ '@' . (Auth::user()->username ?? 'admin') }}
                     </p>
                 </div>

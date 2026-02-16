@@ -50,7 +50,7 @@
                 {{-- Header Card --}}
                 <div class="p-6 border-b border-primary-70 flex justify-between items-center bg-primary-85/50 backdrop-blur-sm">
                     <h3 class="font-primary text-lg text-white font-bold">Recently Added Songs</h3>
-                    <a href="{{ route('admin.songs.index') }}" class="text-xs font-bold text-shadedOfGray-40 hover:text-white transition-colors">
+                    <a href="{{ route('admin.songs.index') }}" class="text-xs font-bold text-[#9CA3AF] hover:text-white transition-colors">
                         VIEW ALL
                     </a>
                 </div>
@@ -59,7 +59,7 @@
                 <div class="p-0 overflow-x-auto flex-grow">
                     <table class="w-full text-left border-collapse">
                         <thead>
-                            <tr class="text-xs text-shadedOfGray-40 font-secondaryAndButton border-b border-primary-70 bg-primary-85/30">
+                            <tr class="text-xs text-[#9CA3AF] font-secondaryAndButton border-b border-primary-70 bg-primary-85/30">
                                 <th class="px-6 py-4 font-bold uppercase tracking-wider">Title</th>
                                 <th class="px-6 py-4 font-bold uppercase tracking-wider">Artist</th>
                                 <th class="px-6 py-4 font-bold uppercase tracking-wider text-right">Date</th>
@@ -83,7 +83,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="3" class="px-6 py-8 text-center text-shadedOfGray-40 italic">
+                                    <td colspan="3" class="px-6 py-8 text-center text-[#9CA3AF] italic">
                                         No songs uploaded yet.
                                     </td>
                                 </tr>
@@ -109,7 +109,7 @@
                 {{-- Header --}}
                 <div class="p-6 border-b border-primary-70 flex justify-between items-center bg-primary-85/50 backdrop-blur-sm">
                     <h3 class="font-primary text-lg text-white font-bold">New Playlists</h3>
-                    <a href="{{ route('admin.playlists.index') }}" class="text-xs font-bold text-shadedOfGray-40 hover:text-white transition-colors">
+                    <a href="{{ route('admin.playlists.index') }}" class="text-xs font-bold text-[#9CA3AF] hover:text-white transition-colors">
                         VIEW ALL
                     </a>
                 </div>
@@ -138,7 +138,7 @@
                                     {{ $playlist->name }}
                                 </h4>
                                 <div class="flex items-center gap-2 mt-0.5">
-                                    <span class="text-[10px] text-shadedOfGray-40">
+                                    <span class="text-[10px] text-[#9CA3AF]">
                                         {{ $playlist->songs_count ?? 0 }} Songs
                                     </span>
                                 </div>
@@ -146,12 +146,12 @@
 
                             {{-- Arrow Action --}}
                             <a href="{{ route('admin.playlists.edit', $playlist) }}"
-                               class="w-8 h-8 rounded-full border border-primary-60 text-shadedOfGray-40 flex items-center justify-center hover:bg-white hover:text-primary-100 transition-all flex-shrink-0">
+                               class="w-8 h-8 rounded-full border border-primary-60 text-[#9CA3AF] flex items-center justify-center hover:bg-white hover:text-primary-100 transition-all flex-shrink-0">
                                 <i class="fa-solid fa-chevron-right text-[10px]"></i>
                             </a>
                         </div>
                     @empty
-                        <div class="py-8 text-center text-shadedOfGray-40 italic text-sm">
+                        <div class="py-8 text-center text-[#9CA3AF] italic text-sm">
                             No playlists created yet.
                         </div>
                     @endforelse

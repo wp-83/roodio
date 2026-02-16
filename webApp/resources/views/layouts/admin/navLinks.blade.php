@@ -1,6 +1,6 @@
 <nav class="flex-1 px-4 space-y-1 overflow-y-auto py-4">
 
-    <p class="px-4 text-micro font-bold text-shadedOfGray-40 uppercase tracking-wider mb-2 mt-2">Menu</p>
+    <p class="px-4 text-micro font-bold text-[#9CA3AF] uppercase tracking-wider mb-2 mt-2">Menu</p>
 
     {{-- Overview --}}
     <a href="{{ route('admin.overview') }}"
@@ -12,7 +12,7 @@
         <span class="font-medium text-small">Overview</span>
     </a>
 
-    <p class="px-4 text-micro font-bold text-shadedOfGray-40 uppercase tracking-wider mb-2 mt-6">Library</p>
+    <p class="px-4 text-micro font-bold text-[#9CA3AF] uppercase tracking-wider mb-2 mt-6">Library</p>
 
     {{-- Songs --}}
     <a href="{{ route('admin.songs.index') }}"

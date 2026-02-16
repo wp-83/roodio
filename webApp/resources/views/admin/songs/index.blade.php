@@ -170,7 +170,7 @@
                         <tr>
                             <td colspan="7" class="py-24 text-center">
                                 <div class="flex flex-col items-center justify-center">
-                                    <div class="w-24 h-24 bg-primary-70/50 rounded-full flex items-center justify-center mb-6 text-shadedOfGray-40 border border-primary-60">
+                                    <div class="w-24 h-24 bg-primary-70/50 rounded-full flex items-center justify-center mb-6 text-[#9CA3AF] border border-primary-60">
                                         @if(request('search'))
                                             <i class="bi bi-search text-4xl"></i>
                                         @else
