@@ -32,7 +32,7 @@ button:focus {
   outline: none;
 }
 
-// custom css
+/* custom css */
 @layer base {
   body {
     margin: 0;

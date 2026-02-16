@@ -11,7 +11,7 @@
 @endpush
 
 
-@section('bodyClass', 'max-h-screen h-screen flex flex-col')
+@section('bodyClass', 'min-h-dvh flex flex-col')
 
 
 @section('bodyContent')

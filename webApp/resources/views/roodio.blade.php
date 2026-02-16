@@ -330,7 +330,7 @@
         <main>
 
             <!-- Hero Section -->
-            <section class="relative min-h-[100svh] flex items-center bg-primary-85 text-white overflow-hidden pb-10 md:pb-0">
+            <section class="relative min-h-screen flex items-center bg-primary-85 text-white overflow-hidden pb-10 md:pb-0">
                 <!-- Full Bg Pattern (Subtle) -->
                 <div class="absolute inset-0 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:60px_60px] opacity-[0.03] pointer-events-none"></div>
                 
@@ -365,7 +365,7 @@
                 <!-- Floating Mood Icons (Scattered) -->
                 <!-- These will be replaced/augmented by the large orbs below, but kept for depth if needed (toned down) -->
 
-                <div class="container mx-auto px-4 mb-12 md:px-6 relative z-10 h-full flex flex-col items-center justify-center pt-20 lg:pb-10  min-h-[80vh]">
+                <div class="container mx-auto px-4 md:px-6 relative z-10 h-full flex flex-col items-center justify-center pt-20 lg:pb-10  min-h-[80vh]">
                     
                     <!-- Center: Typography & CTA -->
                     <div class="text-center max-w-4xl mx-auto relative z-20" data-aos="zoom-in-up">
@@ -380,13 +380,13 @@
                                 <hr class='border-2 border-secondary-happy-50 mt-4'>
                             </span>
                         </h1>
-                        <p class="font-secondaryAndButton text-white text-small md:text-body-size lg:text-paragraph mb-8 md:mb-12 leading-relaxed max-w-2xl mx-auto drop-shadow-md">
+                        <p class="font-secondaryAndButton text-white text-small md:text-body-size lg:text-paragraph mb-2 md:mb-4 leading-relaxed max-w-2xl mx-auto drop-shadow-md">
                             ROODIO matches music to your mood.
                             <br>Enjoy songs that fit how you feel right now.
                         </p>
                         
                         <div class="flex justify-center gap-6">
-                            <x-button behaviour="navigation" navLink="auth/login" content="Listen the song now!" mood="relaxed" customClass="!bg-secondary-happy-85 !text-white hover:!bg-secondary-happy-70 font-bold !px-8 md:!px-12 !py-4 md:!py-5 text-base md:text-lg shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] md:shadow-[8px_8px_0px_0px_rgba(0,0,0,0.3)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,0.3)] transition-all transform hover:translate-x-1 hover:translate-y-1 rounded-none" style="zoom:0.95;"></x-button>
+                            <x-button behaviour="navigation" navLink="auth/login" content="Listen the song now!" mood="relaxed" style="zoom:0.9;"></x-button>
                         </div>
                     </div>
 
