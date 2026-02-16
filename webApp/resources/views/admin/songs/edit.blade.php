@@ -213,23 +213,27 @@
 
 <script>
     // 1. Script untuk Audio Upload Preview Filename
-    document.getElementById('song-input').addEventListener('change', function(e) {
-        var fileName = e.target.files[0] ? e.target.files[0].name : "Replace Audio File";
-        const fileNameText = document.getElementById('audio-filename');
-        const placeholder = document.getElementById('audio-placeholder');
+    // 1. Script untuk Audio Upload Preview Filename
+    const songInput = document.getElementById('song-input');
+    if (songInput) {
+        songInput.addEventListener('change', function(e) {
+            var fileName = e.target.files[0] ? e.target.files[0].name : "Replace Audio File";
+            const fileNameText = document.getElementById('audio-filename');
+            const placeholder = document.getElementById('audio-placeholder');
 
-        fileNameText.textContent = fileName;
+            fileNameText.textContent = fileName;
 
-        if(e.target.files[0]) {
-            fileNameText.classList.remove('text-shadedOfGray-30');
-            fileNameText.classList.add('text-secondary-happy-100', 'font-bold');
-            placeholder.querySelector('i').className = "fa-solid fa-file-audio text-xl text-secondary-happy-100 mb-1";
-        } else {
-            fileNameText.classList.add('text-shadedOfGray-30');
-            fileNameText.classList.remove('text-secondary-happy-100', 'font-bold');
-            placeholder.querySelector('i').className = "fa-solid fa-cloud-arrow-up text-xl text-primary-20 mb-1";
-        }
-    });
+            if(e.target.files[0]) {
+                fileNameText.classList.remove('text-shadedOfGray-30');
+                fileNameText.classList.add('text-secondary-happy-100', 'font-bold');
+                placeholder.querySelector('i').className = "fa-solid fa-file-audio text-xl text-secondary-happy-100 mb-1";
+            } else {
+                fileNameText.classList.add('text-shadedOfGray-30');
+                fileNameText.classList.remove('text-secondary-happy-100', 'font-bold');
+                placeholder.querySelector('i').className = "fa-solid fa-cloud-arrow-up text-xl text-primary-20 mb-1";
+            }
+        });
+    }
 
     // 2. Script untuk Photo Upload Preview
     document.getElementById('photo_input').addEventListener('change', function(e) {
