@@ -11,27 +11,32 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <style>
+        section {
+            margin: 0;
+        }
         /* Custom Wave Separator */
         .wave-bottom {
             position: absolute;
-            bottom: 0; /* kecil saja */
-            transform: translateY(99%); /* paksa nempel */
+            bottom: -1px; /* penting untuk hilangkan gap */
             left: 0;
             width: 100%;
-            overflow: hidden;
             line-height: 0;
-            transform: none;
+            overflow: hidden;
             z-index: 5;
         }
+
         .wave-bottom svg {
-            position: relative;
             display: block;
-            width: calc(100% + 1.3px);
+            width: 100%;
             height: 60px;
         }
+
         @media (min-width: 768px) {
-            .wave-bottom svg { height: 120px; }
+            .wave-bottom svg {
+                height: 120px;
+            }
         }
+
         .wave-bottom .shape-fill {
             fill: #F3F4F6; /* Matches bg-gray-100 */
         }
@@ -331,7 +336,7 @@
         <main>
 
             <!-- Hero Section -->
-            <section class="relative min-h-screen flex items-center bg-primary-85 text-white overflow-hidden pb-0 -mb-1">
+            <section class="relative min-h-screen flex items-center bg-primary-85 text-white overflow-hidden">
                 <!-- Full Bg Pattern (Subtle) -->
                 <div class="absolute inset-0 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:60px_60px] opacity-[0.03] pointer-events-none"></div>
                 
@@ -461,7 +466,7 @@
             </section>
 
             <!-- Features Section (Carousel) -->
-            <section id="features" class="py-16 md:py-24 bg-gray-100 relative overflow-hidden">
+            <section id="features" class="pt-0 pb-16 md:pb-24 bg-gray-100 relative overflow-hidden">
                 <!-- Decorative Shapes (Density) -->
                 <div class="absolute top-0 right-0 w-48 h-48 md:w-64 md:h-64 bg-secondary-happy-10 rounded-full opacity-50 blur-3xl translate-x-1/2 -translate-y-1/2"></div>
                 <div class="absolute bottom-0 left-0 w-48 h-48 md:w-64 md:h-64 bg-secondary-relaxed-10 rounded-full opacity-50 blur-3xl -translate-x-1/2 translate-y-1/2"></div>
