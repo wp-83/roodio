@@ -237,8 +237,8 @@ class SongsSeeder extends Seeder
                 'duration' => rand(120, 300), // Random duration between 2-5 minutes (in seconds)
                 'publisher' => 'Various Publishers',
                 'datePublished' => now()->subDays(rand(1, 365)),
-                'songPath' => null,
-                'photoPath' => null, // Default photo path
+                'songPath' => $encodedPath,
+                'photoPath' => 'default-album.jpg', // Default photo path
             ]);
         }
     }
