@@ -56,6 +56,20 @@ The `webApp` serves as the core platform for users, admins, and super admins. It
 *   **Storage**: Azure Blob Storage
 *   **Build Tools**: Vite, PostCSS
 
+### 🎨 Frontend Libraries & Tools
+
+*   **UI Components**: [Flowbite](https://flowbite.com/)
+*   **Charts & Visualizations**: [Chart.js](https://www.chartjs.org/)
+*   **Calendar**: [FullCalendar](https://fullcalendar.io/)
+*   **Tooltips & Popups**:
+    *   [Popper.js](https://popper.js.org/)
+    *   [Tippy.js](https://atomiks.github.io/tippyjs/)
+*   **Animations & Physics**:
+    *   [Matter.js](https://brm.io/matter-js/) (2D Physics Engine)
+    *   [AOS](https://michalsnik.github.io/aos/) (Animate On Scroll)
+    *   [Canvas Particle Network](https://github.com/JulianLaval/canvas-particle-network)
+*   **Custom Scripts**: `public/js/pages/main/mood.js` (Mood visualization logic)
+
 ---
 
 ## 🧠 Machine Learning Engine
