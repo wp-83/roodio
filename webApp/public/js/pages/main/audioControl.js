@@ -754,7 +754,7 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
                     return;
                 }
 
-                if (!audio.duration && audio.duration !== 0) {
+                if (!Number.isFinite(audio.duration) || audio.duration <= 0) {
                     return;
                 }
 
@@ -795,11 +795,9 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
 
             // Arrow keys - dengan penanganan khusus untuk lagu terakhir
             if ((e.key === 'ArrowRight' || e.key === 'ArrowLeft') && !e.target.matches('input, textarea, [contenteditable]')) {
-                // Cek apakah duration valid (allow if infinity for streams, or just proceed with safety check inside)
-                // Chrome sometimes reports Infinity for a moment
-                if (!audio.duration && audio.duration !== 0) {
+                // Cek apakah duration valid
+                if (!Number.isFinite(audio.duration) || audio.duration <= 0) {
                     return;
-                }
                 }
 
                 e.preventDefault();
