@@ -42,13 +42,17 @@ x-on:password-updated.window="showPasswordModal = false">
                 {{-- Profile Photo --}}
                 <div class="relative">
                     <div class="relative">
-                        @if (empty($profilePhoto))
+                        @if ($photo)
+                            <img class="w-40 h-40 rounded-full border-[6px] border-white object-cover shadow-lg bg-shadedOfGray-20"
+                                 src="{{ $photo->temporaryUrl() }}"
+                                 alt="Profile Photo Preview">
+                        @elseif (empty($profilePhoto))
                             <img class="w-40 h-40 rounded-full border-[6px] border-white object-cover shadow-lg bg-shadedOfGray-20"
                                  src="{{ asset('assets/defaults/user.jpg') }}"
                                  alt="Profile Photo Preview">
                         @else
                             <img class="w-40 h-40 rounded-full border-3 border-primary-50 object-cover shadow-lg bg-shadedOfGray-20"
-                                 src="{{ config('filesystems.disks.azure.url') . '/' . $profilePhoto }}"
+                                 src="{{ rtrim(config('filesystems.disks.azure.url'), '/') . '/' . ltrim($profilePhoto, '/') }}"
                                  alt="Profile Photo">
                         @endif
 
@@ -240,7 +244,7 @@ x-on:password-updated.window="showPasswordModal = false">
                 </div>
 
                 <div class="p-6">
-                    @error('profilePhoto')
+                    @error('photo')
                         <div class="mb-4 p-3 rounded-lg bg-secondary-angry-10 border border-secondary-angry-20 text-secondary-angry-100 text-smallBtn flex items-start gap-2">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" 
@@ -256,11 +260,14 @@ x-on:password-updated.window="showPasswordModal = false">
                             {{-- Photo Preview --}}
                             <div class="flex justify-center">
                                 <div class="relative w-50 h-50">
-                                    @if (empty($profilePhoto))
+                                    @if ($photo)
+                                        <img src="{{ $photo->temporaryUrl() }}" 
+                                             class="w-full h-full rounded-full object-cover border-4 border-shadedOfGray-20 bg-shadedOfGray-10">
+                                    @elseif (empty($profilePhoto))
                                         <img src="{{ asset('assets/defaults/user.jpg') }}" 
                                              class="w-full h-full rounded-full object-cover border-4 border-shadedOfGray-20 bg-shadedOfGray-10">
                                     @else
-                                        <img src="{{ config('filesystems.disks.azure.url') . '/' . $profilePhoto }}" 
+                                        <img src="{{ rtrim(config('filesystems.disks.azure.url'), '/') . '/' . ltrim($profilePhoto, '/') }}" 
                                              class="w-full h-full rounded-full object-cover border-4 border-shadedOfGray-20 bg-shadedOfGray-10">
                                     @endif
 
