@@ -16,7 +16,7 @@ return new class extends Migration
             $table->char('threadId', 10);
             $table->foreign('threadId')
                 ->references('id')
-                ->on('Threads')
+                ->on('threads')
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
             $table->char('userId', 10);

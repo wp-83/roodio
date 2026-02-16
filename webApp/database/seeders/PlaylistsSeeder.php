@@ -278,7 +278,7 @@ class PlaylistsSeeder extends Seeder
                 'userId' => $userId,
                 'name' => $playlistData['name'],
                 'description' => $playlistData['description'],
-                'playlistPath' => $playlistData['playlistPath'],
+                'playlistPath' => null,
             ]);
 
             // Attach songs to playlist using the Tracks table

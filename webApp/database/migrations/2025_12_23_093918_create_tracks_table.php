@@ -16,13 +16,13 @@ return new class extends Migration
             $table->char('songId', 10);
             $table->foreign('songId')
                 ->references('id')
-                ->on('Songs')
+                ->on('songs')
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
             $table->char('playlistId', 10);
             $table->foreign('playlistId')
                 ->references('id')
-                ->on('Playlists')
+                ->on('playlists')
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
             $table->timestamps();

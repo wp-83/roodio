@@ -11,18 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('Songs', function (Blueprint $table) {
+        Schema::create('songs', function (Blueprint $table) {
             $table->char('id', 10)->primary();
             $table->char('userId', 10);
             $table->foreign('userId')
                 ->references('id')
-                ->on('Users')
+                ->on('users')
                 ->noActionOnDelete()
                 ->noActionOnUpdate();
             $table->char('moodId', 10);
             $table->foreign('moodId')
                 ->references('id')
-                ->on('Moods')
+                ->on('moods')
                 ->noActionOnDelete()
                 ->noActionOnUpdate();
             $table->integer('confidence');
@@ -33,8 +33,8 @@ return new class extends Migration
             $table->integer('duration');
             $table->string('publisher', 255);
             $table->date('datePublished');
-            $table->string('songPath', 255);
-            $table->string('photoPath', 255);
+            $table->string('songPath', 255)->nullable();
+            $table->string('photoPath', 255)->nullable();
             $table->timestamps();
         });
     }

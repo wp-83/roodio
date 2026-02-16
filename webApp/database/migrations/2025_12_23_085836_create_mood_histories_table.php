@@ -22,7 +22,7 @@ return new class extends Migration
             $table->char('moodId', 10);
             $table->foreign('moodId')
                 ->references('id')
-                ->on('Moods')
+                ->on('moods')
                 ->noActionOnDelete()
                 ->noActionOnUpdate();
             $table->timestamps();

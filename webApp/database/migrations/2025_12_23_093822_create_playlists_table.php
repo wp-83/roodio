@@ -17,11 +17,11 @@ return new class extends Migration
             $table->char('userId', 10);
             $table->foreign('userId')
                 ->references('id')
-                ->on('Users')
+                ->on('users')
                 ->noActionOnDelete()
                 ->noActionOnUpdate();   
             $table->string('description', 255);
-            $table->string('playlistPath', 255);
+            $table->string('playlistPath', 255)->nullable();
             $table->timestamps();
         });
     }
