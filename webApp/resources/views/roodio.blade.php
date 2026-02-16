@@ -1,6 +1,8 @@
 @extends('layouts.master')
 
+
 @section('title', 'ROODIO - Music Player Based on Your Mood')
+
 
 @push('style')
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -129,9 +131,11 @@
     </style>
 @endpush
 
+
 @push('script')
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <script defer>
         document.addEventListener('DOMContentLoaded', function () {
             AOS.init({
@@ -147,7 +151,7 @@
                 loopedSlides: 4,
                 speed: 400,
                 autoplay: {
-                    delay: 1500,
+                    delay: 5000,
                     disableOnInteraction: false,
                     pauseOnMouseEnter: true,
                 },
@@ -184,11 +188,104 @@
     </script>
 @endpush
 
+
+@php
+    $features = [
+        [
+            'icon' => '🎭',
+            'title' => 'Smart Mood Recognition',
+            'desc' => 'Roodio understands your mood and recommends music that truly matches how you feel.',
+            'color' => 'angry'
+        ],
+        [
+            'icon' => '📝',
+            'title' => 'Mood Threads',
+            'desc' => 'Share what you\'re feeling and express your emotions through interactive threads.',
+            'color' => 'sad'
+        ],
+        [
+            'icon' => '👥',
+            'title' => 'Follow & Connect',
+            'desc' => 'Follow others, gain followers, and discover music from people with similar vibes.',
+            'color' => 'relaxed'
+        ],
+        [
+            'icon' => '📊',
+            'title' => 'Mood Insights',
+            'desc' => 'View your mood recap weekly, monthly, or even yearly with clear summaries.',
+            'color' => 'happy'
+        ],
+        [
+            'icon' => '⏳',
+            'title' => 'Sleep Timer',
+            'desc' => 'Set a timer to automatically stop your music whenever you want.',
+            'color' => 'sad'
+        ],
+        [
+            'icon' => '⚡',
+            'title' => 'Fast & Lightweight',
+            'desc' => 'Smooth performance, fast loading, and optimized to stay light on your device.',
+            'color' => 'relaxed'
+        ],
+    ];
+
+    $advisors = [
+        [
+            'name' => 'Dr. Zulfany Erlisa Rasjid, B.Sc., MMSI.',
+            'role' => 'Software Engineering Specialist',
+            'photo' => 'zulfany.jpg'
+        ],
+        [
+            'name' => 'Dr. Hidayaturrahman, S.Kom., M.T.',
+            'role' => 'Machine Learning Specialist',
+            'photo' => 'hidayaturrahman.jpg'
+        ],
+        [
+            'name' => 'Francisco Maruli Panggabean, S.Kom., M.T.I.',
+            'role' => 'Multimedia Systems Specialist',
+            'photo' => 'francisco.jpg'
+        ],
+    ];
+
+    $developers = [
+        [
+            'name' => 'Andi Zulfikar',
+            'role' => 'Backend Developer',
+            'photo' => 'andi.jpg'
+        ],
+        [
+            'name' => 'William Pratama',
+            'role' => 'Frontend Developer',
+            'photo' => 'william.jpg'
+        ],
+        [
+            'name' => 'Agnes Gonxha F. Sukma',
+            'role' => 'UI/UX Designer',
+            'photo' => 'agnes.jpg'
+        ],
+        [
+            'name' => 'Felicia Wijaya',
+            'role' => 'UI/UX Designer',
+            'photo' => 'felicia.jpg'
+        ],
+        [
+            'name' => 'Yoyada Indrayudha',
+            'role' => 'Quality Assurance',
+            'photo' => 'yoyada.jpg'
+        ],
+    ];
+@endphp
+
+
 @section('bodyContent')
     <div class="font-secondaryAndButton text-primary-85 bg-white overflow-x-hidden">
-
-        <!-- Header -->
-        <header class="fixed top-0 left-0 w-full z-50 py-1.5 bg-primary-70 backdrop-blur-md text-white shadow-xs shadow-white transition-all duration-300">
+        
+        <!-- navbar -->
+        <header 
+            x-data="{ scrolled: false }"
+            @scroll.window="scrolled = window.scrollY > 0"
+            :class="scrolled ? 'bg-primary-70/35' : 'bg-primary-70 shadow-xs shadow-white'"
+            class="fixed w-full z-50 py-1.5 text-white transition-all duration-300">
             <div class="container mx-auto px-4 md:px-6 h-max flex items-center justify-between">
                 <!-- Logo -->
                 <a href="/" class="block w-24 md:w-36 lg:w-48 hover:opacity-80 transition-opacity">
@@ -197,7 +294,7 @@
 
                 <!-- CTA Button -->
                 <div>
-                   <x-button behaviour="navigation" navLink="auth/login" content="Let's Start!" customClass="!bg-white !text-primary-85 hover:!bg-primary-10 font-secondaryAndButton font-bold text-xs md:text-sm tracking-wider uppercase !py-2 md:!py-3 !px-4 md:!px-6 rounded-none skew-x-[-10deg] transition-all hover:skew-x-0 shadow-[2px_2px_0px_0px_rgba(255,255,255,0.3)] md:shadow-[4px_4px_0px_0px_rgba(255,255,255,0.3)] hover:shadow-none"></x-button>
+                    <x-button behaviour="navigation" navLink="auth/login" content="Let's Play Music!" customClass="!bg-white !text-primary-85 hover:!bg-primary-10 font-secondaryAndButton font-bold text-xs md:text-sm tracking-wider uppercase !py-2 md:!py-3 !px-4 md:!px-6 rounded-none skew-x-[-10deg] transition-all hover:skew-x-0 shadow-[2px_2px_0px_0px_rgba(255,255,255,0.3)] md:shadow-[4px_4px_0px_0px_rgba(255,255,255,0.3)] hover:shadow-none" style="zoom:0.75;"></x-button>
                 </div>
             </div>
         </header>
@@ -212,13 +309,13 @@
                 
                 <!-- NEW: Specific Graphics (Donuts & Dot Grid Patches) based on reference -->
                 <!-- Large Yellow Donut (Top Left) -->
-                <div class="absolute top-24 -left-10 w-32 h-32 md:w-48 md:h-48 shape-donut border-[12px] md:border-[16px] border-secondary-happy-50 opacity-20 animate-rotate-scale pointer-events-none"></div>
+                <div class="absolute top-24 -left-10 w-32 h-32 md:w-48 md:h-48 shape-donut border-[12px] md:border-[16px] border-secondary-happy-50 opacity-20 animate-rotate-scale pointer-events-none" data-aos="zoom-in-down"></div>
                 
                 <!-- Dot Grid Patch (Top Right) -->
                 <div class="absolute top-20 right-10 w-24 h-24 shape-dot-grid text-secondary-happy-50/20 animate-float-medium pointer-events-none"></div>
 
                 <!-- Green Donut (Bottom Right) -->
-                <div class="absolute bottom-32 -right-10 w-40 h-40 shape-donut border-[12px] border-secondary-relaxed-50 opacity-10 animate-float-slow pointer-events-none"></div>
+                <div class="absolute bottom-32 -right-10 w-36 h-36 shape-donut border-[12px] border-secondary-relaxed-50 opacity-10 animate-float-slow pointer-events-none"></div>
                 
                 <!-- Small Blue Donut (Middle Left) -->
                 <div class="absolute top-1/2 left-10 w-16 h-16 shape-donut border-[6px] border-secondary-sad-50 opacity-20 animate-float-fast pointer-events-none"></div>
@@ -228,14 +325,14 @@
 
                 <!-- NEW: Enrichment "Rame" Elements -->
                 <!-- Floating Music Notes -->
-                <div class="absolute top-32 left-[20%] text-4xl text-secondary-happy-50/60 animate-float-slow pointer-events-none font-bold drop-shadow-lg" style="animation-duration: 7s;">🎵</div>
-                <div class="absolute bottom-40 right-[25%] text-5xl text-secondary-sad-50/60 animate-float-medium pointer-events-none font-bold drop-shadow-lg" style="animation-duration: 9s;">🎶</div>
-                <div class="absolute top-[15%] right-[30%] text-3xl text-secondary-relaxed-50/40 animate-float-fast pointer-events-none font-bold">♪</div>
+                <div class="absolute top-32 left-[20%] text-4xl text-secondary-happy-50/60 animate-float-slow pointer-events-none font-bold drop-shadow-lg" style="animation-duration: 7s;" data-aos="zoom-in">🎵</div>
+                <div class="absolute bottom-40 right-[25%] text-5xl text-secondary-sad-50/60 animate-float-medium pointer-events-none font-bold drop-shadow-lg" style="animation-duration: 9s;" data-aos="zoom-in">🎶</div>
+                <div class="absolute top-[15%] right-[30%] text-3xl text-secondary-relaxed-50/40 animate-float-fast pointer-events-none font-bold" data-aos="zoom-in">♪</div>
 
                 <!-- Giant Faint Circle Outline -->
-                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border-[2px] border-dashed border-white/20 rounded-full animate-rotate-scale pointer-events-none"></div>
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] border-[2px] border-dashed border-white/20 rounded-full animate-rotate-scale pointer-events-none"></div>
                 <!-- Smaller Inner Circle -->
-                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] border-[2px] border-white/20 rounded-full animate-pulse-glow pointer-events-none"></div>
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] border-[2px] border-white/20 rounded-full animate-pulse-glow pointer-events-none"></div>
 
                 <!-- Existing Elements (Retained for density) -->
                 <!-- Floating Mood Icons (Scattered) -->
@@ -244,23 +341,25 @@
                 <div class="container mx-auto px-4 mb-12 md:px-6 relative z-10 h-full flex flex-col items-center justify-center pt-20 lg:pb-10  min-h-[80vh]">
                     
                     <!-- Center: Typography & CTA -->
-                    <div class="text-center max-w-4xl mx-auto relative z-20" data-aos="fade-up">
-                        <div class="inline-block px-4 py-1 md:px-6 md:py-2 bg-secondary-happy-85 text-white text-[10px] md:text-sm font-bold uppercase tracking-widest mb-6 md:mb-8 skew-x-[-10deg] shadow-lg">
-                            <span class="block skew-x-[10deg]">New Way to Listen</span>
+                    <div class="text-center max-w-4xl mx-auto relative z-20" data-aos="zoom-in-up">
+                        <div class="inline-block px-4 py-1 md:px-6 md:py-2 bg-secondary-happy-85 text-white font-secondaryAndButton text-micro md:text-small font-bold uppercase tracking-widest mb-6 md:mb-8 skew-x-[-10deg] shadow-lg">
+                            <span class="block skew-x-[10deg]">Get The Moo-Dies, Listen to The Music</span>
                         </div>
-                        <h1 class="font-primary text-5xl md:text-7xl lg:text-8xl font-bold leading-tight mb-6 md:mb-10 drop-shadow-2xl">
-                            Discover Your <br>
-                            <span class="text-secondary-happy-50 relative inline-block">
-                                Perfect Sound.
-                                <svg class="absolute w-full h-3 md:h-5 -bottom-2 left-0 text-secondary-happy-50/50" viewBox="0 0 100 10" preserveAspectRatio="none"><path d="M0 5 Q 50 10 100 5" stroke="currentColor" stroke-width="3" fill="none" /></svg>
+                        <h1 class="font-primary text-5xl md:text-7xl lg:text-8xl font-bold mb-3 drop-shadow-2xl">
+                            Listen Music<br>
+                            <span class="text-primary-10 relative inline-block">
+                                With 
+                                <span class='text-white'>R</span><span class='text-secondary-happy-85'>O</span><span class='text-secondary-relaxed-85'>O</span><span class='text-secondary-sad-85'>D</span><span class='text-secondary-angry-85'>I</span><span class='text-white'>O</span>.
+                                <hr class='border-2 border-secondary-happy-50 mt-4'>
                             </span>
                         </h1>
-                        <p class="font-secondaryAndButton text-primary-20 text-lg md:text-2xl mb-8 md:mb-12 leading-relaxed max-w-2xl mx-auto drop-shadow-md">
-                            Roodio intelligently curates playlists based on your current mood. Experience music that truly understands you.
+                        <p class="font-secondaryAndButton text-white text-small md:text-body-size lg:text-paragraph mb-8 md:mb-12 leading-relaxed max-w-2xl mx-auto drop-shadow-md">
+                            Roodio matches music to your mood.
+                            <br>Enjoy songs that fit how you feel right now.
                         </p>
                         
                         <div class="flex justify-center gap-6">
-                            <x-button behaviour="navigation" navLink="auth/login" content="Let's Start!" customClass="!bg-secondary-happy-85 !text-white hover:!bg-secondary-happy-70 font-bold !px-8 md:!px-12 !py-4 md:!py-5 text-base md:text-lg shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] md:shadow-[8px_8px_0px_0px_rgba(0,0,0,0.3)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,0.3)] transition-all transform hover:translate-x-1 hover:translate-y-1 rounded-none"></x-button>
+                            <x-button behaviour="navigation" navLink="auth/login" content="Listen the song now!" mood="relaxed" customClass="!bg-secondary-happy-85 !text-white hover:!bg-secondary-happy-70 font-bold !px-8 md:!px-12 !py-4 md:!py-5 text-base md:text-lg shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] md:shadow-[8px_8px_0px_0px_rgba(0,0,0,0.3)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,0.3)] transition-all transform hover:translate-x-1 hover:translate-y-1 rounded-none" style="zoom:0.95;"></x-button>
                         </div>
                     </div>
 
@@ -268,8 +367,8 @@
                     
                     <!-- Orb 1: Happy (Top Left) -->
                     <div class="absolute top-[10%] md:top-[12%] left-[2%] md:left-[5%] w-32 h-32 md:w-56 md:h-56 flex items-center justify-center animate-float-slow group cursor-pointer hover:scale-110 transition-transform duration-500 z-10">
-                        <div class="relative w-24 h-24 md:w-40 md:h-40 flex items-center justify-center">
-                            <img src="{{ asset('assets/moods/happy.png') }}" class="w-full h-full object-contain drop-shadow-2xl transform group-hover:rotate-12 transition-transform duration-500" alt="Happy">
+                        <div class="relative w-24 h-24 md:w-40 md:h-40 flex items-center justify-center" data-aos="fade-down-right">
+                            <img src="{{ asset('assets/moods/happy.png') }}" class="w-full h-full object-contain drop-shadow-2xl transform group-hover:rotate-12 transition-transform duration-500"  alt="Happy">
                         </div>
                         <!-- Tooltip -->
                         <div class="absolute -bottom-2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 pointer-events-none">
@@ -282,7 +381,7 @@
 
                     <!-- Orb 2: Relaxed (Top Right) -->
                     <div class="absolute top-[10%] md:top-[15%] right-[2%] md:right-[5%] w-28 h-28 md:w-48 md:h-48 flex items-center justify-center animate-float-medium group cursor-pointer hover:scale-110 transition-transform duration-500 z-10" style="animation-delay: 1.5s;">
-                            <div class="relative w-20 h-20 md:w-36 md:h-36 flex items-center justify-center">
+                            <div class="relative w-20 h-20 md:w-36 md:h-36 flex items-center justify-center" data-aos="fade-down-left">
                             <img src="{{ asset('assets/moods/relaxed.png') }}" class="w-full h-full object-contain drop-shadow-2xl transform group-hover:-rotate-12 transition-transform duration-500" alt="Relaxed">
                         </div>
                         <!-- Tooltip -->
@@ -296,7 +395,7 @@
 
                     <!-- Orb 3: Sad (Bottom Left) -->
                     <div class="absolute bottom-[5%] md:bottom-[10%] left-[5%] md:left-[10%] w-36 h-36 md:w-60 md:h-60 flex items-center justify-center animate-float-slow group cursor-pointer hover:scale-110 transition-transform duration-500 z-10" style="animation-delay: 0.5s;">
-                        <div class="relative w-28 h-28 md:w-44 md:h-44 flex items-center justify-center">
+                        <div class="relative w-28 h-28 md:w-44 md:h-44 flex items-center justify-center" data-aos="fade-up-right">
                             <img src="{{ asset('assets/moods/sad.png') }}" class="w-full h-full object-contain drop-shadow-2xl transform group-hover:scale-105 transition-transform duration-500" alt="Sad">
                         </div>
                         <!-- Tooltip -->
@@ -310,7 +409,7 @@
 
                     <!-- Orb 4: Angry (Bottom Right) -->
                     <div class="absolute bottom-[8%] md:bottom-[12%] right-[5%] md:right-[12%] w-32 h-32 md:w-52 md:h-52 flex items-center justify-center animate-float-fast group cursor-pointer hover:scale-110 transition-transform duration-500 z-10" style="animation-delay: 2s;">
-                        <div class="relative w-24 h-24 md:w-36 md:h-36 flex items-center justify-center">
+                        <div class="relative w-24 h-24 md:w-36 md:h-36 flex items-center justify-center" data-aos="fade-up-left">
                             <img src="{{ asset('assets/moods/angry.png') }}" class="w-full h-full object-contain drop-shadow-2xl transform group-hover:shake transition-transform duration-500" alt="Angry">
                         </div>
                         <!-- Tooltip -->
@@ -363,102 +462,61 @@
 
                 <div class="container mx-auto px-4 md:px-6 relative z-10">
                     <div class="text-center max-w-2xl mx-auto mb-10 md:mb-16" data-aos="fade-up">
-                        <h2 class="font-primary text-3xl md:text-4xl font-bold text-primary-85 mb-3 md:mb-4">Why Choose Roodio?</h2>
+                        <h2 class="font-primary text-paragraph md:text-subtitle lg:text-title font-bold text-primary-50 mb-3 md:mb-4">WHY MUST ROODIO?</h2>
                         <div class="w-16 md:w-24 h-1 bg-secondary-happy-85 mx-auto rounded-full"></div>
-                        <p class="font-secondaryAndButton text-gray-600 mt-4 md:mt-6 text-base md:text-lg px-4">Swipe to explore platform capabilities designed for your lifestyle.</p>
+                        <p class="font-secondaryAndButton text-secondary-angry-100 mt-4 md:mt-6 text-small md:text-body-size px-4">Discover features made to fit your daily life. <br>Swipe to see what Roodio can do for you.</p>
                     </div>
 
                     <!-- Swiper - Menambah lebih banyak fitur -->
-<div class="swiper featuresSwiper px-4 pb-16" data-aos="fade-up" data-aos-delay="200">
-    <div class="swiper-wrapper">
-        <!-- Feature 1 -->
-        <div class="swiper-slide h-auto">
-            <div class="h-full group bg-white p-6 md:p-8 shadow-md hover:shadow-xl transition-all duration-300 border-t-4 border-secondary-happy-85 relative overflow-hidden rounded-xl cursor-grab active:cursor-grabbing">
-                <div class="absolute top-0 right-0 w-20 h-20 md:w-24 md:h-24 bg-secondary-happy-10 rounded-bl-[80px] md:rounded-bl-[100px] -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
-                <div class="relative z-10">
-                    <div class="w-12 h-12 md:w-14 md:h-14 bg-secondary-happy-85 text-white flex items-center justify-center text-xl md:text-2xl mb-4 md:mb-6 shadow-md skew-x-[-10deg] rounded-sm transform group-hover:rotate-6 transition-transform">
-                        <span class="block skew-x-[10deg]">🎭</span>
-                    </div>
-                    <h3 class="font-primary text-lg md:text-xl font-bold text-primary-85 mb-2 md:mb-3">Mood Detection</h3>
-                    <p class="font-secondaryAndButton text-sm md:text-base text-gray-600 leading-relaxed">Advanced algorithms analyze your mood input to deliver the most relevant tracks instantly.</p>
-                </div>
-            </div>
-        </div>
+                    <div class="swiper featuresSwiper px-4 pb-16" data-aos="fade-up" data-aos-delay="200">
+                        <div class="swiper-wrapper">
+                            @foreach ($features as $feature)
+                                <div class="swiper-slide h-auto">
+                                    <div class="h-full group bg-white p-6 md:p-8 shadow-md hover:shadow-xl transition-all duration-300 
+                                        border-t-4 border-secondary-{{ $feature['color'] }}-85 
+                                        relative overflow-hidden rounded-xl cursor-grab active:cursor-grabbing">
 
-        <!-- Feature 2 -->
-        <div class="swiper-slide h-auto">
-            <div class="h-full group bg-white p-6 md:p-8 shadow-md hover:shadow-xl transition-all duration-300 border-t-4 border-secondary-relaxed-85 relative overflow-hidden rounded-xl cursor-grab active:cursor-grabbing">
-                <div class="absolute top-0 right-0 w-20 h-20 md:w-24 md:h-24 bg-secondary-relaxed-10 rounded-bl-[80px] md:rounded-bl-[100px] -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
-                <div class="relative z-10">
-                    <div class="w-12 h-12 md:w-14 md:h-14 bg-secondary-relaxed-85 text-white flex items-center justify-center text-xl md:text-2xl mb-4 md:mb-6 shadow-md skew-x-[-10deg] rounded-sm transform group-hover:rotate-6 transition-transform">
-                        <span class="block skew-x-[10deg]">🌊</span>
-                    </div>
-                    <h3 class="font-primary text-lg md:text-xl font-bold text-primary-85 mb-2 md:mb-3">Immersive Visuals</h3>
-                    <p class="font-secondaryAndButton text-sm md:text-base text-gray-600 leading-relaxed">Dynamic, real-time visualizers that react to the beat, creating a complete sensory experience.</p>
-                </div>
-            </div>
-        </div>
+                                        <div class="absolute top-0 right-0 w-20 h-20 md:w-24 md:h-24 
+                                            bg-secondary-{{ $feature['color'] }}-10 
+                                            rounded-bl-[80px] md:rounded-bl-[100px] -mr-4 -mt-4 
+                                            transition-transform group-hover:scale-110">
+                                        </div>
 
-        <!-- Feature 3 -->
-        <div class="swiper-slide h-auto">
-            <div class="h-full group bg-white p-6 md:p-8 shadow-md hover:shadow-xl transition-all duration-300 border-t-4 border-secondary-sad-85 relative overflow-hidden rounded-xl cursor-grab active:cursor-grabbing">
-                <div class="absolute top-0 right-0 w-20 h-20 md:w-24 md:h-24 bg-secondary-sad-10 rounded-bl-[80px] md:rounded-bl-[100px] -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
-                <div class="relative z-10">
-                    <div class="w-12 h-12 md:w-14 md:h-14 bg-secondary-sad-85 text-white flex items-center justify-center text-xl md:text-2xl mb-4 md:mb-6 shadow-md skew-x-[-10deg] rounded-sm transform group-hover:rotate-6 transition-transform">
-                        <span class="block skew-x-[10deg]">🎧</span>
+                                        <div class="relative z-10">
+
+                                            <div class="w-12 h-12 md:w-14 md:h-14 
+                                                bg-secondary-{{ $feature['color'] }}-85 
+                                                text-white flex items-center justify-center 
+                                                text-xl md:text-2xl mb-4 md:mb-6 shadow-md 
+                                                skew-x-[-10deg] rounded-sm 
+                                                transform group-hover:rotate-6 transition-transform">
+
+                                                <span class="block skew-x-[10deg]">
+                                                    {{ $feature['icon'] }}
+                                                </span>
+                                            </div>
+
+                                            <h3 class="font-primary text-body-size md:text-paragraph font-bold 
+                                                text-secondary-{{ $feature['color'] }}-85 
+                                                mb-2 md:mb-3">
+                                                {{ $feature['title'] }}
+                                            </h3>
+
+                                            <p class="font-secondaryAndButton text-small md:text-body-size 
+                                                text-primary-60
+                                                leading-relaxed">
+                                                {{ $feature['desc'] }}
+                                            </p>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>                        
+                        <div class="swiper-button-next text-primary-85 opacity-0 md:opacity-100 transition-opacity"></div>
+                        <div class="swiper-button-prev text-primary-85 opacity-0 md:opacity-100 transition-opacity"></div>
                     </div>
-                    <h3 class="font-primary text-lg md:text-xl font-bold text-primary-85 mb-2 md:mb-3">Curated Playlists</h3>
-                    <p class="font-secondaryAndButton text-sm md:text-base text-gray-600 leading-relaxed">Hand-selected tracks across genres, perfectly categorized to match every shade of emotion.</p>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Feature 4 -->
-        <div class="swiper-slide h-auto">
-            <div class="h-full group bg-white p-6 md:p-8 shadow-md hover:shadow-xl transition-all duration-300 border-t-4 border-secondary-angry-85 relative overflow-hidden rounded-xl cursor-grab active:cursor-grabbing">
-                <div class="absolute top-0 right-0 w-20 h-20 md:w-24 md:h-24 bg-secondary-angry-10 rounded-bl-[80px] md:rounded-bl-[100px] -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
-                <div class="relative z-10">
-                    <div class="w-12 h-12 md:w-14 md:h-14 bg-secondary-angry-85 text-white flex items-center justify-center text-xl md:text-2xl mb-4 md:mb-6 shadow-md skew-x-[-10deg] rounded-sm transform group-hover:rotate-6 transition-transform">
-                        <span class="block skew-x-[10deg]">🚀</span>
-                    </div>
-                    <h3 class="font-primary text-lg md:text-xl font-bold text-primary-85 mb-2 md:mb-3">High Performance</h3>
-                    <p class="font-secondaryAndButton text-sm md:text-base text-gray-600 leading-relaxed">Lightning fast playback with minimal latency, ensuring your vibe is never interrupted.</p>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Feature 5 - BARU: Social Integration -->
-        <div class="swiper-slide h-auto">
-            <div class="h-full group bg-white p-6 md:p-8 shadow-md hover:shadow-xl transition-all duration-300 border-t-4 border-secondary-happy-85 relative overflow-hidden rounded-xl cursor-grab active:cursor-grabbing">
-                <div class="absolute top-0 right-0 w-20 h-20 md:w-24 md:h-24 bg-secondary-happy-10 rounded-bl-[80px] md:rounded-bl-[100px] -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
-                <div class="relative z-10">
-                    <div class="w-12 h-12 md:w-14 md:h-14 bg-secondary-happy-85 text-white flex items-center justify-center text-xl md:text-2xl mb-4 md:mb-6 shadow-md skew-x-[-10deg] rounded-sm transform group-hover:rotate-6 transition-transform">
-                        <span class="block skew-x-[10deg]">👥</span>
-                    </div>
-                    <h3 class="font-primary text-lg md:text-xl font-bold text-primary-85 mb-2 md:mb-3">Social Sharing</h3>
-                    <p class="font-secondaryAndButton text-sm md:text-base text-gray-600 leading-relaxed">Share your mood-based playlists with friends and discover what they're listening to.</p>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Feature 6 - BARU: Offline Mode -->
-        <div class="swiper-slide h-auto">
-            <div class="h-full group bg-white p-6 md:p-8 shadow-md hover:shadow-xl transition-all duration-300 border-t-4 border-secondary-relaxed-85 relative overflow-hidden rounded-xl cursor-grab active:cursor-grabbing">
-                <div class="absolute top-0 right-0 w-20 h-20 md:w-24 md:h-24 bg-secondary-relaxed-10 rounded-bl-[80px] md:rounded-bl-[100px] -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
-                <div class="relative z-10">
-                    <div class="w-12 h-12 md:w-14 md:h-14 bg-secondary-relaxed-85 text-white flex items-center justify-center text-xl md:text-2xl mb-4 md:mb-6 shadow-md skew-x-[-10deg] rounded-sm transform group-hover:rotate-6 transition-transform">
-                        <span class="block skew-x-[10deg]">📱</span>
-                    </div>
-                    <h3 class="font-primary text-lg md:text-xl font-bold text-primary-85 mb-2 md:mb-3">Offline Mode</h3>
-                    <p class="font-secondaryAndButton text-sm md:text-base text-gray-600 leading-relaxed">Download your favorite mood playlists and enjoy them anywhere, even without internet.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="swiper-button-next text-primary-85 opacity-0 md:opacity-100 transition-opacity"></div>
-    <div class="swiper-button-prev text-primary-85 opacity-0 md:opacity-100 transition-opacity"></div>
-</div>
-<div class="swiper-pagination"></div>
+                    <div class="swiper-pagination"></div>
                 </div>
             </section>
 
@@ -469,7 +527,7 @@
                 
                 <!-- NEW: Specific Graphics -->
                 <div class="absolute top-20 left-10 w-24 h-24 shape-dot-grid text-white/20 animate-float-medium pointer-events-none"></div>
-                <div class="absolute bottom-40 right-10 w-40 h-40 shape-donut border-[10px] border-secondary-happy-50 opacity-20 animate-rotate-scale pointer-events-none"></div>
+                <div class="absolute bottom-40 right-10 w-12 h-12 shape-donut border-[7px] border-secondary-happy-50 opacity-20 animate-rotate-scale pointer-events-none"></div>
                 
                 <!-- Large Gradient Blobs for Depth -->
                 <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-secondary-happy-50/20 rounded-full blur-3xl pointer-events-none -translate-y-1/2 translate-x-1/2 mix-blend-overlay"></div>
@@ -477,14 +535,17 @@
 
                 <!-- Extra Ghost Icons (Rame) - Increased Density -->
                 <div class="absolute top-[30%] right-[5%] opacity-20 animate-float-fast pointer-events-none">
-                    <img src="{{ asset('assets/moods/relaxed.png') }}" class="w-24 h-24 grayscale brightness-200" alt="">
+                    <img src="{{ asset('assets/moods/relaxed.png') }}" class="w-28 h-28" alt="">
                 </div>
                 <div class="absolute bottom-[10%] left-[20%] opacity-20 animate-float-slow pointer-events-none">
-                    <img src="{{ asset('assets/moods/sad.png') }}" class="w-32 h-32 grayscale brightness-200" alt="">
+                    <img src="{{ asset('assets/moods/sad.png') }}" class="w-48 h-48" alt="">
                 </div>
                 <!-- Additional Team BG Icons -->
                 <div class="absolute top-[15%] left-[15%] opacity-15 animate-float-medium pointer-events-none transform rotate-180">
-                    <img src="{{ asset('assets/moods/happy.png') }}" class="w-20 h-20 grayscale brightness-200" alt="">
+                    <img src="{{ asset('assets/moods/happy.png') }}" class="w-32 h-32" alt="">
+                </div>
+                <div class="absolute top-[65%] right-[15%] opacity-15 animate-float-medium pointer-events-none transform -rotate-30">
+                    <img src="{{ asset('assets/moods/angry.png') }}" class="w-42 h-42" alt="">
                 </div>
                 
                 <div class="absolute top-[10%] left-[40%] w-16 h-16 shape-donut border-[4px] border-white/30 animate-float-medium pointer-events-none"></div>
@@ -499,58 +560,85 @@
 
                 <div class="container mx-auto px-6 relative z-10 pt-10 md:pt-16">
                     <div class="text-center mb-16 md:mb-20" data-aos="fade-up">
-                         <h2 class="font-primary text-3xl md:text-4xl font-bold mb-4">Meet The Professionals</h2>
-                         <p class="font-secondaryAndButton text-primary-20 max-w-2xl mx-auto text-sm md:text-base">The dedicated team behind the engineering and assessment of Roodio.</p>
+                         <h2 class="font-primary text-subtitle md:text-title font-bold mb-4">Meet the Crews</h2>
+                         <p class="font-secondaryAndButton text-white max-w-2xl mx-auto text-micro md:text-small">The team behind the development and evaluation of ROODIO.</p>
                     </div>
 
                     <!-- Developers Group -->
                     <div class="mb-16 md:mb-24">
                         <div class="flex items-center gap-4 mb-10 md:mb-12 justify-center" data-aos="fade-up">
-                            <span class="h-px w-8 md:w-10 bg-white/20"></span>
-                            <h3 class="font-primary text-lg md:text-xl font-semibold text-white uppercase tracking-wider">Engineering Team</h3>
-                            <span class="h-px w-8 md:w-10 bg-white/20"></span>
+                            <h3 class="font-primary text-paragraph md:text-subtitle font-bold text-secondary-happy-60 uppercase tracking-wider">Development Team</h3>
                         </div>
                         
-                        <div class="grid grid-cols-2 lg:grid-cols-5 gap-6 md:gap-8 max-w-6xl mx-auto">
-                            @foreach(['Dev 1', 'Dev 2', 'Dev 3', 'Dev 4', 'Dev 5'] as $dev)
-                            <div class="flex flex-col items-center group" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
-                                <!-- Circle Image Container -->
-                                <div class="w-24 h-24 md:w-36 md:h-36 rounded-full bg-white flex items-center justify-center overflow-hidden mb-4 md:mb-6 shadow-xl border-4 border-white group-hover:scale-105 transition-transform duration-300 relative z-10">
-                                    <div class="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center text-3xl md:text-4xl">
-                                        👨‍💻
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 md:gap-14 max-w-7xl mx-auto">
+                            @foreach($developers as $dev)
+
+                                @php
+                                    $photo = isset($dev['photo'])
+                                        ? asset('assets/teams/developers/' . $dev['photo'])
+                                        : asset('assets/defaults/user.jpg');
+                                @endphp
+
+                                <div class="flex flex-col items-center group"
+                                    data-aos="fade-left"
+                                    data-aos-delay="{{ $loop->index * 100 }}">
+
+                                    <!-- Circle Image -->
+                                    <div class="w-52 h-52 md:w-48 md:h-48 rounded-full bg-white flex items-center justify-center overflow-hidden mb-4 md:mb-6 shadow-xl border-2 border-white group-hover:scale-105 transition-transform duration-300 relative z-10">
+
+                                        <img src="{{ $photo }}"
+                                            alt="{{ $dev['name'] }}"
+                                            class="w-full h-full object-cover">
                                     </div>
-                                    <div class="absolute inset-0 bg-secondary-happy-50/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+
+                                    <h4 class="font-secondaryAndButton text-center text-small md:text-body-size text-secondary-happy-60 group-hover:text-white transition-colors">
+                                        {{ $dev['name'] }}
+                                    </h4>
+
+                                    <p class="font-secondaryAndButton text-center text-micro md:text-small text-white mt-1">
+                                        {{ $dev['role'] }}
+                                    </p>
+
                                 </div>
-                                
-                                <h4 class="font-primary font-bold text-center text-sm md:text-lg text-secondary-happy-50 group-hover:text-white transition-colors">{{ $dev }}</h4>
-                                <p class="font-secondaryAndButton text-center text-xs md:text-sm font-bold text-white mt-1">Fullstack Engineer</p>
-                            </div>
-                            @endforeach
+
+                                @endforeach
+
                         </div>
                     </div>
 
-                    <!-- Assessors Group -->
+                    <!-- Academic Advisors -->
                     <div>
                         <div class="flex items-center gap-4 mb-10 md:mb-12 justify-center" data-aos="fade-up">
-                            <span class="h-px w-8 md:w-10 bg-white/20"></span>
-                            <h3 class="font-primary text-lg md:text-xl font-semibold text-white uppercase tracking-wider">Assessment Team</h3>
-                            <span class="h-px w-8 md:w-10 bg-white/20"></span>
+                            <h3 class="font-primary text-paragraph md:text-subtitle font-bold text-secondary-relaxed-60 uppercase tracking-wider">Academic Advisors</h3>
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-3xl mx-auto">
-                            @foreach(['Assessor 1', 'Assessor 2', 'Assessor 3'] as $assessor)
-                            <div class="flex flex-col items-center group" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
-                                <!-- Circle Image Container -->
-                                <div class="w-32 h-32 md:w-40 md:h-40 rounded-full bg-white flex items-center justify-center overflow-hidden mb-4 md:mb-6 shadow-xl border-4 border-white group-hover:scale-105 transition-transform duration-300 relative z-10">
-                                    <div class="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center text-4xl md:text-5xl">
-                                        🕵️
+                            @foreach($advisors as $advisor)
+                                @php
+                                    $photo = isset($advisor['photo'])
+                                            ? asset('assets/teams/advisors/' . $advisor['photo'])
+                                            : asset('assets/defaults/user.jpg');
+                                @endphp
+
+                                <div class="flex flex-col items-center group"
+                                    data-aos="fade-right"
+                                    data-aos-delay="{{ $loop->index * 100 }}">
+
+                                    <!-- Circle Image -->
+                                    <div class="w-52 h-52 md:w-48 md:h-48 rounded-full bg-white flex items-center justify-center overflow-hidden mb-4 md:mb-6 shadow-xl border-2 border-white group-hover:scale-105 transition-transform duration-300 relative z-10">
+                                        <img src="{{ $photo }}"
+                                            alt="{{ $advisor['name'] }}"
+                                            class="w-full h-full object-cover">
                                     </div>
-                                     <div class="absolute inset-0 bg-secondary-relaxed-50/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+
+                                    <h4 class="font-secondaryAndButton text-center text-small md:text-body-size text-secondary-relaxed-60 group-hover:text-white transition-colors">
+                                        {{ $advisor['name'] }}
+                                    </h4>
+
+                                    <p class="font-secondaryAndButton text-center text-micro md:text-small text-white mt-1">
+                                        {{ $advisor['role'] }}
+                                    </p>
                                 </div>
-                                
-                                <h4 class="font-primary font-bold text-center text-lg md:text-xl text-secondary-relaxed-50 group-hover:text-white transition-colors">{{ $assessor }}</h4>
-                                <p class="font-secondaryAndButton text-center text-xs md:text-sm font-bold text-white mt-1">Lead Assessor</p>
-                            </div>
                             @endforeach
                         </div>
                     </div>
