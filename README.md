@@ -192,6 +192,14 @@ We welcome contributions! Please follow these steps:
 
 ---
 
+## 👥 Contributors
+
+*   [Andi ZUlfikar](https://github.com/Xullfikar) - **Backend Developer**
+*   [William Pratama](https://github.com/wp-83) - **Frontend Developer**
+*   [Agnes Gonxha Febriane Sukma](https://github.com/username) - **UI/UX Designer**
+*   [Felicia Wijaya](https://github.com/username) - **UI/UX Designer**
+*   [Yoyada Indrayudha](https://github.com/username) - **Quality Assurance**
+
 ---
     
 ## ⚠️ Disclaimer
@@ -203,3 +211,9 @@ This project is intended for **educational purposes only**. It is not designed f
 ## 📝 License
 
 This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+---
+
+<p align="center">
+  Built with ❤️ by <strong>Group 3</strong>
+</p>
