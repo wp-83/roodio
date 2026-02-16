@@ -1,4 +1,4 @@
-<header class="sticky top-0 z-40 w-full px-6 py-4 md:px-8 bg-primary-100/90 backdrop-blur-xl border-b border-primary-70 transition-all duration-300">
+<header class="sticky top-0 z-30 w-full px-6 py-4 md:px-8 bg-primary-100/90 backdrop-blur-xl border-b border-primary-70 transition-all duration-300">
     <div class="flex items-center justify-between">
 
         {{-- LEFT: Mobile Toggle & Page Title --}}

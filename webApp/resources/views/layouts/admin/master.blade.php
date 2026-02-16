@@ -16,66 +16,13 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-    {{-- Alpine.js (Wajib ada untuk fitur Responsive & Modal) --}}
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
+    {{-- Icons --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-    {{-- Tailwind CSS & Config --}}
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: {
-                            100: '#020A36', // Background Utama
-                            85: '#06134D',  // Card/Sidebar
-                            70: '#0D1F67',  // Border
-                            60: '#142C80',
-                            50: '#1F3A98',
-                            30: '#4F6CC3',
-                            20: '#7591DB',
-                            10: '#A4BEF2',
-                        },
-                        secondary: {
-                            happy: { 100: '#FF8E2B', 85: '#FFA350', 20: '#FFF2E5' },
-                            sad: { 100: '#6A4FBF', 20: '#EEE8FB' },
-                            relaxed: { 100: '#28C76F', 20: '#E0F7EB' },
-                            angry: { 100: '#E63946', 20: '#FDEAE9' },
-                        },
-                        accent: { 100: '#E650C5', 20: '#FDEDFC' },
-                        shadedOfGray: {
-                            100: '#000000', 60: '#666666', 40: '#9CA3AF', 30: '#B2B2B2', 20: '#CCCCCC', 10: '#E6E6E6',
-                        },
-                        white: '#FFFFFF',
-                    },
-                    fontFamily: {
-                        'primary': ['Poppins', 'sans-serif'],
-                        'secondaryAndButton': ['Urbanist', 'sans-serif'],
-                    },
-                    fontSize: {
-                        'title': ['2.667rem', { lineHeight: '4rem' }],
-                        'subtitle': ['2rem', { lineHeight: '3rem' }],
-                        'body-size': ['1.167rem', { lineHeight: '1.75rem' }],
-                        'small': ['1rem', { lineHeight: '1.5rem' }],
-                        'micro': ['0.833rem', { lineHeight: '1.25rem' }],
-                    },
-                }
-            }
-        }
-    </script>
-
-    <style>
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: #020A36; }
-        ::-webkit-scrollbar-thumb { background: #142C80; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #4F6CC3; }
-
-        body { font-family: 'Urbanist', sans-serif; }
-        h1, h2, h3, h4, h5, h6 { font-family: 'Poppins', sans-serif; }
-
-        [x-cloak] { display: none !important; }
-    </style>
+    {{-- CSS & JS Assets --}}
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @livewireStyles
 </head>
 
 {{-- TAMBAHKAN x-data DISINI UNTUK MENGONTROL SIDEBAR --}}
@@ -119,5 +66,6 @@
         </div>
     </div>
 
+    @livewireScripts
 </body>
 </html>
