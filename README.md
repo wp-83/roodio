@@ -192,12 +192,14 @@ We welcome contributions! Please follow these steps:
 
 ---
 
-## 📝 License
+---
+    
+## ⚠️ Disclaimer
 
-This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is intended for **educational purposes only**. It is not designed for commercial use, production environments, or widespread deployment. The codebase serves as a demonstration of technical concepts and should be used accordingly.
 
 ---
 
-<p align="center">
-  Built with ❤️ by <strong>Group 3</strong>
-</p>
+## 📝 License
+
+This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
