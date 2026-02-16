@@ -212,8 +212,3 @@ This project is intended for **educational purposes only**. It is not designed f
 
 This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
----
-
-<p align="center">
-  Built with ❤️ by <strong>Group 3</strong>
-</p>
