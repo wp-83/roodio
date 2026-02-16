@@ -194,7 +194,7 @@ We welcome contributions! Please follow these steps:
 
 ## 👥 Contributors
 
-*   [Andi ZUlfikar](https://github.com/Xullfikar) - **Backend Developer**
+*   [Andi Zulfikar](https://github.com/Xullfikar) - **Backend Developer**
 *   [William Pratama](https://github.com/wp-83) - **Frontend Developer**
 *   [Agnes Gonxha Febriane Sukma](https://github.com/agnesgonxha) - **UI/UX Designer**
 *   [Felicia Wijaya](https://github.com/feliciaHw) - **UI/UX Designer**
