@@ -477,6 +477,165 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
             });
         }
 
+        // ============= SLIDER & VOLUME =============
+
+        // SLEEP TIMER LOGIC
+        let sleepTimerId = null;
+        let sleepMode = null; // 'time', 'end', or null
+        let currentSleepMinutes = null; // Store the active duration
+
+        const sleepTimerBtn = document.getElementById('sleep-timer'); // Desktop trigger
+        const sleepTimerMobileBtn = document.getElementById('sleep-timer-mobile'); // Mobile trigger (Accordion Toggle)
+        const sleepTimerStatusMobile = document.getElementById('sleep-timer-status-mobile'); // Mobile Status Text
+        const sleepTimerOptions = document.querySelectorAll('.sleep-timer-opt'); // Desktop dropdown options
+        const sleepTimerOptionsMobile = document.querySelectorAll('.sleep-timer-opt-mobile'); // Mobile dropdown options (New)
+
+        function updateSleepTimerUI() {
+            // Update Active State on Desktop Button
+            if (sleepTimerBtn) {
+                toggleButtonState(sleepTimerBtn, sleepMode !== null);
+            }
+
+            // Update Mobile Button Active State
+            if (sleepTimerMobileBtn) {
+                toggleButtonState(sleepTimerMobileBtn, sleepMode !== null);
+            }
+
+            // Update Status Text on Mobile
+            if (sleepTimerStatusMobile) {
+                if (sleepMode === 'end') {
+                    sleepTimerStatusMobile.textContent = 'End of Track';
+                    sleepTimerStatusMobile.classList.remove('hidden');
+                } else if (sleepMode === 'time') {
+                    sleepTimerStatusMobile.textContent = `${currentSleepMinutes} Minutes`;
+                    sleepTimerStatusMobile.classList.remove('hidden');
+                } else {
+                    sleepTimerStatusMobile.classList.add('hidden');
+                }
+            }
+
+            // Helper to update indicators and styles
+            const updateIndicators = (options, isMobile) => {
+                options.forEach(opt => {
+                    const val = opt.dataset.value;
+                    const indicator = opt.querySelector(isMobile ? '.active-indicator-mobile' : '.active-indicator');
+
+                    let isActive = false;
+
+                    if (sleepMode === 'end' && val === 'end') isActive = true;
+                    if (sleepMode === null && val === 'off') isActive = true; // Optional: highlight "Turn Off" when off
+                    if (sleepMode === 'time' && parseInt(val) === currentSleepMinutes) isActive = true;
+
+                    // Apply/Remove Active Stylings matching Hover
+                    if (isActive) {
+                        if (indicator) indicator.classList.remove('hidden');
+
+                        // Active Styling
+                        if (isMobile) {
+                            opt.classList.add('text-blue-500', 'font-bold');
+                            opt.classList.remove('text-primary-40');
+                        } else {
+                            opt.classList.add('bg-primary-70', 'text-white');
+                            opt.classList.remove('text-gray-300');
+                        }
+                    } else {
+                        if (indicator) indicator.classList.add('hidden');
+
+                        // Inactive Styling (Reset to default)
+                        if (isMobile) {
+                            opt.classList.remove('text-blue-500', 'font-bold');
+                            opt.classList.add('text-primary-40');
+                        } else {
+                            opt.classList.remove('bg-primary-70', 'text-white');
+                            opt.classList.add('text-gray-300');
+                        }
+                    }
+                });
+            };
+
+            updateIndicators(sleepTimerOptions, false);
+            updateIndicators(sleepTimerOptionsMobile, true);
+        }
+
+        function clearSleepTimer() {
+            if (sleepTimerId) {
+                clearTimeout(sleepTimerId);
+                sleepTimerId = null;
+            }
+            sleepMode = null;
+            currentSleepMinutes = null;
+            updateSleepTimerUI();
+            console.log('Sleep timer cleared');
+        }
+
+        function setSleepTimer(minutes) {
+            clearSleepTimer();
+            sleepMode = 'time';
+            currentSleepMinutes = minutes;
+            updateSleepTimerUI();
+
+            const ms = minutes * 60 * 1000;
+            console.log(`Sleep timer set for ${minutes} minutes`);
+
+            sleepTimerId = setTimeout(() => {
+                pauseAudio();
+                clearSleepTimer();
+            }, ms);
+        }
+
+        function setEndOfTrackTimer() {
+            clearSleepTimer();
+            sleepMode = 'end';
+            updateSleepTimerUI();
+            console.log('Sleep timer set to End of Track');
+        }
+
+        function handleTimerSelection(val) {
+            if (val === 'off') {
+                clearSleepTimer();
+            } else if (val === 'end') {
+                setEndOfTrackTimer();
+            } else {
+                const minutes = parseInt(val);
+                if (!isNaN(minutes)) {
+                    setSleepTimer(minutes);
+                }
+            }
+        }
+
+
+
+        // Mobile Dropdown Listeners
+        sleepTimerOptionsMobile.forEach(opt => {
+            opt.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                handleTimerSelection(opt.dataset.value);
+                // Close popup after selection
+                if (audioSleepTimerPopup) {
+                    audioSleepTimerPopup.classList.add('opacity-0', 'invisible');
+                }
+            });
+        });
+
+        // Mobile Trigger (Separate Popup)
+        if (sleepTimerMobileBtn && audioSleepTimerPopup) {
+            sleepTimerMobileBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                popupBehaviour(audioSleepTimerPopup);
+            });
+
+            // Close when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!audioSleepTimerPopup.classList.contains('invisible')) {
+                    if (!audioSleepTimerPopup.contains(e.target) && !sleepTimerMobileBtn.contains(e.target)) {
+                        audioSleepTimerPopup.classList.add('opacity-0', 'invisible');
+                    }
+                }
+            });
+        }
+
         // VOLUME
         if (volumeSlider) {
             let currVol = 1;
@@ -554,6 +713,12 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
 
         // ENDED Listener - FIXED
         audio.addEventListener("ended", () => {
+            if (sleepMode === 'end') {
+                pauseAudio();
+                clearSleepTimer();
+                return;
+            }
+
             if (!audio.loop) {
                 playNext(); // Akan otomatis loop ke 0 jika di akhir
                 if (!isPlay) {
@@ -713,8 +878,19 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
             });
 
             document.addEventListener('mousedown', (e) => {
-                if (audioCtrlContent && !audioCtrlContent.contains(e.target) && !audioCtrlArea.contains(e.target)) {
+                const sleepTimerMobileBtn = document.getElementById('sleep-timer-mobile');
+                const audioSleepTimerPopup = document.getElementById('audioSleepTimerPopup');
+
+                const isSleepTimerInteraction = (sleepTimerMobileBtn && sleepTimerMobileBtn.contains(e.target)) ||
+                    (audioSleepTimerPopup && !audioSleepTimerPopup.classList.contains('invisible') && audioSleepTimerPopup.contains(e.target));
+
+                if (audioCtrlContent && !audioCtrlContent.contains(e.target) && !audioCtrlArea.contains(e.target) && !isSleepTimerInteraction) {
                     audioCtrlPopup.classList.add('opacity-0', 'invisible');
+
+                    // Also close sleep timer popup if main popup closes (optional, but cleaner)
+                    if (audioSleepTimerPopup) {
+                        audioSleepTimerPopup.classList.add('opacity-0', 'invisible');
+                    }
                 }
             });
         }

@@ -8,7 +8,7 @@
             'id' => $song->id,
             'title' => $song->title,
             'artist' => $song->artist,
-            'cover' => $song->cover_path ?? asset('assets/defaults/songCover.png'), // default image
+            'cover' => !empty($song->photoPath) ? config('filesystems.disks.azure.url') . '/' . $song->photoPath : asset('assets/defaults/songCover.png'),
             'path' => config('filesystems.disks.azure.url') . '/' . $song->songPath,
             'lyrics' => $song->lyrics ?? '',
         ];

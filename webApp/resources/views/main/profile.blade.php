@@ -8,7 +8,7 @@
 
 
 @section('bodyContent')
-    @livewire('user.profile');
+    @livewire('user.profile')
     {{-- <script>
         const setupSelect = (id) => {
             const el = document.querySelector(id);

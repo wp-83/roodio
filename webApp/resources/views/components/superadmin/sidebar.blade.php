@@ -3,7 +3,7 @@
     $activeClass = 'bg-primary-70 text-white shadow-lg border-l-4 border-secondary-happy-100 font-bold';
 
     // Style Inactive: Text abu-abu, hover jadi putih
-    $inactiveClass = 'text-shadedOfGray-40 hover:bg-primary-70/50 hover:text-white transition-colors duration-200 font-medium';
+    $inactiveClass = 'text-primary-20 hover:bg-primary-70/50 hover:text-white transition-colors duration-200 font-medium';
 
     // Base Class
     $baseClass = 'flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all mb-1';
@@ -19,14 +19,14 @@
             SUPER<span class="text-secondary-happy-100">ADMIN</span>
         </h1>
         {{-- Close Button Mobile --}}
-        <button id="close-sidebar" class="lg:hidden text-shadedOfGray-40 hover:text-white transition-colors">
+        <button id="close-sidebar" class="lg:hidden text-primary-20 hover:text-white transition-colors">
             <i class="fa-solid fa-xmark text-xl"></i>
         </button>
     </div>
 
     {{-- Menu Items --}}
     <nav class="flex-1 overflow-y-auto py-6 px-4 custom-scrollbar">
-        <p class="px-4 text-[10px] text-shadedOfGray-40 uppercase font-bold tracking-widest mb-3">Main Menu</p>
+        <p class="px-4 text-[10px] text-primary-20 uppercase font-bold tracking-widest mb-3">Main Menu</p>
 
         {{-- 1. Overview --}}
         <a href="{{ route('superadmin.users.overview') }}"
@@ -65,7 +65,7 @@
 
             <div class="overflow-hidden flex-1">
                 <p class="text-sm font-bold text-white truncate">{{ auth()->user()->userDetail?->fullname ?? 'Super Admin' }}</p>
-                <p class="text-[10px] text-shadedOfGray-40 truncate">{{ "@" . auth()->user()->username }}</p>
+                <p class="text-[10px] text-primary-20 truncate">{{ "@" . auth()->user()->username }}</p>
             </div>
         </div>
     </div>

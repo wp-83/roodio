@@ -43,6 +43,9 @@ class Profile extends Component
         );
 
         $user->userDetail()->update(['profilePhoto' => $path]);
+        $this->profilePhoto = $path;
+
+        $this->reset('photo');
 
         $this->dispatch(event: 'photo-updated');
 

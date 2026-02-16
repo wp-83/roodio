@@ -22,7 +22,7 @@
         {{-- Card 1: Total Users --}}
         <div class="relative overflow-hidden bg-gradient-to-br from-primary-85 to-primary-100 p-6 rounded-2xl shadow-lg border border-primary-70 flex items-center justify-between group">
             <div class="relative z-10">
-                <p class="text-sm text-shadedOfGray-40 mb-1 font-secondaryAndButton font-bold uppercase tracking-wider">Total Users</p>
+                <p class="text-sm text-primary-20 mb-1 font-secondaryAndButton font-bold uppercase tracking-wider">Total Users</p>
                 <h3 class="font-primary text-2xl lg:text-3xl text-white font-bold">{{ number_format($totalUser) }}</h3>
             </div>
             <div class="relative z-10 w-12 h-12 lg:w-14 lg:h-14 rounded-xl bg-secondary-happy-20 flex items-center justify-center text-secondary-happy-100 text-xl lg:text-2xl shadow-md group-hover:scale-110 transition-transform">
@@ -34,7 +34,7 @@
         {{-- Card 2: New Registrations --}}
         <div class="relative overflow-hidden bg-gradient-to-br from-primary-85 to-primary-100 p-6 rounded-2xl shadow-lg border border-primary-70 flex items-center justify-between group">
             <div class="relative z-10">
-                <p class="text-sm text-shadedOfGray-40 mb-1 font-secondaryAndButton font-bold uppercase tracking-wider">New Registrations</p>
+                <p class="text-sm text-primary-20 mb-1 font-secondaryAndButton font-bold uppercase tracking-wider">New Registrations</p>
                 <h3 class="font-primary text-2xl lg:text-3xl text-white font-bold">{{ number_format($totalNewUser) }}</h3>
             </div>
             <div class="relative z-10 w-12 h-12 lg:w-14 lg:h-14 rounded-xl bg-accent-20 flex items-center justify-center text-accent-100 text-xl lg:text-2xl shadow-md group-hover:scale-110 transition-transform">
@@ -56,14 +56,14 @@
                     <input type="hidden" name="role" value="{{ request('role') }}">
                 @endif
                 <div class="relative w-full group">
-                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-shadedOfGray-40 group-focus-within:text-secondary-happy-100 transition-colors pointer-events-none">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-primary-20 group-focus-within:text-secondary-happy-100 transition-colors pointer-events-none">
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </span>
                     <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by username..."
-                        class="w-full pl-10 pr-10 py-2.5 lg:py-3 rounded-xl border border-primary-60 bg-primary-100 text-white focus:outline-none focus:border-secondary-happy-100 focus:ring-1 focus:ring-secondary-happy-100 text-sm transition-all shadow-md placeholder-shadedOfGray-40">
+                        class="w-full pl-10 pr-10 py-2.5 lg:py-3 rounded-xl border border-primary-60 bg-primary-100 text-white focus:outline-none focus:border-secondary-happy-100 focus:ring-1 focus:ring-secondary-happy-100 text-sm transition-all shadow-md placeholder-primary-20">
 
                     @if(request()->filled('search'))
-                        <a href="{{ route('superadmin.users.index', request()->except(['search', 'page'])) }}" class="absolute inset-y-0 right-0 pr-3 flex items-center text-shadedOfGray-40 hover:text-white cursor-pointer transition-colors" title="Clear Search">
+                        <a href="{{ route('superadmin.users.index', request()->except(['search', 'page'])) }}" class="absolute inset-y-0 right-0 pr-3 flex items-center text-primary-20 hover:text-white cursor-pointer transition-colors" title="Clear Search">
                             <i class="fa-solid fa-xmark"></i>
                         </a>
                     @endif
@@ -85,7 +85,7 @@
                     {{-- Filter Dropdown --}}
                     <div id="filterPopup" class="hidden absolute top-full right-0 mt-2 w-48 bg-primary-85 rounded-xl shadow-2xl border border-primary-70 z-50 overflow-hidden">
                         <div class="px-4 py-3 border-b border-primary-70 bg-primary-70/30">
-                            <p class="text-xs font-bold text-shadedOfGray-40 uppercase tracking-wider">Filter by Role</p>
+                            <p class="text-xs font-bold text-primary-20 uppercase tracking-wider">Filter by Role</p>
                         </div>
                         <div class="py-2 flex flex-col">
                             <a href="{{ route('superadmin.users.index', ['role' => 0]) }}" class="px-4 py-2.5 text-sm hover:bg-primary-70 transition-colors flex items-center justify-between {{ request('role') === '0' ? 'text-accent-100 font-bold bg-accent-100/10' : 'text-shadedOfGray-20' }}">
@@ -100,7 +100,7 @@
                         </div>
                         @if(request()->has('role'))
                             <div class="border-t border-primary-70">
-                                <a href="{{ route('superadmin.users.index') }}" class="block px-4 py-3 text-xs text-center text-shadedOfGray-40 hover:text-white font-bold transition-colors bg-primary-70/20">Reset Filter</a>
+                                <a href="{{ route('superadmin.users.index') }}" class="block px-4 py-3 text-xs text-center text-primary-20 hover:text-white font-bold transition-colors bg-primary-70/20">Reset Filter</a>
                             </div>
                         @endif
                     </div>
@@ -141,7 +141,7 @@
                                     {{-- Info --}}
                                     <div>
                                         <p class="text-white font-bold group-hover:text-secondary-happy-100 transition-colors">{{ $user->userDetail?->fullname ?? 'No Name' }}</p>
-                                        <p class="text-xs text-shadedOfGray-40"><span>@</span>{{ $user->username }}</p>
+                                        <p class="text-xs text-primary-20"><span>@</span>{{ $user->username }}</p>
                                     </div>
                                 </div>
                             </td>
@@ -158,7 +158,7 @@
                                     {{ $roleConfig['name'] }}
                                 </span>
                             </td>
-                            <td class="px-6 py-4 text-shadedOfGray-40 font-mono text-xs">{{ $user->created_at->format('d M Y') }}</td>
+                            <td class="px-6 py-4 text-primary-20 font-mono text-xs">{{ $user->created_at->format('d M Y') }}</td>
                             <td class="px-6 py-4 text-right">
                                 <div class="flex items-center justify-end gap-2 group-hover:opacity-100 transition-opacity">
                                     <button onclick="openEditModal({{ json_encode($user) }}, '{{ $user->userDetail?->profilePhoto }}')"
@@ -180,7 +180,7 @@
 
         {{-- PAGINATION --}}
         <div class="p-4 lg:p-6 border-t border-primary-70 flex flex-col sm:flex-row items-center justify-between gap-4 bg-primary-85/50 rounded-b-2xl">
-            <p class="text-sm text-shadedOfGray-40 text-center sm:text-left">
+            <p class="text-sm text-primary-20 text-center sm:text-left">
                 Showing <span class="font-bold text-white">{{ $users->firstItem() ?? 0 }}</span> to <span class="font-bold text-white">{{ $users->lastItem() ?? 0 }}</span> of <span class="font-bold text-white">{{ $users->total() }}</span> users
             </p>
             <div>{{ $users->appends(request()->query())->links('pagination.superadmin') }}</div>
@@ -199,7 +199,7 @@
             {{-- Header --}}
             <div class="px-6 py-4 border-b border-primary-70 flex justify-between items-center bg-primary-85 rounded-t-2xl shrink-0">
                 <h3 class="text-lg font-bold text-white font-primary tracking-wide">Create New User</h3>
-                <button onclick="toggleCreateModal()" class="text-shadedOfGray-40 hover:text-white transition-colors">
+                <button onclick="toggleCreateModal()" class="text-primary-20 hover:text-white transition-colors">
                     <i class="fa-solid fa-xmark text-xl"></i>
                 </button>
             </div>
@@ -228,9 +228,9 @@
                         <div class="space-y-1">
                             <label class="text-sm font-bold text-shadedOfGray-20">Username <span class="text-secondary-angry-100">*</span></label>
                             <div class="relative">
-                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-shadedOfGray-40"><i class="fa-solid fa-at"></i></span>
+                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-primary-20"><i class="fa-solid fa-at"></i></span>
                                 <input type="text" name="username" maxlength="25" placeholder="e.g. johndoe" value="{{ old('username') }}"
-                                    class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-primary-60 bg-primary-100 text-white focus:border-secondary-happy-100 focus:ring-1 focus:ring-secondary-happy-100 text-sm transition-colors placeholder-shadedOfGray-40">
+                                    class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-primary-60 bg-primary-100 text-white focus:border-secondary-happy-100 focus:ring-1 focus:ring-secondary-happy-100 text-sm transition-colors placeholder-primary-20">
                             </div>
                             @error('username') <p class="text-secondary-angry-100 text-xs mt-1">{{ $message }}</p> @enderror
                         </div>
@@ -239,9 +239,9 @@
                         <div class="space-y-1">
                             <label class="text-sm font-bold text-shadedOfGray-20">Email <span class="text-secondary-angry-100">*</span></label>
                             <div class="relative">
-                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-shadedOfGray-40"><i class="fa-regular fa-envelope"></i></span>
+                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-primary-20"><i class="fa-regular fa-envelope"></i></span>
                                 <input type="email" name="email" maxlength="255" placeholder="john@example.com" value="{{ old('email') }}"
-                                    class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-primary-60 bg-primary-100 text-white focus:border-secondary-happy-100 focus:ring-1 focus:ring-secondary-happy-100 text-sm transition-colors placeholder-shadedOfGray-40">
+                                    class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-primary-60 bg-primary-100 text-white focus:border-secondary-happy-100 focus:ring-1 focus:ring-secondary-happy-100 text-sm transition-colors placeholder-primary-20">
                             </div>
                             @error('email') <p class="text-secondary-angry-100 text-xs mt-1">{{ $message }}</p> @enderror
                         </div>
@@ -250,9 +250,9 @@
                         <div class="space-y-1">
                             <label class="text-sm font-bold text-shadedOfGray-20">Password <span class="text-secondary-angry-100">*</span></label>
                             <div class="relative">
-                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-shadedOfGray-40"><i class="fa-solid fa-lock"></i></span>
+                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-primary-20"><i class="fa-solid fa-lock"></i></span>
                                 <input type="password" name="password" placeholder="••••••••"
-                                    class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-primary-60 bg-primary-100 text-white focus:border-secondary-happy-100 focus:ring-1 focus:ring-secondary-happy-100 text-sm transition-colors placeholder-shadedOfGray-40">
+                                    class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-primary-60 bg-primary-100 text-white focus:border-secondary-happy-100 focus:ring-1 focus:ring-secondary-happy-100 text-sm transition-colors placeholder-primary-20">
                             </div>
                             @error('password') <p class="text-secondary-angry-100 text-xs mt-1">{{ $message }}</p> @enderror
                         </div>
@@ -261,13 +261,13 @@
                         <div class="space-y-1">
                             <label class="text-sm font-bold text-shadedOfGray-20">Role <span class="text-secondary-angry-100">*</span></label>
                             <div class="relative">
-                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-shadedOfGray-40"><i class="fa-solid fa-shield-halved"></i></span>
+                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-primary-20"><i class="fa-solid fa-shield-halved"></i></span>
                                 <select name="role" class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-primary-60 bg-primary-100 text-white focus:border-secondary-happy-100 focus:ring-1 focus:ring-secondary-happy-100 text-sm appearance-none">
                                     <option value="0" {{ old('role') == '0' ? 'selected' : '' }}>User (Listener)</option>
                                     <option value="1" {{ old('role') == '1' ? 'selected' : '' }}>Admin</option>
                                     <option value="2" {{ old('role') == '2' ? 'selected' : '' }}>Superadmin</option>
                                 </select>
-                                <span class="absolute inset-y-0 right-0 pr-3 flex items-center text-shadedOfGray-40 pointer-events-none"><i class="fa-solid fa-chevron-down text-xs"></i></span>
+                                <span class="absolute inset-y-0 right-0 pr-3 flex items-center text-primary-20 pointer-events-none"><i class="fa-solid fa-chevron-down text-xs"></i></span>
                             </div>
                             @error('role') <p class="text-secondary-angry-100 text-xs mt-1">{{ $message }}</p> @enderror
                         </div>
@@ -281,7 +281,7 @@
                         <div class="space-y-1 md:col-span-2">
                             <label class="text-sm font-bold text-shadedOfGray-20">Full Name <span class="text-secondary-angry-100">*</span></label>
                             <input type="text" name="fullname" maxlength="255" placeholder="e.g. Johnathan Doe" value="{{ old('fullname') }}"
-                                class="w-full px-4 py-2.5 rounded-xl border border-primary-60 bg-primary-100 text-white focus:border-secondary-happy-100 focus:ring-1 focus:ring-secondary-happy-100 text-sm transition-colors placeholder-shadedOfGray-40">
+                                class="w-full px-4 py-2.5 rounded-xl border border-primary-60 bg-primary-100 text-white focus:border-secondary-happy-100 focus:ring-1 focus:ring-secondary-happy-100 text-sm transition-colors placeholder-primary-20">
                             @error('fullname') <p class="text-secondary-angry-100 text-xs mt-1">{{ $message }}</p> @enderror
                         </div>
 
@@ -312,7 +312,7 @@
                                     <option value="-1" @selected(old('gender') == '-1')>Prefer not to say</option>
 
                                 </select>
-                                <span class="absolute inset-y-0 right-0 pr-3 flex items-center text-shadedOfGray-40 pointer-events-none">
+                                <span class="absolute inset-y-0 right-0 pr-3 flex items-center text-primary-20 pointer-events-none">
                                     <i class="fa-solid fa-chevron-down text-xs"></i>
                                 </span>
                             </div>
@@ -329,7 +329,7 @@
                                         <option value="{{ $region->id }}" {{ old('countryId') == $region->id ? 'selected' : '' }}>{{ $region->name }}</option>
                                     @endforeach
                                 </select>
-                                <span class="absolute inset-y-0 right-0 pr-3 flex items-center text-shadedOfGray-40 pointer-events-none"><i class="fa-solid fa-chevron-down text-xs"></i></span>
+                                <span class="absolute inset-y-0 right-0 pr-3 flex items-center text-primary-20 pointer-events-none"><i class="fa-solid fa-chevron-down text-xs"></i></span>
                             </div>
                             @error('countryId') <p class="text-secondary-angry-100 text-xs mt-1">{{ $message }}</p> @enderror
                         </div>
@@ -338,14 +338,14 @@
                         <div class="space-y-1">
                             <label class="text-sm font-bold text-shadedOfGray-20">Profile Photo</label>
                             <input type="file" name="profilePhoto" accept="image/*"
-                                class="w-full text-sm text-shadedOfGray-40 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-primary-60 file:text-white hover:file:bg-primary-50 cursor-pointer border border-primary-60 rounded-xl bg-primary-100">
+                                class="w-full text-sm text-primary-20 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-primary-60 file:text-white hover:file:bg-primary-50 cursor-pointer border border-primary-60 rounded-xl bg-primary-100">
                             @error('profilePhoto') <p class="text-secondary-angry-100 text-xs mt-1">{{ $message }}</p> @enderror
                         </div>
                     </div>
 
                     {{-- Footer --}}
                     <div class="mt-8 flex items-center justify-end gap-3 pt-6 border-t border-primary-70">
-                        <button type="button" onclick="toggleCreateModal()" class="px-6 py-2.5 rounded-xl border border-primary-60 text-shadedOfGray-40 font-bold hover:bg-primary-70 hover:text-white transition-colors text-sm">Cancel</button>
+                        <button type="button" onclick="toggleCreateModal()" class="px-6 py-2.5 rounded-xl border border-primary-60 text-primary-20 font-bold hover:bg-primary-70 hover:text-white transition-colors text-sm">Cancel</button>
                         <button type="submit" class="px-6 py-2.5 rounded-xl bg-secondary-happy-100 text-white font-bold hover:bg-secondary-happy-85 shadow-lg shadow-secondary-happy-100/20 transition-all text-sm flex items-center gap-2">
                             <i class="fa-solid fa-check"></i> Create User
                         </button>
@@ -363,7 +363,7 @@
             {{-- Header --}}
             <div class="px-6 py-4 border-b border-primary-70 flex justify-between items-center bg-primary-85 rounded-t-2xl shrink-0">
                 <h3 class="text-lg font-bold text-white font-primary tracking-wide">Edit User</h3>
-                <button onclick="toggleEditModal()" class="text-shadedOfGray-40 hover:text-white transition-colors">
+                <button onclick="toggleEditModal()" class="text-primary-20 hover:text-white transition-colors">
                     <i class="fa-solid fa-xmark text-xl"></i>
                 </button>
             </div>
@@ -385,7 +385,7 @@
                         <div class="space-y-1">
                             <label class="text-sm font-bold text-shadedOfGray-20">Username <span class="text-secondary-angry-100">*</span></label>
                             <div class="relative">
-                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-shadedOfGray-40"><i class="fa-solid fa-at"></i></span>
+                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-primary-20"><i class="fa-solid fa-at"></i></span>
                                 <input type="text" name="username" id="edit_username" required maxlength="25" value="{{ old('username') }}"
                                     class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-primary-60 bg-primary-100 text-white focus:border-secondary-happy-100 focus:ring-1 focus:ring-secondary-happy-100 text-sm transition-colors">
                             </div>
@@ -396,7 +396,7 @@
                         <div class="space-y-1">
                             <label class="text-sm font-bold text-shadedOfGray-20">Email <span class="text-secondary-angry-100">*</span></label>
                             <div class="relative">
-                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-shadedOfGray-40"><i class="fa-regular fa-envelope"></i></span>
+                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-primary-20"><i class="fa-regular fa-envelope"></i></span>
                                 <input type="email" name="email" id="edit_email" required maxlength="255" value="{{ old('email') }}"
                                     class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-primary-60 bg-primary-100 text-white focus:border-secondary-happy-100 focus:ring-1 focus:ring-secondary-happy-100 text-sm transition-colors">
                             </div>
@@ -407,7 +407,7 @@
                         <div class="space-y-1">
                             <label class="text-sm font-bold text-shadedOfGray-20">Password <span class="text-shadedOfGray-60 font-normal text-xs">(Leave blank to keep current)</span></label>
                             <div class="relative">
-                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-shadedOfGray-40"><i class="fa-solid fa-lock"></i></span>
+                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-primary-20"><i class="fa-solid fa-lock"></i></span>
                                 <input type="password" name="password" id="edit_password" placeholder="••••••••"
                                     class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-primary-60 bg-primary-100 text-white focus:border-secondary-happy-100 focus:ring-1 focus:ring-secondary-happy-100 text-sm transition-colors">
                             </div>
@@ -418,13 +418,13 @@
                         <div class="space-y-1">
                             <label class="text-sm font-bold text-shadedOfGray-20">Role <span class="text-secondary-angry-100">*</span></label>
                             <div class="relative">
-                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-shadedOfGray-40"><i class="fa-solid fa-shield-halved"></i></span>
+                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-primary-20"><i class="fa-solid fa-shield-halved"></i></span>
                                 <select name="role" id="edit_role" class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-primary-60 bg-primary-100 text-white focus:border-secondary-happy-100 focus:ring-1 focus:ring-secondary-happy-100 text-sm appearance-none">
                                     <option value="0">User (Listener)</option>
                                     <option value="1">Admin</option>
                                     <option value="2">Superadmin</option>
                                 </select>
-                                <span class="absolute inset-y-0 right-0 pr-3 flex items-center text-shadedOfGray-40 pointer-events-none"><i class="fa-solid fa-chevron-down text-xs"></i></span>
+                                <span class="absolute inset-y-0 right-0 pr-3 flex items-center text-primary-20 pointer-events-none"><i class="fa-solid fa-chevron-down text-xs"></i></span>
                             </div>
                             @if(old('_method') == 'PUT') @error('role') <p class="text-secondary-angry-100 text-xs mt-1">{{ $message }}</p> @enderror @endif
                         </div>
@@ -459,7 +459,7 @@
                                     <option value="0">Female</option>
                                     <option value="">Prefer not to say</option>
                                 </select>
-                                <span class="absolute inset-y-0 right-0 pr-3 flex items-center text-shadedOfGray-40 pointer-events-none"><i class="fa-solid fa-chevron-down text-xs"></i></span>
+                                <span class="absolute inset-y-0 right-0 pr-3 flex items-center text-primary-20 pointer-events-none"><i class="fa-solid fa-chevron-down text-xs"></i></span>
                             </div>
                             @if(old('_method') == 'PUT') @error('gender') <p class="text-secondary-angry-100 text-xs mt-1">{{ $message }}</p> @enderror @endif
                         </div>
@@ -473,7 +473,7 @@
                                         <option value="{{ $region->id }}">{{ $region->name }}</option>
                                     @endforeach
                                 </select>
-                                <span class="absolute inset-y-0 right-0 pr-3 flex items-center text-shadedOfGray-40 pointer-events-none"><i class="fa-solid fa-chevron-down text-xs"></i></span>
+                                <span class="absolute inset-y-0 right-0 pr-3 flex items-center text-primary-20 pointer-events-none"><i class="fa-solid fa-chevron-down text-xs"></i></span>
                             </div>
                             @if(old('_method') == 'PUT') @error('countryId') <p class="text-secondary-angry-100 text-xs mt-1">{{ $message }}</p> @enderror @endif
                         </div>
@@ -482,14 +482,14 @@
                         <div class="space-y-1">
                             <label class="text-sm font-bold text-shadedOfGray-20">Profile Photo</label>
                             <input type="file" name="profilePhoto" id="edit_profilePhoto" accept="image/*"
-                                class="w-full text-sm text-shadedOfGray-40 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-primary-60 file:text-white hover:file:bg-primary-50 cursor-pointer border border-primary-60 rounded-xl bg-primary-100">
+                                class="w-full text-sm text-primary-20 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-primary-60 file:text-white hover:file:bg-primary-50 cursor-pointer border border-primary-60 rounded-xl bg-primary-100">
                             @if(old('_method') == 'PUT') @error('profilePhoto') <p class="text-secondary-angry-100 text-xs mt-1">{{ $message }}</p> @enderror @endif
                         </div>
                     </div>
 
                     {{-- Footer --}}
                     <div class="mt-8 flex items-center justify-end gap-3 pt-6 border-t border-primary-70">
-                        <button type="button" onclick="toggleEditModal()" class="px-6 py-2.5 rounded-xl border border-primary-60 text-shadedOfGray-40 font-bold hover:bg-primary-70 hover:text-white transition-colors text-sm">Cancel</button>
+                        <button type="button" onclick="toggleEditModal()" class="px-6 py-2.5 rounded-xl border border-primary-60 text-primary-20 font-bold hover:bg-primary-70 hover:text-white transition-colors text-sm">Cancel</button>
                         <button type="submit" id="editSubmitBtn" disabled
                             class="px-6 py-2.5 rounded-xl bg-secondary-happy-100 text-white font-bold shadow-lg shadow-secondary-happy-100/20 transition-all text-sm flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-secondary-happy-85">
                             <i class="fa-solid fa-floppy-disk"></i> Save Changes
@@ -521,7 +521,7 @@
                     </div>
                     <div>
                         <h4 class="font-bold text-white text-lg">Are you sure?</h4>
-                        <p class="text-sm text-shadedOfGray-40 mt-1">
+                        <p class="text-sm text-primary-20 mt-1">
                             Do you really want to delete user <span id="delete_username_display" class="font-bold text-white"></span>? This process cannot be undone.
                         </p>
                     </div>
@@ -531,7 +531,7 @@
                     @csrf
                     @method('DELETE')
                     <div class="flex items-center justify-end gap-3 mt-6 pt-4 border-t border-primary-70">
-                        <button type="button" onclick="toggleDeleteModal()" class="px-5 py-2.5 rounded-xl border border-primary-60 text-shadedOfGray-40 font-bold hover:bg-primary-70 hover:text-white transition-colors text-sm">Cancel</button>
+                        <button type="button" onclick="toggleDeleteModal()" class="px-5 py-2.5 rounded-xl border border-primary-60 text-primary-20 font-bold hover:bg-primary-70 hover:text-white transition-colors text-sm">Cancel</button>
                         <button type="submit" class="px-5 py-2.5 rounded-xl bg-secondary-angry-100 text-white font-bold hover:bg-secondary-angry-85 shadow-lg shadow-secondary-angry-100/20 transition-all text-sm flex items-center gap-2">
                             <i class="fa-solid fa-trash-can"></i> Delete
                         </button>

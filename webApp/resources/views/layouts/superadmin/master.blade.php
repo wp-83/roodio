@@ -86,7 +86,7 @@
             </div>
 
             {{-- Footer Simple --}}
-            <div class="mt-12 py-6 border-t border-primary-70 text-center md:text-right text-shadedOfGray-40 text-xs relative z-10">
+            <div class="mt-12 py-6 border-t border-primary-70 text-center md:text-right text-primary-20 text-xs relative z-10">
                 <p>&copy; {{ date('Y') }} Roodio SuperAdmin.</p>
             </div>
         </main>

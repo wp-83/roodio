@@ -18,7 +18,7 @@
                     <i class="fa-solid fa-users text-2xl"></i>
                 </div>
                 <div>
-                    <p class="text-sm text-shadedOfGray-40 mb-1 font-secondaryAndButton font-bold uppercase tracking-wider">Total Users</p>
+                    <p class="text-sm text-[#9CA3AF] mb-1 font-secondaryAndButton font-bold uppercase tracking-wider">Total Users</p>
                     <h3 class="font-primary text-2xl font-bold text-white">{{ number_format($totalUser) }}</h3>
                     <p class="text-xs text-shadedOfGray-30 mt-1">Registered accounts</p>
                 </div>
@@ -34,7 +34,7 @@
                     <i class="fa-solid fa-user-plus text-2xl"></i>
                 </div>
                 <div>
-                    <p class="text-sm text-shadedOfGray-40 mb-1 font-secondaryAndButton font-bold uppercase tracking-wider">New Users</p>
+                    <p class="text-sm text-[#9CA3AF] mb-1 font-secondaryAndButton font-bold uppercase tracking-wider">New Users</p>
                     <h3 class="font-primary text-2xl font-bold text-white">{{ number_format($newUsersToday) }}</h3>
                     <p class="text-xs text-secondary-relaxed-100 font-bold mt-1 flex items-center gap-1">
                         <i class="fa-solid fa-calendar-day"></i> Joined Today
@@ -51,7 +51,7 @@
                     <i class="fa-solid fa-user-shield text-2xl"></i>
                 </div>
                 <div>
-                    <p class="text-sm text-shadedOfGray-40 mb-1 font-secondaryAndButton font-bold uppercase tracking-wider">Admins</p>
+                    <p class="text-sm text-[#9CA3AF] mb-1 font-secondaryAndButton font-bold uppercase tracking-wider">Admins</p>
                     <h3 class="font-primary text-2xl font-bold text-white">{{ number_format($totalAdmins) }}</h3>
                     <p class="text-xs text-shadedOfGray-30 mt-1">Admin & Superadmin</p>
                 </div>
@@ -70,14 +70,14 @@
                 {{-- Text Wrapper: Tambah flex-1 dan min-w-0 agar teks menyesuaikan ruang --}}
                 <div class="flex-1 min-w-0">
                     {{-- Title: Tambah truncate --}}
-                    <p class="text-sm text-shadedOfGray-40 mb-1 font-secondaryAndButton font-bold uppercase tracking-wider truncate" title="Demographics">
+                    <p class="text-sm text-[#9CA3AF] mb-1 font-secondaryAndButton font-bold uppercase tracking-wider truncate" title="Demographics">
                         Demographics
                     </p>
 
                     <div class="flex items-baseline gap-2">
-                        <h3 class="font-primary text-xl font-bold text-white">{{ $totalMale }} <span class="text-xs font-normal text-shadedOfGray-40">M</span></h3>
+                        <h3 class="font-primary text-xl font-bold text-white">{{ $totalMale }} <span class="text-xs font-normal text-[#9CA3AF]">M</span></h3>
                         <span class="text-shadedOfGray-60">/</span>
-                        <h3 class="font-primary text-xl font-bold text-white">{{ $totalFemale }} <span class="text-xs font-normal text-shadedOfGray-40">F</span></h3>
+                        <h3 class="font-primary text-xl font-bold text-white">{{ $totalFemale }} <span class="text-xs font-normal text-[#9CA3AF]">F</span></h3>
                     </div>
                     <p class="text-xs text-shadedOfGray-30 mt-1 truncate">Male vs Female</p>
                 </div>
@@ -92,7 +92,7 @@
         <div class="bg-primary-85 rounded-2xl border border-primary-70 shadow-lg flex flex-col justify-between lg:col-span-1 h-full">
             <div class="p-6 border-b border-primary-70">
                 <h3 class="font-primary text-lg font-bold text-white mb-1">User Distribution</h3>
-                <p class="text-xs text-shadedOfGray-40">By Role / Access Level</p>
+                <p class="text-xs text-[#9CA3AF]">By Role / Access Level</p>
             </div>
 
             {{-- Chart Container --}}
@@ -131,7 +131,7 @@
             <div class="p-6 border-b border-primary-70 flex justify-between items-center bg-primary-85/50 backdrop-blur-sm">
                 <div>
                     <h3 class="font-primary text-lg font-bold text-white">Latest Registrations</h3>
-                    <p class="text-xs text-shadedOfGray-40">Recently joined users</p>
+                    <p class="text-xs text-[#9CA3AF]">Recently joined users</p>
                 </div>
                 <a href="{{ route('superadmin.users.index') }}" class="text-xs font-bold text-secondary-happy-100 hover:text-white transition-colors flex items-center gap-1">
                     VIEW ALL <i class="fa-solid fa-arrow-right text-[10px]"></i>
@@ -141,7 +141,7 @@
             <div class="overflow-x-auto flex-grow">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="text-xs text-shadedOfGray-40 font-secondaryAndButton border-b border-primary-70 bg-primary-85/30 uppercase tracking-wider">
+                        <tr class="text-xs text-[#9CA3AF] font-secondaryAndButton border-b border-primary-70 bg-primary-85/30 uppercase tracking-wider">
                             <th class="px-6 py-4 font-bold">User</th>
                             <th class="px-6 py-4 font-bold">Role</th>
                             <th class="px-6 py-4 font-bold">Gender</th>
@@ -166,7 +166,7 @@
                                     {{-- Name & Email --}}
                                     <div>
                                         <p class="font-bold text-white group-hover:text-secondary-happy-100 transition-colors">{{ $user->userDetail?->fullname ?? $user->username }}</p>
-                                        <p class="text-xs text-shadedOfGray-40">{{ $user->userDetail?->email ?? $user->email }}</p>
+                                        <p class="text-xs text-[#9CA3AF]">{{ $user->userDetail?->email ?? $user->email }}</p>
                                     </div>
                                 </div>
                             </td>
@@ -192,7 +192,7 @@
                                     <span class="text-shadedOfGray-60">-</span>
                                 @endif
                             </td>
-                            <td class="px-6 py-4 text-right text-shadedOfGray-40 text-xs font-mono">
+                            <td class="px-6 py-4 text-right text-[#9CA3AF] text-xs font-mono">
                                 {{ $user->created_at->format('d M Y') }}
                             </td>
                         </tr>

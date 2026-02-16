@@ -100,9 +100,12 @@
                 <p class='text-primary-60 pointer-events-none'>{{ Str::ucfirst($audioControlLabel[$audioCtrlOpt]) }}</p>
             </button>
             @endforeach
+            
         </div>
     </x-slot>
 </x-modal>
+
+
 
 <div 
     id='audioPlayer' 
@@ -142,31 +145,77 @@
     >
         <div class="flex-1 flex flex-col md:flex-row min-h-0 overflow-y-auto md:overflow-hidden scrollbar-hide">
             <!-- Left Section (Unified Spinning Disc) -->
-            <div class="w-full md:w-3/5 relative aspect-square md:aspect-none max-h-[60vh] md:max-h-none md:min-h-0 shrink-0 overflow-hidden flex items-center justify-center bg-transparent">
+            <div class="w-full md:w-3/5 relative aspect-square md:aspect-none max-h-[60vh] md:max-h-none md:min-h-0 shrink-0 flex items-center justify-center bg-transparent">
                 
-                <!-- Vinyl Disc Container -->
-                <div id="vinylDisc" class="relative w-[50%] aspect-square rounded-full border-[4px] border-primary-40/30 flex items-center justify-center shadow-2xl vinyl-spin vinyl-paused">
-                    
-                    <!-- Visualizer Canvas (Behind) -->
-                    <canvas id="audioVisualizer" class="absolute inset-[-60%] w-[220%] h-[220%] rounded-full pointer-events-none opacity-80" 
-                            style="mix-blend-mode: screen;"
-                            data-beat-color="{{ $visualizerColors[$mood] }}"></canvas>
-
-                    <!-- Vinyl Grooves/Body -->
-                    <div class="absolute inset-0 rounded-full bg-[#101010] shadow-xl border border-black/50 flex items-center justify-center overflow-hidden z-10">
-                         <div class="absolute inset-0 rounded-full bg-[repeating-radial-gradient(#111_0,#111_2px,#222_3px)] opacity-50"></div>
-                         <div class="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent pointer-events-none z-10"></div>
+                <!-- Unified Sleep Timer Button (Top Right) -->
+                <button 
+                    id="sleep-timer-mobile"
+                    class="absolute top-4 right-4 z-30 p-2 rounded-full {{ $mainBtnStyle[$mood] }} backdrop-blur-sm border border-white/10 text-white transition-all duration-200"
+                    data-active-class="bg-primary-60/90 text-secondary-happy-50"
+                    data-inactive-class="{{ $mainBtnStyle[$mood] }} text-white"
+                    title="Sleep Timer"
+                >
+                     <div class="flex flex-col items-center">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class='w-6 h-6 pointer-events-none text-white'>
+                            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span id="sleep-timer-status-mobile" class="text-[0.6rem] font-bold hidden bg-primary-70 px-1 rounded mt-0.5">--</span>
                     </div>
+                </button>
+                
+                <!-- Sleep Timer Popup (Absolute within container) -->
+                 <div id="audioSleepTimerPopup" class="absolute top-16 right-4 z-40 w-max bg-white rounded-lg shadow-lg p-2 min-w-[10rem] opacity-0 invisible transition-all duration-300 origin-top-right font-secondaryAndButton">
+                    <div class='flex flex-col gap-1'>
+                        <div class="text-primary-60 text-body-size md:text-paragraph font-bold px-4 py-2 border-b border-primary-70/50 mb-1">Sleep Timer</div>
+                        @php
+                            $timerOptionsMobile = [
+                                '5' => '5 Minutes',
+                                '10' => '10 Minutes',
+                                '15' => '15 Minutes',
+                                '30' => '30 Minutes',
+                                '45' => '45 Minutes',
+                                '60' => '1 Hour',
+                                'end' => 'End of Track',
+                                'off' => 'Turn Off'
+                            ];
+                        @endphp
+                        @foreach($timerOptionsMobile as $val => $label)
+                            <button 
+                                class="sleep-timer-opt-mobile w-full text-left px-4 py-2 text-small text-primary-40 hover:text-primary-60 hover:bg-primary-70/50 rounded-md transition-colors flex justify-between items-center"
+                                data-value="{{ $val }}"
+                            >
+                                <span>{{ $label }}</span>
+                                <span class="active-indicator-mobile hidden text-secondary-happy-50">●</span>
+                            </button>
+                        @endforeach
+                    </div>
+                </div>
+                <!-- Vinyl Disc Container (Wrapped for Clipping) -->
+                <div class="absolute inset-0 overflow-hidden flex items-center justify-center z-0">
+                    <div id="vinylDisc" class="relative w-[50%] aspect-square rounded-full border-[4px] border-primary-40/30 flex items-center justify-center shadow-2xl vinyl-spin vinyl-paused">
+                        
+                        <!-- Visualizer Canvas (Behind) -->
+                        <canvas id="audioVisualizer" class="absolute inset-[-60%] w-[220%] h-[220%] rounded-full pointer-events-none opacity-80" 
+                                style="mix-blend-mode: screen;"
+                                data-beat-color="{{ $visualizerColors[$mood] }}"></canvas>
 
-                    <!-- Center Label (Full Image) -->
-                    <div class="w-[65%] h-[65%] rounded-full flex items-center justify-center relative z-20 shadow-inner overflow-hidden border-[4px] border-[#151515] group">
-                         <img :src="songImage" class="w-full h-full object-cover opacity-95 group-hover:scale-105 transition-transform duration-700">
-                         
-                         <!-- Spinner Center Hole -->
-                         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-[#111] rounded-full shadow-inner border border-white/10"></div>
-                         
-                         <!-- Shine/glare on label -->
-                         <div class="absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent pointer-events-none"></div>
+                        <!-- Vinyl Grooves/Body -->
+                        <div class="absolute inset-0 rounded-full bg-[#101010] shadow-xl border border-black/50 flex items-center justify-center overflow-hidden z-10">
+                             <div class="absolute inset-0 rounded-full bg-[repeating-radial-gradient(#111_0,#111_2px,#222_3px)] opacity-50"></div>
+                             <div class="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent pointer-events-none z-10"></div>
+                        </div>
+
+                        <!-- Center Label (Full Image) -->
+                        <div class="w-[65%] h-[65%] rounded-full flex items-center justify-center relative z-20 shadow-inner overflow-hidden border-[4px] border-[#151515] group">
+                             <img :src="songImage" class="w-full h-full object-cover opacity-95 group-hover:scale-105 transition-transform duration-700">
+                             
+                             <!-- Spinner Center Hole -->
+                             <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-[#111] rounded-full shadow-inner border border-white/10"></div>
+                             
+                             <!-- Shine/glare on label -->
+                             <div class="absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent pointer-events-none"></div>
+                        </div>
                     </div>
                 </div>
 
@@ -293,6 +342,8 @@
                             <path d="M16.4697 9.46967C16.1768 9.76256 16.1768 10.2374 16.4697 10.5303C16.7626 10.8232 17.2374 10.8232 17.5303 10.5303L16.4697 9.46967ZM19.5303 8.53033C19.8232 8.23744 19.8232 7.76256 19.5303 7.46967C19.2374 7.17678 18.7626 7.17678 18.4697 7.46967L19.5303 8.53033ZM18.4697 8.53033C18.7626 8.82322 19.2374 8.82322 19.5303 8.53033C19.8232 8.23744 19.8232 7.76256 19.5303 7.46967L18.4697 8.53033ZM17.5303 5.46967C17.2374 5.17678 16.7626 5.17678 16.4697 5.46967C16.1768 5.76256 16.1768 6.23744 16.4697 6.53033L17.5303 5.46967ZM19 8.75C19.4142 8.75 19.75 8.41421 19.75 8C19.75 7.58579 19.4142 7.25 19 7.25V8.75ZM16.7 8L16.6993 8.75H16.7V8ZM12.518 10.252L13.1446 10.6642L13.1446 10.6642L12.518 10.252ZM10.7414 11.5878C10.5138 11.9338 10.6097 12.3989 10.9558 12.6266C11.3018 12.8542 11.7669 12.7583 11.9946 12.4122L10.7414 11.5878ZM11.9946 12.4122C12.2222 12.0662 12.1263 11.6011 11.7802 11.3734C11.4342 11.1458 10.9691 11.2417 10.7414 11.5878L11.9946 12.4122ZM10.218 13.748L9.59144 13.3358L9.59143 13.3358L10.218 13.748ZM6.041 16V16.75H6.04102L6.041 16ZM5 15.25C4.58579 15.25 4.25 15.5858 4.25 16C4.25 16.4142 4.58579 16.75 5 16.75V15.25ZM11.9946 11.5878C11.7669 11.2417 11.3018 11.1458 10.9558 11.3734C10.6097 11.6011 10.5138 12.0662 10.7414 12.4122L11.9946 11.5878ZM12.518 13.748L13.1446 13.3358L13.1446 13.3358L12.518 13.748ZM16.7 16V15.25H16.6993L16.7 16ZM19 16.75C19.4142 16.75 19.75 16.4142 19.75 16C19.75 15.5858 19.4142 15.25 19 15.25V16.75ZM10.7414 12.4122C10.9691 12.7583 11.4342 12.8542 11.7802 12.6266C12.1263 12.3989 12.2222 11.9338 11.9946 11.5878L10.7414 12.4122ZM10.218 10.252L9.59143 10.6642L9.59144 10.6642L10.218 10.252ZM6.041 8L6.04102 7.25H6.041V8ZM5 7.25C4.58579 7.25 4.25 7.58579 4.25 8C4.25 8.41421 4.58579 8.75 5 8.75V7.25ZM17.5303 13.4697C17.2374 13.1768 16.7626 13.1768 16.4697 13.4697C16.1768 13.7626 16.1768 14.2374 16.4697 14.5303L17.5303 13.4697ZM18.4697 16.5303C18.7626 16.8232 19.2374 16.8232 19.5303 16.5303C19.8232 16.2374 19.8232 15.7626 19.5303 15.4697L18.4697 16.5303ZM19.5303 16.5303C19.8232 16.2374 19.8232 15.7626 19.5303 15.4697C19.2374 15.1768 18.7626 15.1768 18.4697 15.4697L19.5303 16.5303ZM16.4697 17.4697C16.1768 17.7626 16.1768 18.2374 16.4697 18.5303C16.7626 18.8232 17.2374 18.8232 17.5303 18.5303L16.4697 17.4697ZM17.5303 10.5303L19.5303 8.53033L18.4697 7.46967L16.4697 9.46967L17.5303 10.5303ZM19.5303 7.46967L17.5303 5.46967L16.4697 6.53033L18.4697 8.53033L19.5303 7.46967ZM19 7.25H16.7V8.75H19V7.25ZM16.7007 7.25C14.7638 7.24812 12.956 8.22159 11.8914 9.8398L13.1446 10.6642C13.9314 9.46813 15.2676 8.74861 16.6993 8.75L16.7007 7.25ZM11.8914 9.83979L10.7414 11.5878L11.9946 12.4122L13.1446 10.6642L11.8914 9.83979ZM10.7414 11.5878L9.59144 13.3358L10.8446 14.1602L11.9946 12.4122L10.7414 11.5878ZM9.59143 13.3358C8.80541 14.5306 7.47115 15.25 6.04098 15.25L6.04102 16.75C7.97596 16.7499 9.78113 15.7767 10.8446 14.1602L9.59143 13.3358ZM6.041 15.25H5V16.75H6.041V15.25ZM10.7414 12.4122L11.8914 14.1602L13.1446 13.3358L11.9946 11.5878L10.7414 12.4122ZM11.8914 14.1602C12.956 15.7784 14.7638 16.7519 16.7007 16.75L16.6993 15.25C15.2676 15.2514 13.9314 14.5319 13.1446 13.3358L11.8914 14.1602ZM16.7 16.75H19V15.25H16.7V16.75ZM11.9946 11.5878L10.8446 9.83979L9.59144 10.6642L10.7414 12.4122L11.9946 11.5878ZM10.8446 9.8398C9.78113 8.2233 7.97596 7.25005 6.04102 7.25L6.04098 8.75C7.47115 8.75004 8.80541 9.46939 9.59143 10.6642L10.8446 9.8398ZM6.041 7.25H5V8.75H6.041V7.25ZM16.4697 14.5303L18.4697 16.5303L19.5303 15.4697L17.5303 13.4697L16.4697 14.5303ZM18.4697 15.4697L16.4697 17.4697L17.5303 18.5303L19.5303 16.5303L18.4697 15.4697Z" fill="{{ $elementStyle[$mood] }}"/> 
                         </svg>
                     </button>
+                    
+
                     <div class='flex gap-1 items-center'>
                         <button class='{{ 'w-9 h-9 p-1 rounded-full cursor-pointer ' . $bgStyle[$mood] . ' ' }}' id='speaker'>
                             <svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
