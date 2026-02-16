@@ -1,9 +1,6 @@
 @extends('layouts.master')
 
 
-{{-- @section('bodyClass', 'scrollbar scrollbar-thumb-secondary-happy-85/75 scrollbar-track-transparent') --}}
-
-
 @section('title', 'ROODIO - Music Player Based on Your Mood')
 
 
