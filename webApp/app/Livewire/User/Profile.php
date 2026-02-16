@@ -26,6 +26,7 @@ class Profile extends Component
     public $newPassword;
     public $newPasswordConfirmation;
     public $deleteConfirmationPassword;
+    public $passwordLastChanged;
 
     public array $originalData = [];
     public function uploadPhoto()
@@ -58,11 +59,13 @@ class Profile extends Component
             'countryId'   => 'required|string|exists:regions,id',
         ]);
 
+        $gender = $this->gender === 'null' ? null : $this->gender;
+
         auth()->user()->userDetail()->update([
             'fullname'    => $this->fullname,
             'email'       => $this->email,
             'dateOfBirth' => $this->dateOfBirth,
-            'gender'      => $this->gender,
+            'gender'      => $gender,
             'countryId'   => $this->countryId,
         ]);
 
@@ -86,6 +89,9 @@ class Profile extends Component
 
         $this->dispatch('username-updated');
 
+        $this->dispatch('username-updated');
+
+        $this->passwordLastChanged = now(); // Username change updates updated_at
         session()->flash('success', 'Username updated successfully.');
     }
 
@@ -110,6 +116,9 @@ class Profile extends Component
 
         $this->dispatch('password-updated');
 
+        $this->dispatch('password-updated');
+
+        $this->passwordLastChanged = now();
         session()->flash('success', 'Password updated successfully.');
     }
 
@@ -135,6 +144,7 @@ class Profile extends Component
         $this->gender       = $user->userDetail->gender;
         $this->countryId    = $user->userDetail->countryId;
         $this->username     = $user->username;
+        $this->passwordLastChanged = $user->updated_at;
     }
 
     public function render()
