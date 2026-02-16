@@ -108,11 +108,6 @@
         .swiper-pagination-bullet-active {
             background-color: #06134D !important;
         }
-        /* HACK: Hide duplicated pagination bullets (Since we manually duplicate slides for robust loop) */
-        .swiper-pagination-bullet:nth-child(n+5) {
-            display: none;
-        }
-        }
 
         /* Carousel Scaling Effect */
         .featuresSwiper {
@@ -149,54 +144,38 @@
             var swiper = new Swiper(".featuresSwiper", {
                 centeredSlides: true,
                 loop: true,
-                // Loop mode with manual duplication works best without 'loopedSlides' explicit setting
-                speed: 600,
+                loopedSlides: 4,
+                speed: 400,
                 autoplay: {
-                    delay: 2500, // Faster, continuous feel
-                    disableOnInteraction: false, // Continue after interaction
-                    pauseOnMouseEnter: true, // Pause to let user click arrows
+                    delay: 1500,
+                    disableOnInteraction: false,
+                    pauseOnMouseEnter: true,
                 },
                 pagination: {
                     el: ".swiper-pagination",
                     clickable: true,
-                    // Custom render for control? No, default is fine if we manage classes.
-                },
-                on: {
-                    slideChange: function () {
-                        // Custom logic to handle pagination for duplicated slides (0-3 are originals, 4-7 are duplicates)
-                        var realIndex = this.realIndex; 
-                        var slidesCount = 4; // Original count
-
-                        // Calculate the logical index using realIndex!
-                        // In manual duplicate mode, Swiper's realIndex goes 0-7.
-                        var logicalIndex = realIndex % slidesCount;
-
-                        // Manually update pagination bullets
-                        var bullets = document.querySelectorAll('.featuresSwiper .swiper-pagination-bullet');
-                        bullets.forEach(function(bullet, index) {
-                            if (index === logicalIndex) {
-                                bullet.classList.add('swiper-pagination-bullet-active');
-                            } else {
-                                bullet.classList.remove('swiper-pagination-bullet-active');
-                            }
-                        });
-                    }
                 },
                 navigation: {
                     nextEl: ".swiper-button-next",
                     prevEl: ".swiper-button-prev",
                 },
+                observer: true,
+                observeParents: true,
+                observeSlideChildren: true,
                 breakpoints: {
                     320: {
-                        slidesPerView: 1.5, /* More visible sides */
+                        slidesPerView: 1.2, // Turunkan sedikit
+                        slidesPerGroup: 1,
                         spaceBetween: 20,
                     },
                     640: {
-                        slidesPerView: 2,
+                        slidesPerView: 1.8, // Turunkan
+                        slidesPerGroup: 1,
                         spaceBetween: 30,
                     },
                     1024: {
-                        slidesPerView: 3,
+                        slidesPerView: 2.5, // Turunkan dari 3 ke 2.5
+                        slidesPerGroup: 1,
                         spaceBetween: 40,
                     },
                 },
@@ -234,7 +213,7 @@
 
                 <!-- CTA Button -->
                 <div>
-                   <x-button behaviour="navigation" navLink="auth/login" content="LETSS GOOOOOOOOOO" customClass="!bg-white !text-primary-85 hover:!bg-primary-10 font-secondaryAndButton font-bold text-xs md:text-sm tracking-wider uppercase !py-2 md:!py-3 !px-4 md:!px-6 rounded-none skew-x-[-10deg] transition-all hover:skew-x-0 shadow-[2px_2px_0px_0px_rgba(255,255,255,0.3)] md:shadow-[4px_4px_0px_0px_rgba(255,255,255,0.3)] hover:shadow-none"></x-button>
+                   <x-button behaviour="navigation" navLink="auth/login" content="Let's Start!" customClass="!bg-white !text-primary-85 hover:!bg-primary-10 font-secondaryAndButton font-bold text-xs md:text-sm tracking-wider uppercase !py-2 md:!py-3 !px-4 md:!px-6 rounded-none skew-x-[-10deg] transition-all hover:skew-x-0 shadow-[2px_2px_0px_0px_rgba(255,255,255,0.3)] md:shadow-[4px_4px_0px_0px_rgba(255,255,255,0.3)] hover:shadow-none"></x-button>
                 </div>
             </div>
         </header>
@@ -278,7 +257,7 @@
                 <!-- Floating Mood Icons (Scattered) -->
                 <!-- These will be replaced/augmented by the large orbs below, but kept for depth if needed (toned down) -->
 
-                <div class="container mx-auto px-4 md:px-6 relative z-10 h-full flex flex-col items-center justify-center pt-20 pb-20 md:pt-32 md:pb-32 min-h-[80vh]">
+                <div class="container mx-auto px-4 mb-12 md:px-6 relative z-10 h-full flex flex-col items-center justify-center pt-20 lg:pb-10  min-h-[80vh]">
                     
                     <!-- Center: Typography & CTA -->
                     <div class="text-center max-w-4xl mx-auto relative z-20" data-aos="fade-up">
@@ -297,7 +276,7 @@
                         </p>
                         
                         <div class="flex justify-center gap-6">
-                            <x-button behaviour="navigation" navLink="auth/login" content="LETSS GOOOOOOOOOO" customClass="!bg-secondary-happy-85 !text-white hover:!bg-secondary-happy-70 font-bold !px-8 md:!px-12 !py-4 md:!py-5 text-base md:text-lg shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] md:shadow-[8px_8px_0px_0px_rgba(0,0,0,0.3)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,0.3)] transition-all transform hover:translate-x-1 hover:translate-y-1 rounded-none"></x-button>
+                            <x-button behaviour="navigation" navLink="auth/login" content="Let's Start!" customClass="!bg-secondary-happy-85 !text-white hover:!bg-secondary-happy-70 font-bold !px-8 md:!px-12 !py-4 md:!py-5 text-base md:text-lg shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] md:shadow-[8px_8px_0px_0px_rgba(0,0,0,0.3)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,0.3)] transition-all transform hover:translate-x-1 hover:translate-y-1 rounded-none"></x-button>
                         </div>
                     </div>
 
@@ -373,7 +352,7 @@
             <!-- Features Section (Carousel) -->
             <section id="features" class="py-16 md:py-24 bg-gray-100 relative overflow-hidden">
                 <!-- Decorative Shapes (Density) -->
-                 <div class="absolute top-0 right-0 w-48 h-48 md:w-64 md:h-64 bg-secondary-happy-10 rounded-full opacity-50 blur-3xl translate-x-1/2 -translate-y-1/2"></div>
+                <div class="absolute top-0 right-0 w-48 h-48 md:w-64 md:h-64 bg-secondary-happy-10 rounded-full opacity-50 blur-3xl translate-x-1/2 -translate-y-1/2"></div>
                 <div class="absolute bottom-0 left-0 w-48 h-48 md:w-64 md:h-64 bg-secondary-relaxed-10 rounded-full opacity-50 blur-3xl -translate-x-1/2 translate-y-1/2"></div>
                 
                 <!-- NEW: Specific Graphics -->
@@ -389,10 +368,10 @@
                 </div>
                 <!-- More Scattered Icons -->
                 <div class="absolute top-[40%] left-[2%] opacity-15 animate-float-fast pointer-events-none w-20 h-20 transform rotate-45">
-                     <img src="{{ asset('assets/moods/relaxed.png') }}" class="w-full h-full grayscale brightness-90" alt="">
+                    <img src="{{ asset('assets/moods/relaxed.png') }}" class="w-full h-full grayscale brightness-90" alt="">
                 </div>
                 <div class="absolute bottom-[30%] right-[5%] opacity-15 animate-float-slow pointer-events-none w-24 h-24 transform -rotate-12">
-                     <img src="{{ asset('assets/moods/sad.png') }}" class="w-full h-full grayscale brightness-90" alt="">
+                    <img src="{{ asset('assets/moods/sad.png') }}" class="w-full h-full grayscale brightness-90" alt="">
                 </div>
                 <!-- Geometric Squiggles (CSS Shapes) -->
                 <div class="absolute top-[15%] left-[40%] w-0 h-0 border-l-[15px] border-l-transparent border-r-[15px] border-r-transparent border-b-[26px] border-b-secondary-happy-50/30 transform rotate-12 animate-float-medium pointer-events-none"></div>
@@ -405,128 +384,97 @@
                         <p class="font-secondaryAndButton text-gray-600 mt-4 md:mt-6 text-base md:text-lg px-4">Swipe to explore platform capabilities designed for your lifestyle.</p>
                     </div>
 
-                    <!-- Swiper -->
-                    <div class="swiper featuresSwiper px-4 pb-16" data-aos="fade-up" data-aos-delay="200">
-                        <div class="swiper-wrapper">
-                            <!-- Feature 1 -->
-                            <div class="swiper-slide h-auto">
-                                <div class="h-full group bg-white p-6 md:p-8 shadow-md hover:shadow-xl transition-all duration-300 border-t-4 border-secondary-happy-85 relative overflow-hidden rounded-xl cursor-grab active:cursor-grabbing">
-                                    <div class="absolute top-0 right-0 w-20 h-20 md:w-24 md:h-24 bg-secondary-happy-10 rounded-bl-[80px] md:rounded-bl-[100px] -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
-                                    <div class="relative z-10">
-                                        <div class="w-12 h-12 md:w-14 md:h-14 bg-secondary-happy-85 text-white flex items-center justify-center text-xl md:text-2xl mb-4 md:mb-6 shadow-md skew-x-[-10deg] rounded-sm transform group-hover:rotate-6 transition-transform">
-                                            <span class="block skew-x-[10deg]">🎭</span>
-                                        </div>
-                                        <h3 class="font-primary text-lg md:text-xl font-bold text-primary-85 mb-2 md:mb-3">Mood Detection</h3>
-                                        <p class="font-secondaryAndButton text-sm md:text-base text-gray-600 leading-relaxed">Advanced algorithms analyze your mood input to deliver the most relevant tracks instantly.</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Feature 2 -->
-                            <div class="swiper-slide h-auto">
-                                <div class="h-full group bg-white p-6 md:p-8 shadow-md hover:shadow-xl transition-all duration-300 border-t-4 border-secondary-relaxed-85 relative overflow-hidden rounded-xl cursor-grab active:cursor-grabbing">
-                                    <div class="absolute top-0 right-0 w-20 h-20 md:w-24 md:h-24 bg-secondary-relaxed-10 rounded-bl-[80px] md:rounded-bl-[100px] -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
-                                    <div class="relative z-10">
-                                        <div class="w-12 h-12 md:w-14 md:h-14 bg-secondary-relaxed-85 text-white flex items-center justify-center text-xl md:text-2xl mb-4 md:mb-6 shadow-md skew-x-[-10deg] rounded-sm transform group-hover:rotate-6 transition-transform">
-                                            <span class="block skew-x-[10deg]">🌊</span>
-                                        </div>
-                                        <h3 class="font-primary text-lg md:text-xl font-bold text-primary-85 mb-2 md:mb-3">Immersive Visuals</h3>
-                                        <p class="font-secondaryAndButton text-sm md:text-base text-gray-600 leading-relaxed">Dynamic, real-time visualizers that react to the beat, creating a complete sensory experience.</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Feature 3 -->
-                            <div class="swiper-slide h-auto">
-                                <div class="h-full group bg-white p-6 md:p-8 shadow-md hover:shadow-xl transition-all duration-300 border-t-4 border-secondary-sad-85 relative overflow-hidden rounded-xl cursor-grab active:cursor-grabbing">
-                                    <div class="absolute top-0 right-0 w-20 h-20 md:w-24 md:h-24 bg-secondary-sad-10 rounded-bl-[80px] md:rounded-bl-[100px] -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
-                                    <div class="relative z-10">
-                                        <div class="w-12 h-12 md:w-14 md:h-14 bg-secondary-sad-85 text-white flex items-center justify-center text-xl md:text-2xl mb-4 md:mb-6 shadow-md skew-x-[-10deg] rounded-sm transform group-hover:rotate-6 transition-transform">
-                                            <span class="block skew-x-[10deg]">🎧</span>
-                                        </div>
-                                        <h3 class="font-primary text-lg md:text-xl font-bold text-primary-85 mb-2 md:mb-3">Curated Playlists</h3>
-                                        <p class="font-secondaryAndButton text-sm md:text-base text-gray-600 leading-relaxed">Hand-selected tracks across genres, perfectly categorized to match every shade of emotion.</p>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Feature 4 (Restored) -->
-                            <div class="swiper-slide h-auto">
-                                <div class="h-full group bg-white p-6 md:p-8 shadow-md hover:shadow-xl transition-all duration-300 border-t-4 border-secondary-angry-85 relative overflow-hidden rounded-xl cursor-grab active:cursor-grabbing">
-                                    <div class="absolute top-0 right-0 w-20 h-20 md:w-24 md:h-24 bg-secondary-angry-10 rounded-bl-[80px] md:rounded-bl-[100px] -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
-                                    <div class="relative z-10">
-                                        <div class="w-12 h-12 md:w-14 md:h-14 bg-secondary-angry-85 text-white flex items-center justify-center text-xl md:text-2xl mb-4 md:mb-6 shadow-md skew-x-[-10deg] rounded-sm transform group-hover:rotate-6 transition-transform">
-                                            <span class="block skew-x-[10deg]">🚀</span>
-                                        </div>
-                                        <h3 class="font-primary text-lg md:text-xl font-bold text-primary-85 mb-2 md:mb-3">High Performance</h3>
-                                        <p class="font-secondaryAndButton text-sm md:text-base text-gray-600 leading-relaxed">Lightning fast playback with minimal latency, ensuring your vibe is never interrupted.</p>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- DUPLICATED SLIDES (for Gap-Free Loop) -->
-                            <!-- Feature 1 Copy -->
-                            <div class="swiper-slide h-auto">
-                                <div class="h-full group bg-white p-6 md:p-8 shadow-md hover:shadow-xl transition-all duration-300 border-t-4 border-secondary-happy-85 relative overflow-hidden rounded-xl cursor-grab active:cursor-grabbing">
-                                    <div class="absolute top-0 right-0 w-20 h-20 md:w-24 md:h-24 bg-secondary-happy-10 rounded-bl-[80px] md:rounded-bl-[100px] -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
-                                    <div class="relative z-10">
-                                        <div class="w-12 h-12 md:w-14 md:h-14 bg-secondary-happy-85 text-white flex items-center justify-center text-xl md:text-2xl mb-4 md:mb-6 shadow-md skew-x-[-10deg] rounded-sm transform group-hover:rotate-6 transition-transform">
-                                            <span class="block skew-x-[10deg]">🎭</span>
-                                        </div>
-                                        <h3 class="font-primary text-lg md:text-xl font-bold text-primary-85 mb-2 md:mb-3">Mood Detection</h3>
-                                        <p class="font-secondaryAndButton text-sm md:text-base text-gray-600 leading-relaxed">Advanced algorithms analyze your mood input to deliver the most relevant tracks instantly.</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Feature 2 Copy -->
-                            <div class="swiper-slide h-auto">
-                                <div class="h-full group bg-white p-6 md:p-8 shadow-md hover:shadow-xl transition-all duration-300 border-t-4 border-secondary-relaxed-85 relative overflow-hidden rounded-xl cursor-grab active:cursor-grabbing">
-                                    <div class="absolute top-0 right-0 w-20 h-20 md:w-24 md:h-24 bg-secondary-relaxed-10 rounded-bl-[80px] md:rounded-bl-[100px] -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
-                                    <div class="relative z-10">
-                                        <div class="w-12 h-12 md:w-14 md:h-14 bg-secondary-relaxed-85 text-white flex items-center justify-center text-xl md:text-2xl mb-4 md:mb-6 shadow-md skew-x-[-10deg] rounded-sm transform group-hover:rotate-6 transition-transform">
-                                            <span class="block skew-x-[10deg]">🌊</span>
-                                        </div>
-                                        <h3 class="font-primary text-lg md:text-xl font-bold text-primary-85 mb-2 md:mb-3">Immersive Visuals</h3>
-                                        <p class="font-secondaryAndButton text-sm md:text-base text-gray-600 leading-relaxed">Dynamic, real-time visualizers that react to the beat, creating a complete sensory experience.</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Feature 3 Copy -->
-                            <div class="swiper-slide h-auto">
-                                <div class="h-full group bg-white p-6 md:p-8 shadow-md hover:shadow-xl transition-all duration-300 border-t-4 border-secondary-sad-85 relative overflow-hidden rounded-xl cursor-grab active:cursor-grabbing">
-                                    <div class="absolute top-0 right-0 w-20 h-20 md:w-24 md:h-24 bg-secondary-sad-10 rounded-bl-[80px] md:rounded-bl-[100px] -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
-                                    <div class="relative z-10">
-                                        <div class="w-12 h-12 md:w-14 md:h-14 bg-secondary-sad-85 text-white flex items-center justify-center text-xl md:text-2xl mb-4 md:mb-6 shadow-md skew-x-[-10deg] rounded-sm transform group-hover:rotate-6 transition-transform">
-                                            <span class="block skew-x-[10deg]">🎧</span>
-                                        </div>
-                                        <h3 class="font-primary text-lg md:text-xl font-bold text-primary-85 mb-2 md:mb-3">Curated Playlists</h3>
-                                        <p class="font-secondaryAndButton text-sm md:text-base text-gray-600 leading-relaxed">Hand-selected tracks across genres, perfectly categorized to match every shade of emotion.</p>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Feature 4 Copy -->
-                            <div class="swiper-slide h-auto">
-                                <div class="h-full group bg-white p-6 md:p-8 shadow-md hover:shadow-xl transition-all duration-300 border-t-4 border-secondary-angry-85 relative overflow-hidden rounded-xl cursor-grab active:cursor-grabbing">
-                                    <div class="absolute top-0 right-0 w-20 h-20 md:w-24 md:h-24 bg-secondary-angry-10 rounded-bl-[80px] md:rounded-bl-[100px] -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
-                                    <div class="relative z-10">
-                                        <div class="w-12 h-12 md:w-14 md:h-14 bg-secondary-angry-85 text-white flex items-center justify-center text-xl md:text-2xl mb-4 md:mb-6 shadow-md skew-x-[-10deg] rounded-sm transform group-hover:rotate-6 transition-transform">
-                                            <span class="block skew-x-[10deg]">🚀</span>
-                                        </div>
-                                        <h3 class="font-primary text-lg md:text-xl font-bold text-primary-85 mb-2 md:mb-3">High Performance</h3>
-                                        <p class="font-secondaryAndButton text-sm md:text-base text-gray-600 leading-relaxed">Lightning fast playback with minimal latency, ensuring your vibe is never interrupted.</p>
-                                    </div>
-                                </div>
-                            </div>
-                            
-
-                        </div>
-                        <div class="swiper-pagination !-bottom-2"></div>
-                        <div class="swiper-button-next !text-primary-85 opacity-0 md:opacity-100 transition-opacity"></div>
-                        <div class="swiper-button-prev !text-primary-85 opacity-0 md:opacity-100 transition-opacity"></div>
+                    <!-- Swiper - Menambah lebih banyak fitur -->
+<div class="swiper featuresSwiper px-4 pb-16" data-aos="fade-up" data-aos-delay="200">
+    <div class="swiper-wrapper">
+        <!-- Feature 1 -->
+        <div class="swiper-slide h-auto">
+            <div class="h-full group bg-white p-6 md:p-8 shadow-md hover:shadow-xl transition-all duration-300 border-t-4 border-secondary-happy-85 relative overflow-hidden rounded-xl cursor-grab active:cursor-grabbing">
+                <div class="absolute top-0 right-0 w-20 h-20 md:w-24 md:h-24 bg-secondary-happy-10 rounded-bl-[80px] md:rounded-bl-[100px] -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
+                <div class="relative z-10">
+                    <div class="w-12 h-12 md:w-14 md:h-14 bg-secondary-happy-85 text-white flex items-center justify-center text-xl md:text-2xl mb-4 md:mb-6 shadow-md skew-x-[-10deg] rounded-sm transform group-hover:rotate-6 transition-transform">
+                        <span class="block skew-x-[10deg]">🎭</span>
                     </div>
+                    <h3 class="font-primary text-lg md:text-xl font-bold text-primary-85 mb-2 md:mb-3">Mood Detection</h3>
+                    <p class="font-secondaryAndButton text-sm md:text-base text-gray-600 leading-relaxed">Advanced algorithms analyze your mood input to deliver the most relevant tracks instantly.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="swiper-slide h-auto">
+            <div class="h-full group bg-white p-6 md:p-8 shadow-md hover:shadow-xl transition-all duration-300 border-t-4 border-secondary-relaxed-85 relative overflow-hidden rounded-xl cursor-grab active:cursor-grabbing">
+                <div class="absolute top-0 right-0 w-20 h-20 md:w-24 md:h-24 bg-secondary-relaxed-10 rounded-bl-[80px] md:rounded-bl-[100px] -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
+                <div class="relative z-10">
+                    <div class="w-12 h-12 md:w-14 md:h-14 bg-secondary-relaxed-85 text-white flex items-center justify-center text-xl md:text-2xl mb-4 md:mb-6 shadow-md skew-x-[-10deg] rounded-sm transform group-hover:rotate-6 transition-transform">
+                        <span class="block skew-x-[10deg]">🌊</span>
+                    </div>
+                    <h3 class="font-primary text-lg md:text-xl font-bold text-primary-85 mb-2 md:mb-3">Immersive Visuals</h3>
+                    <p class="font-secondaryAndButton text-sm md:text-base text-gray-600 leading-relaxed">Dynamic, real-time visualizers that react to the beat, creating a complete sensory experience.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="swiper-slide h-auto">
+            <div class="h-full group bg-white p-6 md:p-8 shadow-md hover:shadow-xl transition-all duration-300 border-t-4 border-secondary-sad-85 relative overflow-hidden rounded-xl cursor-grab active:cursor-grabbing">
+                <div class="absolute top-0 right-0 w-20 h-20 md:w-24 md:h-24 bg-secondary-sad-10 rounded-bl-[80px] md:rounded-bl-[100px] -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
+                <div class="relative z-10">
+                    <div class="w-12 h-12 md:w-14 md:h-14 bg-secondary-sad-85 text-white flex items-center justify-center text-xl md:text-2xl mb-4 md:mb-6 shadow-md skew-x-[-10deg] rounded-sm transform group-hover:rotate-6 transition-transform">
+                        <span class="block skew-x-[10deg]">🎧</span>
+                    </div>
+                    <h3 class="font-primary text-lg md:text-xl font-bold text-primary-85 mb-2 md:mb-3">Curated Playlists</h3>
+                    <p class="font-secondaryAndButton text-sm md:text-base text-gray-600 leading-relaxed">Hand-selected tracks across genres, perfectly categorized to match every shade of emotion.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Feature 4 -->
+        <div class="swiper-slide h-auto">
+            <div class="h-full group bg-white p-6 md:p-8 shadow-md hover:shadow-xl transition-all duration-300 border-t-4 border-secondary-angry-85 relative overflow-hidden rounded-xl cursor-grab active:cursor-grabbing">
+                <div class="absolute top-0 right-0 w-20 h-20 md:w-24 md:h-24 bg-secondary-angry-10 rounded-bl-[80px] md:rounded-bl-[100px] -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
+                <div class="relative z-10">
+                    <div class="w-12 h-12 md:w-14 md:h-14 bg-secondary-angry-85 text-white flex items-center justify-center text-xl md:text-2xl mb-4 md:mb-6 shadow-md skew-x-[-10deg] rounded-sm transform group-hover:rotate-6 transition-transform">
+                        <span class="block skew-x-[10deg]">🚀</span>
+                    </div>
+                    <h3 class="font-primary text-lg md:text-xl font-bold text-primary-85 mb-2 md:mb-3">High Performance</h3>
+                    <p class="font-secondaryAndButton text-sm md:text-base text-gray-600 leading-relaxed">Lightning fast playback with minimal latency, ensuring your vibe is never interrupted.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Feature 5 - BARU: Social Integration -->
+        <div class="swiper-slide h-auto">
+            <div class="h-full group bg-white p-6 md:p-8 shadow-md hover:shadow-xl transition-all duration-300 border-t-4 border-secondary-happy-85 relative overflow-hidden rounded-xl cursor-grab active:cursor-grabbing">
+                <div class="absolute top-0 right-0 w-20 h-20 md:w-24 md:h-24 bg-secondary-happy-10 rounded-bl-[80px] md:rounded-bl-[100px] -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
+                <div class="relative z-10">
+                    <div class="w-12 h-12 md:w-14 md:h-14 bg-secondary-happy-85 text-white flex items-center justify-center text-xl md:text-2xl mb-4 md:mb-6 shadow-md skew-x-[-10deg] rounded-sm transform group-hover:rotate-6 transition-transform">
+                        <span class="block skew-x-[10deg]">👥</span>
+                    </div>
+                    <h3 class="font-primary text-lg md:text-xl font-bold text-primary-85 mb-2 md:mb-3">Social Sharing</h3>
+                    <p class="font-secondaryAndButton text-sm md:text-base text-gray-600 leading-relaxed">Share your mood-based playlists with friends and discover what they're listening to.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Feature 6 - BARU: Offline Mode -->
+        <div class="swiper-slide h-auto">
+            <div class="h-full group bg-white p-6 md:p-8 shadow-md hover:shadow-xl transition-all duration-300 border-t-4 border-secondary-relaxed-85 relative overflow-hidden rounded-xl cursor-grab active:cursor-grabbing">
+                <div class="absolute top-0 right-0 w-20 h-20 md:w-24 md:h-24 bg-secondary-relaxed-10 rounded-bl-[80px] md:rounded-bl-[100px] -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
+                <div class="relative z-10">
+                    <div class="w-12 h-12 md:w-14 md:h-14 bg-secondary-relaxed-85 text-white flex items-center justify-center text-xl md:text-2xl mb-4 md:mb-6 shadow-md skew-x-[-10deg] rounded-sm transform group-hover:rotate-6 transition-transform">
+                        <span class="block skew-x-[10deg]">📱</span>
+                    </div>
+                    <h3 class="font-primary text-lg md:text-xl font-bold text-primary-85 mb-2 md:mb-3">Offline Mode</h3>
+                    <p class="font-secondaryAndButton text-sm md:text-base text-gray-600 leading-relaxed">Download your favorite mood playlists and enjoy them anywhere, even without internet.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="swiper-button-next text-primary-85 opacity-0 md:opacity-100 transition-opacity"></div>
+    <div class="swiper-button-prev text-primary-85 opacity-0 md:opacity-100 transition-opacity"></div>
+</div>
+<div class="swiper-pagination"></div>
                 </div>
             </section>
 
