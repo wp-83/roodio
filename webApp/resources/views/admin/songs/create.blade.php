@@ -36,7 +36,7 @@
                             {{-- Placeholder --}}
                             <div class="flex flex-col items-center justify-center text-center p-6 transition-opacity duration-300" id="photo-placeholder">
                                 <div class="w-16 h-16 rounded-full bg-primary-70 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                                    <i class="fa-regular fa-image text-3xl text-[#9CA3AF] group-hover:text-secondary-happy-100 transition-colors"></i>
+                                    <i class="fa-regular fa-image text-3xl text-primary-20 group-hover:text-secondary-happy-100 transition-colors"></i>
                                 </div>
                                 <span class="font-secondaryAndButton text-sm text-shadedOfGray-30 font-medium group-hover:text-white transition-colors">Click to upload cover</span>
                                 <span class="text-[10px] text-shadedOfGray-50 mt-2 uppercase tracking-wide">JPG, PNG (Max 5MB)</span>
@@ -65,7 +65,7 @@
                         <label class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-primary-60 hover:border-accent-100 hover:bg-primary-70/50 rounded-xl cursor-pointer transition-all duration-300 group">
 
                             <div class="flex flex-col items-center justify-center pt-2" id="audio-placeholder">
-                                <i class="fa-solid fa-cloud-arrow-up text-2xl text-[#9CA3AF] mb-2 group-hover:text-accent-100 transition-colors"></i>
+                                <i class="fa-solid fa-cloud-arrow-up text-2xl text-primary-20 mb-2 group-hover:text-accent-100 transition-colors"></i>
                                 <p class="text-sm text-shadedOfGray-30 font-medium group-hover:text-white transition-colors" id="audio-filename">Browse Audio File</p>
                                 <p class="text-[10px] text-shadedOfGray-50 mt-1">MP3, WAV, AAC (Max 20MB)</p>
                             </div>
@@ -187,7 +187,7 @@
         } else {
             fileNameText.classList.add('text-shadedOfGray-30');
             fileNameText.classList.remove('text-secondary-happy-100', 'font-bold');
-            placeholder.querySelector('i').className = "fa-solid fa-cloud-arrow-up text-2xl text-[#9CA3AF] mb-2";
+            placeholder.querySelector('i').className = "fa-solid fa-cloud-arrow-up text-2xl text-primary-20 mb-2";
         }
     });
 

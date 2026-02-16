@@ -97,7 +97,7 @@
             </div>
             <form action="{{ route('auth.logout') }}" method="POST">
                 @csrf
-                <button type="submit" class="text-[#9CA3AF] hover:text-white transition-colors" title="Logout">
+                <button type="submit" class="text-primary-20 hover:text-white transition-colors" title="Logout">
                     <i class="bi bi-box-arrow-right text-lg"></i>
                 </button>
             </form>

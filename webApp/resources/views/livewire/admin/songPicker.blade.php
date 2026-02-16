@@ -2,7 +2,7 @@
 
     {{-- Search Bar (Sticky Top agar tidak hilang saat scroll) --}}
     <div class="relative sticky top-0 z-20 bg-primary-100 pb-2">
-        <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-[#9CA3AF] pb-2">
+        <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-primary-20 pb-2">
             <i class="fa-solid fa-magnifying-glass"></i>
         </span>
         <input wire:model.live.debounce.300ms="search"
@@ -35,7 +35,7 @@
                         <h4 class="text-sm font-bold text-white truncate pr-2 group-hover:text-secondary-happy-100 transition-colors">
                             {{ $song->title }}
                         </h4>
-                        <p class="text-xs text-[#9CA3AF] truncate">
+                        <p class="text-xs text-primary-20 truncate">
                             {{ $song->artist }}
                         </p>
                     </div>
@@ -64,7 +64,7 @@
         @empty
             {{-- Empty State --}}
             <div class="text-center py-12 flex flex-col items-center justify-center border-2 border-dashed border-primary-60 rounded-xl">
-                <div class="w-12 h-12 rounded-full bg-primary-85 flex items-center justify-center mb-3 text-[#9CA3AF]">
+                <div class="w-12 h-12 rounded-full bg-primary-85 flex items-center justify-center mb-3 text-primary-20">
                     <i class="fa-solid fa-music-slash text-xl"></i>
                 </div>
                 <p class="text-sm text-shadedOfGray-30 font-medium">No songs found.</p>

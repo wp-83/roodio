@@ -54,7 +54,7 @@
                                 {{-- Placeholder (Visible) --}}
                                 <div class="flex flex-col items-center justify-center text-center p-6 transition-opacity duration-300" id="photo-placeholder">
                                     <div class="w-16 h-16 rounded-full bg-primary-70 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                                        <i class="fa-regular fa-image text-3xl text-[#9CA3AF] group-hover:text-secondary-happy-100 transition-colors"></i>
+                                        <i class="fa-regular fa-image text-3xl text-primary-20 group-hover:text-secondary-happy-100 transition-colors"></i>
                                     </div>
                                     <span class="font-secondaryAndButton text-sm text-shadedOfGray-30 font-medium group-hover:text-white transition-colors">Upload new cover</span>
                                 </div>
@@ -106,10 +106,10 @@
 
                             <div class="flex flex-col items-center justify-center pt-1 text-center px-4">
                                 {{-- Ganti icon jadi Lock --}}
-                                <i class="fa-solid fa-lock text-xl text-[#9CA3AF] mb-1"></i>
+                                <i class="fa-solid fa-lock text-xl text-primary-20 mb-1"></i>
 
                                 {{-- Ganti teks informasi --}}
-                                <p class="text-xs text-[#9CA3AF] font-medium">
+                                <p class="text-xs text-primary-20 font-medium">
                                     Audio file cannot be changed
                                 </p>
                                 <p class="text-[10px] text-shadedOfGray-60 mt-1">
@@ -227,7 +227,7 @@
         } else {
             fileNameText.classList.add('text-shadedOfGray-30');
             fileNameText.classList.remove('text-secondary-happy-100', 'font-bold');
-            placeholder.querySelector('i').className = "fa-solid fa-cloud-arrow-up text-xl text-[#9CA3AF] mb-1";
+            placeholder.querySelector('i').className = "fa-solid fa-cloud-arrow-up text-xl text-primary-20 mb-1";
         }
     });
 
