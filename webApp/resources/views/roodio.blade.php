@@ -14,7 +14,8 @@
         /* Custom Wave Separator */
         .wave-bottom {
             position: absolute;
-            bottom: -5px; /* Aggressive overlap to hide gap */
+            bottom: 0; /* kecil saja */
+            transform: translateY(99%); /* paksa nempel */
             left: 0;
             width: 100%;
             overflow: hidden;
@@ -330,7 +331,7 @@
         <main>
 
             <!-- Hero Section -->
-            <section class="relative min-h-screen flex items-center bg-primary-85 text-white overflow-hidden pb-10 md:pb-0">
+            <section class="relative min-h-screen flex items-center bg-primary-85 text-white overflow-hidden pb-0 -mb-1">
                 <!-- Full Bg Pattern (Subtle) -->
                 <div class="absolute inset-0 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:60px_60px] opacity-[0.03] pointer-events-none"></div>
                 
