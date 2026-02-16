@@ -198,7 +198,7 @@ We welcome contributions! Please follow these steps:
 *   [William Pratama](https://github.com/wp-83) - **Frontend Developer**
 *   [Agnes Gonxha Febriane Sukma](https://github.com/agnesgonxha) - **UI/UX Designer**
 *   [Felicia Wijaya](https://github.com/feliciaHw) - **UI/UX Designer**
-*   [Yoyada Indrayudha](https://github.com/) - **Quality Assurance**
+*   [Yoyada Indrayudha](https://github.com/yoyadayudha) - **Quality Assurance**
 
 ---
     
