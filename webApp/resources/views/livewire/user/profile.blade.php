@@ -17,7 +17,7 @@ x-on:password-updated.window="showPasswordModal = false">
              #8EE0B1 66%, 
              #F49DA0 100%)">
             {{-- Back Button --}}
-            <a href="javascript:history.back()" 
+            <a href="/" wire:navigate
                class="absolute top-6 left-4 flex items-center gap-2 px-5 py-2 bg-primary-10 rounded-full text-white hover:bg-primary-60 transition group z-20">
                 <svg xmlns="http://www.w3.org/2000/svg" 
                     class="h-5 w-5 group-hover:-translate-x-1 transition-transform stroke-primary-60 group-hover:stroke-white" 
@@ -72,8 +72,6 @@ x-on:password-updated.window="showPasswordModal = false">
                 {{-- Save Changes Button --}}
                 <div class="w-full md:w-auto">
                     <x-button wire:click="update"
-                            disabled
-                            wire:dirty.attr.remove="disabled"
                             wire:target="fullname,email,dateOfBirth,gender,countryId"
                             content='Save Changes'
                             style="zoom:0.85;">
@@ -108,36 +106,36 @@ x-on:password-updated.window="showPasswordModal = false">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6">
                                 {{-- Full Name --}}
                                 <div class="col-span-1 md:col-span-2">
-                                    <x-input id='fullname' icon='name' label='Fullname' placeholder='Ex: John Doe' wire:model="fullname" value="{{ old('fullname') }}" :isRequired='false'></x-input>
+                                    <x-input id='fullname' icon='name' label='Fullname' placeholder='Ex: John Doe' wire:model.defer="fullname" :isRequired='false'></x-input>
                                 </div>
 
                                 {{-- Email --}}
                                 <div class="col-span-1 md:col-span-2">
-                                    <x-input type='email' id='email' icon='email' label='Email Address' placeholder='Ex: john.doe321@gmail.com' value="{{ old('email') }}" wire:model="email" :isRequired='false'></x-input>
+                                    <x-input type='email' id='email' icon='email' label='Email Address' placeholder='Ex: john.doe321@gmail.com' wire:model.defer="email" :isRequired='false'></x-input>
                                 </div>
 
                                 {{-- Date of Birth --}}
                                 <div>
-                                    <x-input type='date' id='dob' icon='date' label='Date of Birth' placeholder='mm/dd/yyyy' value="{{ old('dob') }}" wire:model="dateOfBirth" :isRequired='false'></x-input>
+                                    <x-input type='date' id='dob' icon='date' label='Date of Birth' placeholder='mm/dd/yyyy' wire:model.defer="dateOfBirth" :isRequired='false'></x-input>
                                 </div>
 
                                 {{-- Gender --}}
                                 <div>
-                                    <x-inputSelect id='gender' icon='gender' label='Gender' class='gender-select valid:bg-accent-20/60 valid:text-shadedOfGray-100 valid:not-italic invalid:text-shadedOfGray-60 invalid:italic' defaultOption='Your gender...' wire:model="gender" required>
+                                    <x-inputSelect id='gender' icon='gender' label='Gender' class='gender-select valid:bg-accent-20/60 valid:text-shadedOfGray-100 valid:not-italic invalid:text-shadedOfGray-60 invalid:italic' defaultOption='Your gender...' wire:model.defer="gender" required>
                                         <x-slot:options>
-                                            <option value="1" {{ old('gender') === '1' ? 'selected' : '' }}>Male</option>
-                                            <option value="0" {{ old('gender') === '0' ? 'selected' : '' }}>Female</option>
-                                            <option value="null" {{ old('gender') === 'null' ? 'selected' : '' }}>Prefer not to say</option>
+                                            <option value="1">Male</option>
+                                            <option value="0">Female</option>
+                                            <option value="null">Prefer not to say</option>
                                         </x-slot:options>
                                     </x-inputSelect>
                                 </div>
 
                                 {{-- Region --}}
                                 <div class="col-span-1 md:col-span-2">
-                                    <x-inputSelect id='country' icon='country' label='Country' class='country-select valid:bg-accent-20/60 valid:text-shadedOfGray-100 valid:not-italic invalid:text-shadedOfGray-60 invalid:italic' defaultOption='Your country...' wire:model="countryId" required>
+                                    <x-inputSelect id='country' icon='country' label='Country' class='country-select valid:bg-accent-20/60 valid:text-shadedOfGray-100 valid:not-italic invalid:text-shadedOfGray-60 invalid:italic' defaultOption='Your country...' wire:model.defer="countryId" required>
                                         <x-slot:options>
                                             @forelse($regions as $region)
-                                                <option value="{{ $region->id }}" {{ old('country') == $region->id ? 'selected' : '' }}>{{ $region->name }}</option>
+                                                <option value="{{ $region->id }}">{{ $region->name }}</option>
                                             @empty
                                             @endforelse
                                         </x-slot:options>

@@ -59,11 +59,13 @@ class Profile extends Component
             'countryId'   => 'required|string|exists:regions,id',
         ]);
 
+        $gender = $this->gender === 'null' ? null : $this->gender;
+
         auth()->user()->userDetail()->update([
             'fullname'    => $this->fullname,
             'email'       => $this->email,
             'dateOfBirth' => $this->dateOfBirth,
-            'gender'      => $this->gender,
+            'gender'      => $gender,
             'countryId'   => $this->countryId,
         ]);
 
