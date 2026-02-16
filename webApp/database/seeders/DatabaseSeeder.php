@@ -24,5 +24,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call(RegionSeeder::class);
         $this->call(MoodSeeder::class);
+        $this->call(SongsSeeder::class);
+        $this->call(PlaylistsSeeder::class);
     }
 }
