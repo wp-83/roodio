@@ -16,12 +16,8 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'id'       => 'US-0000001',
-            'username' => 'andi',
-            'role'     => 2,
-        ]);
-
+       
+        $this->call(UserSeeder::class);
         $this->call(RegionSeeder::class);
         $this->call(MoodSeeder::class);
         $this->call(SongsSeeder::class);

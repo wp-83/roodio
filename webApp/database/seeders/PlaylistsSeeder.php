@@ -30,25 +30,25 @@ class PlaylistsSeeder extends Seeder
             [
                 'name' => 'All Angry Songs',
                 'description' => 'Complete collection of all angry mood songs',
-                'playlistPath' => 'playlists/all-angry.jpg',
+                'playlistPath' => null,
                 'songs' => $angrySongs, // ALL 50 angry songs
             ],
             [
                 'name' => 'All Happy Songs',
                 'description' => 'Complete collection of all happy mood songs',
-                'playlistPath' => 'playlists/all-happy.jpg',
+                'playlistPath' => null,
                 'songs' => $happySongs, // ALL 50 happy songs
             ],
             [
                 'name' => 'All Relaxed Songs',
                 'description' => 'Complete collection of all relaxed mood songs',
-                'playlistPath' => 'playlists/all-relaxed.jpg',
+                'playlistPath' => null,
                 'songs' => $relaxedSongs, // ALL 50 relaxed songs
             ],
             [
                 'name' => 'All Sad Songs',
                 'description' => 'Complete collection of all sad mood songs',
-                'playlistPath' => 'playlists/all-sad.jpg',
+                'playlistPath' => null,
                 'songs' => $sadSongs, // ALL 50 sad songs
             ],
 
@@ -56,25 +56,25 @@ class PlaylistsSeeder extends Seeder
             [
                 'name' => 'Angry Anthems',
                 'description' => 'Let it all out with these powerful angry tracks',
-                'playlistPath' => 'playlists/angry-anthems.jpg',
+                'playlistPath' => null,
                 'songs' => array_slice($angrySongs, 0, 20),
             ],
             [
                 'name' => 'Breakup Rage',
                 'description' => 'Perfect soundtrack for when you\'re done with relationships',
-                'playlistPath' => 'playlists/breakup-rage.jpg',
+                'playlistPath' => null,
                 'songs' => array_slice($angrySongs, 10, 15),
             ],
             [
                 'name' => 'Workout Fury',
                 'description' => 'Channel your anger into your workout',
-                'playlistPath' => 'playlists/workout-fury.jpg',
+                'playlistPath' => null,
                 'songs' => array_slice($angrySongs, 20, 18),
             ],
             [
                 'name' => 'Emotional Release',
                 'description' => 'Songs for when you need to let out your emotions',
-                'playlistPath' => 'playlists/emotional-release.jpg',
+                'playlistPath' => null,
                 'songs' => array_slice($angrySongs, 5, 25),
             ],
 
@@ -82,37 +82,37 @@ class PlaylistsSeeder extends Seeder
             [
                 'name' => 'Feel Good Hits',
                 'description' => 'Uplifting songs to brighten your day',
-                'playlistPath' => 'playlists/feel-good-hits.jpg',
+                'playlistPath' =>  null,
                 'songs' => array_slice($happySongs, 0, 25),
             ],
             [
                 'name' => 'Party All Night',
                 'description' => 'Turn up the volume and dance all night long',
-                'playlistPath' => 'playlists/party-all-night.jpg',
+                'playlistPath' => null,
                 'songs' => array_slice($happySongs, 15, 20),
             ],
             [
                 'name' => 'Summer Vibes',
                 'description' => 'Perfect songs for sunny summer days',
-                'playlistPath' => 'playlists/summer-vibes.jpg',
+                'playlistPath' => null,
                 'songs' => array_slice($happySongs, 10, 22),
             ],
             [
                 'name' => 'Morning Energy',
                 'description' => 'Start your day with positive energy',
-                'playlistPath' => 'playlists/morning-energy.jpg',
+                'playlistPath' =>  null,
                 'songs' => array_slice($happySongs, 5, 18),
             ],
             [
                 'name' => 'Celebration Mix',
                 'description' => 'Celebrate life with these joyful tunes',
-                'playlistPath' => 'playlists/celebration-mix.jpg',
+                'playlistPath' => null,
                 'songs' => array_slice($happySongs, 25, 15),
             ],
             [
                 'name' => 'Road Trip Bangers',
                 'description' => 'Your ultimate road trip companion',
-                'playlistPath' => 'playlists/road-trip.jpg',
+                'playlistPath' => null,
                 'songs' => array_slice($happySongs, 30, 20),
             ],
 
@@ -120,37 +120,37 @@ class PlaylistsSeeder extends Seeder
             [
                 'name' => 'Chill Vibes',
                 'description' => 'Relax and unwind with these mellow tracks',
-                'playlistPath' => 'playlists/chill-vibes.jpg',
+                'playlistPath' =>  null,
                 'songs' => array_slice($relaxedSongs, 0, 20),
             ],
             [
                 'name' => 'Study Focus',
                 'description' => 'Stay focused with calming background music',
-                'playlistPath' => 'playlists/study-focus.jpg',
+                'playlistPath' => null,
                 'songs' => array_slice($relaxedSongs, 10, 18),
             ],
             [
                 'name' => 'Coffee Shop Ambience',
                 'description' => 'Like sitting in your favorite coffee shop',
-                'playlistPath' => 'playlists/coffee-shop.jpg',
+                'playlistPath' => null,
                 'songs' => array_slice($relaxedSongs, 5, 22),
             ],
             [
                 'name' => 'Late Night Thoughts',
                 'description' => 'For those quiet, contemplative nights',
-                'playlistPath' => 'playlists/late-night.jpg',
+                'playlistPath' => null,
                 'songs' => array_slice($relaxedSongs, 15, 20),
             ],
             [
                 'name' => 'Sunset Sessions',
                 'description' => 'Wind down as the day comes to an end',
-                'playlistPath' => 'playlists/sunset-sessions.jpg',
+                'playlistPath' => null,
                 'songs' => array_slice($relaxedSongs, 20, 15),
             ],
             [
                 'name' => 'Meditation & Mindfulness',
                 'description' => 'Find your inner peace',
-                'playlistPath' => 'playlists/meditation.jpg',
+                'playlistPath' => null,
                 'songs' => array_slice($relaxedSongs, 8, 17),
             ],
 
@@ -158,37 +158,37 @@ class PlaylistsSeeder extends Seeder
             [
                 'name' => 'Heartbreak Hotel',
                 'description' => 'Songs for when your heart is broken',
-                'playlistPath' => 'playlists/heartbreak.jpg',
+                'playlistPath' => null,
                 'songs' => array_slice($sadSongs, 0, 20),
             ],
             [
                 'name' => 'Melancholic Moments',
                 'description' => 'Embrace the sadness with these emotional tracks',
-                'playlistPath' => 'playlists/melancholic.jpg',
+                'playlistPath' => null,
                 'songs' => array_slice($sadSongs, 10, 18),
             ],
             [
                 'name' => 'Crying in the Rain',
                 'description' => 'Let the tears flow freely',
-                'playlistPath' => 'playlists/crying-rain.jpg',
+                'playlistPath' => null,
                 'songs' => array_slice($sadSongs, 15, 22),
             ],
             [
                 'name' => 'Lost Love',
                 'description' => 'Remembering what once was',
-                'playlistPath' => 'playlists/lost-love.jpg',
+                'playlistPath' => null,
                 'songs' => array_slice($sadSongs, 5, 20),
             ],
             [
                 'name' => 'Lonely Nights',
                 'description' => 'Company for your solitude',
-                'playlistPath' => 'playlists/lonely-nights.jpg',
+                'playlistPath' => null,
                 'songs' => array_slice($sadSongs, 20, 15),
             ],
             [
                 'name' => 'Beautiful Sadness',
                 'description' => 'Finding beauty in the pain',
-                'playlistPath' => 'playlists/beautiful-sadness.jpg',
+                'playlistPath' => null,
                 'songs' => array_slice($sadSongs, 8, 19),
             ],
 
@@ -196,7 +196,7 @@ class PlaylistsSeeder extends Seeder
             [
                 'name' => 'Emotional Rollercoaster',
                 'description' => 'A journey through all emotions',
-                'playlistPath' => 'playlists/emotional-rollercoaster.jpg',
+                'playlistPath' => null,
                 'songs' => array_merge(
                     array_slice($happySongs, 0, 5),
                     array_slice($sadSongs, 0, 5),
@@ -207,13 +207,13 @@ class PlaylistsSeeder extends Seeder
             [
                 'name' => 'Top 50 Hits',
                 'description' => 'The most popular songs across all moods',
-                'playlistPath' => 'playlists/top-50.jpg',
+                'playlistPath' => null,
                 'songs' => array_slice($allSongs, 0, 50),
             ],
             [
                 'name' => 'Weekly Discovery',
                 'description' => 'Fresh picks for this week',
-                'playlistPath' => 'playlists/weekly-discovery.jpg',
+                'playlistPath' => null,
                 'songs' => array_merge(
                     array_slice($happySongs, 5, 8),
                     array_slice($relaxedSongs, 5, 8),
@@ -224,7 +224,7 @@ class PlaylistsSeeder extends Seeder
             [
                 'name' => '2010s Throwback',
                 'description' => 'Nostalgia from the 2010s era',
-                'playlistPath' => 'playlists/2010s-throwback.jpg',
+                'playlistPath' => null,
                 'songs' => array_merge(
                     array_slice($happySongs, 0, 10),
                     array_slice($sadSongs, 0, 10),
@@ -234,7 +234,7 @@ class PlaylistsSeeder extends Seeder
             [
                 'name' => 'Acoustic Sessions',
                 'description' => 'Stripped down and beautiful',
-                'playlistPath' => 'playlists/acoustic.jpg',
+                'playlistPath' => null,
                 'songs' => array_merge(
                     array_slice($relaxedSongs, 10, 10),
                     array_slice($sadSongs, 10, 10)
@@ -243,7 +243,7 @@ class PlaylistsSeeder extends Seeder
             [
                 'name' => 'Power Ballads',
                 'description' => 'Epic emotional anthems',
-                'playlistPath' => 'playlists/power-ballads.jpg',
+                'playlistPath' => null,
                 'songs' => array_merge(
                     array_slice($sadSongs, 5, 8),
                     array_slice($angrySongs, 5, 7),
@@ -253,7 +253,7 @@ class PlaylistsSeeder extends Seeder
             [
                 'name' => 'Indie Favorites',
                 'description' => 'Best of indie music',
-                'playlistPath' => 'playlists/indie-favorites.jpg',
+                'playlistPath' => null,
                 'songs' => array_merge(
                     array_slice($relaxedSongs, 15, 10),
                     array_slice($sadSongs, 15, 8)
@@ -262,7 +262,7 @@ class PlaylistsSeeder extends Seeder
             [
                 'name' => 'Love Songs Collection',
                 'description' => 'Songs about love in all its forms',
-                'playlistPath' => 'playlists/love-songs.jpg',
+                'playlistPath' => null,
                 'songs' => array_merge(
                     array_slice($happySongs, 20, 8),
                     array_slice($sadSongs, 20, 8),
