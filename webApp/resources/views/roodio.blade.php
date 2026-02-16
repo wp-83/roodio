@@ -330,7 +330,7 @@
         <main>
 
             <!-- Hero Section -->
-            <section class="relative min-h-[100vh] flex items-center bg-primary-85 text-white overflow-hidden pb-10 md:pb-0">
+            <section class="relative min-h-[100svh] flex items-center bg-primary-85 text-white overflow-hidden pb-10 md:pb-0">
                 <!-- Full Bg Pattern (Subtle) -->
                 <div class="absolute inset-0 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:60px_60px] opacity-[0.03] pointer-events-none"></div>
                 
