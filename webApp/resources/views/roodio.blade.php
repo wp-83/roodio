@@ -1,6 +1,9 @@
 @extends('layouts.master')
 
 
+{{-- @section('bodyClass', 'scrollbar scrollbar-thumb-secondary-happy-85/75 scrollbar-track-transparent') --}}
+
+
 @section('title', 'ROODIO - Music Player Based on Your Mood')
 
 
@@ -149,12 +152,8 @@
                 centeredSlides: true,
                 loop: true,
                 loopedSlides: 4,
-                speed: 400,
-                autoplay: {
-                    delay: 5000,
-                    disableOnInteraction: false,
-                    pauseOnMouseEnter: true,
-                },
+                speed: 500,
+                autoplay: false,
                 pagination: {
                     el: ".swiper-pagination",
                     clickable: true,
@@ -182,9 +181,37 @@
                         slidesPerGroup: 1,
                         spaceBetween: 40,
                     },
-                },
+                }
             });
+
+            let autoSlide = setInterval(() => {
+                swiper.slideNext();
+            }, 4000); 
+
+            const resetInterval = () => {
+                clearInterval(autoSlide);
+                autoSlide = setInterval(() => {
+                    swiper.slideNext();
+                }, 4000);
+            };
+
+            document.querySelector('.swiper-button-next')?.addEventListener('click', resetInterval);
+            document.querySelector('.swiper-button-prev')?.addEventListener('click', resetInterval);
+
+            document.querySelectorAll('.swiper-pagination-bullet')?.forEach(bullet => {
+                bullet.addEventListener('click', resetInterval);
+            });
+
+            swiper.on('touchEnd', resetInterval);
         });
+
+        function scrollToTop(event) {
+            event.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
     </script>
 @endpush
 
@@ -194,7 +221,7 @@
         [
             'icon' => '🎭',
             'title' => 'Smart Mood Recognition',
-            'desc' => 'Roodio understands your mood and recommends music that truly matches how you feel.',
+            'desc' => 'ROODIO understands your mood and recommends music that truly matches how you feel.',
             'color' => 'angry'
         ],
         [
@@ -354,7 +381,7 @@
                             </span>
                         </h1>
                         <p class="font-secondaryAndButton text-white text-small md:text-body-size lg:text-paragraph mb-8 md:mb-12 leading-relaxed max-w-2xl mx-auto drop-shadow-md">
-                            Roodio matches music to your mood.
+                            ROODIO matches music to your mood.
                             <br>Enjoy songs that fit how you feel right now.
                         </p>
                         
@@ -464,7 +491,7 @@
                     <div class="text-center max-w-2xl mx-auto mb-10 md:mb-16" data-aos="fade-up">
                         <h2 class="font-primary text-paragraph md:text-subtitle lg:text-title font-bold text-primary-50 mb-3 md:mb-4">WHY MUST ROODIO?</h2>
                         <div class="w-16 md:w-24 h-1 bg-secondary-happy-85 mx-auto rounded-full"></div>
-                        <p class="font-secondaryAndButton text-secondary-angry-100 mt-4 md:mt-6 text-small md:text-body-size px-4">Discover features made to fit your daily life. <br>Swipe to see what Roodio can do for you.</p>
+                        <p class="font-secondaryAndButton text-secondary-angry-100 mt-4 md:mt-6 text-small md:text-body-size px-4">Discover features made to fit your daily life. <br>Swipe to see what ROODIO can do for you.</p>
                     </div>
 
                     <!-- Swiper - Menambah lebih banyak fitur -->
@@ -647,48 +674,43 @@
         </main>
 
         <!-- Footer -->
-        <footer id="footer" class="bg-primary-100 border-t border-white/10 pt-10 md:pt-16 pb-8 text-white relative z-20">
+        <footer id="footer" class="bg-primary-100 border-t border-white/10 pt-6 pb-6 text-white relative z-20">
             <div class="container mx-auto px-6">
-                <div class="grid md:grid-cols-4 gap-8 md:gap-12 mb-10 md:mb-16 text-center md:text-left">
-                    <!-- Brand -->
-                    <div class="col-span-1 md:col-span-2 md:pr-8 flex flex-col items-center md:items-start">
-                         <div class="w-24 md:w-32 mb-4 md:mb-6">
-                            <img src="{{ asset('assets/logo/logo-horizontal.png') }}" alt="Logo" class="w-full grayscale brightness-200 hover:brightness-100 hover:grayscale-0 transition-all duration-500">
-                         </div>
-                         <p class="font-secondaryAndButton text-primary-20 text-xs md:text-sm leading-relaxed mb-6 max-w-sm">
-                             Pioneering the future of emotional audio intelligence. Roodio connects human emotion with sonic landscapes through data-driven curation.
-                         </p>
-                         <a href="mailto:roodio.team@gmail.com" class="font-secondaryAndButton text-primary-30 hover:text-white transition-colors text-xs md:text-sm font-medium flex items-center gap-2">
-                            <span>📧</span> roodio.team@gmail.com
-                         </a>
+                <!-- Simple layout: centered content on mobile, flex on desktop -->
+                <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-8 md:gap-12 mb-8">
+                    <!-- Brand section with logo and description -->
+                    <div class="flex flex-col items-center md:items-start max-w-md mx-auto md:mx-0">
+                        <div class="w-48 md:w-58 mb-4">
+                            <img src="{{ asset('assets/logo/logo-horizontal.png') }}" alt="Roodio Logo" class="w-full">
+                        </div>
+                        <p class="font-secondaryAndButton text-white text-small leading-relaxed text-center md:pl-4 md:text-left">
+                            Pioneering the future of emotional audio intelligence. ROODIO connects human emotion with sonic landscapes through data-driven curation.
+                        </p>
                     </div>
-
-                    <!-- Links -->
-                    <div>
-                        <h4 class="font-primary font-bold text-white mb-4 md:mb-6 uppercase text-xs md:text-sm tracking-wider">Platform</h4>
-                        <ul class="space-y-3 font-secondaryAndButton text-xs md:text-sm text-primary-30">
-                            <li><a href="#" class="hover:text-white transition-colors">Technology</a></li>
-                            <li><a href="#" class="hover:text-white transition-colors">Solutions</a></li>
-                            <li><a href="#" class="hover:text-white transition-colors">Integration</a></li>
-                        </ul>
-                    </div>
-
-                    <!-- Legal -->
-                    <div>
-                        <h4 class="font-primary font-bold text-white mb-4 md:mb-6 uppercase text-xs md:text-sm tracking-wider">Legal</h4>
-                        <ul class="space-y-3 font-secondaryAndButton text-xs md:text-sm text-primary-30">
-                            <li><a href="#" class="hover:text-white transition-colors">Privacy Notice</a></li>
-                            <li><a href="#" class="hover:text-white transition-colors">Terms of Use</a></li>
-                            <li><a href="#" class="hover:text-white transition-colors">Accessibility</a></li>
-                        </ul>
+                    
+                    <!-- Right side: email + go to top button (stacked on mobile, row on desktop) -->
+                    <div class="flex flex-col-reverse items-center justify-center md:items-end gap-3">
+                        <!-- Email -->
+                        <a href="mailto:roodio.team@gmail.com" class="font-secondaryAndButton text-white hover:text-secondary-relaxed-50 transition-colors flex items-center gap-1 whitespace-nowrap">
+                            <img src="{{ asset('assets/icons/email-white.svg') }}" alt="email" class='w-8'>
+                            <span class='text-small'>roodio.team@gmail.com</span>
+                        </a>
+                        
+                        <!-- Go to Top Button with smooth scroll -->
+                        <a href="#" onclick="scrollToTop(event)" class="group flex items-center gap-2 px-4 py-2 border border-primary-40/30 rounded-full hover:bg-primary-60 transition-all duration-300 cursor-pointer">
+                            <span class="font-secondaryAndButton text-white group-hover:text-white text-small">Back to top</span>
+                            <svg class="w-4 h-4 text-white group-hover:text-white transform group-hover:-translate-y-0.5 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+                            </svg>
+                        </a>
                     </div>
                 </div>
-
-                <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-                    <p class="font-secondaryAndButton text-primary-40 text-xs text-center md:text-left">© {{ date('Y') }} PT ROODIO Indonesia. All rights reserved.</p>
+                
+                <!-- disclaimer -->
+                <div class="border-t border-white/10 pt-6 text-center">
+                    <p class="font-secondaryAndButton text-white text-micro">© {{ date('Y') }} - ROODIO Production. Intended exclusively for educational purposes, not for commercial distribution.</p>
                 </div>
             </div>
         </footer>
-
     </div>
 @endsection
