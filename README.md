@@ -69,7 +69,7 @@ The production-ready models and training scripts are located in the `machineLear
 *   **`train_stage1_pytorch.py`**: Training script for **Stage 1**, focusing on initial audio feature extraction and classification using PyTorch.
 *   **`train_stage2a_angry_happy.py`**: Training script for **Stage 2A**, refining predictions for specific mood quadrants (Angry/Happy).
 *   **`lyrics_stage2b.ipynb`**: Jupyter Notebook for **Stage 2B**, handling the NLP pipeline and sentiment analysis of lyrics using RoBERTa.
-*   **`17_final_combined_cv.py`**: The **Final Combined Model** script that integrates outputs from all stages and performs cross-validation for robust mood prediction.
+
 *   **`test_manual_input.py`**: A utility script for manually testing the model with custom inputs to verify predictions.
 
 ### �🔬 Technical Approach
