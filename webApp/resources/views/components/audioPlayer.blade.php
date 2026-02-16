@@ -101,54 +101,11 @@
             </button>
             @endforeach
             
-            <!-- Mobile Sleep Timer Toggle -->
-            <button 
-                id="sleep-timer-mobile"
-                class='w-full text-left cursor-pointer h-max rounded-md px-2 py-1.5 flex flex-row items-center gap-2.5 transition-all duration-200' 
-                data-active-class="{{ $activeBgStyle[$mood] }}" 
-                data-inactive-class="bg-transparent {{ $hoverBgMoodStyle[$mood] }}">
-                <img src="{{ asset('assets/icons/sleep-timer.svg') }}" alt="sleep-timer" class='w-7 h-7 pointer-events-none'>
-                <div class="flex flex-col">
-                        <p class='text-primary-60 pointer-events-none'>Sleep Timer</p>
-                        <p id="sleep-timer-status-mobile" class="text-micro text-secondary-happy-50 hidden">Standard</p>
-                </div>
-                <svg class="ml-auto w-4 h-4 text-primary-60 -rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                </svg>
-            </button>
         </div>
     </x-slot>
 </x-modal>
 
-<!-- Mobile Sleep Timer Popup (Separate) -->
-<x-modal modalId='audioSleepTimerPopup' additionalStyle='absolute right-[18rem] bottom-24 w-max' :isNeedBg='false'>
-    <x-slot name='body'>
-        <div class='flex flex-col gap-1 min-w-[10rem]'>
-            <div class="text-primary-60 text-xs font-bold px-4 py-2 border-b border-primary-70/50 mb-1">Sleep Timer</div>
-            @php
-                $timerOptionsMobile = [
-                    '5' => '5 Minutes',
-                    '10' => '10 Minutes',
-                    '15' => '15 Minutes',
-                    '30' => '30 Minutes',
-                    '45' => '45 Minutes',
-                    '60' => '1 Hour',
-                    'end' => 'End of Track',
-                    'off' => 'Turn Off'
-                ];
-            @endphp
-            @foreach($timerOptionsMobile as $val => $label)
-                <button 
-                    class="sleep-timer-opt-mobile w-full text-left px-4 py-2 text-small text-primary-40 hover:text-primary-60 hover:bg-primary-70/50 rounded-md transition-colors flex justify-between items-center"
-                    data-value="{{ $val }}"
-                >
-                    <span>{{ $label }}</span>
-                    <span class="active-indicator-mobile hidden text-secondary-happy-50">●</span>
-                </button>
-            @endforeach
-        </div>
-    </x-slot>
-</x-modal>
+
 
 <div 
     id='audioPlayer' 
@@ -188,31 +145,77 @@
     >
         <div class="flex-1 flex flex-col md:flex-row min-h-0 overflow-y-auto md:overflow-hidden scrollbar-hide">
             <!-- Left Section (Unified Spinning Disc) -->
-            <div class="w-full md:w-3/5 relative aspect-square md:aspect-none max-h-[60vh] md:max-h-none md:min-h-0 shrink-0 overflow-hidden flex items-center justify-center bg-transparent">
+            <div class="w-full md:w-3/5 relative aspect-square md:aspect-none max-h-[60vh] md:max-h-none md:min-h-0 shrink-0 flex items-center justify-center bg-transparent">
                 
-                <!-- Vinyl Disc Container -->
-                <div id="vinylDisc" class="relative w-[50%] aspect-square rounded-full border-[4px] border-primary-40/30 flex items-center justify-center shadow-2xl vinyl-spin vinyl-paused">
-                    
-                    <!-- Visualizer Canvas (Behind) -->
-                    <canvas id="audioVisualizer" class="absolute inset-[-60%] w-[220%] h-[220%] rounded-full pointer-events-none opacity-80" 
-                            style="mix-blend-mode: screen;"
-                            data-beat-color="{{ $visualizerColors[$mood] }}"></canvas>
-
-                    <!-- Vinyl Grooves/Body -->
-                    <div class="absolute inset-0 rounded-full bg-[#101010] shadow-xl border border-black/50 flex items-center justify-center overflow-hidden z-10">
-                         <div class="absolute inset-0 rounded-full bg-[repeating-radial-gradient(#111_0,#111_2px,#222_3px)] opacity-50"></div>
-                         <div class="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent pointer-events-none z-10"></div>
+                <!-- Unified Sleep Timer Button (Top Right) -->
+                <button 
+                    id="sleep-timer-mobile"
+                    class="absolute top-4 right-4 z-30 p-2 rounded-full {{ $mainBtnStyle[$mood] }} backdrop-blur-sm border border-white/10 text-white transition-all duration-200"
+                    data-active-class="bg-primary-60/90 text-secondary-happy-50"
+                    data-inactive-class="{{ $mainBtnStyle[$mood] }} text-white"
+                    title="Sleep Timer"
+                >
+                     <div class="flex flex-col items-center">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class='w-6 h-6 pointer-events-none text-white'>
+                            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span id="sleep-timer-status-mobile" class="text-[0.6rem] font-bold hidden bg-primary-70 px-1 rounded mt-0.5">--</span>
                     </div>
+                </button>
+                
+                <!-- Sleep Timer Popup (Absolute within container) -->
+                 <div id="audioSleepTimerPopup" class="absolute top-16 right-4 z-40 w-max bg-white rounded-lg shadow-lg p-2 min-w-[10rem] opacity-0 invisible transition-all duration-300 origin-top-right font-secondaryAndButton">
+                    <div class='flex flex-col gap-1'>
+                        <div class="text-primary-60 text-body-size md:text-paragraph font-bold px-4 py-2 border-b border-primary-70/50 mb-1">Sleep Timer</div>
+                        @php
+                            $timerOptionsMobile = [
+                                '5' => '5 Minutes',
+                                '10' => '10 Minutes',
+                                '15' => '15 Minutes',
+                                '30' => '30 Minutes',
+                                '45' => '45 Minutes',
+                                '60' => '1 Hour',
+                                'end' => 'End of Track',
+                                'off' => 'Turn Off'
+                            ];
+                        @endphp
+                        @foreach($timerOptionsMobile as $val => $label)
+                            <button 
+                                class="sleep-timer-opt-mobile w-full text-left px-4 py-2 text-small text-primary-40 hover:text-primary-60 hover:bg-primary-70/50 rounded-md transition-colors flex justify-between items-center"
+                                data-value="{{ $val }}"
+                            >
+                                <span>{{ $label }}</span>
+                                <span class="active-indicator-mobile hidden text-secondary-happy-50">●</span>
+                            </button>
+                        @endforeach
+                    </div>
+                </div>
+                <!-- Vinyl Disc Container (Wrapped for Clipping) -->
+                <div class="absolute inset-0 overflow-hidden flex items-center justify-center z-0">
+                    <div id="vinylDisc" class="relative w-[50%] aspect-square rounded-full border-[4px] border-primary-40/30 flex items-center justify-center shadow-2xl vinyl-spin vinyl-paused">
+                        
+                        <!-- Visualizer Canvas (Behind) -->
+                        <canvas id="audioVisualizer" class="absolute inset-[-60%] w-[220%] h-[220%] rounded-full pointer-events-none opacity-80" 
+                                style="mix-blend-mode: screen;"
+                                data-beat-color="{{ $visualizerColors[$mood] }}"></canvas>
 
-                    <!-- Center Label (Full Image) -->
-                    <div class="w-[65%] h-[65%] rounded-full flex items-center justify-center relative z-20 shadow-inner overflow-hidden border-[4px] border-[#151515] group">
-                         <img :src="songImage" class="w-full h-full object-cover opacity-95 group-hover:scale-105 transition-transform duration-700">
-                         
-                         <!-- Spinner Center Hole -->
-                         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-[#111] rounded-full shadow-inner border border-white/10"></div>
-                         
-                         <!-- Shine/glare on label -->
-                         <div class="absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent pointer-events-none"></div>
+                        <!-- Vinyl Grooves/Body -->
+                        <div class="absolute inset-0 rounded-full bg-[#101010] shadow-xl border border-black/50 flex items-center justify-center overflow-hidden z-10">
+                             <div class="absolute inset-0 rounded-full bg-[repeating-radial-gradient(#111_0,#111_2px,#222_3px)] opacity-50"></div>
+                             <div class="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent pointer-events-none z-10"></div>
+                        </div>
+
+                        <!-- Center Label (Full Image) -->
+                        <div class="w-[65%] h-[65%] rounded-full flex items-center justify-center relative z-20 shadow-inner overflow-hidden border-[4px] border-[#151515] group">
+                             <img :src="songImage" class="w-full h-full object-cover opacity-95 group-hover:scale-105 transition-transform duration-700">
+                             
+                             <!-- Spinner Center Hole -->
+                             <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-[#111] rounded-full shadow-inner border border-white/10"></div>
+                             
+                             <!-- Shine/glare on label -->
+                             <div class="absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent pointer-events-none"></div>
+                        </div>
                     </div>
                 </div>
 
@@ -340,60 +343,7 @@
                         </svg>
                     </button>
                     
-                    <!-- Sleep Timer Button & Dropdown -->
-                    <div class="relative" x-data="{ open: false }">
-                        <button 
-                            @click="open = !open" 
-                            @click.outside="open = false"
-                            class='{{ 'w-9 h-9 p-1 rounded-full cursor-pointer ' . $bgStyle[$mood] . ' ' }}' 
-                            id='sleep-timer' 
-                            data-active-class="{{ $activeBgStyle[$mood] }}" 
-                            data-inactive-class="{{ $bgStyle[$mood] }}"
-                            title="Sleep Timer"
-                        >
-                            <svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="{{ $elementStyle[$mood] }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M12 6V12L16 14" stroke="{{ $elementStyle[$mood] }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </button>
-                        
-                        <!-- Dropdown Menu -->
-                        <div 
-                            x-show="open" 
-                            x-transition:enter="transition ease-out duration-100"
-                            x-transition:enter-start="transform opacity-0 scale-95"
-                            x-transition:enter-end="transform opacity-100 scale-100"
-                            x-transition:leave="transition ease-in duration-75"
-                            x-transition:leave-start="transform opacity-100 scale-100"
-                            x-transition:leave-end="transform opacity-0 scale-95"
-                            class="absolute bottom-12 left-1/2 -translate-x-1/2 w-48 bg-primary-100 rounded-md shadow-lg py-1 z-50 border border-primary-70"
-                            style="display: none;"
-                        >
-                            <div class="text-white text-xs font-bold px-4 py-2 border-b border-primary-70">Sleep Timer</div>
-                            @php
-                                $timerOptions = [
-                                    '5' => '5 Minutes',
-                                    '10' => '10 Minutes',
-                                    '15' => '15 Minutes',
-                                    '30' => '30 Minutes',
-                                    '45' => '45 Minutes',
-                                    '60' => '1 Hour',
-                                    'end' => 'End of Track',
-                                    'off' => 'Turn Off'
-                                ];
-                            @endphp
-                            @foreach($timerOptions as $val => $label)
-                                <button 
-                                    class="sleep-timer-opt w-full text-left px-4 py-2 text-small text-gray-300 hover:bg-primary-70 hover:text-white transition-colors flex justify-between items-center"
-                                    data-value="{{ $val }}"
-                                    @click="open = false"
-                                >
-                                    <span>{{ $label }}</span>
-                                    <span class="active-indicator hidden text-secondary-happy-50">●</span>
-                                </button>
-                            @endforeach
-                        </div>
-                    </div>
+
                     <div class='flex gap-1 items-center'>
                         <button class='{{ 'w-9 h-9 p-1 rounded-full cursor-pointer ' . $bgStyle[$mood] . ' ' }}' id='speaker'>
                             <svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -532,7 +532,7 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
 
                         // Active Styling
                         if (isMobile) {
-                            opt.classList.add('text-white', 'font-bold');
+                            opt.classList.add('text-blue-500', 'font-bold');
                             opt.classList.remove('text-primary-40');
                         } else {
                             opt.classList.add('bg-primary-70', 'text-white');
@@ -543,7 +543,7 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
 
                         // Inactive Styling (Reset to default)
                         if (isMobile) {
-                            opt.classList.remove('text-white', 'font-bold');
+                            opt.classList.remove('text-blue-500', 'font-bold');
                             opt.classList.add('text-primary-40');
                         } else {
                             opt.classList.remove('bg-primary-70', 'text-white');
@@ -603,14 +603,7 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
             }
         }
 
-        // Desktop Dropdown Listeners
-        sleepTimerOptions.forEach(opt => {
-            opt.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                handleTimerSelection(opt.dataset.value);
-            });
-        });
+
 
         // Mobile Dropdown Listeners
         sleepTimerOptionsMobile.forEach(opt => {
