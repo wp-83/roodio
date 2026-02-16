@@ -259,7 +259,7 @@
             'photo' => 'william.jpg'
         ],
         [
-            'name' => 'Agnes Gonxha F. Sukma',
+            'name' => 'Agnes G. F. Sukma',
             'role' => 'UI/UX Designer',
             'photo' => 'agnes.jpg'
         ],
@@ -560,7 +560,7 @@
 
                 <div class="container mx-auto px-6 relative z-10 pt-10 md:pt-16">
                     <div class="text-center mb-16 md:mb-20" data-aos="fade-up">
-                         <h2 class="font-primary text-subtitle md:text-title font-bold mb-4">Meet the Crews</h2>
+                         <h2 class="font-primary text-subtitle md:text-title font-bold mb-4 uppercase">Meet the Crews</h2>
                          <p class="font-secondaryAndButton text-white max-w-2xl mx-auto text-micro md:text-small">The team behind the development and evaluation of ROODIO.</p>
                     </div>
 
