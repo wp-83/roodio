@@ -76,7 +76,12 @@
         'angry' => '#EB5F68'
     ];
 
-
+    $textBaseStyleBtn = [
+        'happy' => 'text-secondary-happy-50',
+        'sad' => 'text-secondary-sad-50',
+        'relaxed' => 'text-secondary-relaxed-50',
+        'angry' => 'text-secondary-angry-50'
+    ];
 @endphp
 
 
@@ -187,12 +192,12 @@
                 <div class="flex flex-row shrink-0 border-b border-primary-70">
                     <button
                         @click="activeTab = 'tracks'"
-                        :class="activeTab === 'tracks' ? 'border-b-2 border-white text-white' : 'text-primary-40 hover:text-white'"
+                        :class="activeTab === 'tracks' ? 'border-b-2 border-white text-white' : '{{ $textBaseStyleBtn[$mood] }} hover:text-white'"
                         class="flex-1 py-3 text-center font-secondaryAndButton text-body-size transition-colors duration-200"
                     >Tracks</button>
                     <button
                         @click="activeTab = 'lyrics'"
-                        :class="activeTab === 'lyrics' ? 'border-b-2 border-white text-white' : 'text-primary-40 hover:text-white'"
+                        :class="activeTab === 'lyrics' ? 'border-b-2 border-white text-white' : '{{ $textBaseStyleBtn[$mood] }} hover:text-white'"
                         class="flex-1 py-3 text-center font-secondaryAndButton text-body-size transition-colors duration-200"
                     >Lyrics</button>
                 </div>
@@ -200,13 +205,13 @@
                 <div class="flex-1 md:overflow-y-auto p-4 scrollbar scrollbar-thumb-primary-10/75 scrollbar-track-transparent">
                     <!-- Lyrics Content -->
                     <div x-show="activeTab === 'lyrics'" class="w-full md:h-full">
-                        <div id="popupLyricsContent" class="text-primary-20 text-small font-secondaryAndButton whitespace-pre-line leading-relaxed">
+                        <div id="popupLyricsContent" class="text-white text-small lg:text-body-size font-secondaryAndButton whitespace-pre-line leading-relaxed">
                             <!-- Lyrics will be rendered here by JS -->
                         </div>
                     </div>
                     <!-- Tracks Content -->
                     <div x-show="activeTab === 'tracks'" class="w-full md:h-full">
-                        <div id="popupTracksList" class="flex flex-col gap-1">
+                        <div id="popupTracksList" class="flex flex-col gap-3">
                             <!-- Tracks will be rendered here by JS -->
                         </div>
                     </div>

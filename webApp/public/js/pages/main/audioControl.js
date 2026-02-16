@@ -67,7 +67,7 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
 
             container.innerHTML = '';
             if (playlist.length === 0) {
-                container.innerHTML = '<p class="text-primary-40 text-small text-center py-4">No tracks in queue</p>';
+                container.innerHTML = '<p class="text-white font-secondaryAndButton font-bold text-small lg:text-body-size text-center py-4">No tracks in queue</p>';
                 return;
             }
 
@@ -77,18 +77,18 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
                 const isActive = songIdx === currentIndex;
 
                 const item = document.createElement('div');
-                item.className = `flex flex-row items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition-colors duration-150 ${isActive ? 'bg-primary-70' : 'hover:bg-primary-85'
+                item.className = `flex flex-row items-center gap-3 px-2 py-1.5 rounded-lg cursor-pointer transition-colors duration-150 ${isActive ? 'bg-primary-70/70' : 'hover:bg-primary-85'
                     }`;
                 item.dataset.songIndex = songIdx;
 
                 item.innerHTML = `
-                    <span class="text-small font-secondaryAndButton ${isActive ? 'text-white' : 'text-primary-40'} w-6 text-center shrink-0">${orderIdx + 1}</span>
+                    <span class="text-small font-secondaryAndButton ${isActive ? 'text-white' : 'text-shadedOfGray-30'} w-6 text-center shrink-0">${orderIdx + 1}</span>
                     <div class="w-10 h-10 rounded-md overflow-hidden bg-primary-70 shrink-0">
-                        <img src="${song.cover || song.image || ''}" alt="" class="w-full h-full object-cover">
+                        <img src="${song.cover || song.image || ''}" alt="song" class="w-full h-full object-cover">
                     </div>
                     <div class="flex-1 min-w-0">
-                        <p class="text-small font-secondaryAndButton truncate ${isActive ? 'text-white font-bold' : 'text-primary-20'}">${song.title || 'Unknown'}</p>
-                        <p class="text-micro truncate ${isActive ? 'text-primary-30' : 'text-primary-40'}">${song.artist || 'Unknown'}</p>
+                        <p class="text-small lg:text-body-size font-secondaryAndButton truncate ${isActive ? 'text-white font-bold' : 'text-white'}">${song.title || 'Unknown'}</p>
+                        <p class="text-micro lg:text-small truncate font-secondaryAndButton text-shadedOfGray-30">${song.artist || 'Unknown'}</p>
                     </div>
                 `;
 
