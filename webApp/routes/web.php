@@ -11,7 +11,7 @@ use App\Http\Controllers\User\MoodController;
 use App\Http\Controllers\User\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/roodio', function () {
+Route::get('/', function () {
     return view('roodio');
 })->name('roodio');
 
@@ -75,7 +75,7 @@ Route::prefix('/')->middleware(['auth', 'role:0', 'prevent-back-history'])->grou
         Route::post('preference-update', [MoodController::class, 'preferenceUpdate'])->name('preference.update');
     });
                 
-    Route::get('', [App\Http\Controllers\User\SongController::class, 'index'])->name('user.index');
+    Route::get('home', [App\Http\Controllers\User\SongController::class, 'index'])->name('user.index');
     Route::get('{playlists}', [App\Http\Controllers\User\SongController::class, 'playlists'])->name('user.playlists');
 });
 
