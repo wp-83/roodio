@@ -164,17 +164,17 @@
                 observeSlideChildren: true,
                 breakpoints: {
                     320: {
-                        slidesPerView: 1.2, // Turunkan sedikit
+                        slidesPerView: 1.2,
                         slidesPerGroup: 1,
                         spaceBetween: 20,
                     },
                     640: {
-                        slidesPerView: 1.8, // Turunkan
+                        slidesPerView: 1.8,
                         slidesPerGroup: 1,
                         spaceBetween: 30,
                     },
                     1024: {
-                        slidesPerView: 2.5, // Turunkan dari 3 ke 2.5
+                        slidesPerView: 2.5,
                         slidesPerGroup: 1,
                         spaceBetween: 40,
                     },
@@ -188,28 +188,12 @@
     <div class="font-secondaryAndButton text-primary-85 bg-white overflow-x-hidden">
 
         <!-- Header -->
-        <header class="fixed top-0 left-0 w-full z-50 bg-primary-85/95 backdrop-blur-md text-white shadow-md transition-all duration-300">
-            <div class="container mx-auto px-4 md:px-6 h-16 md:h-20 flex items-center justify-between">
+        <header class="fixed top-0 left-0 w-full z-50 py-1.5 bg-primary-70 backdrop-blur-md text-white shadow-xs shadow-white transition-all duration-300">
+            <div class="container mx-auto px-4 md:px-6 h-max flex items-center justify-between">
                 <!-- Logo -->
-                <a href="#" class="block w-24 md:w-32 lg:w-36 hover:opacity-90 transition-opacity">
-                    <img src="{{ asset('assets/logo/logo-horizontal.png') }}" alt="ROODIO Logo" class="w-full h-auto brightness-0 invert">
+                <a href="/" class="block w-24 md:w-36 lg:w-48 hover:opacity-80 transition-opacity">
+                    <img src="{{ asset('assets/logo/logo-horizontal.png') }}" alt="ROODIO Logo" class="w-full h-auto">
                 </a>
-
-                <!-- Navigation (Desktop) -->
-                <nav class="hidden md:flex items-center gap-6 lg:gap-10">
-                    <a href="#features" class="font-secondaryAndButton text-white/80 hover:text-white text-xs lg:text-sm font-medium tracking-wide transition-colors relative group">
-                        Why Roodio
-                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary-happy-50 transition-all group-hover:w-full"></span>
-                    </a>
-                    <a href="#team" class="font-secondaryAndButton text-white/80 hover:text-white text-xs lg:text-sm font-medium tracking-wide transition-colors relative group">
-                        Our Team
-                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary-happy-50 transition-all group-hover:w-full"></span>
-                    </a>
-                    <a href="#footer" class="font-secondaryAndButton text-white/80 hover:text-white text-xs lg:text-sm font-medium tracking-wide transition-colors relative group">
-                        Contact
-                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary-happy-50 transition-all group-hover:w-full"></span>
-                    </a>
-                </nav>
 
                 <!-- CTA Button -->
                 <div>
@@ -219,10 +203,10 @@
         </header>
 
         <!-- Main Content -->
-        <main class="pt-16 md:pt-20">
+        <main>
 
             <!-- Hero Section -->
-            <section class="relative min-h-[85vh] flex items-center bg-primary-85 text-white overflow-hidden pb-10 md:pb-0">
+            <section class="relative min-h-[100vh] flex items-center bg-primary-85 text-white overflow-hidden pb-10 md:pb-0">
                 <!-- Full Bg Pattern (Subtle) -->
                 <div class="absolute inset-0 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:60px_60px] opacity-[0.03] pointer-events-none"></div>
                 
