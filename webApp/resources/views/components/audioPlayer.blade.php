@@ -14,10 +14,10 @@
     ];
 
     $bgStyle = [
-        'happy' => 'hover:bg-secondary-happy-10/30',
-        'sad' => 'hover:bg-secondary-sad-10/30',
-        'relaxed' => 'hover:bg-secondary-relaxed-10/30',
-        'angry' => 'hover:bg-secondary-angry-10/30'
+        'happy' => 'hover:bg-secondary-happy-10/30 active:bg-secondary-happy-10/30',
+        'sad' => 'hover:bg-secondary-sad-10/30 active:bg-secondary-sad-10/30',
+        'relaxed' => 'hover:bg-secondary-relaxed-10/30 active:bg-secondary-relaxed-10/30',
+        'angry' => 'hover:bg-secondary-angry-10/30 active:bg-secondary-angry-10/30'
     ];
 
     $textStyle = [
@@ -49,17 +49,17 @@
     ];
 
     $hoverBgMoodStyle = [
-        'happy' => 'hover:bg-secondary-happy-20',
-        'sad' => 'hover:bg-secondary-sad-20',
-        'relaxed' => 'hover:bg-secondary-relaxed-20',
-        'angry' => 'hover:bg-secondary-angry-20'
+        'happy' => 'hover:bg-secondary-happy-20 active:bg-secondary-happy-20',
+        'sad' => 'hover:bg-secondary-sad-20 active:bg-secondary-sad-20',
+        'relaxed' => 'hover:bg-secondary-relaxed-20 active:bg-secondary-relaxed-20',
+        'angry' => 'hover:bg-secondary-angry-20 active:bg-secondary-angry-20'
     ];
 
     $activeBgStyle = [
-        'happy' => 'bg-secondary-happy-20',
-        'sad' => 'bg-secondary-sad-20',
-        'relaxed' => 'bg-secondary-relaxed-20',
-        'angry' => 'bg-secondary-angry-20'
+        'happy' => 'bg-secondary-happy-10/30',
+        'sad' => 'bg-secondary-sad-10/30',
+        'relaxed' => 'bg-secondary-relaxed-10/30',
+        'angry' => 'bg-secondary-angry-10/30'
     ];
 
     $cassetteStyle = [
@@ -307,14 +307,14 @@
                         <input type="range" name="volume" id="volumeSlider" min='0' max='1' step='0.01' class='{{ 'w-20 lg:w-28 ' . $sliderStyle[$mood] . ' ' }}'>
                     </div>
                     <!-- Expand Button -->
-                    <button class="flex items-center justify-center cursor-pointer p-0.5 rounded-full hover:bg-white/10 transition-all h-9 w-9" @click="isExpanded = !isExpanded" title="Expand Player">
+                    <button class="flex items-center justify-center cursor-pointer p-0.5 rounded-full hover:bg-white/10 active:bg-white/10 transition-all h-9 w-9" @click="isExpanded = !isExpanded" title="Expand Player">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" :class="isExpanded ? 'rotate-180' : ''" class="transition-transform duration-300">
                             <path d="M6 9L12 15L18 9" stroke="{{ $elementStyle[$mood] }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </button>
                 </div>
                     <!-- Mobile Expand/Collapse Arrow -->
-                    <button class="flex lg:hidden items-center justify-center cursor-pointer p-0.5 rounded-full hover:bg-white/10 transition-all h-9 w-9" @click="isExpanded = !isExpanded" title="Toggle Player">
+                    <button class="flex lg:hidden items-center justify-center cursor-pointer p-0.5 rounded-full hover:bg-white/10 active:bg-white/10 transition-all h-9 w-9" @click="isExpanded = !isExpanded" title="Toggle Player">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" :class="isExpanded ? 'rotate-180' : ''" class="transition-transform duration-300">
                             <path d="M6 9L12 15L18 9" stroke="{{ $elementStyle[$mood] }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>

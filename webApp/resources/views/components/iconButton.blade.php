@@ -32,10 +32,10 @@
     ];
 
     $backgroundHover = [
-        'happy' => 'bg-secondary-happy-10 hover:bg-secondary-happy-30',
-        'sad' => 'bg-secondary-sad-10 hover:bg-secondary-sad-30',
-        'relaxed' => 'bg-secondary-relaxed-10 hover:bg-secondary-relaxed-30',
-        'angry' => 'bg-secondary-angry-10 hover:bg-secondary-angry-30'
+        'happy' => 'bg-secondary-happy-10 hover:bg-secondary-happy-30 active:bg-secondary-happy-30',
+        'sad' => 'bg-secondary-sad-10 hover:bg-secondary-sad-30 active:bg-secondary-sad-30',
+        'relaxed' => 'bg-secondary-relaxed-10 hover:bg-secondary-relaxed-30 active:bg-secondary-relaxed-30',
+        'angry' => 'bg-secondary-angry-10 hover:bg-secondary-angry-30 active:bg-secondary-angry-30'
     ];
 @endphp
 
