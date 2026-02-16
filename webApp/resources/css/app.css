@@ -44,10 +44,9 @@ button:focus {
 
 @layer components {
   .container-body {
-    max-width: 2560px;
-    min-height: 100svh;
-    overflow-x: hidden;
-    @apply bg-primary-100 mx-auto;
+      max-width: 2560px;
+      overflow-x: hidden;
+      @apply bg-primary-100 mx-auto;
   }
 
   .datepicker-picker {
