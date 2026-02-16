@@ -66,7 +66,7 @@
                 @endif
             </div>
             <div class='flex flex-col items-center'>
-                <p class='text-small font-bold {{ $textMoodStyle[$mood] }}'>{{ Str::limit($fullname, 24) }}</p>
+                <p class='text-small font-bold {{ $textMoodStyle[$mood] }}'>{{ Str::limit($fullname, 19) }}</p>
                 <p class='text-micro text-primary-60'>{{ '@' . Str::limit($username, 18) }}</p>
             </div>
         </div>
