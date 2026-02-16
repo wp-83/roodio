@@ -17,7 +17,7 @@ x-on:password-updated.window="showPasswordModal = false">
              #8EE0B1 66%, 
              #F49DA0 100%)">
             {{-- Back Button --}}
-            <a href="/" wire:navigate
+            <a href="/home" wire:navigate
                class="absolute top-6 left-4 flex items-center gap-2 px-5 py-2 bg-primary-10 rounded-full text-white hover:bg-primary-60 transition group z-20">
                 <svg xmlns="http://www.w3.org/2000/svg" 
                     class="h-5 w-5 group-hover:-translate-x-1 transition-transform stroke-primary-60 group-hover:stroke-white" 
