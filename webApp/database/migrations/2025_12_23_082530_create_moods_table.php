@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('Moods', function (Blueprint $table) {
+        Schema::create('moods', function (Blueprint $table) {
             $table->char('id', 10)->primary();
             $table->string('type', 255)->unique();
             $table->timestamps();

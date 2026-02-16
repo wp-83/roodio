@@ -49,7 +49,7 @@ class Songs extends Model
 
     public function playlists()
     {
-        return $this->belongsToMany(Playlists::class, 'Tracks', 'songId', 'playlistId');
+        return $this->belongsToMany(Playlists::class, 'tracks', 'songId', 'playlistId');
     }
 
     public function getOppositesMood($mood)
