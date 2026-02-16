@@ -123,7 +123,7 @@ x-on:password-updated.window="showPasswordModal = false">
 
                                 {{-- Gender --}}
                                 <div>
-                                    <x-inputSelect id='gender' icon='gender' label='Gender' class='gender-select' defaultOption='Your gender...' wire:model="gender" >
+                                    <x-inputSelect id='gender' icon='gender' label='Gender' class='gender-select valid:bg-accent-20/60 valid:text-shadedOfGray-100 valid:not-italic invalid:text-shadedOfGray-60 invalid:italic' defaultOption='Your gender...' wire:model="gender" required>
                                         <x-slot:options>
                                             <option value="1" {{ old('gender') === '1' ? 'selected' : '' }}>Male</option>
                                             <option value="0" {{ old('gender') === '0' ? 'selected' : '' }}>Female</option>
@@ -134,7 +134,7 @@ x-on:password-updated.window="showPasswordModal = false">
 
                                 {{-- Region --}}
                                 <div class="col-span-1 md:col-span-2">
-                                    <x-inputSelect id='country' icon='country' label='Country' class='country-select' defaultOption='Your country...' wire:model="countryId" >
+                                    <x-inputSelect id='country' icon='country' label='Country' class='country-select valid:bg-accent-20/60 valid:text-shadedOfGray-100 valid:not-italic invalid:text-shadedOfGray-60 invalid:italic' defaultOption='Your country...' wire:model="countryId" required>
                                         <x-slot:options>
                                             @forelse($regions as $region)
                                                 <option value="{{ $region->id }}" {{ old('country') == $region->id ? 'selected' : '' }}>{{ $region->name }}</option>
@@ -203,7 +203,9 @@ x-on:password-updated.window="showPasswordModal = false">
                                     
                                     {{-- Password Info --}}
                                     <div class="">
-                                        <p class="text-micro lg:text-small text-shadedOfGray-70 italic">Last password changed: 3 months ago</p>
+                                    <div class="">
+                                        <p class="text-micro lg:text-small text-shadedOfGray-70 italic">Last password changed: {{ $passwordLastChanged ? $passwordLastChanged->diffForHumans() : 'Never' }}</p>
+                                    </div>
                                     </div>
                                 </div>
                             </div>
