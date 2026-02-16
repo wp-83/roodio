@@ -273,7 +273,7 @@
     <div id='overlayNan' class='hidden absolute bottom-0 z-10 h-23.25 w-full bg-shadedOfGray-85/50 cursor-not-allowed'></div>
     
     <!-- Audio Element -->
-    <audio id='audio' preload="metadata" crossorigin="anonymous"></audio>
+    <audio id='audio' preload="auto" crossorigin="anonymous"></audio>
     
     <!-- Main Player Bar -->
     <div class='relative bg-primary-85 w-full'>
