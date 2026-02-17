@@ -7,6 +7,8 @@
 ![Python](https://img.shields.io/badge/Python-3.x-3776AB?style=for-the-badge&logo=python)
 ![TensorFlow](https://img.shields.io/badge/TensorFlow-2.15-FF6F00?style=for-the-badge&logo=tensorflow)
 ![Azure](https://img.shields.io/badge/Azure_Blob_Storage-0078D4?style=for-the-badge&logo=microsoft-azure)
+![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)
+![HuggingFace](https://img.shields.io/badge/Hugging%20Face-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black)
 
 ## 📖 Overview
 
@@ -30,7 +32,7 @@ The `webApp` serves as the core platform for users, admins, and super admins. It
 ### ✨ Key Features
 
 *   **🎧 Smart Audio Player**:
-    *   real-time audio visualizer.
+    *   **Real-time Beat Visualization** & Audio Spectrum.
     *   Interactive vinyl record animation.
     *   Full-screen immersive mode with lyrics and queue management.
 *   **😊 Mood Tracking & Analytics**:
@@ -54,12 +56,16 @@ The `webApp` serves as the core platform for users, admins, and super admins. It
 *   **Frontend**: Livewire 3.7, TailwindCSS 4.x, Alpine.js
 *   **Database**: MySQL 8.x
 *   **Storage**: Azure Blob Storage
+*   **Cloud Server (VM)**: Azure VM
+*   **Email Service**: Brevo (SMTP)
+*   **CDN & Security**: Cloudflare
+*   **Domain**: Hostinger
 *   **Build Tools**: Vite, PostCSS
 
 ### 🎨 Frontend Libraries & Tools
 
 *   **UI Components**: [Flowbite](https://flowbite.com/)
-*   **Charts & Visualizations**: [Chart.js](https://www.chartjs.org/)
+*   **Charts & Visualizations**: [ApexCharts](https://apexcharts.com/), [Chart.js](https://www.chartjs.org/)
 *   **Calendar**: [FullCalendar](https://fullcalendar.io/)
 *   **Tooltips & Popups**:
     *   [Popper.js](https://popper.js.org/)
@@ -102,7 +108,7 @@ The system employs a multi-stage pipeline:
 ### 🧰 ML Libraries & Tools
 
 *   **Core**: `numpy` (<2.0.0), `pandas`, `scipy`
-*   **Deep Learning**: `tensorflow` (>=2.15), `torch`, `transformers` (HuggingFace)
+*   **Deep Learning**: `tensorflow` (>=2.15), `torch` (PyTorch), `transformers` (Hugging Face)
 *   **Audio Processing**: `librosa`, `soundfile`, `audioread`
 *   **Classical ML**: `scikit-learn`, `xgboost`
 *   **Ops & Tracking**: `mlflow` for experiment tracking.
@@ -211,4 +217,3 @@ This project is intended for **educational purposes only**. It is not designed f
 ## 📝 License
 
 This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-
