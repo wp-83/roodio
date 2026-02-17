@@ -56,10 +56,10 @@
     ];
 
     $activeBgStyle = [
-        'happy' => 'bg-secondary-happy-10/30',
-        'sad' => 'bg-secondary-sad-10/30',
-        'relaxed' => 'bg-secondary-relaxed-10/30',
-        'angry' => 'bg-secondary-angry-10/30'
+        'happy' => 'bg-secondary-happy-20',
+        'sad' => 'bg-secondary-sad-20',
+        'relaxed' => 'bg-secondary-relaxed-20',
+        'angry' => 'bg-secondary-angry-20'
     ];
 
     $cassetteStyle = [
