@@ -25,7 +25,7 @@ class EmailOtp extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Email Otp',
+            subject: 'TWO WAY VERIFICATION',
         );
     }
 
