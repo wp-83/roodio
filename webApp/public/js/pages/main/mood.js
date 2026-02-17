@@ -6,8 +6,23 @@
  */
 
 window.moodHandlers = window.moodHandlers || {
-    resize: null
+    resize: null,
+    matterEngine: null,
+    matterRunner: null,
+    matterRender: null,
+    orientation: null
 };
+
+// Debounce function
+function debounce(func, wait) {
+    let timeout;
+    return function (...args) {
+        const context = this;
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(context, args), wait);
+    };
+}
+
 
 // ==========================================
 // WEEKLY MOOD (Chart.js)
@@ -792,17 +807,57 @@ function initMonthlyMood() {
 // ==========================================
 // YEARLY MOOD (Matter.js)
 // ==========================================
+// ==========================================
+// CLEANUP FUNCTION
+// ==========================================
+function cleanupMoodEngine() {
+    // Stop Runner
+    if (window.moodHandlers.matterRunner) {
+        Matter.Runner.stop(window.moodHandlers.matterRunner);
+        window.moodHandlers.matterRunner = null;
+    }
+
+    // Stop Render
+    if (window.moodHandlers.matterRender) {
+        Matter.Render.stop(window.moodHandlers.matterRender);
+        if (window.moodHandlers.matterRender.canvas) {
+            window.moodHandlers.matterRender.canvas.remove();
+        }
+        window.moodHandlers.matterRender = null;
+    }
+
+    // Clear World and Engine
+    if (window.moodHandlers.matterEngine) {
+        Matter.World.clear(window.moodHandlers.matterEngine.world);
+        Matter.Engine.clear(window.moodHandlers.matterEngine);
+        window.moodHandlers.matterEngine = null;
+    }
+
+    // Remove Resize Listener
+    if (window.moodHandlers.resize) {
+        window.removeEventListener('resize', window.moodHandlers.resize);
+        window.moodHandlers.resize = null;
+    }
+
+    // Remove Orientation Listener
+    if (window.moodHandlers.orientation) {
+        window.removeEventListener('deviceorientation', window.moodHandlers.orientation);
+        window.moodHandlers.orientation = null;
+    }
+}
+
+// ==========================================
+// YEARLY MOOD (Matter.js)
+// ==========================================
 function initYearlyMood() {
     const container = document.getElementById('moodYear');
     if (!container) return;
     if (typeof Matter === 'undefined') return;
 
     // Clean up previous simulation
-    container.innerHTML = ''; // Clear canvas
-    if (window.moodHandlers.resize) {
-        window.removeEventListener('resize', window.moodHandlers.resize);
-        window.moodHandlers.resize = null;
-    }
+    cleanupMoodEngine();
+    container.innerHTML = ''; // Ensure container is empty
+
 
     const { Engine, Render, Runner, Bodies, World, Mouse, MouseConstraint, Events, Body } = Matter;
 
@@ -862,6 +917,12 @@ function initYearlyMood() {
     Render.run(render);
     const runner = Runner.create();
     Runner.run(runner, engine);
+
+    // Store instances for cleanup
+    window.moodHandlers.matterEngine = engine;
+    window.moodHandlers.matterRunner = runner;
+    window.moodHandlers.matterRender = render;
+
 
     // =============================
     // WALLS
@@ -948,28 +1009,28 @@ function initYearlyMood() {
         if (screenWidth >= 1200) { // Desktop besar
             bgBallMinRadius = 15;
             bgBallMaxRadius = 35;
-            bgBallCount = 75;
+            bgBallCount = 125;
             moodBallRadius = 70;
             moodBallScale = 0.0325;
         }
         else if (screenWidth >= 768) { // Tablet
             bgBallMinRadius = 12;
             bgBallMaxRadius = 28;
-            bgBallCount = 60;
+            bgBallCount = 85;
             moodBallRadius = 55;
             moodBallScale = 0.028;
         }
         else if (screenWidth >= 480) { // Mobile besar
             bgBallMinRadius = 10;
             bgBallMaxRadius = 22;
-            bgBallCount = 45;
+            bgBallCount = 75;
             moodBallRadius = 45;
             moodBallScale = 0.024;
         }
         else { // Mobile kecil
             bgBallMinRadius = 8;
             bgBallMaxRadius = 18;
-            bgBallCount = 35;
+            bgBallCount = 55;
             moodBallRadius = 38;
             moodBallScale = 0.02;
         }
@@ -1040,72 +1101,20 @@ function initYearlyMood() {
     // =============================
     // RESIZE HANDLER - UPDATE UKURAN KETIKA LAYAR DIUBAH
     // =============================
-    const resizeHandler = function () {
-        // Hapus semua balls yang ada
-        world.bodies.forEach(body => {
-            if (!body.isStatic) {
-                World.remove(world, body);
-            }
-        });
-
-        // Reset moodBodies array
-        moodBodies = [];
-
-        // Dapatkan ukuran baru
-        const newSizes = getResponsiveSizes();
-        const newWidth = container.clientWidth;
-
-        // Buat ulang background balls dengan ukuran baru
-        for (let i = 0; i < newSizes.bgBallCount; i++) {
-            const ballRadius = newSizes.bgBallMinRadius + Math.random() * (newSizes.bgBallMaxRadius - newSizes.bgBallMinRadius);
-
-            const ball = Bodies.circle(
-                Math.random() * newWidth,
-                -50 - Math.random() * 150,
-                ballRadius,
-                {
-                    restitution: 0.85,
-                    friction: 0.001,
-                    frictionAir: 0.005,
-                    density: 0.001,
-                    render: {
-                        fillStyle: ballColors[Math.floor(Math.random() * ballColors.length)]
-                    }
-                }
-            );
-
-            World.add(world, ball);
-        }
-
-        // Buat ulang mood balls dengan ukuran baru
-        yearlyData.forEach((item) => {
-            const moodBall = Bodies.circle(
-                150 + Math.random() * (newWidth - 300),
-                -50 - Math.random() * 150,
-                newSizes.moodBallRadius,
-                {
-                    restitution: 0.85,
-                    friction: 0.001,
-                    frictionAir: 0.01,
-                    density: 0.002,
-                    render: {
-                        sprite: {
-                            texture: moodImages[item.mood],
-                            xScale: newSizes.moodBallScale,
-                            yScale: newSizes.moodBallScale
-                        }
-                    }
-                }
-            );
-
-            moodBall.moodData = item;
-            moodBodies.push(moodBall);
-            World.add(world, moodBall);
-        });
-    };
+    // =============================
+    // RESIZE HANDLER (DEBOUNCED)
+    // =============================
+    const resizeHandler = debounce(function () {
+        // Instead of removing bodies, we should probably full restart 
+        // to handle container size changes correctly without "spawning" bugs.
+        // But for now, let's keep the logic but maybe just clearing bodies is enough?
+        // Actually, re-initializing the whole thing is safer for resize to avoid duplicates.
+        initYearlyMood();
+    }, 250);
 
     window.addEventListener('resize', resizeHandler);
     window.moodHandlers.resize = resizeHandler;
+
 
     Events.on(engine, 'beforeUpdate', function () {
         const topHardLimit = -600;
@@ -1162,6 +1171,30 @@ function initYearlyMood() {
             }
         });
     });
+
+    // =============================
+    // GYROSCOPE (MOBILE/TABLET)
+    // =============================
+    function handleOrientation(event) {
+        // Check if device is mobile/tablet (simple check)
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+        // Or check if window width is small enough
+        const isSmallScreen = window.innerWidth < 1200;
+
+        if ((isMobile || isSmallScreen) && event.beta !== null && event.gamma !== null) {
+            const gravityX = Math.min(Math.max(event.gamma / 45, -1), 1); // Left/Right tilt
+            const gravityY = Math.min(Math.max(event.beta / 45, -1), 1);  // Front/Back tilt
+
+            // Adjust gravity (default y is 1.4)
+            engine.gravity.x = gravityX * 1.5;
+            engine.gravity.y = Math.max(gravityY * 1.5, 0.5); // Keep some downward gravity
+        }
+    }
+
+    window.addEventListener('deviceorientation', handleOrientation);
+    window.moodHandlers.orientation = handleOrientation;
+
 
     // =============================
     // TOOLTIP
