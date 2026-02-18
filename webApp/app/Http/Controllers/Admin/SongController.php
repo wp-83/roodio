@@ -128,7 +128,18 @@ class SongController extends Controller
         unset($datas['song']);
         unset($datas['photo']);
 
-        Songs::create($datas);
+        $song = Songs::create($datas);
+
+        // MLOps: Log the prediction
+        if ($moodId) {
+            $moodModel = \App\Models\Mood::find($moodId);
+            \App\Models\ModelLog::create([
+                'song_id'          => $song->id,
+                'predicted_mood'   => $moodModel ? $moodModel->type : 'Unknown',
+                'confidence_score' => $moodConfidence ?? 0,
+                'is_correct'       => null // Pending user feedback
+            ]);
+        }
 
         if ($request->wantsJson()) {
             return response()->json([

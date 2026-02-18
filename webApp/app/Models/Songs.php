@@ -52,6 +52,11 @@ class Songs extends Model
         return $this->belongsToMany(Playlists::class, 'tracks', 'songId', 'playlistId');
     }
 
+    public function modelLog()
+    {
+        return $this->hasOne(ModelLog::class, 'song_id', 'id');
+    }
+
     public function getOppositesMood($mood)
     {
         $map = [

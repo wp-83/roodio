@@ -78,6 +78,9 @@ Route::prefix('/')->middleware(['auth', 'role:0', 'prevent-back-history'])->grou
                 
     Route::get('home', [App\Http\Controllers\User\SongController::class, 'index'])->name('user.index');
     Route::get('{playlists}', [App\Http\Controllers\User\SongController::class, 'playlists'])->name('user.playlists');
+
+    // MLOps Feedback
+    Route::post('/mood-feedback', [App\Http\Controllers\User\ModelFeedbackController::class, 'store'])->name('mood.feedback');
 });
 
 // Admin Route
@@ -101,6 +104,9 @@ Route::prefix('admin')->middleware(['auth', 'role:1', 'prevent-back-history'])->
         Route::put('/{playlist}', [PlaylistController::class, 'update'])->name('admin.playlists.update');
         Route::delete('/{playlist}', [PlaylistController::class, 'destroy'])->name('admin.playlists.destroy');
     });
+
+    // MLOps Monitoring
+    Route::get('model-monitor', [App\Http\Controllers\Admin\ModelMonitorController::class, 'index'])->name('admin.model.monitor');
 });
 
 // Super Admin Route

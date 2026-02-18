@@ -41,6 +41,7 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
         let isShuffle = false;
         let hasPlayedOnce = false;
         let playOrder = []; // track indices in play order
+        let feedbackSent = false; // MLOps Feedback Flag
 
         // Build play order array (normal or shuffled)
         function buildPlayOrder() {
@@ -124,6 +125,27 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
         }
 
         // ============= HELPER FUNCTIONS =============
+        function sendFeedback(isCorrect, type) {
+            if (!playlist[currentIndex] || !playlist[currentIndex].id) return;
+
+            const payload = {
+                song_id: playlist[currentIndex].id,
+                is_correct: isCorrect,
+                feedback_type: type
+            };
+
+            fetch('/mood-feedback', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify(payload)
+            }).then(res => res.json())
+                .then(data => console.log('MLOps Feedback:', data))
+                .catch(err => console.error('MLOps Feedback Error:', err));
+        }
+
         function formatTime(time) {
             if (isNaN(time) || !Number.isFinite(time) || time < 0) return "00:00";
             const minutes = Math.floor(time / 60).toString().padStart(2, '0');
@@ -273,7 +295,22 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
             if (index < 0) index = 0;
             if (index >= playlist.length) index = playlist.length - 1;
 
+            // MLOps: Negative Feedback Check (Skip < 30s)
+            // If checking previous song (playlist[currentIndex] exists and valid duration)
+            if (audio.src && !isSongNan() && audio.currentTime < 30 && audio.currentTime > 5 && !feedbackSent) {
+                // Must be a valid song attempt (>5s to avoid accidental skips being penalized too harshly? User said <30s strictly)
+                // User requirement: "below 30s skip automatically false"
+                // Let's stick to strict < 30s. Even 0s skip is a skip. 
+                // However, initial load might trigger this if we are not careful. 
+                // hasPlayedOnce check helps ensure we actually played something.
+                if (hasPlayedOnce && playlist[currentIndex]) {
+                    console.log("Skipped < 30s. Sending Negative Feedback.");
+                    sendFeedback(false, 'implicit_skip');
+                }
+            }
+
             currentIndex = index;
+            feedbackSent = false; // Reset feedback flag
             const song = playlist[currentIndex];
 
             // Update audio source
@@ -702,6 +739,12 @@ if (!window.HAS_RUN_AUDIO_CONTROL_JS) {
                     progressBar.style.width = `${percent}%`;
                     currentTimeEl.textContent = formatTime(audio.currentTime);
                     updatePositionState();
+
+                    // MLOps Implicit Feedback (> 30s)
+                    if (audio.currentTime > 30 && !feedbackSent) {
+                        sendFeedback(true, 'implicit');
+                        feedbackSent = true;
+                    }
                 }
             }
 
