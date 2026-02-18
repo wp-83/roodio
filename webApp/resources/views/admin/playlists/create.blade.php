@@ -60,7 +60,7 @@
 
                         {{-- Description --}}
                         <div>
-                            <label class="text-sm font-bold text-shadedOfGray-10 mb-2 block">Description</label>
+                            <label class="text-sm font-bold text-shadedOfGray-10 mb-2 block">Description <span class="text-secondary-angry-100">*</span></label>
                             <textarea name="description" rows="4"
                                 class="w-full bg-primary-100 border border-primary-60 rounded-xl text-white px-4 py-3 focus:border-secondary-happy-100 focus:ring-1 focus:ring-secondary-happy-100 outline-none transition placeholder-shadedOfGray-50 leading-relaxed resize-none"
                                 placeholder="What is this playlist about?">{{ old('description') }}</textarea>

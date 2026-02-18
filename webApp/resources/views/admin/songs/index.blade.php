@@ -8,10 +8,12 @@
 <div class="w-full">
 
     {{-- FLASH MESSAGE (Tetap sama) --}}
-    @if(session('success'))
+    @if(session('success') || request('success_upload'))
         <div id="flashMessage" class="mb-6 bg-primary-85 border border-secondary-relaxed-100 text-secondary-relaxed-100 px-4 py-3 rounded-xl relative shadow-lg flex items-center gap-3 animate-fade-in-down">
             <i class="bi bi-check-circle-fill text-xl"></i>
-            <span class="block sm:inline font-medium font-secondaryAndButton">{{ session('success') }}</span>
+            <span class="block sm:inline font-medium font-secondaryAndButton">
+                {{ session('success') ?? 'Successfully added song with AI prediction!' }}
+            </span>
             <button onclick="document.getElementById('flashMessage').remove()" class="absolute top-0 bottom-0 right-0 px-4 py-3 hover:text-white transition-colors">
                 <i class="bi bi-x-lg"></i>
             </button>

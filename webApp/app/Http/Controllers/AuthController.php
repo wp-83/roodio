@@ -23,6 +23,18 @@ class AuthController extends Controller
             'password' => ['required'],
         ]);
 
+        $field = filter_var($credentials['username'], FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+
+        if ($field === 'email') {
+            $user_detail = userDetails::where('email', $credentials['username'])->first();
+
+            if ($user_detail) {
+                $credentials['username'] = $user_detail->user->username;
+            } else {
+                return back()->with('failed', 'email not registered');
+            }
+        }
+
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
@@ -37,7 +49,7 @@ class AuthController extends Controller
             }
         }
 
-        return back()->with('failed', 'username or password incorrect!');
+        return back()->with('failed', 'username/email or password incorrect!')->withInput();
     }
 
     public function emailVerificationView()

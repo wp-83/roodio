@@ -84,6 +84,9 @@ class SongController extends Controller
             $photo
         );
 
+        $moodId = null;
+        $moodConfidence = null;
+
         try {
             $apiUrl = env('ROODIO_API_URL') . '/predict';
 
@@ -100,10 +103,16 @@ class SongController extends Controller
                 $moodId         = $result['data']['mood_id'] ?? null;
                 $moodConfidence = $result['data']['confidence'] ?? null;
             } else {
+                if ($request->wantsJson()) {
+                    return response()->json(['message' => 'AI Server Error: ' . $response->body()], 422);
+                }
                 return back()->withErrors(['api' => 'AI Server Error: ' . $response->body()]);
             }
 
         } catch (\Exception $e) {
+            if ($request->wantsJson()) {
+                return response()->json(['message' => 'Connection Failed: ' . $e->getMessage()], 422);
+            }
             return back()->withErrors(['api' => 'Connection Failed: ' . $e->getMessage()]);
         }
 
@@ -120,6 +129,14 @@ class SongController extends Controller
         unset($datas['photo']);
 
         Songs::create($datas);
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'redirect' => route('admin.songs.index'),
+                'message' => 'Successfully added song with AI prediction!'
+            ]);
+        }
 
         return redirect()->route('admin.songs.index')->with('success', 'Successfully added song with AI prediction!');
     }

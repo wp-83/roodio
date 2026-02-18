@@ -62,5 +62,21 @@ class UserSeeder extends Seeder
             'countryId'   => 'ID',
             'gender'      => 0,
         ]);
+
+        // User Promotion
+        $userPromotion = User::create([
+            'username' => 'oz123',
+            'role' => 0,
+            'password' => Hash::make('dummyuser1234567890'),
+        ]);
+
+        userDetails::create([
+            'userId'      => $promotion->id,
+            'fullname'    => 'Oliver Brooks',
+            'email'       => 'oliver.brooks@gmail.com',
+            'dateOfBirth' => '1901-01-01',
+            'countryId'   => 'EN',
+            'gender'      => 1,
+        ]);
     }
 }
