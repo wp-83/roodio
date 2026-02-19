@@ -33,4 +33,15 @@
         <i class="bi bi-collection-play-fill text-lg {{ request()->routeIs('admin.playlists.*') ? 'text-secondary-happy-100' : 'group-hover:text-white' }}"></i>
         <span class="font-medium text-small">Playlists</span>
     </a>
+    <p class="px-4 text-micro font-bold text-primary-20 uppercase tracking-wider mb-2 mt-6">Analytics</p>
+
+    {{-- Model Monitor --}}
+    <a href="{{ route('admin.model.monitor') }}"
+       class="group flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all duration-200 {{ request()->routeIs('admin.model.monitor') ? 'bg-primary-70 text-white shadow-lg border border-primary-60 relative overflow-hidden' : 'text-shadedOfGray-30 hover:bg-primary-70/50 hover:text-white' }}">
+        @if(request()->routeIs('admin.model.monitor'))
+            <div class="absolute left-0 top-0 bottom-0 w-1 bg-secondary-happy-100 rounded-l-xl"></div>
+        @endif
+        <i class="bi bi-activity text-lg {{ request()->routeIs('admin.model.monitor') ? 'text-secondary-happy-100' : 'group-hover:text-white' }}"></i>
+        <span class="font-medium text-small">Model Monitor</span>
+    </a>
 </nav>

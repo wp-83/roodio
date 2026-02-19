@@ -84,6 +84,9 @@ class SongController extends Controller
             $photo
         );
 
+        $moodId = null;
+        $moodConfidence = null;
+
         try {
             $apiUrl = env('ROODIO_API_URL') . '/predict';
 
@@ -100,10 +103,16 @@ class SongController extends Controller
                 $moodId         = $result['data']['mood_id'] ?? null;
                 $moodConfidence = $result['data']['confidence'] ?? null;
             } else {
+                if ($request->wantsJson()) {
+                    return response()->json(['message' => 'AI Server Error: ' . $response->body()], 422);
+                }
                 return back()->withErrors(['api' => 'AI Server Error: ' . $response->body()]);
             }
 
         } catch (\Exception $e) {
+            if ($request->wantsJson()) {
+                return response()->json(['message' => 'Connection Failed: ' . $e->getMessage()], 422);
+            }
             return back()->withErrors(['api' => 'Connection Failed: ' . $e->getMessage()]);
         }
 
@@ -119,7 +128,26 @@ class SongController extends Controller
         unset($datas['song']);
         unset($datas['photo']);
 
-        Songs::create($datas);
+        $song = Songs::create($datas);
+
+        // MLOps: Log the prediction
+        if ($moodId) {
+            $moodModel = \App\Models\Mood::find($moodId);
+            \App\Models\ModelLog::create([
+                'song_id'          => $song->id,
+                'predicted_mood'   => $moodModel ? $moodModel->type : 'Unknown',
+                'confidence_score' => $moodConfidence ?? 0,
+                'is_correct'       => null // Pending user feedback
+            ]);
+        }
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'redirect' => route('admin.songs.index'),
+                'message' => 'Successfully added song with AI prediction!'
+            ]);
+        }
 
         return redirect()->route('admin.songs.index')->with('success', 'Successfully added song with AI prediction!');
     }

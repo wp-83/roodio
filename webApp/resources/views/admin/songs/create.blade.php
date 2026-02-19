@@ -18,7 +18,7 @@
         </a>
     </div>
 
-    <form action="{{ route('admin.songs.store') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.songs.store') }}" method="POST" enctype="multipart/form-data" id="upload-form">
         @csrf
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -170,51 +170,58 @@
 </div>
 
 {{-- SCRIPT FOR PREVIEWS --}}
-<script>
-    // 1. Script untuk Audio Upload Preview Filename
-    document.getElementById('song-input').addEventListener('change', function(e) {
-        var fileName = e.target.files[0] ? e.target.files[0].name : "Browse Audio File";
-        const fileNameText = document.getElementById('audio-filename');
-        const placeholder = document.getElementById('audio-placeholder');
+{{-- Moved to public/resources/pages/admin/upload-song.js --}}
 
-        fileNameText.textContent = fileName;
+{{-- Overlay Progress Bar --}}
+{{-- Changed from fixed inset-0 to absolute inset-0 to stay within content area --}}
+<div id="upload-overlay" class="absolute inset-0 bg-primary-100/90 z-50 hidden flex-col items-center justify-center backdrop-blur-sm transition-opacity duration-300 rounded-2xl">
+    <div class="w-full max-w-md p-8 bg-primary-85 rounded-2xl border border-primary-70 shadow-2xl text-center relative overflow-hidden">
+        {{-- Background Decoration --}}
+        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-secondary-happy-100 to-secondary-angry-100"></div>
 
-        if(e.target.files[0]) {
-            fileNameText.classList.remove('text-shadedOfGray-30');
-            fileNameText.classList.add('text-secondary-happy-100', 'font-bold');
-            // Ganti icon jadi check file
-            placeholder.querySelector('i').className = "fa-solid fa-file-audio text-2xl text-secondary-happy-100 mb-2";
-        } else {
-            fileNameText.classList.add('text-shadedOfGray-30');
-            fileNameText.classList.remove('text-secondary-happy-100', 'font-bold');
-            placeholder.querySelector('i').className = "fa-solid fa-cloud-arrow-up text-2xl text-primary-20 mb-2";
-        }
-    });
+        <div class="mb-6 relative">
+            <div class="w-16 h-16 mx-auto bg-primary-70 rounded-full flex items-center justify-center mb-4">
+                <i class="fa-solid fa-cloud-arrow-up text-3xl text-secondary-happy-100 animate-bounce"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-white mb-2 font-primary" id="upload-status-title">Uploading...</h3>
+            <p class="text-shadedOfGray-30 text-sm" id="upload-status-text">Please wait while we upload your track.</p>
+        </div>
+        
+        {{-- Progress Bar --}}
+        <div class="w-full bg-primary-60 rounded-full h-3 mb-4 overflow-hidden relative">
+            <div id="upload-progress-bar" class="bg-gradient-to-r from-secondary-happy-100 to-accent-100 h-3 rounded-full transition-all duration-300 relative" style="width: 0%">
+            </div>
+        </div>
+        
+        <p class="text-white font-bold text-lg font-primary" id="upload-percentage">0%</p>
+    </div>
+</div>
 
-    // 2. Script untuk Photo Upload Preview
-    document.getElementById('photo_input').addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        const previewElement = document.getElementById('photo-preview');
-        const placeholderElement = document.getElementById('photo-placeholder');
-        const overlayElement = document.getElementById('preview-overlay');
+{{-- Error Modal --}}
+<div id="error-modal" class="absolute inset-0 bg-primary-100/90 z-[100] hidden flex-col items-center justify-center backdrop-blur-sm transition-opacity duration-300 rounded-2xl">
+    <div class="w-full max-w-md p-8 bg-primary-85 rounded-2xl border border-secondary-angry-100/50 shadow-2xl text-center relative overflow-hidden animate-bounce-in">
+        {{-- Background Decoration --}}
+        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-secondary-angry-100 to-red-600"></div>
 
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                previewElement.src = e.target.result;
-                previewElement.classList.remove('hidden');
-                placeholderElement.classList.add('opacity-0', 'absolute');
-                overlayElement.classList.remove('hidden');
-                overlayElement.classList.add('flex');
-            }
-            reader.readAsDataURL(file);
-        } else {
-            previewElement.src = '#';
-            previewElement.classList.add('hidden');
-            placeholderElement.classList.remove('opacity-0', 'absolute');
-            overlayElement.classList.add('hidden');
-            overlayElement.classList.remove('flex');
-        }
-    });
-</script>
+        <div class="mb-6 relative">
+            <div class="w-16 h-16 mx-auto bg-secondary-angry-100/10 rounded-full flex items-center justify-center mb-4 border border-secondary-angry-100/30">
+                <i class="fa-solid fa-circle-exclamation text-3xl text-secondary-angry-100"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-white mb-2 font-primary">Upload Failed</h3>
+            <p class="text-shadedOfGray-30 text-sm" id="error-message-text">Something went wrong.</p>
+        </div>
+
+        <button type="button" onclick="document.getElementById('error-modal').classList.add('hidden'); document.getElementById('error-modal').classList.remove('flex');" 
+                class="px-6 py-2.5 rounded-xl bg-secondary-angry-100 text-white font-bold hover:bg-secondary-angry-85 shadow-lg shadow-secondary-angry-100/20 transition-all text-sm">
+            Try Again
+        </button>
+    </div>
+</div>
+
+@section('scripts')
+    <script src="{{ asset('js/pages/admin/upload-song.js') }}"></script>
+    <script>
+        // Ensure globals or simple initializers if needed, but the main logic is now external
+    </script>
+@endsection
 @endsection

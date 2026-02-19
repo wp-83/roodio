@@ -8,10 +8,12 @@
 <div class="w-full">
 
     {{-- FLASH MESSAGE (Tetap sama) --}}
-    @if(session('success'))
+    @if(session('success') || request('success_upload'))
         <div id="flashMessage" class="mb-6 bg-primary-85 border border-secondary-relaxed-100 text-secondary-relaxed-100 px-4 py-3 rounded-xl relative shadow-lg flex items-center gap-3 animate-fade-in-down">
             <i class="bi bi-check-circle-fill text-xl"></i>
-            <span class="block sm:inline font-medium font-secondaryAndButton">{{ session('success') }}</span>
+            <span class="block sm:inline font-medium font-secondaryAndButton">
+                {{ session('success') ?? 'Successfully added song with AI prediction!' }}
+            </span>
             <button onclick="document.getElementById('flashMessage').remove()" class="absolute top-0 bottom-0 right-0 px-4 py-3 hover:text-white transition-colors">
                 <i class="bi bi-x-lg"></i>
             </button>
@@ -161,7 +163,7 @@
                             <td class="px-4 py-4 text-center">
                                 <div class="flex items-center justify-center gap-2 opacity-80 group-hover:opacity-100 transition-opacity">
                                     <a href="{{ route('admin.songs.edit', $song) }}" class="w-8 h-8 flex items-center justify-center rounded-lg bg-primary-60 text-white hover:bg-white hover:text-primary-85 transition-all duration-200 shadow-sm border border-primary-50"><i class="bi bi-pencil-fill text-xs"></i></a>
-                                    <button type="button" onclick="openDeleteMusic('{{ route('admin.songs.destroy', $song) }}', '{{ $song->title }}')" class="w-8 h-8 flex items-center justify-center rounded-lg bg-error-dark/20 text-error-moderate hover:bg-error-moderate hover:text-white transition-all duration-200 shadow-sm border border-error-dark/30"><i class="bi bi-trash-fill text-xs"></i></button>
+                                    <button type="button" onclick="openDeleteMusic('{{ route('admin.songs.destroy', $song) }}', '{{ addslashes($song->title) }}')" class="w-8 h-8 flex items-center justify-center rounded-lg bg-error-dark/20 text-error-moderate hover:bg-error-moderate hover:text-white transition-all duration-200 shadow-sm border border-error-dark/30"><i class="bi bi-trash-fill text-xs"></i></button>
                                 </div>
                             </td>
                         </tr>
@@ -213,34 +215,33 @@
 
     {{-- DELETE MODAL (Tetap sama) --}}
     {{-- ... (Kode Modal Delete Anda sebelumnya) ... --}}
-    <div id="deleteMusicModal" class="hidden fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-        {{-- ... isi modal ... --}}
-        {{-- (Pastikan copy paste kode modal dari respon sebelumnya disini) --}}
-        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-            <div class="fixed inset-0 bg-[#020a36]/80 backdrop-blur-sm transition-opacity" onclick="toggleDeleteMusicModal()"></div>
-            <span class="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
-            <div class="relative inline-block align-bottom bg-primary-85 rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md w-full border border-primary-70">
-                <div class="p-6">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="w-12 h-12 rounded-full bg-secondary-angry-100/20 flex items-center justify-center flex-shrink-0 text-secondary-angry-100 text-xl border border-secondary-angry-100/30 shadow-inner">
-                            <i class="bi bi-exclamation-triangle-fill"></i>
-                        </div>
-                        <div>
-                            <h4 class="font-primary font-bold text-white text-lg">Delete Item?</h4>
-                            <p class="font-secondaryAndButton text-sm text-shadedOfGray-30 mt-1">
-                                Are you sure you want to delete <span id="delete_item_name" class="text-white font-bold"></span>? This action cannot be undone.
-                            </p>
-                        </div>
+    {{-- DELETE MODAL --}}
+    <div id="deleteMusicModal" class="fixed inset-0 md:left-64 z-50 hidden flex flex-col items-center justify-center" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        {{-- Backdrop --}}
+        <div class="absolute inset-0 bg-[#020a36]/80 backdrop-blur-sm transition-opacity" onclick="toggleDeleteMusicModal()"></div>
+
+        {{-- Modal Panel --}}
+        <div class="relative bg-primary-85 rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:max-w-md w-full border border-primary-70 m-4">
+            <div class="p-6">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-12 h-12 rounded-full bg-secondary-angry-100/20 flex items-center justify-center flex-shrink-0 text-secondary-angry-100 text-xl border border-secondary-angry-100/30 shadow-inner">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
                     </div>
-                    <form id="deleteMusicForm" action="#" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <div class="flex justify-end gap-3 mt-6 pt-4 border-t border-primary-70">
-                            <button type="button" onclick="toggleDeleteMusicModal()" class="px-5 py-2.5 rounded-xl border border-primary-60 text-shadedOfGray-30 text-sm font-bold hover:bg-primary-70 hover:text-white transition-colors duration-200">Cancel</button>
-                            <button type="submit" class="px-5 py-2.5 rounded-xl bg-secondary-angry-100 text-white text-sm font-bold hover:bg-secondary-angry-85 shadow-lg shadow-secondary-angry-100/20 transition-all duration-200 flex items-center gap-2 transform active:scale-95"><i class="bi bi-trash"></i> Yes, Delete</button>
-                        </div>
-                    </form>
+                    <div>
+                        <h4 class="font-primary font-bold text-white text-lg">Delete Item?</h4>
+                        <p class="font-secondaryAndButton text-sm text-shadedOfGray-30 mt-1">
+                            Are you sure you want to delete <span id="delete_item_name" class="text-white font-bold"></span>? This action cannot be undone.
+                        </p>
+                    </div>
                 </div>
+                <form id="deleteMusicForm" action="#" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <div class="flex justify-end gap-3 mt-6 pt-4 border-t border-primary-70">
+                        <button type="button" onclick="toggleDeleteMusicModal()" class="px-5 py-2.5 rounded-xl border border-primary-60 text-shadedOfGray-30 text-sm font-bold hover:bg-primary-70 hover:text-white transition-colors duration-200">Cancel</button>
+                        <button type="submit" class="px-5 py-2.5 rounded-xl bg-secondary-angry-100 text-white text-sm font-bold hover:bg-secondary-angry-85 shadow-lg shadow-secondary-angry-100/20 transition-all duration-200 flex items-center gap-2 transform active:scale-95"><i class="bi bi-trash"></i> Yes, Delete</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

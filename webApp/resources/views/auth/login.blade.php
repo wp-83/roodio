@@ -38,7 +38,7 @@
     @endif
     <form action="{{ route('auth.login') }}" method='POST' id='login'>
         @csrf {{-- cross site request forgery --}}
-        <x-input id='username' icon='user' label='Username' placeholder='Input your username...' value="{{ old('username') }}"></x-input>
+        <x-input id='username' icon='user' label='Account' placeholder='Input your username or email...' value="{{ old('username') }}"></x-input>
         <x-input type='password' id='password' icon='password' label='Password' placeholder='Input your password...'>
             <x-slot:inlineContent>
                 <x-button behaviour='navigation' navType='text' :navLink="route('user.verification')" content="Forget Password?" class='w-fit inline'></x-button>

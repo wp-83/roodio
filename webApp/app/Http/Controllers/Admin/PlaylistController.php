@@ -53,15 +53,18 @@ class PlaylistController extends Controller
         $validated = $request->validate([
             'name'        => 'required|max:255',
             'description' => 'required|max:255',
-            'image'       => 'required|image|mimes:jpeg,png,jpg|max:5120',
+            'image'       => 'image|mimes:jpeg,png,jpg|max:5120',
         ]);
 
-        $image = $request->file('image');
+        if($request->hasFile('image')){
+            $image = $request->file('image');
+    
+            $validated['playlistPath'] = Storage::disk('azure')->put(
+                'image',
+                $image
+            );
+        }
 
-        $validated['playlistPath'] = Storage::disk('azure')->put(
-            'image',
-            $image
-        );
         $validated['userId'] = auth()->id();
 
         $playlist = Playlists::create($validated);
