@@ -132,11 +132,11 @@
             <div class='mb-10 contentFadeLoad'>
                 <div class='w-fit h-fit flex flex-row items-center gap-3 mb-3'>
                     <img src="{{ asset('assets/moods/icons/' . $mood . '.png') }}" alt="{{ $mood }}" class='w-15 h-15 md:w-24 md:h-24'>
-                    <p class='text-subtitle md:text-title font-primary font-bold {{ $textStyle[$mood] }}'>Discovery Albums</p>
+                    <p class='text-subtitle md:text-title font-primary font-bold {{ $textStyle[$mood] }}'>New Arrivals</p>
                 </div>
                 <div class="md:w-full md:overflow-x-auto scrollbar pb-3 {{ $scrollbarTheme[$mood] }}">
                     <div class='flex flex-col w-full h-max gap-8 md:flex-row md:justify-between md:gap-5 md:w-max'>
-                        @forelse($trendingPlaylists as $playlist)
+                        @forelse($newArrivalPlaylists as $playlist)
                             <a href="/{{ $playlist->id }}" wire:navigate>
                                 <x-albumCard :mood='$mood' :playlistName='$playlist->name' :playlistDesc='$playlist->description' :imageSource='$playlist->playlistPath' :totalSong="$playlist->songs->count()" :totalTime="$playlist->total_duration"></x-albumCard>
                             </a>
@@ -149,11 +149,11 @@
             <div class='mb-10 contentFadeLoad'>
                 <div class='w-fit h-fit flex flex-row items-center gap-3 mb-3'>
                     <img src="{{ asset('assets/moods/icons/' . $mood . '.png') }}" alt="{{ $mood }}" class='w-15 h-15 md:w-24 md:h-24'>
-                    <p class='text-subtitle md:text-title font-primary font-bold {{ $textStyle[$mood] }}'>New Arrivals</p>
+                    <p class='text-subtitle md:text-title font-primary font-bold {{ $textStyle[$mood] }}'>Discovery Albums</p>
                 </div>
                 <div class="md:w-full md:overflow-x-auto scrollbar pb-3 {{ $scrollbarTheme[$mood] }}">
                     <div class='flex flex-col w-full h-max gap-8 md:flex-row md:justify-between md:gap-5 md:w-max'>
-                        @forelse($newArrivalPlaylists as $playlist)
+                        @forelse($trendingPlaylists as $playlist)
                             <a href="/{{ $playlist->id }}" wire:navigate>
                                 <x-albumCard :mood='$mood' :playlistName='$playlist->name' :playlistDesc='$playlist->description' :imageSource='$playlist->playlistPath' :totalSong="$playlist->songs->count()" :totalTime="$playlist->total_duration"></x-albumCard>
                             </a>
