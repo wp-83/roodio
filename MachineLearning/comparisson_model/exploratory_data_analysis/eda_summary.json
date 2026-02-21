@@ -1,0 +1,69 @@
+{
+  "eda_metrics": {
+    "total_samples": 200,
+    "total_unique_words": 3500,
+    "avg_words_per_lyric": 308.215,
+    "std_words_per_lyric": 108.87800916345314,
+    "min_words": 73,
+    "max_words": 686,
+    "class_distribution": {
+      "angry": 50,
+      "relaxed": 50,
+      "happy": 50,
+      "sad": 50
+    },
+    "class_imbalance_ratio": 1.0
+  },
+  "mood_stats": {
+    "happy": {
+      "count": 50,
+      "avg_words": 371.6,
+      "std_words": 119.94420471576757,
+      "min_words": 174,
+      "max_words": 686,
+      "total_unique_words": 1559
+    },
+    "sad": {
+      "count": 50,
+      "avg_words": 265.6,
+      "std_words": 86.86513121159814,
+      "min_words": 73,
+      "max_words": 462,
+      "total_unique_words": 1478
+    },
+    "angry": {
+      "count": 50,
+      "avg_words": 326.46,
+      "std_words": 95.50877938061772,
+      "min_words": 84,
+      "max_words": 679,
+      "total_unique_words": 1607
+    },
+    "relaxed": {
+      "count": 50,
+      "avg_words": 269.2,
+      "std_words": 96.14423688247926,
+      "min_words": 88,
+      "max_words": 496,
+      "total_unique_words": 1517
+    }
+  },
+  "timestamp": "2026-02-21T21:07:47.280630",
+  "dataset_info": {
+    "columns": [
+      "id",
+      "lyrics",
+      "mood",
+      "title",
+      "artist",
+      "lyrics_clean",
+      "char_count",
+      "word_count"
+    ],
+    "shape": [
+      200,
+      8
+    ],
+    "missing_values": 0
+  }
+}
