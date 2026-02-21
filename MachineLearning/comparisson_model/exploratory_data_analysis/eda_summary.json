@@ -1,0 +1,41 @@
+{
+  "eda_metrics": {
+    "total_samples": 200,
+    "total_unique_words": 3500,
+    "avg_words_per_lyric": 308.215,
+    "class_distribution": {
+      "angry": 50,
+      "relaxed": 50,
+      "happy": 50,
+      "sad": 50
+    },
+    "class_imbalance_ratio": 1.0
+  },
+  "mood_stats": {
+    "happy": {
+      "count": 50,
+      "avg_words": 371.6,
+      "min_words": 174,
+      "max_words": 686
+    },
+    "sad": {
+      "count": 50,
+      "avg_words": 265.6,
+      "min_words": 73,
+      "max_words": 462
+    },
+    "angry": {
+      "count": 50,
+      "avg_words": 326.46,
+      "min_words": 84,
+      "max_words": 679
+    },
+    "relaxed": {
+      "count": 50,
+      "avg_words": 269.2,
+      "min_words": 88,
+      "max_words": 496
+    }
+  },
+  "timestamp": "2026-02-21T11:23:06.766545"
+}
