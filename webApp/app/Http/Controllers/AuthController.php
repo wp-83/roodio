@@ -139,7 +139,7 @@ class AuthController extends Controller
             'fullname' => 'required|max:255',
             'email'    => 'required|email|max:255|unique:user_details,email',
             'dob'      => 'required|date',
-            'gender'   => 'required|in:1,0,null',
+            'gender'   => 'nullable|in:1,0',
             'country'  => 'required|string|exists:regions,id',
         ]);
 
