@@ -38,7 +38,7 @@
                         <x-slot:options>
                             <option value="1" {{ old('gender') === '1' ? 'selected' : '' }}>Male</option>
                             <option value="0" {{ old('gender') === '0' ? 'selected' : '' }}>Female</option>
-                            <option value="null" {{ old('gender') === 'null' ? 'selected' : '' }}>Prefer not to say</option>
+                            <option value="" {{ old('gender') == '' ? 'selected' : '' }}>Prefer not to say</option>
                         </x-slot:options>
                     </x-inputSelect>
                 </div>
