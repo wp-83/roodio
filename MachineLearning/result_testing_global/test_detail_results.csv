@@ -1,0 +1,79 @@
+path,id,true_mood,true_stage1,stage1_pred,final_pred,error,lyric
+data/data_test\angry\216_Which Witch by Florence + The Machine lyrics - MilesSmiles.mp3,216,angry,high,high,angry,,
+data/data_test\angry\217_Bea Miller - like that (Lyrics).mp3,217,angry,high,high,angry,,
+"data/data_test\angry\218_The Kid LAROI - FCK YOU, GOODBYE (Official Video) ft. Machine Gun Kelly - Mateo Bassotti.mp3",218,angry,high,high,angry,,
+data/data_test\angry\219_Clinton Kane - GO TO HELL (Lyrics).mp3,219,angry,high,high,angry,,
+data/data_test\angry\220_Control - Halsey (Lyrics).mp3,220,angry,high,high,angry,,
+data/data_test\angry\221_Benson Boone - Cry (Lyrics) - BagOnly.mp3,221,angry,high,high,angry,,
+data/data_test\angry\222_GAYLE - abcdefu.mp3,222,angry,high,high,angry,,
+data/data_test\angry\223_ThxSoMch - Hate. (Lyrics) - cold boy..mp3,223,angry,high,high,angry,,
+data/data_test\angry\224_Natalie Jane - Seven (Lyric Video) - Natalie Jane.mp3,224,angry,high,high,angry,,
+data/data_test\angry\225_Kelly Clarkson - Happier Than Ever (Lyrics).mp3,225,angry,high,high,happy,,
+data/data_test\angry\226_CIL - Bloodsucker (Lyrics) - TribleTunes.mp3,226,angry,high,low,relaxed,,
+data/data_test\angry\227_NF - Hate Myself (Audio).mp3,227,angry,high,high,angry,,
+data/data_test\angry\228_Sueco - POS [Official Audio].mp3,228,angry,high,high,angry,,
+data/data_test\angry\229_Bishop Briggs - River (Lyrics) - ourmemoriestonight.mp3,229,angry,high,high,happy,,
+data/data_test\angry\230_Halsey - Lonely is the Muse (Lyrics) - Vibe Music.mp3,230,angry,high,low,sad,,
+data/data_test\happy\201_Ariana Grande - Break Free (Lyrics).mp3,201,happy,high,high,happy,,
+data/data_test\happy\202_Ariana Grande - Daydreamin' (Lyrics).mp3,202,happy,high,high,happy,,
+data/data_test\happy\203_B.o.B - Nothin' On You (Lyrics) ft. Bruno Mars.mp3,203,happy,high,high,happy,,
+data/data_test\happy\204_Checklist - MAX (Lyrics).mp3,204,happy,high,high,happy,,
+"data/data_test\happy\205_Clean Bandit, Jess Glynne - Rather Be (Lyrics).mp3",205,happy,high,high,happy,,
+data/data_test\happy\206_WALK THE MOON - Shut Up and Dance (Lyrics).mp3,206,happy,high,high,angry,,
+data/data_test\happy\207_Ed Sheeran - Galway Girl (Lyrics).mp3,207,happy,high,high,happy,,
+"data/data_test\happy\208_Ellie Goulding, Diplo, Swae Lee - Close To Me (Lyrics).mp3",208,happy,high,high,happy,,
+data/data_test\happy\209_MAGIC! - Rude (Lyrics).mp3,209,happy,high,high,happy,,
+data/data_test\happy\210_Meghan Trainor - Dear Future Husband (Lyrics).mp3,210,happy,high,high,happy,,
+data/data_test\happy\211_Myles Smith - Stargazing.mp3,211,happy,high,high,happy,,
+"data/data_test\happy\212_Owl City, Carly Rae Jepsen - Good Time (Lyric Video).mp3",212,happy,high,high,happy,,
+data/data_test\happy\213_Panic! At The Disco - House of Memories.mp3,213,happy,high,low,relaxed,,
+data/data_test\happy\214_Paramore - Still into You  Lyrics.mp3,214,happy,high,high,happy,,
+data/data_test\happy\215_Coldplay - Hymn For The Weekend (Lyrics).mp3,215,happy,high,high,happy,,
+data/data_test\sad\231_Adele - Someone Like You (Official Music Video).mp3,231,sad,low,low,relaxed,,
+data/data_test\sad\232_Coldplay - Fix You (Official Video) (1).mp3,232,sad,low,low,sad,,
+data/data_test\sad\233_Conan Gray - Memories (Official Music Video).mp3,233,sad,low,low,sad,,
+data/data_test\sad\234_David Kushner - Daylight (Official Music Video).mp3,234,sad,low,low,sad,,
+data/data_test\sad\235_The Script - For The First Time (Official Video) (HD Version).mp3,235,sad,low,low,sad,,
+data/data_test\sad\236_I Really Want to Stay at Your House.mp3,236,sad,low,high,angry,,
+data/data_test\sad\237_JP Saxe - If the World Was Ending (Official Video) ft. Julia Michaels.mp3,237,sad,low,low,sad,,
+data/data_test\sad\238_Olivia Rodrigo - All I Want (Official Video).mp3,238,sad,low,low,sad,,
+data/data_test\sad\239_Radiohead - No Surprises.mp3,239,sad,low,low,sad,,
+data/data_test\sad\240_Seafret - Atlantis (Official Video).mp3,240,sad,low,low,sad,,
+data/data_test\sad\241_Taylor Swift  exile (feat. Bon Iver) (Official Lyric Video).mp3,241,sad,low,low,sad,,
+data/data_test\sad\242_The Script - Breakeven (Official Video).mp3,242,sad,low,low,sad,,
+data/data_test\sad\243_The Truth Untold (Feat. Steve Aoki).mp3,243,sad,low,low,sad,,
+data/data_test\sad\244_The Smiths - Back to the Old House (Official Lyric Video).mp3,244,sad,low,low,sad,,
+data/data_test\sad\245_Ed Sheeran - Happier (Official Music Video).mp3,245,sad,low,low,relaxed,,
+data/data_test\relaxed\246_Arctic Monkeys - I Wanna Be Yours (Lyrics) - Escape Lyrics.mp3,246,relaxed,low,low,relaxed,,
+data/data_test\relaxed\247_Arctic Monkeys - No. 1 Party Anthem (Lyrics) - Rock Chaos.mp3,247,relaxed,low,low,relaxed,,
+data/data_test\relaxed\248_Surfaces - Sunday Best (Lyrics) - Unique Vibes.mp3,248,relaxed,low,low,relaxed,,
+data/data_test\relaxed\249_Flower - yung kai (Lyrics) - Golden Network.mp3,249,relaxed,,,,,"Hold my heart in your hands, a flower
+Like you loved me then
+How did it wither?
+Sea to cloud
+In my eyes you are the ocean
+I'll be the stars over you
+
+I'll watch our flowers dry
+I'll find a vase for it
+Though they're already gone
+It's filled with all the tears, I left for you
+And I hope they'll come back
+
+Hold my heart in your hands, a flower
+Like you loved me then
+How did it wither?
+Sea to cloud
+In my eyes you are the ocean
+I'll be the stars over you"
+data/data_test\relaxed\250_Justin Bieber - Flatline - Cakes & Eclairs.mp3,250,relaxed,low,high,angry,,
+data/data_test\relaxed\251_Sufjan Stevens Remaster - Futile Devices (+ lyrics) - Baptiste Robert (Baptiste R.).mp3,251,relaxed,low,low,relaxed,,
+data/data_test\relaxed\252_Maroon5 - Sunday Morning - Lyrics - djhoffmandj.mp3,252,relaxed,low,low,relaxed,,
+data/data_test\relaxed\253_Lewis Capaldi - Love The Hell Out Of You (Lyrics) - Lost Panda.mp3,253,relaxed,low,low,relaxed,,
+data/data_test\relaxed\254_Miguel - Sure Thing (Lyrics) - Dan Music.mp3,254,relaxed,low,high,happy,,
+data/data_test\relaxed\255_Lana Del Rey - Say Yes To Heaven (Lyrics) - Unique Sound.mp3,255,relaxed,low,low,relaxed,,
+data/data_test\relaxed\256_Shawn Mendes - Imagination (Lyrics) - Cakes & Eclairs.mp3,256,relaxed,low,low,relaxed,,
+data/data_test\relaxed\257_DRAKE - YEBBA'S HEARTBREAK ( LYRICS ) - Fusion Clouds.mp3,257,relaxed,low,low,relaxed,,
+data/data_test\relaxed\258_H.E.R. - Best Part (Lyrics) Ft. Daniel Caesar - Unique Sound.mp3,258,relaxed,low,low,relaxed,,
+data/data_test\relaxed\259_Lana Del Rey - Margaret (Lyrics) ft. Bleachers - cold boy..mp3,259,relaxed,low,low,relaxed,,
+data/data_test\relaxed\260_Laufey & beabadoobee - A Night To Remember (lyrics) - Eternal Sublime Music.mp3,260,relaxed,low,low,relaxed,,

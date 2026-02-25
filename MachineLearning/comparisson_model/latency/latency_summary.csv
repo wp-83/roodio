@@ -1,0 +1,12 @@
+component,n,mean_ms,std_ms,P50_ms,P90_ms,P95_ms,min_ms,max_ms
+Stage 1 — Feature Extraction (YAMNet),295,332.0,97.85,319.29,436.21,477.18,167.42,847.5
+Stage 1 — Model Inference (PyTorch NN),295,1.06,0.35,1.01,1.24,1.38,0.65,5.16
+Stage 1 — TOTAL,295,333.06,97.94,321.04,437.16,478.35,168.21,849.67
+Stage 2A — Audio Feature Extraction,295,564.82,142.48,567.08,736.97,793.6,292.54,1269.89
+Stage 2A — Text Scoring (RoBERTa Emotion),295,71.9,17.65,68.24,96.05,103.72,47.86,173.6
+Stage 2A — Model Inference (RF + MetaLR),295,26.13,15.51,25.19,30.69,32.71,13.43,205.59
+Stage 2A — TOTAL (Angry/Happy),295,662.85,148.01,663.69,845.36,901.27,364.58,1399.65
+Stage 2B — Tokenization,295,1.62,0.82,1.51,2.09,2.78,0.6,9.01
+Stage 2B — Model Inference (RoBERTa),295,273.54,95.94,269.72,359.46,387.15,97.01,1210.56
+Stage 2B — TOTAL (Sad/Relaxed),295,275.15,96.38,271.26,361.12,389.2,97.91,1213.45
+FULL PIPELINE (Stage 1 + aktual Stage 2),295,766.15,257.63,726.25,1091.69,1175.52,311.47,2243.2

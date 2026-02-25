@@ -1,0 +1,7 @@
+# Jangan copy model ke image (didownload saat runtime dari HF Hub)
+models/
+temp_uploads/
+__pycache__/
+*.pyc
+*.pyo
+.cache/
