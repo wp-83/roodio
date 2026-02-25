@@ -142,7 +142,12 @@ git clone https://github.com/Xullfikar/roodio.git
 cd roodio
 ```
 
-**Windows (PowerShell):**
+**Windows — CMD, PowerShell, or double-click (recommended):**
+```cmd
+setup.bat
+```
+
+**Windows — PowerShell only:**
 ```powershell
 .\setup.ps1
 ```
@@ -164,7 +169,12 @@ The setup script will automatically:
 
 ### Step 3 — Start the Servers
 
-**Windows (PowerShell):**
+**Windows — CMD, PowerShell, or double-click (recommended):**
+```cmd
+start.bat
+```
+
+**Windows — PowerShell only:**
 ```powershell
 .\start.ps1
 ```
@@ -199,6 +209,7 @@ php artisan serve
 ```
 
 ---
+
 
 ## 🤝 Contributing
 
