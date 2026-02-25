@@ -1,0 +1,94 @@
+# ══════════════════════════════════════════════════════════════
+#  Roodio — Docker Compose Local Development
+#  Usage: docker compose up
+#  Access:
+#    Webapp   → http://localhost:8000
+#    ML API   → http://localhost:7860
+# ══════════════════════════════════════════════════════════════
+
+services:
+
+  # ── 1. MySQL Database ──────────────────────────────────────
+  mysql:
+    image: mysql:8.4
+    container_name: roodio-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: roodio_root
+      MYSQL_DATABASE: roodio
+      MYSQL_USER: roodio
+      MYSQL_PASSWORD: roodio_pass
+    volumes:
+      - mysql-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroodio", "-proodio_pass"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - roodio-net
+
+  # ── 2. Flask ML API ────────────────────────────────────────
+  flask-api:
+    build:
+      context: ./machineLearning/api
+      dockerfile: Dockerfile
+    container_name: roodio-flask-api
+    restart: unless-stopped
+    environment:
+      MODEL_REPO_ID: xullfikar/roodio-models
+    volumes:
+      # Persist downloaded models so they are not re-downloaded on every restart
+      - ml-models:/app/models
+    ports:
+      - "7860:7860"
+    networks:
+      - roodio-net
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:7860/')"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 120s   # Model download can take a long time on first run
+
+  # ── 3. Laravel Webapp ──────────────────────────────────────
+  webapp:
+    build:
+      context: ./webApp
+      dockerfile: Dockerfile
+    container_name: roodio-webapp
+    restart: unless-stopped
+    env_file:
+      - .env.docker
+    environment:
+      # Override ROODIO_API_URL → internal Docker network service name
+      ROODIO_API_URL: http://flask-api:7860
+      # DB credentials matching the mysql service above
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: roodio
+      DB_USERNAME: roodio
+      DB_PASSWORD: roodio_pass
+    ports:
+      - "8000:8000"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      flask-api:
+        condition: service_started
+    networks:
+      - roodio-net
+
+# ── Volumes ────────────────────────────────────────────────────
+volumes:
+  mysql-data:
+    driver: local
+  ml-models:
+    driver: local
+
+# ── Networks ───────────────────────────────────────────────────
+networks:
+  roodio-net:
+    driver: bridge

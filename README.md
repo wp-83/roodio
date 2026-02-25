@@ -116,72 +116,86 @@ The system employs a multi-stage pipeline:
 
 ---
 
-## ⚙️ Installation & Setup
+## ⚙️ Local Setup (After Git Clone)
 
-### Prerequisites
+### Step 1 — Install Prerequisites
 
-*   **PHP** >= 8.2
-*   **Composer** (PHP Dependency Manager)
-*   **Node.js** & **NPM**
-*   **Python** 3.10+ (Ensure compatibility with TensorFlow/NumPy versions)
-*   **MySQL** Database
+Make sure the following tools are installed on your machine:
 
-### 1. Web App Setup
+| Tool | Version | Download |
+|---|---|---|
+| **PHP** | 8.2+ | Windows: [Laragon](https://laragon.org/download) (includes PHP + MySQL + Composer) |
+| **Composer** | Latest | [getcomposer.org](https://getcomposer.org/download/) |
+| **Node.js** | 20+ | [nodejs.org](https://nodejs.org) |
+| **Python** | 3.10+ | [python.org](https://python.org/downloads) |
+| **MySQL** | 8.x | Included in Laragon (Windows) / `brew install mysql` (Mac) |
+| **Git** | Latest | [git-scm.com](https://git-scm.com/downloads) |
+
+> **Windows (Recommended):** Install **[Laragon](https://laragon.org/download)** — it includes PHP, MySQL, and Composer in one package. Then install Python and Node.js separately.
+
+---
+
+### Step 2 — Clone & Run Automated Setup
 
 ```bash
-# Navigate to webApp directory
-cd webApp
-
-# Install PHP dependencies
-composer install
-
-# Install JS dependencies
-npm install
-
-# Copy environment file and configure DB/Azure credentials
-cp .env.example .env
-
-# Generate App Key
-php artisan key:generate
-
-# Run Migrations & Seeders (Initializes Roles, Users, Songs)
-php artisan migrate --seed
-
-# Build Frontend Assets
-npm run build
-
-# Start Local Server
-php artisan serve
+git clone https://github.com/Xullfikar/roodio.git
+cd roodio
 ```
 
-### 2. Machine Learning Setup
+**Windows (PowerShell):**
+```powershell
+.\setup.ps1
+```
+
+**Mac / Linux:**
+```bash
+bash setup.sh
+```
+
+The setup script will automatically:
+- Check all prerequisites
+- Install Python packages for the ML API
+- Install Composer & NPM dependencies
+- Create and configure the `.env` file (interactive DB setup)
+- Run `migrate --seed`
+- Build Vite/Tailwind frontend assets
+
+---
+
+### Step 3 — Start the Servers
+
+**Windows (PowerShell):**
+```powershell
+.\start.ps1
+```
+
+**Mac / Linux:**
+```bash
+bash start.sh
+```
+
+Two servers will start:
+
+| Server | URL | Description |
+|---|---|---|
+| Laravel Webapp | http://localhost:8000 | Main application |
+| Flask ML API | http://localhost:7860 | AI mood detection |
+
+---
+
+### Manual (Without Script)
+
+To run manually in 2 separate terminals:
 
 ```bash
-# Navigate to machineLearning directory
-cd machineLearning
+# Terminal 1 — ML API
+cd machineLearning/api
+python app.py       # Windows
+python3 app.py      # Mac/Linux
 
-# Create a Virtual Environment (Recommended)
-python -m venv venv
-# Windows
-venv\Scripts\activate
-# Mac/Linux
-source venv/bin/activate
-
-# Install Dependencies
-pip install -r requirements.txt
-
-# 🚀 Running the Models
-# IMPORTANT: Execute scripts from the 'machineLearning' root directory
-# to ensure correct path resolution for 'data/' and 'models/'
-
-# Example: Run Stage 1 Training
-python finished/train_stage1_pytorch.py
-
-# Example: Run Manual Testing
-python finished/test_manual_input.py
-
-# (Optional) Start MLflow UI to view experiments
-mlflow ui
+# Terminal 2 — Laravel
+cd webApp
+php artisan serve
 ```
 
 ---

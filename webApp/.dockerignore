@@ -1,0 +1,11 @@
+vendor/
+node_modules/
+.env
+storage/framework/
+storage/logs/
+public/build/
+public/hot
+public/storage
+bootstrap/cache/
+*.log
+docker/

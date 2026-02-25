@@ -18,3 +18,7 @@ MachineLearning/src/__pycache__
 Thumbs.db
 
 cek_path.py
+
+# Docker local data
+mysql-data/
+.env.docker.local
