@@ -25,7 +25,7 @@ Write-Host "[2/2] Starting Laravel Webapp (port 8000)..." -ForegroundColor Cyan
 Start-Process powershell -ArgumentList "-NoExit", "-Command", `
     "cd '$RepoRoot\webApp'; `
      Write-Host 'Laravel Webapp running at http://localhost:8000' -ForegroundColor Green; `
-     php artisan serve --host=0.0.0.0 --port=8000"
+     php artisan serve --host=127.0.0.1 --port=8000"
 
 Write-Host ''
 Write-Host '  Two new terminal windows have been opened.' -ForegroundColor Green
