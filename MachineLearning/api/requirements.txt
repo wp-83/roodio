@@ -1,0 +1,18 @@
+flask
+gunicorn
+numpy
+pandas
+joblib
+librosa
+scikit-learn
+
+# Audio Extraction (YAMNet tetap butuh TF, tapi versi bebas)
+tensorflow
+tensorflow-hub
+
+# Main Engine (Stage 1 & 2B)
+torch
+transformers
+
+# Model Versioning (Download dari HF Hub)
+huggingface_hub
