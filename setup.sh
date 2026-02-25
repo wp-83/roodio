@@ -62,7 +62,7 @@ cd "$REPO_ROOT/webApp"
 
 # 3a. Composer install
 echo "  Running composer install..."
-composer install --no-interaction --quiet
+composer install --no-interaction
 ok "Composer dependencies installed."
 
 # 3b. Setup .env
@@ -115,7 +115,7 @@ fi
 
 # 3g. Install Node dependencies & build assets
 echo "  Installing Node.js dependencies..."
-npm install --silent
+npm install
 echo "  Building frontend assets (Vite)..."
 npm run build
 ok "Frontend assets built."

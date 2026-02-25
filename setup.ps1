@@ -66,7 +66,7 @@ Push-Location $WebDir
 
     # 3a. Composer install
     Write-Host '  Running composer install...'
-    composer install --no-interaction --quiet
+    composer install --no-interaction
     Write-OK 'Composer dependencies installed.'
 
     # 3b. Setup .env
@@ -128,7 +128,7 @@ Push-Location $WebDir
 
     # 3g. Install Node dependencies & build assets
     Write-Host '  Installing Node.js dependencies...'
-    npm install --silent
+    npm install
     Write-Host '  Building frontend assets (Vite)...'
     npm run build
     Write-OK 'Frontend assets built.'
