@@ -24,7 +24,7 @@
         <div class='w-16 h-16 lg:w-18 lg:h-18 border-2 {{ $borderMood[$mood] }} rounded-full flex items-center justify-center'>
             <div class='w-14 h-14 lg:w-16 lg:h-16 bg-primary-10 rounded-full flex items-center justify-center relative z-5 overflow-hidden'>
             @if (!empty($profilePicture))
-                <img src="{{ config('filesystems.disks.azure.url') . '/' . $profilePicture }}" alt="{{ $creator }}" class='w-full h-full object-cover'>
+                <img src="{{ config('filesystems.storage_url') . '/' . $profilePicture }}" alt="{{ $creator }}" class='w-full h-full object-cover'>
             @else
                 <p class='text-subtitle font-primary font-bold text-primary-70 h-fit'>{{ Str::charAt(Str::upper($creator), 0) }}</p>
             @endif
@@ -97,7 +97,7 @@
                         <div class='mb-3 flex flex-row items-start gap-3'>
                             <div class='w-8 h-8 rounded-full flex items-center justify-center relative z-5 overflow-hidden {{ $bgMoodStyle[$mood] }} shrink-0'>
                                 @if (!empty($replyPhoto))
-                                    <img src="{{ config('filesystems.disks.azure.url') . '/' . $replyPhoto }}" alt="{{ $replyName }}" class='w-full h-full object-cover'>
+                                    <img src="{{ config('filesystems.storage_url') . '/' . $replyPhoto }}" alt="{{ $replyName }}" class='w-full h-full object-cover'>
                                 @else
                                     <p class='text-small font-primary font-bold h-fit {{ $textMood[$mood] }}'>{{ Str::charAt(Str::upper($replyName), 0) }}</p>
                                 @endif

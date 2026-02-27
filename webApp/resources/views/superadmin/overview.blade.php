@@ -156,7 +156,7 @@
                                     {{-- Avatar --}}
                                     <div class="flex-shrink-0">
                                         @if($user->userDetail?->profilePhoto)
-                                            <img src="{{ config('filesystems.disks.azure.url') . '/' . $user->userDetail->profilePhoto }}" class="w-9 h-9 rounded-full object-cover border border-primary-60">
+                                            <img src="{{ config('filesystems.storage_url') . '/' . $user->userDetail->profilePhoto }}" class="w-9 h-9 rounded-full object-cover border border-primary-60">
                                         @else
                                             <div class="w-9 h-9 rounded-full bg-primary-60 flex items-center justify-center text-white font-bold text-xs border border-primary-50">
                                                 {{ substr($user->username, 0, 1) }}

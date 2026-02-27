@@ -52,7 +52,7 @@ class UserController extends Controller
         ]);
 
         if ($request->filled('profilePhoto')) {
-            $path = Storage::disk('azure')->put(
+            $path = Storage::disk()->put(
                 'images',
                 $validated['profilePhoto']
             );
@@ -116,10 +116,10 @@ class UserController extends Controller
 
         if ($request->hasFile('profilePhoto')) {
             if ($user->userDetail && $user->userDetail->profilePhoto) {
-                Storage::disk('azure')->delete($user->userDetail->profilePhoto);
+                Storage::disk()->delete($user->userDetail->profilePhoto);
             }
 
-            $path = $request->file('profilePhoto')->store('images', 'azure');
+            $path = $request->file('profilePhoto')->store('images');
 
             $detailData['profilePhoto'] = $path;
         }

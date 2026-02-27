@@ -37,7 +37,7 @@
         @if (empty($photoPath))
             <img src="{{ asset('assets/defaults/songCover.png') }}" alt="{{ $mood }}" class='w-full h-full object-cover relative'>
         @else
-            <img src="{{ config('filesystems.disks.azure.url') . '/' . $photoPath }}" alt="{{ $title }}" class='w-full h-full object-cover relative'>
+            <img src="{{ config('filesystems.storage_url') . '/' . $photoPath }}" alt="{{ $title }}" class='w-full h-full object-cover relative'>
         @endif
         <div class='{{ $hoverPlayStyle[$mood] }} w-full h-full absolute top-0 left-0 invisible flex items-center justify-center group-hover:visible'>
             <img src="{{ asset('assets/icons/play-dark.svg') }}" alt="play-btn" class='w-9 h-9 opacity-80'>

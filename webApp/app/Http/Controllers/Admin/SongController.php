@@ -74,12 +74,12 @@ class SongController extends Controller
         $song  = $request->file('song');
         $photo = $request->file('photo');
 
-        $path = Storage::disk('azure')->put(
+        $path = Storage::disk()->put(
             'songs',
             $song
         );
 
-        $photoPath = Storage::disk('azure')->put(
+        $photoPath = Storage::disk()->put(
             'images',
             $photo
         );
@@ -184,7 +184,7 @@ class SongController extends Controller
 
         if ($request->hasFile('photo')) {
             $photo     = $request->file('photo');
-            $photoPath = Storage::disk('azure')->put(
+            $photoPath = Storage::disk()->put(
                 'images',
                 $photo
             );

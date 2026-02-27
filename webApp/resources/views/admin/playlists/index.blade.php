@@ -142,7 +142,7 @@
                     <div class="relative w-full aspect-[16/9] bg-[#020a36] overflow-hidden">
                         @if($playlist->playlistPath)
                             <div class="absolute inset-0 flex items-center justify-center text-primary-60 group-hover/card:scale-110 transition-transform duration-500">
-                                <img src="{{ config('filesystems.disks.azure.url') . '/' . $playlist->playlistPath }}"
+                                <img src="{{ config('filesystems.storage_url') . '/' . $playlist->playlistPath }}"
                                      class="w-full h-full object-cover"
                                      onerror="this.onerror=null; this.parentElement.innerHTML='<i class=\'fa-solid fa-music text-4xl opacity-50\'></i>';">
                             </div>

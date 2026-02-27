@@ -37,7 +37,7 @@
     @if (empty($imageSource))
             <img src="{{ asset('assets/moods/icons/' . $mood . '.png') }}" alt="{{ $mood }}" class='w-[90%] h-[90%] object-cover'>
         @else
-            <img src="{{ config('filesystems.disks.azure.url') . '/' . $imageSource }}" alt="{{ $playlistName }}" class='w-full h-full object-cover'>
+            <img src="{{ config('filesystems.storage_url') . '/' . $imageSource }}" alt="{{ $playlistName }}" class='w-full h-full object-cover'>
         @endif
     </div>
     <div class='font-secondaryAndButton flex flex-col justify-between relative z-1000 w-full'>

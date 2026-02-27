@@ -38,7 +38,7 @@
                             {{-- Image Preview Logic --}}
                             @if($song->photoPath)
                                 <img id="photo-preview"
-                                    src="{{ config('filesystems.disks.azure.url') . '/' . $song->photoPath }}"
+                                    src="{{ config('filesystems.storage_url') . '/' . $song->photoPath }}"
                                     class="absolute inset-0 w-full h-full object-cover z-10"
                                     alt="Cover Preview" />
 

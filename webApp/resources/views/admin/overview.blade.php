@@ -122,7 +122,7 @@
                             {{-- Small Cover --}}
                             <div class="relative w-12 h-12 rounded-lg bg-[#020a36] overflow-hidden flex-shrink-0">
                                 @if($playlist->playlistPath)
-                                    <img src="{{ config('filesystems.disks.azure.url') . '/' . $playlist->playlistPath }}"
+                                    <img src="{{ config('filesystems.storage_url') . '/' . $playlist->playlistPath }}"
                                          class="w-full h-full object-cover"
                                          onerror="this.onerror=null; this.parentElement.innerHTML='<i class=\'fa-solid fa-music text-white text-xs opacity-50 flex items-center justify-center h-full w-full\'></i>';">
                                 @else

@@ -8,8 +8,8 @@
             'id' => $song->id,
             'title' => $song->title,
             'artist' => $song->artist,
-            'cover' => !empty($song->photoPath) ? config('filesystems.disks.azure.url') . '/' . $song->photoPath : asset('assets/defaults/songCover.png'),
-            'path' => config('filesystems.disks.azure.url') . '/' . $song->songPath,
+            'cover' => !empty($song->photoPath) ? config('filesystems.storage_url') . '/' . $song->photoPath : asset('assets/defaults/songCover.png'),
+            'path' => config('filesystems.storage_url') . '/' . $song->songPath,
             'lyrics' => $song->lyrics ?? '',
         ];
     });

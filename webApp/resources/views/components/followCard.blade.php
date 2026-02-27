@@ -53,7 +53,7 @@
     <div class='mr-2.5'>
         <div class='w-30 h-30 overflow-hidden {{ $bgPhotoStyle[$mood] }}' style="clip-path: polygon(50% 0%, 83% 12%, 100% 43%, 94% 78%, 68% 100%, 32% 100%, 6% 78%, 0% 43%, 17% 12%);">
             @if (!empty($profilePhoto))
-                <img src="{{ config('filesystems.disks.azure.url') . '/' . $profilePhoto }}" alt="{{ $fullname }}" class='w-full h-full object-cover opacity-80'>
+                <img src="{{ config('filesystems.storage_url') . '/' . $profilePhoto }}" alt="{{ $fullname }}" class='w-full h-full object-cover opacity-80'>
             @else
                 <img src="{{ asset('assets/defaults/user.jpg') }}" alt="userDefault" class='w-full h-full object-cover opacity-75'>
             @endif
@@ -85,7 +85,7 @@
 
 <div class='hidden md:block relative w-full min-h-90 rounded-lg overflow-hidden group'>
     @if (!empty($profilePhoto))
-        <img src="{{ config('filesystems.disks.azure.url') . '/' . $profilePhoto }}" alt="{{ $username }}" class='w-full h-full object-cover opacity-80'>
+        <img src="{{ config('filesystems.storage_url') . '/' . $profilePhoto }}" alt="{{ $username }}" class='w-full h-full object-cover opacity-80'>
     @else
         <img src="{{ asset('assets/defaults/user.jpg') }}" alt="userDefault" class='w-full h-full object-cover opacity-75'>
     @endif

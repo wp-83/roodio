@@ -37,7 +37,7 @@ class Profile extends Component
 
         $user = auth()->user();
 
-        $path = Storage::disk('azure')->put(
+        $path = Storage::disk()->put(
             'images',
             $this->photo
         );

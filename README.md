@@ -25,6 +25,26 @@ The project is divided into two main modules:
 
 ---
 
+## 🌐 Deployment
+
+| Service | URL |
+|---|---|
+| **Web Application** | [roodio.site](https://roodio.site) |
+| **ML API (Hugging Face)** | [Roodio Predict API](https://huggingface.co/spaces/xullfikar/roodio-predict) |
+
+### Production Infrastructure
+
+| Component | Technology |
+|---|---|
+| Cloud Server (VM) | Azure VM |
+| File Storage | Azure Blob Storage |
+| Database | MySQL 8.x |
+| Email Service | Brevo (SMTP) |
+| CDN & Security | Cloudflare |
+| Domain | Hostinger |
+
+---
+
 ## 🚀 Web Application
 
 The `webApp` serves as the core platform for users, admins, and super admins. It features a modern, responsive UI built with **TailwindCSS** and **Livewire** for seamless dynamic interactions.
@@ -46,9 +66,10 @@ The `webApp` serves as the core platform for users, admins, and super admins. It
     *   **User**: Standard streaming and social features.
     *   **Admin**: Manage songs (CRUD), playlists, and view platform overviews.
     *   **Super Admin**: Manage users, roles, and system-wide configurations.
-*   **☁️ Cloud Infrastructure**:
-    *   Song files are securely stored and streamed from **Microsoft Azure Blob Storage**.
-    *   MP3 metadata extraction using `james-heinrich/getid3`.
+*   **🤖 MLOps Dashboard**:
+    *   Model accuracy monitoring and confidence tracking.
+    *   User feedback loop for continuous improvement.
+    *   Misprediction analysis.
 
 ### 🛠️ Tech Stack
 
@@ -56,10 +77,6 @@ The `webApp` serves as the core platform for users, admins, and super admins. It
 *   **Frontend**: Livewire 3.7, TailwindCSS 4.x, Alpine.js
 *   **Database**: MySQL 8.x
 *   **Storage**: Azure Blob Storage
-*   **Cloud Server (VM)**: Azure VM
-*   **Email Service**: Brevo (SMTP)
-*   **CDN & Security**: Cloudflare
-*   **Domain**: Hostinger
 *   **Build Tools**: Vite, PostCSS
 
 ### 🎨 Frontend Libraries & Tools
@@ -67,14 +84,11 @@ The `webApp` serves as the core platform for users, admins, and super admins. It
 *   **UI Components**: [Flowbite](https://flowbite.com/)
 *   **Charts & Visualizations**: [ApexCharts](https://apexcharts.com/), [Chart.js](https://www.chartjs.org/)
 *   **Calendar**: [FullCalendar](https://fullcalendar.io/)
-*   **Tooltips & Popups**:
-    *   [Popper.js](https://popper.js.org/)
-    *   [Tippy.js](https://atomiks.github.io/tippyjs/)
+*   **Tooltips & Popups**: [Popper.js](https://popper.js.org/), [Tippy.js](https://atomiks.github.io/tippyjs/)
 *   **Animations & Physics**:
     *   [Matter.js](https://brm.io/matter-js/) (2D Physics Engine)
     *   [AOS](https://michalsnik.github.io/aos/) (Animate On Scroll)
     *   [Canvas Particle Network](https://github.com/JulianLaval/canvas-particle-network)
-*   **Custom Scripts**: `public/js/pages/main/mood.js` (Mood visualization logic)
 
 ---
 
@@ -82,28 +96,27 @@ The `webApp` serves as the core platform for users, admins, and super admins. It
 
 The `machineLearning` module is the brain behind Roodio's mood detection capabilities. It utilizes a **Multi-Modal Hybrid Model** that processes both audio signals (spectrograms) and textual data (lyrics) to predict emotional valence and arousal.
 
-### � Core Module (`machineLearning/finished`)
+### 🔥 Core Module (`machineLearning/finished`)
 
-The production-ready models and training scripts are located in the `machineLearning/finished` directory. Key files include:
+The production-ready models and training scripts are located in the `machineLearning/finished` directory:
 
-*   **`train_stage1_pytorch.py`**: Training script for **Stage 1**, focusing on initial audio feature extraction and classification using PyTorch.
-*   **`train_stage2a_angry_happy.py`**: Training script for **Stage 2A**, refining predictions for specific mood quadrants (Angry/Happy).
-*   **`lyrics_stage2b.ipynb`**: Jupyter Notebook for **Stage 2B**, handling the NLP pipeline and sentiment analysis of lyrics using RoBERTa.
+*   **`train_stage1_pytorch.py`**: Stage 1 — Audio feature extraction and classification using PyTorch.
+*   **`train_stage2a_angry_happy.py`**: Stage 2A — Refinement for specific mood quadrants (Angry/Happy).
+*   **`lyrics_stage2b.ipynb`**: Stage 2B — NLP pipeline and sentiment analysis using RoBERTa.
+*   **`test_manual_input.py`**: Utility for manual model testing.
 
-*   **`test_manual_input.py`**: A utility script for manually testing the model with custom inputs to verify predictions.
-
-### �🔬 Technical Approach
+### 🔬 Technical Approach
 
 The system employs a multi-stage pipeline:
 
-1.  **Stage 1: Feature Extraction**:
-    *   **Audio**: Uses **Librosa** and **YAMNet** (Transfer Learning) to extract deep audio features and Mel-spectrograms from song files.
-    *   **Lyrics**: Utilizes **RoBERTa** (Transformer-based NLP) for semantic understanding and sentiment analysis of song lyrics.
-2.  **Stage 2: Model Training & Regression**:
-    *   **XGBoost Regressor**: Combines extracted features to predict continuous variables for **Valence** (positivity/negativity) and **Arousal** (energy level).
-    *   **Deep Mood Aware Augmentation**: Custom data augmentation techniques to balance dataset distribution across emotional quadrants.
-3.  **Stage 3: Classification**:
-    *   Maps the regression outputs into distinct mood categories (e.g., Happy, Sad, Energetic, Calm).
+1.  **Stage 1 — Feature Extraction**:
+    *   **Audio**: Uses **Librosa** and **YAMNet** (Transfer Learning) to extract deep audio features and Mel-spectrograms.
+    *   **Lyrics**: Utilizes **RoBERTa** (Transformer-based NLP) for semantic understanding and sentiment analysis.
+2.  **Stage 2 — Model Training & Regression**:
+    *   **XGBoost Regressor**: Combines extracted features to predict continuous variables for **Valence** and **Arousal**.
+    *   **Deep Mood Aware Augmentation**: Custom data augmentation to balance dataset distribution across emotional quadrants.
+3.  **Stage 3 — Classification**:
+    *   Maps the regression outputs into distinct mood categories (Happy, Sad, Relaxed, Angry).
 
 ### 🧰 ML Libraries & Tools
 
@@ -116,100 +129,21 @@ The system employs a multi-stage pipeline:
 
 ---
 
-## ⚙️ Local Setup (After Git Clone)
+## 💻 Local Development
 
-### Step 1 — Install Prerequisites
+Want to run Roodio on your local machine? See the full setup guide:
 
-Make sure the following tools are installed on your machine:
+### 👉 [LOCAL_SETUP.md](LOCAL_SETUP.md)
 
-| Tool | Version | Download |
-|---|---|---|
-| **PHP** | 8.2+ | Windows: [Laragon](https://laragon.org/download) (includes PHP + MySQL + Composer) |
-| **Composer** | Latest | [getcomposer.org](https://getcomposer.org/download/) |
-| **Node.js** | 20+ | [nodejs.org](https://nodejs.org) |
-| **Python** | 3.10+ | [python.org](https://python.org/downloads) |
-| **MySQL** | 8.x | Included in Laragon (Windows) / `brew install mysql` (Mac) |
-| **Git** | Latest | [git-scm.com](https://git-scm.com/downloads) |
-
-> **Windows (Recommended):** Install **[Laragon](https://laragon.org/download)** — it includes PHP, MySQL, and Composer in one package. Then install Python and Node.js separately.
-
----
-
-### Step 2 — Clone & Run Automated Setup
-
+Quick start:
 ```bash
 git clone https://github.com/Xullfikar/roodio.git
 cd roodio
-```
-
-**Windows — CMD, PowerShell, or double-click (recommended):**
-```cmd
-setup.bat
-```
-
-**Windows — PowerShell only:**
-```powershell
-.\setup.ps1
-```
-
-**Mac / Linux:**
-```bash
-bash setup.sh
-```
-
-The setup script will automatically:
-- Check all prerequisites
-- Install Python packages for the ML API
-- Install Composer & NPM dependencies
-- Create and configure the `.env` file (interactive DB setup)
-- Run `migrate --seed`
-- Build Vite/Tailwind frontend assets
-
----
-
-### Step 3 — Start the Servers
-
-**Windows — CMD, PowerShell, or double-click (recommended):**
-```cmd
-start.bat
-```
-
-**Windows — PowerShell only:**
-```powershell
-.\start.ps1
-```
-
-**Mac / Linux:**
-```bash
-bash start.sh
-```
-
-Two servers will start:
-
-| Server | URL | Description |
-|---|---|---|
-| Laravel Webapp | http://localhost:8000 | Main application |
-| Flask ML API | http://localhost:7860 | AI mood detection |
-
----
-
-### Manual (Without Script)
-
-To run manually in 2 separate terminals:
-
-```bash
-# Terminal 1 — ML API
-cd machineLearning/api
-python app.py       # Windows
-python3 app.py      # Mac/Linux
-
-# Terminal 2 — Laravel
-cd webApp
-php artisan serve
+setup.bat        # Windows
+bash setup.sh    # Mac/Linux
 ```
 
 ---
-
 
 ## 👥 Contributors
 

@@ -59,7 +59,7 @@ class PlaylistController extends Controller
         if($request->hasFile('image')){
             $image = $request->file('image');
     
-            $validated['playlistPath'] = Storage::disk('azure')->put(
+            $validated['playlistPath'] = Storage::disk()->put(
                 'image',
                 $image
             );
@@ -100,10 +100,10 @@ class PlaylistController extends Controller
 
         if ($request->hasFile('image')) {
             if ($playlist->playlistPath) {
-                Storage::disk('azure')->delete($playlist->playlistPath);
+                Storage::disk()->delete($playlist->playlistPath);
             }
 
-            $validated['playlistPath'] = Storage::disk('azure')->put('image', $request->file('image'));
+            $validated['playlistPath'] = Storage::disk()->put('image', $request->file('image'));
         }
 
         $playlist->update([
