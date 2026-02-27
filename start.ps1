@@ -15,6 +15,7 @@ Write-Host '========================================' -ForegroundColor Magenta
 Write-Host "`n[1/2] Starting Flask ML API (port 7860)..." -ForegroundColor Cyan
 Start-Process powershell -ArgumentList "-NoExit", "-Command", `
     "cd '$RepoRoot\machineLearning\api'; `
+     .\venv\Scripts\activate; `
      Write-Host 'Flask ML API running at http://localhost:7860' -ForegroundColor Cyan; `
      python app.py"
 

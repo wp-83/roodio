@@ -165,13 +165,59 @@ Two servers will start:
 *   **Laravel Webapp**: `http://localhost:8000`
 *   **Flask ML API**: `http://localhost:7860`
 
-### 3. Local Environment Details
+### 3. Manual Setup (Without Script)
+
+If you prefer to set things up manually, follow these steps in 2 separate terminals:
+
+**Terminal 1 — ML API (Python)**
+```bash
+cd machineLearning/api
+
+# 1. Create a virtual environment (Recommended)
+python -m venv venv     # Windows
+python3 -m venv venv    # Mac/Linux
+
+# 2. Activate the virtual environment
+venv\Scripts\activate   # Windows
+source venv/bin/activate # Mac/Linux
+
+# 3. Install dependencies
+pip install -r requirements.txt
+
+# 4. Start the Flask server
+python app.py           # Windows
+python3 app.py          # Mac/Linux
+```
+
+**Terminal 2 — Laravel Webapp**
+```bash
+cd webApp
+
+# 1. Install dependencies
+composer install
+npm install && npm run build
+
+# 2. Setup Environment
+cp .env.example .env
+php artisan key:generate
+
+# 3. Setup Database (Ensure MySQL is running first, then configure DB credentials in .env)
+php artisan migrate --seed
+
+# 4. Create storage symlink
+php artisan storage:link
+
+# 5. Start the server
+php artisan serve
+```
+
+### 4. Local Environment Details
 
 *   **File Uploads**: Stored locally in `webApp/storage/app/public/` (no Azure credentials needed).
 *   **Emails/OTP**: Emails are NOT sent. OTP codes are logged in `webApp/storage/logs/laravel.log`.
 *   **Database Initial State**: Starts empty (no pre-loaded songs) to save local storage. Admin must upload songs to test the ML API.
 
-### 4. Test Accounts
+### 5. Test Accounts
 
 After the setup script finishes, use these seeded accounts:
 
@@ -181,7 +227,7 @@ After the setup script finishes, use these seeded accounts:
 | **Admin** | `admin` | `password` |
 | **SuperAdmin**| `superadmin`| `password` |
 
-### � Recommended Testing Order
+### 6. Recommended Testing Order
 
 To fully test the application locally, follow this sequence:
 1. **Auth**: Test Login, Register (check Laravel log for OTP), and Forgot Password.
