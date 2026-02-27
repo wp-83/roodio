@@ -16,32 +16,36 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         // Admin
+        // Production: set ADMIN_USERNAME, ADMIN_EMAIL, ADMIN_PASSWORD in .env
+        // Local: defaults to admin / admin@gmail.com / password
         $admin = User::create([
-            'username' => 'admin',
+            'username' => env('ADMIN_USERNAME', 'admin'),
             'role' => 1,
-            'password' => Hash::make('password'),
+            'password' => Hash::make(env('ADMIN_PASSWORD', 'password')),
         ]);
 
         userDetails::create([
             'userId'      => $admin->id,
             'fullname'    => 'Admin User',
-            'email'       => 'admin@gmail.com',
+            'email'       => env('ADMIN_EMAIL', 'admin@gmail.com'),
             'dateOfBirth' => '1990-01-01',
             'countryId'   => 'ID',
             'gender'      => 1,
         ]);
 
         // Superadmin
+        // Production: set SUPERADMIN_USERNAME, SUPERADMIN_EMAIL, SUPERADMIN_PASSWORD in .env
+        // Local: defaults to superadmin / superadmin@gmail.com / password
         $superadmin = User::create([
-            'username' => 'superadmin',
+            'username' => env('SUPERADMIN_USERNAME', 'superadmin'),
             'role' => 2,
-            'password' => Hash::make('password'),
+            'password' => Hash::make(env('SUPERADMIN_PASSWORD', 'password')),
         ]);
 
         userDetails::create([
             'userId'      => $superadmin->id,
             'fullname'    => 'Super Admin',
-            'email'       => 'superadmin@gmail.com',
+            'email'       => env('SUPERADMIN_EMAIL', 'superadmin@gmail.com'),
             'dateOfBirth' => '1990-01-01',
             'countryId'   => 'ID',
             'gender'      => 1,
@@ -71,7 +75,7 @@ class UserSeeder extends Seeder
         ]);
 
         userDetails::create([
-            'userId'      => $promotion->id,
+            'userId'      => $userPromotion->id,
             'fullname'    => 'Oliver Brooks',
             'email'       => 'oliver.brooks@gmail.com',
             'dateOfBirth' => '1901-01-01',

@@ -13,7 +13,23 @@ return [
     |
     */
 
-    'default' => env('FILESYSTEM_DISK', 'local'),
+    'default' => env('FILESYSTEM_DISK', 'public'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Storage URL (auto-resolved)
+    |--------------------------------------------------------------------------
+    |
+    | This URL is used by Blade views to generate public URLs for uploaded files.
+    | It automatically resolves based on FILESYSTEM_DISK:
+    |   - azure  → AZURE_STORAGE_URL  (e.g. https://roodio.blob.core.windows.net/uploads)
+    |   - public → APP_URL/storage     (e.g. http://localhost:8000/storage)
+    |
+    */
+
+    'storage_url' => env('FILESYSTEM_DISK', 'public') === 'azure'
+        ? env('AZURE_STORAGE_URL', '')
+        : env('APP_URL', 'http://localhost:8000') . '/storage',
 
     /*
     |--------------------------------------------------------------------------

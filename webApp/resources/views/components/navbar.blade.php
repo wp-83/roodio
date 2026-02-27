@@ -60,7 +60,7 @@
         <div class='flex flex-col items-center gap-2'>
             <div class='w-20 h-20 rounded-full flex items-center justify-center overflow-hidden {{ $bgMoodStyle[$mood] }}'>
                 @if (!empty($profilePhoto))
-                    <img src="{{ config('filesystems.disks.azure.url') . '/' . $profilePhoto }}" alt="{{ $fullname }}" class='w-full h-full object-cover'>
+                    <img src="{{ config('filesystems.storage_url') . '/' . $profilePhoto }}" alt="{{ $fullname }}" class='w-full h-full object-cover'>
                 @else
                 <p class='text-title font-primary font-bold h-fit {{ $textMoodStyle[$mood] }}'>{{ Str::charAt(Str::upper($fullname), 0) }}</p>
                 @endif
@@ -303,7 +303,7 @@
                 </div>
                 <div class='w-10 h-10 bg-primary-10 rounded-full flex items-center justify-center relative z-5 overflow-hidden'>
                     @if (!empty($profilePhoto))
-                        <img src="{{ config('filesystems.disks.azure.url') . '/' . $profilePhoto }}" alt="{{ $fullname }}" class='w-full h-full object-cover'>
+                        <img src="{{ config('filesystems.storage_url') . '/' . $profilePhoto }}" alt="{{ $fullname }}" class='w-full h-full object-cover'>
                     @else
                         <p class='text-paragraph font-primary font-bold text-primary-70 h-fit'>{{ Str::charAt(Str::upper($fullname), 0) }}</p>
                     @endif

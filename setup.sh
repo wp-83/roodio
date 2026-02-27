@@ -113,7 +113,11 @@ else
     warn "Run manually: cd webApp && php artisan migrate --seed"
 fi
 
-# 3g. Install Node dependencies & build assets
+# 3g. Create storage symlink for local file uploads
+php artisan storage:link --quiet 2>/dev/null || true
+ok "Storage symlink created (public/storage → storage/app/public)."
+
+# 3h. Install Node dependencies & build assets
 echo "  Installing Node.js dependencies..."
 npm install
 echo "  Building frontend assets (Vite)..."

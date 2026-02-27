@@ -55,7 +55,7 @@
             <div class='overflow-y-auto h-64 pr-2 custom-scrollbar'>
                 @forelse($mispredictedSongs as $item)
                 <div class='flex items-center gap-3 mb-4 last:mb-0 p-3 bg-primary-80 rounded-xl'>
-                    <img src="{{ $item->song->photoPath ? config('filesystems.disks.azure.url') . '/' . $item->song->photoPath : asset('assets/images/placeholder.jpg') }}" 
+                    <img src="{{ $item->song->photoPath ? config('filesystems.storage_url') . '/' . $item->song->photoPath : asset('assets/images/placeholder.jpg') }}" 
                          class='w-10 h-10 rounded object-cover'>
                     <div class='flex-1 min-w-0'>
                         <p class='text-white font-bold truncate'>{{ $item->song->title ?? 'Unknown Song' }}</p>

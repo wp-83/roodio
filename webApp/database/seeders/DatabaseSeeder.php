@@ -14,13 +14,17 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-       
+        // Essential seeders — always run (local + production)
         $this->call(UserSeeder::class);
         $this->call(RegionSeeder::class);
         $this->call(MoodSeeder::class);
-        $this->call(SongsSeeder::class);
-        $this->call(PlaylistsSeeder::class);
+
+        // Production seeders — only run in production
+        // These contain pre-loaded songs with Azure storage paths.
+        // To run manually: php artisan db:seed --class=SongsSeeder
+        if (app()->environment('production')) {
+            $this->call(SongsSeeder::class);
+            $this->call(PlaylistsSeeder::class);
+        }
     }
 }

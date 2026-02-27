@@ -55,7 +55,7 @@
         <div class="flex items-center gap-3 p-3 rounded-xl bg-primary-70/50 border border-primary-60">
             @if (auth()->user()->userDetail?->profilePhoto)
                 <img class="w-10 h-10 rounded-full object-cover border border-primary-50"
-                     src="{{ config('filesystems.disks.azure.url') . '/' . auth()->user()->userDetail?->profilePhoto }}"
+                     src="{{ config('filesystems.storage_url') . '/' . auth()->user()->userDetail?->profilePhoto }}"
                      alt="{{ auth()->user()->userDetail?->fullname }}">
             @else
                 <div class='w-10 h-10 rounded-full object-cover font-primary font-bold flex items-center justify-center bg-secondary-happy-100 text-white shadow-md'>

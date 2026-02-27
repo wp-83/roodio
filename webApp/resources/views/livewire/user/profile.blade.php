@@ -52,7 +52,7 @@ x-on:password-updated.window="showPasswordModal = false">
                                  alt="Profile Photo Preview">
                         @else
                             <img class="w-40 h-40 rounded-full border-3 border-primary-50 object-cover shadow-lg bg-shadedOfGray-20"
-                                 src="{{ rtrim(config('filesystems.disks.azure.url'), '/') . '/' . ltrim($profilePhoto, '/') }}"
+                                 src="{{ rtrim(config('filesystems.storage_url'), '/') . '/' . ltrim($profilePhoto, '/') }}"
                                  alt="Profile Photo">
                         @endif
 
@@ -267,7 +267,7 @@ x-on:password-updated.window="showPasswordModal = false">
                                         <img src="{{ asset('assets/defaults/user.jpg') }}" 
                                              class="w-full h-full rounded-full object-cover border-4 border-shadedOfGray-20 bg-shadedOfGray-10">
                                     @else
-                                        <img src="{{ rtrim(config('filesystems.disks.azure.url'), '/') . '/' . ltrim($profilePhoto, '/') }}" 
+                                        <img src="{{ rtrim(config('filesystems.storage_url'), '/') . '/' . ltrim($profilePhoto, '/') }}" 
                                              class="w-full h-full rounded-full object-cover border-4 border-shadedOfGray-20 bg-shadedOfGray-10">
                                     @endif
 

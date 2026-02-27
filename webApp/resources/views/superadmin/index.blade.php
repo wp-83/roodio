@@ -131,7 +131,7 @@
                                     {{-- Avatar --}}
                                     <div class="flex-shrink-0">
                                         @if ($user->userDetail?->profilePhoto)
-                                            <img class="w-10 h-10 rounded-full object-cover border border-primary-60" src="{{ config('filesystems.disks.azure.url') . '/' . $user->userDetail?->profilePhoto }}" alt="{{ $user->userDetail?->fullname }}">
+                                            <img class="w-10 h-10 rounded-full object-cover border border-primary-60" src="{{ config('filesystems.storage_url') . '/' . $user->userDetail?->profilePhoto }}" alt="{{ $user->userDetail?->fullname }}">
                                         @else
                                             <div class='w-10 h-10 rounded-full object-cover font-primary font-bold flex items-center justify-center bg-primary-60 text-white border border-primary-50'>
                                                 {{ Str::length($user->username) > 0 ? Str::upper(Str::substr($user->username, 0, 1)) : '?' }}

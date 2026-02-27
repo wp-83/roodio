@@ -47,7 +47,7 @@
 
                                 {{-- Image Preview (Menampilkan gambar lama dari Azure atau preview upload baru) --}}
                                 <img id="imagePreview"
-                                     src="{{ $playlist->playlistPath ? config('filesystems.disks.azure.url') . '/' . $playlist->playlistPath : '#' }}"
+                                     src="{{ $playlist->playlistPath ? config('filesystems.storage_url') . '/' . $playlist->playlistPath : '#' }}"
                                      alt="Preview"
                                      class="absolute inset-0 w-full h-full object-cover z-10 {{ $playlist->playlistPath ? '' : 'hidden' }}" />
 

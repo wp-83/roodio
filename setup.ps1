@@ -126,7 +126,11 @@ Push-Location $WebDir
         Write-Warn 'Run manually: cd webApp ; php artisan migrate --seed'
     }
 
-    # 3g. Install Node dependencies & build assets
+    # 3g. Create storage symlink for local file uploads
+    php artisan storage:link --quiet 2>$null
+    Write-OK 'Storage symlink created (public/storage → storage/app/public).'
+
+    # 3h. Install Node dependencies & build assets
     Write-Host '  Installing Node.js dependencies...'
     npm install
     Write-Host '  Building frontend assets (Vite)...'
