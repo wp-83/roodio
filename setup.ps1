@@ -51,10 +51,13 @@ Write-Step 'Setting up Flask ML API...'
 $ApiDir = Join-Path $RepoRoot 'machineLearning\api'
 
 Push-Location $ApiDir
-    Write-Host '  Installing Python packages (machineLearning/api/requirements.txt)...'
+    Write-Host '  Creating Python virtual environment...'
+    python -m venv venv
+    Write-Host '  Activating virtual environment & installing dependencies...'
+    .\venv\Scripts\activate
     python -m pip install --upgrade pip -q
     python -m pip install -r requirements.txt -q
-    Write-OK 'Flask ML API dependencies installed.'
+    Write-OK 'Flask ML API dependencies installed in virtual environment.'
 Pop-Location
 
 # ==============================================================================

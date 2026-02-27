@@ -50,9 +50,14 @@ ok "All prerequisites found."
 step "Setting up Flask ML API..."
 cd "$REPO_ROOT/machineLearning/api"
 
+echo "  Creating Python virtual environment..."
+python3 -m venv venv
+echo "  Activating virtual environment & installing dependencies..."
+source venv/bin/activate
+
 python3 -m pip install --upgrade pip -q
 python3 -m pip install -r requirements.txt -q
-ok "Flask ML API dependencies installed."
+ok "Flask ML API dependencies installed in virtual environment."
 
 # ==============================================================================
 # 3. SETUP LARAVEL WEBAPP
