@@ -94,38 +94,55 @@ The `webApp` serves as the core platform for users, admins, and super admins. It
 
 ## 🧠 Machine Learning Engine
 
-The `machineLearning` module is the brain behind Roodio's mood detection capabilities. It utilizes a **Multi-Modal Hybrid Model** that processes both audio signals (spectrograms) and textual data (lyrics) to predict emotional valence and arousal.
+The `machineLearning` module is the brain behind Roodio's mood detection capabilities. It uses a **Hierarchical Multi-Modal Classification** system that branches based on energy level, combining audio signal analysis with NLP-based lyric sentiment analysis.
 
-### 🔥 Core Module (`machineLearning/finished`)
+### 🔥 Pipeline Architecture
 
-The production-ready models and training scripts are located in the `machineLearning/finished` directory:
+The system uses a **3-stage hierarchical pipeline** instead of a single flat classifier:
 
-*   **`train_stage1_pytorch.py`**: Stage 1 — Audio feature extraction and classification using PyTorch.
-*   **`train_stage2a_angry_happy.py`**: Stage 2A — Refinement for specific mood quadrants (Angry/Happy).
-*   **`lyrics_stage2b.ipynb`**: Stage 2B — NLP pipeline and sentiment analysis using RoBERTa.
-*   **`test_manual_input.py`**: Utility for manual model testing.
+```
+Audio Input
+    │
+    ▼
+┌──────────────────────────────┐
+│  Stage 1: Energy Classifier  │  PyTorch Neural Network
+│  (YAMNet + RMS + ZCR)        │  → High Energy / Low Energy
+└──────────┬───────────────────┘
+           │
+     ┌─────┴─────┐
+     ▼           ▼
+┌─────────┐ ┌──────────┐
+│ Stage 2A│ │ Stage 2B │
+│ (Audio) │ │ (Lyrics) │
+│ RF + Meta│ │ BERT     │
+│→Angry/  │ │→Sad/     │
+│  Happy  │ │  Relaxed │
+└─────────┘ └──────────┘
+```
 
-### 🔬 Technical Approach
+1.  **Stage 1 — Energy Classification** (Audio):
+    *   **PyTorch Neural Network** (`AudioClassifier`) classifies songs into **High Energy** or **Low Energy**.
+    *   Features: **YAMNet** (Transfer Learning) embeddings (mean, std, max) + **RMS** + **ZCR** = 3,074-dimensional vector.
+    *   Architecture: `Linear(3074→512) → ReLU → BN → Dropout → Linear(512→256) → ReLU → BN → Dropout → Linear(256→2)`.
 
-The system employs a multi-stage pipeline:
+2.  **Stage 2A — High Energy Branch** (Audio-only):
+    *   **Random Forest + Meta Classifier** (stacking ensemble) to classify between **Angry** and **Happy**.
+    *   Uses YAMNet mean embeddings + RMS + ZCR as features.
+    *   No lyrics needed — mood distinction is audio-driven.
 
-1.  **Stage 1 — Feature Extraction**:
-    *   **Audio**: Uses **Librosa** and **YAMNet** (Transfer Learning) to extract deep audio features and Mel-spectrograms.
-    *   **Lyrics**: Utilizes **RoBERTa** (Transformer-based NLP) for semantic understanding and sentiment analysis.
-2.  **Stage 2 — Model Training & Regression**:
-    *   **XGBoost Regressor**: Combines extracted features to predict continuous variables for **Valence** and **Arousal**.
-    *   **Deep Mood Aware Augmentation**: Custom data augmentation to balance dataset distribution across emotional quadrants.
-3.  **Stage 3 — Classification**:
-    *   Maps the regression outputs into distinct mood categories (Happy, Sad, Relaxed, Angry).
+3.  **Stage 2B — Low Energy Branch** (Lyrics-based):
+    *   **Fine-tuned BERT** (`AutoModelForSequenceClassification`) to classify between **Sad** and **Relaxed**.
+    *   If no lyrics are provided, defaults to **Relaxed** with 50% confidence.
+    *   Lyrics are cleaned and tokenized (max 512 tokens).
 
 ### 🧰 ML Libraries & Tools
 
 *   **Core**: `numpy` (<2.0.0), `pandas`, `scipy`
-*   **Deep Learning**: `tensorflow` (>=2.15), `torch` (PyTorch), `transformers` (Hugging Face)
-*   **Audio Processing**: `librosa`, `soundfile`, `audioread`
-*   **Classical ML**: `scikit-learn`, `xgboost`
-*   **Ops & Tracking**: `mlflow` for experiment tracking.
-*   **Data Mining**: `spotipy` (Spotify API) for ground truth labeling.
+*   **Deep Learning**: `torch` (PyTorch), `tensorflow` (for YAMNet), `transformers` (Hugging Face BERT)
+*   **Audio Processing**: `librosa` (RMS, ZCR), `tensorflow_hub` (YAMNet embeddings)
+*   **Classical ML**: `scikit-learn` (Random Forest, Meta Classifier), `joblib`
+*   **Ops & Tracking**: `mlflow` for experiment tracking
+*   **Model Hosting**: Hugging Face Hub (model weights downloaded at runtime)
 
 ---
 
