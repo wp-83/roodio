@@ -131,7 +131,7 @@ Push-Location $WebDir
 
     # 3g. Create storage symlink for local file uploads
     php artisan storage:link --quiet 2>$null
-    Write-OK 'Storage symlink created (public/storage → storage/app/public).'
+    Write-OK 'Storage symlink created (public/storage -> storage/app/public).'
 
     # 3h. Install Node dependencies & build assets
     Write-Host '  Installing Node.js dependencies...'
