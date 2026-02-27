@@ -29,7 +29,7 @@ The project is divided into two main modules:
 
 | Service | URL |
 |---|---|
-| **Web Application** | [roodio.site](https://roodio.site) |
+| **Web Application** | [roodio.id](https://roodio.id) |
 | **ML API (Hugging Face)** | [Roodio Predict API](https://huggingface.co/spaces/xullfikar/roodio-predict) |
 
 ### Production Infrastructure
