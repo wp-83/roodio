@@ -109,7 +109,19 @@ sed -i.bak \
     .env && rm -f .env.bak
 ok "Database config saved to .env"
 
-# 3f. Run Migrations & Seeders
+# 3f. Auto-create database if it doesn't exist
+echo "  Ensuring database exists..."
+cat <<EOF > create_db.php
+<?php
+try {
+    \$pdo = new PDO('mysql:host=$DB_HOST;port=$DB_PORT', '$DB_USERNAME', '$DB_PASSWORD');
+    \$pdo->exec('CREATE DATABASE IF NOT EXISTS \`$DB_DATABASE\`');
+} catch (Exception \$e) {}
+EOF
+php create_db.php 2>/dev/null
+rm -f create_db.php
+
+# 3g. Run Migrations & Seeders
 while true; do
     echo "  Running database migrations and seeders..."
     if php artisan migrate:fresh --seed --force; then

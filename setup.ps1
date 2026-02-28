@@ -119,7 +119,14 @@ Push-Location $WebDir
     Set-Content '.env' $envContent
     Write-OK 'Database config saved to .env'
 
-    # 3f. Run Migrations & Seeders
+    # 3f. Auto-create database if it doesn't exist
+    Write-Host '  Ensuring database exists...'
+    $phpCode = "<?php try { `$pdo = new PDO('mysql:host=$dbHost;port=$dbPort', '$dbUser', '$dbPass'); `$pdo->exec('CREATE DATABASE IF NOT EXISTS \`$dbName\`'); } catch (Exception `$e) {}"
+    Set-Content -Path "create_db.php" -Value $phpCode -Encoding ASCII
+    php create_db.php 2>$null
+    Remove-Item "create_db.php" -ErrorAction SilentlyContinue
+
+    # 3g. Run Migrations & Seeders
     $migrationSuccess = $false
     while (-not $migrationSuccess) {
         Write-Host '  Running database migrations and seeders...'
