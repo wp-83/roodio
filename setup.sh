@@ -115,7 +115,7 @@ cat <<EOF > create_db.php
 <?php
 try {
     \$pdo = new PDO('mysql:host=$DB_HOST;port=$DB_PORT', '$DB_USERNAME', '$DB_PASSWORD');
-    \$pdo->exec('CREATE DATABASE IF NOT EXISTS \`$DB_DATABASE\`');
+    \$pdo->exec("CREATE DATABASE IF NOT EXISTS $DB_DATABASE");
 } catch (Exception \$e) {}
 EOF
 php create_db.php 2>/dev/null
