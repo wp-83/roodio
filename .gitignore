@@ -22,3 +22,13 @@ cek_path.py
 # Docker local data
 mysql-data/
 .env.docker.local
+
+# ML Models & Heavy binaries
+*.h5
+*.keras
+*.pkl
+*.mp3
+*.wav
+
+# Local Database binaries (Laragon/XAMPP)
+webApp/mysql-*/
