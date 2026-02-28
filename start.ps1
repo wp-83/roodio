@@ -12,11 +12,14 @@ Write-Host '  Roodio - Starting Local Servers'        -ForegroundColor Magenta
 Write-Host '========================================' -ForegroundColor Magenta
 
 # Start Flask ML API in a new terminal window
+$ApiDir = Join-Path $RepoRoot 'machineLearning\api'
+$VenvPython = Join-Path $ApiDir 'venv\Scripts\python.exe'
+
 Write-Host "`n[1/2] Starting Flask ML API (port 7860)..." -ForegroundColor Cyan
 Start-Process powershell -ArgumentList "-NoExit", "-Command", `
-    "cd '$RepoRoot\machineLearning\api'; `
+    "cd '$ApiDir'; `
      Write-Host 'Flask ML API running at http://localhost:7860' -ForegroundColor Cyan; `
-     cmd /c '.\venv\Scripts\python.exe app.py'"
+     & '$VenvPython' app.py"
 
 Start-Sleep -Seconds 2
 
