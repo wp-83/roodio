@@ -96,14 +96,8 @@ class AudioClassifier(nn.Module):
 print("[INFO] Loading Models...")
 
 # --- A. LOAD V1 MODELS (Legacy) ---
-try:
-    v1_model = joblib.load(os.path.join(MODEL_DIR, 'v1/audio_mood_model.pkl'))
-    v1_columns = joblib.load(os.path.join(MODEL_DIR, 'v1/feature_columns.pkl'))
-    v1_encoder = joblib.load(os.path.join(MODEL_DIR, 'v1/label_encoder.pkl'))
-    print("[OK] V1 Models Loaded.")
-except Exception as e:
-    print(f"[WARN] V1 Load Error: {e}")
-    v1_model = None
+# [DISABLED] V1 tidak di-download secara lokal.
+v1_model = None
 
 # --- B. SHARED: YAMNet (Dipakai V2 & V3) ---
 try:
@@ -114,35 +108,8 @@ except Exception as e:
     yamnet_model = None
 
 # --- C. LOAD V2 MODELS (PyTorch Hybrid) ---
+# [DISABLED] V2 tidak di-download secara lokal.
 v2_loaded = False
-try:
-    # Stage 1 (Audio PyTorch)
-    s1_v2_path = os.path.join(MODEL_DIR, 'v2/stage1_nn.pth')
-    if os.path.exists(s1_v2_path):
-        s1_v2_model = AudioClassifier().to(DEVICE)
-        s1_v2_model.load_state_dict(torch.load(s1_v2_path, map_location=DEVICE))
-        s1_v2_model.eval()
-    else:
-        raise FileNotFoundError("v2/stage1_nn.pth not found")
-
-    # Encoder Stage 1
-    enc_v2_path = os.path.join(MODEL_DIR, 'v2/stage1_encoder.pkl')
-    s1_v2_encoder = joblib.load(enc_v2_path) if os.path.exists(enc_v2_path) else None
-
-    # Stage 2A (Random Forest)
-    s2a_v2_rf = joblib.load(os.path.join(MODEL_DIR, 'v2/stage2a_rf.pkl'))
-    s2a_v2_meta = joblib.load(os.path.join(MODEL_DIR, 'v2/stage2a_meta.pkl'))
-
-    # Stage 2B (BERT)
-    bert_v2_path = os.path.join(MODEL_DIR, 'v2/model_hybrid_final')
-    tokenizer_v2 = AutoTokenizer.from_pretrained(bert_v2_path)
-    bert_v2_model = AutoModelForSequenceClassification.from_pretrained(bert_v2_path).to(DEVICE)
-    bert_v2_model.eval()
-
-    v2_loaded = True
-    print("[OK] V2 Models Loaded Successfully.")
-except Exception as e:
-    print(f"[WARN] V2 Load Error: {e}")
 
 # --- D. LOAD V3 MODELS (Latest) ---
 v3_loaded = False
