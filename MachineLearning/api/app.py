@@ -47,20 +47,20 @@ MOOD_DB_MAPPING = {
 # ==============================================================================
 # 2. DOWNLOAD MODELS DARI HUGGING FACE HUB
 # ==============================================================================
-_models_exist = all(
-    os.path.isdir(os.path.join(MODEL_DIR, d)) for d in ['v1', 'v2', 'v3']
-)
+_models_exist = os.path.isdir(os.path.join(MODEL_DIR, 'v3'))
+
 if _models_exist:
-    print(f"[INFO] Local models/ folder found — skipping HuggingFace Hub download.")
+    print(f"[INFO] Local models/v3 folder found — skipping HuggingFace Hub download.")
 else:
-    print(f"[INFO] Downloading models from HuggingFace Hub ({MODEL_REPO_ID})...")
+    print(f"[INFO] Downloading v3 models from HuggingFace Hub ({MODEL_REPO_ID})...")
     try:
         snapshot_download(
             repo_id=MODEL_REPO_ID,
             local_dir=MODEL_DIR,
-            repo_type="model"
+            repo_type="model",
+            allow_patterns=["v3/*"]
         )
-        print("[OK] Models downloaded successfully from Hub.")
+        print("[OK] V3 Models downloaded successfully from Hub.")
     except Exception as e:
         print(f"[WARN] Hub download failed: {e}")
         print("   Falling back to local models/ directory if available.")
