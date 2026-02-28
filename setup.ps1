@@ -121,7 +121,13 @@ Push-Location $WebDir
 
     # 3f. Auto-create database if it doesn't exist
     Write-Host '  Ensuring database exists...'
-    $phpCode = "<?php try { `$pdo = new PDO('mysql:host=$dbHost;port=$dbPort', '$dbUser', '$dbPass'); `$pdo->exec('CREATE DATABASE IF NOT EXISTS \`$dbName\`'); } catch (Exception `$e) {}"
+    $phpCode = @"
+<?php
+try {
+    `$pdo = new PDO('mysql:host=$dbHost;port=$dbPort', '$dbUser', '$dbPass');
+    `$pdo->exec("CREATE DATABASE IF NOT EXISTS $dbName");
+} catch (Exception `$e) {}
+"@
     Set-Content -Path "create_db.php" -Value $phpCode -Encoding ASCII
     php create_db.php 2>$null
     Remove-Item "create_db.php" -ErrorAction SilentlyContinue
