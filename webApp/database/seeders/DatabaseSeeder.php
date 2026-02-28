@@ -13,8 +13,8 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Essential seeders — always run (local + production)
-        $this->call(UserSeeder::class);
         $this->call(RegionSeeder::class);
+        $this->call(UserSeeder::class);
         $this->call(MoodSeeder::class);
 
         // Production seeders — only run in production
