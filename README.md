@@ -142,6 +142,9 @@ git clone https://github.com/Xullfikar/roodio.git
 cd roodio
 ```
 
+> **[!WARNING]**
+> **CRITICAL:** Before running the setup script, **YOU MUST START YOUR MYSQL SERVER** (e.g., click "Start All" in Laragon, XAMPP, or MAMP). If the database is off, the migration and seeding process will fail.
+
 **Run the Setup Script:**
 ```cmd
 # Windows (CMD / PowerShell / Double-click)

@@ -55,8 +55,8 @@ python3 -m venv venv
 echo "  Activating virtual environment & installing dependencies..."
 source venv/bin/activate
 
-python3 -m pip install --upgrade pip -q
-python3 -m pip install -r requirements.txt -q
+python3 -m pip install --upgrade pip
+python3 -m pip install -r requirements.txt
 ok "Flask ML API dependencies installed in virtual environment."
 
 # ==============================================================================
@@ -110,13 +110,26 @@ sed -i.bak \
 ok "Database config saved to .env"
 
 # 3f. Run Migrations & Seeders
-echo "  Running database migrations and seeders..."
-if php artisan migrate --seed --force 2>/dev/null; then
-    ok "Database migrated and seeded."
-else
-    warn "Migration failed. Make sure MySQL is running and credentials in .env are correct."
-    warn "Run manually: cd webApp && php artisan migrate --seed"
-fi
+while true; do
+    echo "  Running database migrations and seeders..."
+    if php artisan migrate --seed --force; then
+        ok "Database migrated and seeded."
+        break
+    else
+        warn "Migration failed! This usually means MySQL is not running or the database credentials are wrong."
+        echo -e "${YELLOW}  -> Please start your MySQL server (e.g. Laragon/XAMPP/Docker) if it is not running.${NC}"
+        read -p "  Do you want to retry the migration? (Y to retry / N to skip) " retry_answer
+        case ${retry_answer:0:1} in
+            y|Y )
+                continue
+            ;;
+            * )
+                warn "Skipping database migration. You MUST run 'php artisan migrate --seed' manually later after fixing your database!"
+                break
+            ;;
+        esac
+    fi
+done
 
 # 3g. Create storage symlink for local file uploads
 php artisan storage:link --quiet 2>/dev/null || true
