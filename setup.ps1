@@ -54,9 +54,8 @@ Push-Location $ApiDir
     Write-Host '  Creating Python virtual environment...'
     python -m venv venv
     Write-Host '  Activating virtual environment & installing dependencies...'
-    .\venv\Scripts\activate
-    python -m pip install --upgrade pip
-    python -m pip install -r requirements.txt
+    cmd /c ".\venv\Scripts\python.exe -m pip install --upgrade pip"
+    cmd /c ".\venv\Scripts\python.exe -m pip install -r requirements.txt"
     Write-OK 'Flask ML API dependencies installed in virtual environment.'
 Pop-Location
 
