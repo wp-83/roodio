@@ -24,7 +24,8 @@ trap cleanup INT TERM
 
 # Start Flask ML API in background
 echo -e "\n${CYAN}[1/2] Starting Flask ML API (port 7860)...${NC}"
-(cd "$REPO_ROOT/machineLearning/api" && source venv/bin/activate && python3 app.py) &
+VENV_PYTHON="$REPO_ROOT/machineLearning/api/venv/bin/python3"
+(cd "$REPO_ROOT/machineLearning/api" && "$VENV_PYTHON" app.py) &
 
 sleep 3
 

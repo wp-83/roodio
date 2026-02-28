@@ -52,11 +52,13 @@ cd "$REPO_ROOT/machineLearning/api"
 
 echo "  Creating Python virtual environment..."
 python3 -m venv venv
-echo "  Activating virtual environment & installing dependencies..."
-source venv/bin/activate
+echo "  Installing dependencies..."
 
-python3 -m pip install --upgrade pip
-python3 -m pip install -r requirements.txt
+# Use absolute path to venv python to bypass global environments (e.g. Anaconda)
+VENV_PYTHON="$REPO_ROOT/machineLearning/api/venv/bin/python3"
+
+"$VENV_PYTHON" -m pip install --upgrade pip "setuptools<70.0.0" wheel
+"$VENV_PYTHON" -m pip install -r requirements.txt
 ok "Flask ML API dependencies installed in virtual environment."
 
 # ==============================================================================
