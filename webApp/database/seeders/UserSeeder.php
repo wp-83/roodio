@@ -79,7 +79,7 @@ class UserSeeder extends Seeder
             'fullname'    => 'Oliver Brooks',
             'email'       => 'oliver.brooks@gmail.com',
             'dateOfBirth' => '1901-01-01',
-            'countryId'   => 'EN',
+            'countryId'   => 'GB',
             'gender'      => 1,
         ]);
     }
