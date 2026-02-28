@@ -6,16 +6,10 @@ scikit-learn>=1.5.0
 scipy>=1.13.0
 openpyxl>=3.1.2      # WAJIB: Untuk pd.read_excel (baca file lyrics.xlsx)
 
-# --- Machine Learning (NEW) ---
-xgboost>=2.0.0       # WAJIB: Untuk Stage 2B Trifecta & Valence Regressor
-
 # --- Audio Processing (Librosa Logic) ---
 librosa>=0.10.0
 soundfile>=0.12.0
 audioread>=3.0.0     # Backend decoding audio universal
-
-# --- Data Mining & API (NEW) ---
-spotipy>=2.23.0      # WAJIB: Untuk mengambil data Valence dari Spotify
 
 # --- Deep Learning 1: Audio (YAMNet & TensorFlow) ---
 # Engine utama untuk Stage 1 & Audio Feature Extraction
@@ -26,13 +20,10 @@ tensorflow-hub>=0.16.1
 transformers>=4.38.0
 torch>=2.2.0         # Backend default untuk HuggingFace Pipeline
 
-# --- Natural Language Processing ---
-nltk>=3.8.1          # WAJIB: Untuk VADER Sentiment Analysis (jika dipakai)
-
 # --- System, Saving & Utilities ---
 joblib>=1.3.0        # Untuk save/load model sklearn/xgboost (.pkl)
 tqdm>=4.66.0         # Progress bar (biar gak bosan nunggu mining)
-Pillow>=10.0.0       # Image processing
+
 
 # --- Visualization ---
 matplotlib>=3.8.0
@@ -40,4 +31,3 @@ seaborn>=0.13.0
 
 # --- MLOps & Web (Opsional) ---
 mlflow>=2.10.0
-flask>=3.0.0

@@ -10,7 +10,8 @@ scikit-learn
 tensorflow
 tensorflow-hub
 
-# Main Engine (Stage 1 & 2B)
+# Main engine & Core modules
+setuptools
 torch
 transformers
 
