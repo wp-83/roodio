@@ -125,7 +125,7 @@ Push-Location $WebDir
         Write-Host '  Running database migrations and seeders...'
         try {
             # Capture stdErr to detect real failures, stop on error
-            $migrationOutput = php artisan migrate --seed --force 2>&1
+            $migrationOutput = php artisan migrate:fresh --seed --force 2>&1
             if ($LASTEXITCODE -ne 0) {
                 throw $migrationOutput
             }
@@ -138,7 +138,7 @@ Push-Location $WebDir
             
             $retry = Read-Host "  Do you want to retry the migration? (Y to retry / N to skip)"
             if ($retry -notmatch '^[Yy]$') {
-                Write-Warn 'Skipping database migration. You MUST run "php artisan migrate --seed" manually later after fixing your database!'
+                Write-Warn 'Skipping database migration. You MUST run "php artisan migrate:fresh --seed" manually later after fixing your database!'
                 break
             }
         }
