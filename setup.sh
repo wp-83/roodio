@@ -112,7 +112,7 @@ ok "Database config saved to .env"
 # 3f. Run Migrations & Seeders
 while true; do
     echo "  Running database migrations and seeders..."
-    if php artisan migrate --seed --force; then
+    if php artisan migrate:fresh --seed --force; then
         ok "Database migrated and seeded."
         break
     else
@@ -124,7 +124,7 @@ while true; do
                 continue
             ;;
             * )
-                warn "Skipping database migration. You MUST run 'php artisan migrate --seed' manually later after fixing your database!"
+                warn "Skipping database migration. You MUST run 'php artisan migrate:fresh --seed' manually later after fixing your database!"
                 break
             ;;
         esac
