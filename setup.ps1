@@ -55,8 +55,8 @@ Push-Location $ApiDir
     python -m venv venv
     Write-Host '  Activating virtual environment & installing dependencies...'
     .\venv\Scripts\activate
-    python -m pip install --upgrade pip -q
-    python -m pip install -r requirements.txt -q
+    python -m pip install --upgrade pip
+    python -m pip install -r requirements.txt
     Write-OK 'Flask ML API dependencies installed in virtual environment.'
 Pop-Location
 
@@ -120,13 +120,28 @@ Push-Location $WebDir
     Write-OK 'Database config saved to .env'
 
     # 3f. Run Migrations & Seeders
-    Write-Host '  Running database migrations and seeders...'
-    try {
-        php artisan migrate --seed --force
-        Write-OK 'Database migrated and seeded.'
-    } catch {
-        Write-Warn 'Migration failed. Make sure MySQL is running and credentials in .env are correct.'
-        Write-Warn 'Run manually: cd webApp ; php artisan migrate --seed'
+    $migrationSuccess = $false
+    while (-not $migrationSuccess) {
+        Write-Host '  Running database migrations and seeders...'
+        try {
+            # Capture stdErr to detect real failures, stop on error
+            $migrationOutput = php artisan migrate --seed --force 2>&1
+            if ($LASTEXITCODE -ne 0) {
+                throw $migrationOutput
+            }
+            Write-OK 'Database migrated and seeded.'
+            $migrationSuccess = $true
+        } catch {
+            Write-Warn 'Migration failed! This usually means MySQL is not running or the database credentials are wrong.'
+            Write-Host "    Error detail: $_" -ForegroundColor Red
+            Write-Host "  -> Please start your MySQL server (e.g. Laragon/XAMPP) if it is not running." -ForegroundColor Yellow
+            
+            $retry = Read-Host "  Do you want to retry the migration? (Y to retry / N to skip)"
+            if ($retry -notmatch '^[Yy]$') {
+                Write-Warn 'Skipping database migration. You MUST run "php artisan migrate --seed" manually later after fixing your database!'
+                break
+            }
+        }
     }
 
     # 3g. Create storage symlink for local file uploads
