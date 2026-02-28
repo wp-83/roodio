@@ -11,7 +11,7 @@ tensorflow
 tensorflow-hub
 
 # Main engine & Core modules
-setuptools
+setuptools<70.0.0
 torch
 transformers
 
