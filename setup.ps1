@@ -91,15 +91,35 @@ if (Get-Command 'composer' -ErrorAction SilentlyContinue) {
 }
 Write-OK 'Composer is ready.'
 
+# ── Auto-detect Node & NPM ────────────────────────────────────────────────────
+$NodeExe = 'node'
+if (-not (Get-Command 'node' -ErrorAction SilentlyContinue)) {
+    $NodeCandidates = @(
+        'C:\laragon\bin\nodejs\*\node.exe',
+        'D:\laragon\bin\nodejs\*\node.exe',
+        'C:\Program Files\nodejs\node.exe',
+        'D:\Program Files\nodejs\node.exe'
+    )
+    foreach ($p in $NodeCandidates) {
+        $f = Get-Item $p -ErrorAction SilentlyContinue | Select-Object -First 1
+        if ($f) { 
+            $NodeExe = "$($f.FullName)"
+            Write-Warn "Node not in PATH. Using: $NodeExe"
+            # Try to add its folder to PATH for this session so npm works
+            $env:PATH += ";$($f.DirectoryName)"
+            break 
+        }
+    }
+}
+
 # ── Check remaining tools ─────────────────────────────────────────────────────
 $missing = @()
-@('node','npm','python','git') | ForEach-Object {
+@('python','git') | ForEach-Object {
     if (-not (Get-Command $_ -ErrorAction SilentlyContinue)) { $missing += $_ }
 }
 if ($missing.Count -gt 0) {
     Write-Host '  Missing tools:' -ForegroundColor Red
     $missing | ForEach-Object { Write-Host "    - $_" -ForegroundColor Red }
-    Write-Host '  Node.js : https://nodejs.org' -ForegroundColor Yellow
     Write-Host '  Python  : https://python.org/downloads' -ForegroundColor Yellow
     Write-Host '  Git     : https://git-scm.com/download/win' -ForegroundColor Yellow
     Write-Fail 'Please install the missing tools above, then re-run this script.'
