@@ -15,7 +15,7 @@ Maaf karena sebelumnya terpotong! Berikut adalah kode *full* `README.md` dari aw
 ## 📑 Table of Contents
 
 1. [Overview](#-overview)
-2. [Deployment & Architecture](#-deployment--architecture)
+2. [Deployment & Architecture](#️-deployment--architecture)
 3. [🚀 Web Application Features](#-web-application)
 4. [🧠 Machine Learning Engine](#-machine-learning-engine)
 5. [💻 Local Setup & Testing (For Reviewers)](#-local-setup--testing)
@@ -149,6 +149,11 @@ Make sure the following tools are installed on your machine:
 
 ### 2. Quick Start (Automated)
 
+> [!IMPORTANT]
+> **TERMINAL & DIRECTORY REQUIREMENTS:**
+> * **Laragon Users:** You **MUST** use the built-in Laragon terminal (Click the **Terminal** button in the Laragon app). Navigate to the `www` folder.
+> * **XAMPP Users:** Open your preferred terminal and navigate to the `htdocs` folder.
+
 **Clone the repository:**
 
 ```bash
@@ -157,8 +162,8 @@ cd roodio
 
 ```
 
-> **[!WARNING]**
-> **CRITICAL:** Before running the setup script, **YOU MUST START YOUR MYSQL SERVER** (e.g., click "Start All" in Laragon, XAMPP, or MAMP). If the database is off, the migration and seeding process will fail.
+> [!WARNING]
+> **CRITICAL:** Before running the setup script, **YOU MUST START YOUR MYSQL SERVER** (e.g., click "Start All" in Laragon or XAMPP). If the database is off, the migration and seeding process will fail.
 
 **Run the Setup Script:**
 If you are on Windows, you must allow scripts to run on your system first. Open your terminal (CMD or PowerShell) as **Administrator** and run:
@@ -185,7 +190,7 @@ bash setup.sh
 **Start the Servers:**
 
 ```cmd
-# Windows
+# Windows (Standard CMD/PowerShell)
 start.bat
 
 # Mac / Linux
@@ -201,11 +206,12 @@ Three terminal windows will open handling the following local servers:
 
 ### 3. Manual Setup (Without Script)
 
-If you prefer to set things up manually, follow these steps in 2 separate terminals:
+If you prefer to set things up manually, follow these steps in 2 separate terminals (Remember to use Laragon's terminal if you are using Laragon):
 
 **Terminal 1 — ML API (Python)**
 
 ```bash
+# Ensure you are inside the roodio folder (www/roodio or htdocs/roodio)
 cd machineLearning/api
 
 # 1. Create a virtual environment (Recommended)
@@ -228,6 +234,7 @@ python3 app.py          # Mac/Linux
 **Terminal 2 — Laravel Webapp**
 
 ```bash
+# Ensure you are inside the roodio folder (www/roodio or htdocs/roodio)
 cd webApp
 
 # 1. Install dependencies
@@ -275,6 +282,57 @@ To fully test the application locally, follow this sequence:
 4. **User Features**: Login as `user`. Test Home, Mood Filtering, Threads, Socials, and Profile updates.
 5. **SuperAdmin**: Login as `superadmin`. Test User Management and Role assignments.
 6. **MLOps**: Go back to Admin to check the Model Monitor and Feedback metrics.
+
+---
+
+## 🔧 Troubleshooting: ML API Errors
+
+### ❌ Song Upload Returns an Error / Mood Prediction Fails
+
+When uploading a song, the Laravel app calls the local Flask ML API at `http://localhost:7860`. If the mood prediction fails, the most common cause is a **corrupted or incomplete model download cache**.
+
+The ML API uses pre-trained models (YAMNet via TensorFlow Hub, BERT via Hugging Face) that are downloaded and cached on first run. If the download was interrupted, the cached files can become corrupted and cause errors like:
+
+```
+OSError: Unable to load weights from checkpoint file
+RuntimeError: PytorchStreamReader failed
+tensorflow.python.framework.errors_impl.NotFoundError: ...
+```
+
+### ✅ Fix: Clear the Model Cache
+
+Run the following commands in your terminal to delete the corrupted cache and force a fresh download on the next startup:
+
+**Windows (PowerShell or CMD):**
+```powershell
+# Clear TensorFlow Hub cache (YAMNet model)
+Remove-Item -Recurse -Force "$env:TEMP\tfhub_modules" -ErrorAction SilentlyContinue
+Remove-Item -Recurse -Force "$env:USERPROFILE\.cache\tfhub_modules" -ErrorAction SilentlyContinue
+
+# Clear Hugging Face cache (BERT model)
+Remove-Item -Recurse -Force "$env:USERPROFILE\.cache\huggingface" -ErrorAction SilentlyContinue
+```
+
+**Mac / Linux (Bash):**
+```bash
+# Clear TensorFlow Hub cache (YAMNet model)
+rm -rf /tmp/tfhub_modules
+rm -rf ~/.cache/tfhub_modules
+
+# Clear Hugging Face cache (BERT model)
+rm -rf ~/.cache/huggingface
+```
+
+After clearing the cache, restart the Flask ML API server and wait for the models to re-download completely before uploading a song:
+
+```bash
+# Inside machineLearning/api with venv activated:
+python app.py   # Windows
+python3 app.py  # Mac/Linux
+```
+
+> [!NOTE]
+> The first startup after clearing the cache may take **several minutes** depending on your internet speed, as the models (YAMNet ~200MB, BERT ~400MB) need to be fully re-downloaded. Do **not** interrupt the process.
 
 ---
 
