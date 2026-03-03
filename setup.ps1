@@ -22,39 +22,45 @@ Write-Host '========================================' -ForegroundColor Magenta
 # ==============================================================================
 Write-Step 'Checking prerequisites...'
 
-# Refresh PATH from registry (picks up tools installed after this session started)
+# Refresh PATH from registry
 $MachinePath = [System.Environment]::GetEnvironmentVariable('PATH', 'Machine')
 $UserPath    = [System.Environment]::GetEnvironmentVariable('PATH', 'User')
 $env:PATH    = "$MachinePath;$UserPath"
 
-# ── Auto-detect PHP ───────────────────────────────────────────────────────────
+# ── Auto-detect PHP (Prioritize Laragon) ──────────────────────────────────────
 $PhpExe = 'php'
-if (-not (Get-Command 'php' -ErrorAction SilentlyContinue)) {
-    # Match any version of php.exe in common locations
-    $PhpCandidates = @(
-        'C:\laragon\bin\php\*\php.exe',
-        'C:\xampp\php\php.exe',
-        'C:\wamp64\bin\php\*\php.exe',
-        'D:\laragon\bin\php\*\php.exe',
-        'D:\xampp\php\php.exe'
-    )
-    foreach ($p in $PhpCandidates) {
-        $f = Get-Item $p -ErrorAction SilentlyContinue | Select-Object -First 1
-        if ($f) { 
-            $PhpExe = "$($f.FullName)"
-            Write-Warn "PHP not in PATH. Using: $PhpExe"
-            break 
-        }
+
+# Custom Logic: Force looking directly into Laragon/XAMPP active bins first
+$ActivePhpPaths = @(
+    'C:\laragon\bin\php\php-8.5*\php.exe',
+    'C:\laragon\bin\php\php-8.4*\php.exe',
+    'C:\laragon\bin\php\*\php.exe',
+    'D:\laragon\bin\php\*\php.exe',
+    'C:\xampp\php\php.exe',
+    'C:\wamp64\bin\php\*\php.exe'
+)
+
+foreach ($p in $ActivePhpPaths) {
+    $f = Get-Item $p -ErrorAction SilentlyContinue | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+    if ($f) { 
+        $PhpExe = "$($f.FullName)"
+        
+        # Inject this found path into session PATH to override system defaults
+        $env:PATH = "$($f.DirectoryName);" + $env:PATH 
+        break 
     }
-    if ($PhpExe -eq 'php') {
-        Write-Host '  [ERROR] PHP not found.' -ForegroundColor Red
-        Write-Host '  Install Laragon (https://laragon.org/download) or add PHP to PATH.' -ForegroundColor Yellow
-        Write-Fail 'PHP is required. Please install it and re-run this script.'
-    }
+}
+
+if (-not (Get-Command 'php' -ErrorAction SilentlyContinue) -and ($PhpExe -eq 'php')) {
+    Write-Host '  [ERROR] PHP not found.' -ForegroundColor Red
+    Write-Host '  Install Laragon (https://laragon.org/download) or add PHP to PATH.' -ForegroundColor Yellow
+    Write-Fail 'PHP is required. Please install it and re-run this script.'
 }
 Write-OK "PHP found: $PhpExe"
 
-# ── Cek Ekstensi PHP Wajib (Mencegah Error Disk Space) ───────────────────────
+
+# ── Cek Ekstensi PHP Wajib ───────────────────────────────────────────────────
+Write-Step 'Checking required PHP extensions...'
 $RequiredExts = @('zip', 'mbstring', 'pdo_mysql', 'fileinfo', 'curl')
 $MissingExts = @()
 
@@ -66,18 +72,28 @@ foreach ($ext in $RequiredExts) {
 }
 
 if ($MissingExts.Count -gt 0) {
+    # Minta PHP mencari tahu lokasi php.ini yang sedang dipakai
+    $IniPath = & $PhpExe -r "echo php_ini_loaded_file();"
+    if ([string]::IsNullOrWhiteSpace($IniPath)) {
+        $IniPath = "(Tidak ada php.ini yang dimuat. Buat dari php.ini-development di folder PHP Anda)"
+    }
+
     Write-Host '  [ERROR] PHP is missing required extensions:' -ForegroundColor Red
     $MissingExts | ForEach-Object { Write-Host "    - $_" -ForegroundColor Red }
-    Write-Host "  Silakan buka file php.ini Anda dan hapus tanda ';' di depan ekstensi tersebut." -ForegroundColor Yellow
+    
+    Write-Host "`n  Silakan aktifkan ekstensi tersebut dengan mengedit file ini:" -ForegroundColor Yellow
+    Write-Host "  -> $IniPath" -ForegroundColor Cyan
+    Write-Host "  (Buka file tersebut, cari baris ';extension=...' dan hapus tanda ';' di depannya)`n" -ForegroundColor Yellow
+    
     Write-Fail "Setup dihentikan karena konfigurasi PHP (php.ini) tidak lengkap."
 }
 Write-OK 'All required PHP extensions are active.'
+
 
 # ── Auto-detect Composer ──────────────────────────────────────────────────────
 $ComposerCmd = $null
 $resolved = $null
 if (Get-Command 'composer' -ErrorAction SilentlyContinue) {
-    # If composer command works, use it directly
     $ComposerCmd = { param($a) & composer @a }
 } else {
     $ComposerPharCandidates = @(
@@ -88,12 +104,11 @@ if (Get-Command 'composer' -ErrorAction SilentlyContinue) {
     foreach ($p in $ComposerPharCandidates) {
         if (Test-Path $p) {
             $resolved = $p
-            Write-Warn "composer not in PATH. Using Laragon composer: $resolved"
+            Write-Warn "composer not in PATH. Using fallback composer: $resolved"
             break
         }
     }
     
-    # Fallback: Download composer.phar if still not found
     if (-not $resolved) {
         Write-Step 'Composer not found. Attempting to download composer.phar...'
         try {
@@ -104,11 +119,10 @@ if (Get-Command 'composer' -ErrorAction SilentlyContinue) {
             Write-Fail 'Failed to download composer.phar. Please install it manually from https://getcomposer.org.'
         }
     }
-    
-    # Create a script block to run composer via PHP
     $ComposerCmd = { param($a) & $PhpExe $resolved @a }
 }
 Write-OK 'Composer is ready.'
+
 
 # ── Auto-detect Node & NPM ────────────────────────────────────────────────────
 $NodeExe = 'node'
@@ -123,15 +137,12 @@ if (-not (Get-Command 'node' -ErrorAction SilentlyContinue)) {
         $f = Get-Item $p -ErrorAction SilentlyContinue | Select-Object -First 1
         if ($f) { 
             $NodeExe = "$($f.FullName)"
-            Write-Warn "Node not in PATH. Using: $NodeExe"
-            # Try to add its folder to PATH for this session so npm works
             $env:PATH += ";$($f.DirectoryName)"
             break 
         }
     }
 }
 
-# Cek versi Node sekilas untuk info ke user
 if (Get-Command $NodeExe -ErrorAction SilentlyContinue) {
     $NodeVer = & $NodeExe -v
     Write-Host "  [INFO] Detected Node version: $NodeVer. Roodio recommends Node v20.19+ or v22+" -ForegroundColor Cyan
@@ -151,6 +162,7 @@ if ($missing.Count -gt 0) {
 }
 Write-OK 'All prerequisites found.'
 
+
 # ==============================================================================
 # 2. SETUP FLASK ML API
 # ==============================================================================
@@ -166,6 +178,7 @@ Push-Location $ApiDir
     Write-OK 'Flask ML API dependencies installed in virtual environment.'
 Pop-Location
 
+
 # ==============================================================================
 # 3. SETUP LARAVEL WEBAPP
 # ==============================================================================
@@ -175,8 +188,6 @@ Push-Location $WebDir
 
     # 3a. Composer install
     Write-Host '  Running composer install...'
-
-    # If vendor/ was built on a newer PHP, remove it so platform_check.php is regenerated.
     $PlatformCheck = Join-Path $WebDir 'vendor\composer\platform_check.php'
     if (Test-Path $PlatformCheck) {
         $PlatformContent = Get-Content $PlatformCheck -Raw
@@ -190,7 +201,6 @@ Push-Location $WebDir
         }
     }
 
-    # Dihapus: --ignore-platform-req=php agar Composer memberitahu user jika PHP mereka terlalu lawas
     if ($ComposerCmd) {
         & $ComposerCmd @('install','--no-interaction')
     } else {
@@ -263,7 +273,6 @@ try {
     while (-not $migrationSuccess) {
         Write-Host '  Running database migrations and seeders...'
         try {
-            # Capture stdErr to detect real failures, stop on error
             $migrationOutput = & $PhpExe artisan migrate:fresh --seed --force 2>&1
             if ($LASTEXITCODE -ne 0) {
                 throw $migrationOutput
@@ -283,11 +292,11 @@ try {
         }
     }
 
-    # 3g. Create storage symlink for local file uploads
+    # 3h. Create storage symlink
     & $PhpExe artisan storage:link --quiet 2>$null
     Write-OK 'Storage symlink created (public/storage -> storage/app/public).'
 
-    # 3h. Install Node dependencies & build assets
+    # 3i. Install Node dependencies & build assets
     Write-Host '  Installing Node.js dependencies...'
     npm install
     Write-Host '  Building frontend assets (Vite)...'
@@ -306,12 +315,4 @@ Write-Host '========================================' -ForegroundColor Green
 Write-Host ''
 Write-Host '  To start all servers, run:' -ForegroundColor Cyan
 Write-Host '    .\start.ps1'
-Write-Host ''
-Write-Host '  Or manually in 2 separate terminals:' -ForegroundColor Cyan
-Write-Host '    Terminal 1 (ML API) : cd machineLearning\api ; python app.py'
-Write-Host '    Terminal 2 (Webapp) : cd webApp ; php artisan serve'
-Write-Host ''
-Write-Host '  Open in browser:' -ForegroundColor Cyan
-Write-Host '    Webapp   http://localhost:8000'
-Write-Host '    ML API   http://localhost:7860'
 Write-Host ''
