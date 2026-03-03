@@ -190,6 +190,7 @@ bash start.sh
 > ```bash
 > cd machineLearning/api
 > venv\Scripts\activate
+> pip install -r requirements.txt
 > python app.py
 > ```
 
