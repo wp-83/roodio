@@ -1,6 +1,3 @@
-Maaf karena sebelumnya terpotong! Berikut adalah kode *full* `README.md` dari awal sampai akhir di dalam satu blok format, siap untuk kamu salin semua:
-
-```markdown
 # 🎵 Roodio - Smart Mood-Based Music Streaming & Analysis Platform
 
 ![Laravel](https://img.shields.io/badge/Laravel-12.x-FF2D20?style=for-the-badge&logo=laravel)
@@ -104,13 +101,13 @@ Audio Input
            │
      ┌─────┴─────┐
      ▼           ▼
-┌─────────┐ ┌──────────┐
-│ Stage 2A│ │ Stage 2B │
-│ (Audio) │ │ (Lyrics) │
+┌──────────┐ ┌──────────┐
+│ Stage 2A │ │ Stage 2B │
+│ (Audio)  │ │ (Lyrics) │
 │ RF + Meta│ │ BERT     │
-│→Angry/  │ │→Sad/     │
-│  Happy  │ │  Relaxed │
-└─────────┘ └──────────┘
+│→Angry/   │ │→Sad/     │
+│  Happy   │ │  Relaxed │
+└──────────┘ └──────────┘
 
 ```
 
