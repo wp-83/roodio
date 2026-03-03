@@ -54,6 +54,25 @@ if (-not (Get-Command 'php' -ErrorAction SilentlyContinue)) {
 }
 Write-OK "PHP found: $PhpExe"
 
+# ── Cek Ekstensi PHP Wajib (Mencegah Error Disk Space) ───────────────────────
+$RequiredExts = @('zip', 'mbstring', 'pdo_mysql', 'fileinfo', 'curl')
+$MissingExts = @()
+
+foreach ($ext in $RequiredExts) {
+    $ExtCheck = & $PhpExe -r "echo extension_loaded('$ext') ? 'OK' : 'MISSING';"
+    if ($ExtCheck -ne 'OK') {
+        $MissingExts += $ext
+    }
+}
+
+if ($MissingExts.Count -gt 0) {
+    Write-Host '  [ERROR] PHP is missing required extensions:' -ForegroundColor Red
+    $MissingExts | ForEach-Object { Write-Host "    - $_" -ForegroundColor Red }
+    Write-Host "  Silakan buka file php.ini Anda dan hapus tanda ';' di depan ekstensi tersebut." -ForegroundColor Yellow
+    Write-Fail "Setup dihentikan karena konfigurasi PHP (php.ini) tidak lengkap."
+}
+Write-OK 'All required PHP extensions are active.'
+
 # ── Auto-detect Composer ──────────────────────────────────────────────────────
 $ComposerCmd = $null
 $resolved = $null
@@ -112,6 +131,12 @@ if (-not (Get-Command 'node' -ErrorAction SilentlyContinue)) {
     }
 }
 
+# Cek versi Node sekilas untuk info ke user
+if (Get-Command $NodeExe -ErrorAction SilentlyContinue) {
+    $NodeVer = & $NodeExe -v
+    Write-Host "  [INFO] Detected Node version: $NodeVer. Roodio recommends Node v20.19+ or v22+" -ForegroundColor Cyan
+}
+
 # ── Check remaining tools ─────────────────────────────────────────────────────
 $missing = @()
 @('python','git') | ForEach-Object {
@@ -165,10 +190,11 @@ Push-Location $WebDir
         }
     }
 
+    # Dihapus: --ignore-platform-req=php agar Composer memberitahu user jika PHP mereka terlalu lawas
     if ($ComposerCmd) {
-        & $ComposerCmd @('install','--no-interaction','--ignore-platform-req=php')
+        & $ComposerCmd @('install','--no-interaction')
     } else {
-        & $PhpExe $resolved install --no-interaction --ignore-platform-req=php
+        & $PhpExe $resolved install --no-interaction
     }
     Write-OK 'Composer dependencies installed.'
 
