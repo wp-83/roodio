@@ -35,7 +35,50 @@ $WebAppDir = Join-Path $RepoRoot 'webApp'
 
 Write-Host "[2/2] Starting Laravel Webapp (port 8000)..." -ForegroundColor Cyan
 
-$LaravelCmd     = "Set-Location '$WebAppDir'; `$env:PATH = [System.Environment]::GetEnvironmentVariable('PATH','Machine') + ';' + [System.Environment]::GetEnvironmentVariable('PATH','User'); Write-Host 'Laravel Webapp running at http://localhost:8000' -ForegroundColor Green; php artisan serve --host=127.0.0.1 --port=8000"
+# Refresh PATH from registry first
+$MachinePath = [System.Environment]::GetEnvironmentVariable('PATH', 'Machine')
+$UserPath    = [System.Environment]::GetEnvironmentVariable('PATH', 'User')
+$env:PATH    = "$MachinePath;$UserPath"
+
+# Auto-detect PHP executable (for Laragon / XAMPP users without PHP in PATH)
+$PhpExe = 'php'
+if (-not (Get-Command 'php' -ErrorAction SilentlyContinue)) {
+    $CommonPhpPaths = @(
+        'C:\laragon\bin\php\php8.2*\php.exe',
+        'C:\laragon\bin\php\php8.1*\php.exe',
+        'C:\laragon\bin\php\php8.3*\php.exe',
+        'C:\laragon\bin\php\php*\php.exe',
+        'C:\xampp\php\php.exe',
+        'C:\wamp64\bin\php\php*\php.exe',
+        'D:\laragon\bin\php\php8.2*\php.exe',
+        'D:\laragon\bin\php\php8.1*\php.exe',
+        'D:\laragon\bin\php\php*\php.exe',
+        'D:\xampp\php\php.exe'
+    )
+    foreach ($Pattern in $CommonPhpPaths) {
+        $Found = Get-Item $Pattern -ErrorAction SilentlyContinue | Select-Object -First 1
+        if ($Found) {
+            $PhpExe = $Found.FullName
+            Write-Host "  [INFO] PHP not in PATH. Using: $PhpExe" -ForegroundColor Yellow
+            break
+        }
+    }
+    if ($PhpExe -eq 'php') {
+        Write-Host '' -ForegroundColor Red
+        Write-Host '  [ERROR] PHP not found! Laravel cannot start.' -ForegroundColor Red
+        Write-Host '  Fix options:' -ForegroundColor Yellow
+        Write-Host '    1. Open Laragon, click Menu > PHP, and make sure PHP is enabled.' -ForegroundColor Yellow
+        Write-Host '    2. Add your PHP folder to the system PATH:' -ForegroundColor Yellow
+        Write-Host '       e.g. C:\laragon\bin\php\php8.2.x' -ForegroundColor Yellow
+        Write-Host '    3. Or run manually: cd webApp && php artisan serve' -ForegroundColor Yellow
+        Write-Host "  See README.md section 'Troubleshooting: PHP Not Recognized' for details." -ForegroundColor Yellow
+        Write-Host ''
+        Read-Host 'Press Enter to exit'
+        exit 1
+    }
+}
+
+$LaravelCmd     = "Set-Location '$WebAppDir'; Write-Host 'Laravel Webapp running at http://localhost:8000' -ForegroundColor Green; & '$PhpExe' artisan serve --host=127.0.0.1 --port=8000"
 $LaravelBytes   = [System.Text.Encoding]::Unicode.GetBytes($LaravelCmd)
 $LaravelEncoded = [Convert]::ToBase64String($LaravelBytes)
 Start-Process powershell -ArgumentList "-NoProfile", "-NoExit", "-EncodedCommand", $LaravelEncoded
