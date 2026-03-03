@@ -30,23 +30,21 @@ $env:PATH    = "$MachinePath;$UserPath"
 # ── Auto-detect PHP ───────────────────────────────────────────────────────────
 $PhpExe = 'php'
 if (-not (Get-Command 'php' -ErrorAction SilentlyContinue)) {
+    # Match any version of php.exe in common locations
     $PhpCandidates = @(
-        'C:\laragon\bin\php\php8.2*\php.exe',
-        'C:\laragon\bin\php\php8.3*\php.exe',
-        'C:\laragon\bin\php\php8.4*\php.exe',
-        'C:\laragon\bin\php\php8.1*\php.exe',
-        'C:\laragon\bin\php\php*\php.exe',
+        'C:\laragon\bin\php\*\php.exe',
         'C:\xampp\php\php.exe',
-        'C:\wamp64\bin\php\php*\php.exe',
-        'D:\laragon\bin\php\php8.2*\php.exe',
-        'D:\laragon\bin\php\php8.3*\php.exe',
-        'D:\laragon\bin\php\php8.4*\php.exe',
-        'D:\laragon\bin\php\php*\php.exe',
+        'C:\wamp64\bin\php\*\php.exe',
+        'D:\laragon\bin\php\*\php.exe',
         'D:\xampp\php\php.exe'
     )
     foreach ($p in $PhpCandidates) {
         $f = Get-Item $p -ErrorAction SilentlyContinue | Select-Object -First 1
-        if ($f) { $PhpExe = $f.FullName; Write-Warn "PHP not in PATH. Using: $PhpExe"; break }
+        if ($f) { 
+            $PhpExe = "$($f.FullName)"
+            Write-Warn "PHP not in PATH. Using: $PhpExe"
+            break 
+        }
     }
     if ($PhpExe -eq 'php') {
         Write-Host '  [ERROR] PHP not found.' -ForegroundColor Red
@@ -58,31 +56,40 @@ Write-OK "PHP found: $PhpExe"
 
 # ── Auto-detect Composer ──────────────────────────────────────────────────────
 $ComposerCmd = $null
+$resolved = $null
 if (Get-Command 'composer' -ErrorAction SilentlyContinue) {
-    $ComposerCmd = { param($args) & composer @args }
+    # If composer command works, use it directly
+    $ComposerCmd = { param($a) & composer @a }
 } else {
     $ComposerPharCandidates = @(
         'C:\laragon\bin\composer\composer.phar',
-        'C:\laragon\bin\composer\composer.bat',
         'D:\laragon\bin\composer\composer.phar',
-        'D:\laragon\bin\composer\composer.bat',
         'C:\ProgramData\ComposerSetup\bin\composer.phar'
     )
     foreach ($p in $ComposerPharCandidates) {
         if (Test-Path $p) {
             $resolved = $p
-            Write-Warn "composer not in PATH. Using: $resolved"
+            Write-Warn "composer not in PATH. Using Laragon composer: $resolved"
             break
         }
     }
+    
+    # Fallback: Download composer.phar if still not found
     if (-not $resolved) {
-        Write-Host '  [ERROR] Composer not found.' -ForegroundColor Red
-        Write-Host '  Install Laragon (https://laragon.org/download) or Composer (https://getcomposer.org).' -ForegroundColor Yellow
-        Write-Fail 'Composer is required. Please install it and re-run this script.'
+        Write-Step 'Composer not found. Attempting to download composer.phar...'
+        try {
+            Invoke-WebRequest -Uri "https://getcomposer.org/composer.phar" -OutFile (Join-Path $PSScriptRoot "composer.phar")
+            $resolved = Join-Path $PSScriptRoot "composer.phar"
+            Write-OK 'composer.phar downloaded successfully.'
+        } catch {
+            Write-Fail 'Failed to download composer.phar. Please install it manually from https://getcomposer.org.'
+        }
     }
+    
+    # Create a script block to run composer via PHP
     $ComposerCmd = { param($a) & $PhpExe $resolved @a }
 }
-Write-OK 'Composer found.'
+Write-OK 'Composer is ready.'
 
 # ── Check remaining tools ─────────────────────────────────────────────────────
 $missing = @()

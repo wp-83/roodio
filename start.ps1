@@ -44,21 +44,16 @@ $env:PATH    = "$MachinePath;$UserPath"
 $PhpExe = 'php'
 if (-not (Get-Command 'php' -ErrorAction SilentlyContinue)) {
     $CommonPhpPaths = @(
-        'C:\laragon\bin\php\php8.2*\php.exe',
-        'C:\laragon\bin\php\php8.1*\php.exe',
-        'C:\laragon\bin\php\php8.3*\php.exe',
-        'C:\laragon\bin\php\php*\php.exe',
+        'C:\laragon\bin\php\*\php.exe',
         'C:\xampp\php\php.exe',
-        'C:\wamp64\bin\php\php*\php.exe',
-        'D:\laragon\bin\php\php8.2*\php.exe',
-        'D:\laragon\bin\php\php8.1*\php.exe',
-        'D:\laragon\bin\php\php*\php.exe',
+        'C:\wamp64\bin\php\*\php.exe',
+        'D:\laragon\bin\php\*\php.exe',
         'D:\xampp\php\php.exe'
     )
     foreach ($Pattern in $CommonPhpPaths) {
         $Found = Get-Item $Pattern -ErrorAction SilentlyContinue | Select-Object -First 1
         if ($Found) {
-            $PhpExe = $Found.FullName
+            $PhpExe = "$($Found.FullName)"
             Write-Host "  [INFO] PHP not in PATH. Using: $PhpExe" -ForegroundColor Yellow
             break
         }
@@ -71,7 +66,6 @@ if (-not (Get-Command 'php' -ErrorAction SilentlyContinue)) {
         Write-Host '    2. Add your PHP folder to the system PATH:' -ForegroundColor Yellow
         Write-Host '       e.g. C:\laragon\bin\php\php8.2.x' -ForegroundColor Yellow
         Write-Host '    3. Or run manually: cd webApp && php artisan serve' -ForegroundColor Yellow
-        Write-Host "  See README.md section 'Troubleshooting: PHP Not Recognized' for details." -ForegroundColor Yellow
         Write-Host ''
         Read-Host 'Press Enter to exit'
         exit 1
