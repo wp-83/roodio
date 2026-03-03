@@ -9,7 +9,7 @@
 ![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)
 ![HuggingFace](https://img.shields.io/badge/Hugging%20Face-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black)
 
-## � Table of Contents
+## 📖 Table of Contents
 
 1. [Overview](#-overview)
 2. [Deployment & Architecture](#-deployment--architecture)
@@ -24,7 +24,7 @@
 
 ---
 
-## �📖 Overview
+## 📖 Overview
 
 **Roodio** is a cutting-edge music streaming platform that integrates advanced **Machine Learning** to personalize the listening experience based on user mood and emotion. Unlike traditional streaming services, Roodio employs a dual-stack architecture combining a robust **Laravel Web Application** with a sophisticated **Python-based Deep Learning Pipeline** to analyze, classify, and recommend music that resonates with the user's current emotional state.
 
@@ -61,21 +61,21 @@ The `webApp` serves as the core platform for users, admins, and super admins. It
 
 ### ✨ Key Features
 
-*   **🎧 Smart Audio Player**: Real-time Beat Visualization, interactive vinyl record animation, and full-screen immersive mode with lyrics.
-*   **😊 Mood Tracking & Analytics**: Daily/weekly mood logging, personalized analytics dashboard, and mood-based playlist generation.
-*   **👥 Social Community**: Thread discussions, replies, reactions, and user networking.
-*   **🛡️ Role-Based Access Control**:
-    *   **User**: Standard streaming and social features.
-    *   **Admin**: Manage songs (CRUD), playlists, and platform overviews.
-    *   **Super Admin**: Manage users, roles, and system-wide configurations.
-*   **🤖 MLOps Dashboard**: Model accuracy monitoring, confidence tracking, and misprediction analysis.
+* **🎧 Smart Audio Player**: Real-time Beat Visualization, interactive vinyl record animation, and full-screen immersive mode with lyrics.
+* **😊 Mood Tracking & Analytics**: Daily/weekly mood logging, personalized analytics dashboard, and mood-based playlist generation.
+* **👥 Social Community**: Thread discussions, replies, reactions, and user networking.
+* **🛡️ Role-Based Access Control**:
+    * **User**: Standard streaming and social features.
+    * **Admin**: Manage songs (CRUD), playlists, and platform overviews.
+    * **Super Admin**: Manage users, roles, and system-wide configurations.
+* **🤖 MLOps Dashboard**: Model accuracy monitoring, confidence tracking, and misprediction analysis.
 
 ### 🛠️ Tech Stack & Libraries
 
-*   **Framework**: Laravel 12.x | Livewire 3.7 | TailwindCSS 4.x | Alpine.js
-*   **Database & Storage**: MySQL 8.x | Azure Blob Storage
-*   **UI Components**: Flowbite, ApexCharts, Chart.js, FullCalendar, Tippy.js
-*   **Animations**: Matter.js (2D Physics), AOS, Canvas Particle Network
+* **Framework**: Laravel 12.x | Livewire 3.7 | TailwindCSS 4.x | Alpine.js
+* **Database & Storage**: MySQL 8.x | Azure Blob Storage
+* **UI Components**: Flowbite, ApexCharts, Chart.js, FullCalendar, Tippy.js
+* **Animations**: Matter.js (2D Physics), AOS, Canvas Particle Network
 
 ---
 
@@ -87,7 +87,7 @@ The `machineLearning` module uses a **Hierarchical Multi-Modal Classification** 
 
 The system uses a **3-stage hierarchical pipeline**:
 
-```
+```text
 Audio Input
     │
     ▼
@@ -108,12 +108,12 @@ Audio Input
 ```
 
 1.  **Stage 1 — Energy Classification** (Audio):
-    *   **PyTorch NN** (`AudioClassifier`) classifies songs into **High Energy** or **Low Energy**.
-    *   Features: **YAMNet** embeddings (mean, std, max) + **RMS** + **ZCR** = 3,074-dimensional vector.
+    * **PyTorch NN** (`AudioClassifier`) classifies songs into **High Energy** or **Low Energy**.
+    * Features: **YAMNet** embeddings (mean, std, max) + **RMS** + **ZCR** = 3,074-dimensional vector.
 2.  **Stage 2A — High Energy Branch** (Audio-only):
-    *   **Random Forest + Meta Classifier** (stacking ensemble) to classify between **Angry** and **Happy**.
+    * **Random Forest + Meta Classifier** (stacking ensemble) to classify between **Angry** and **Happy**.
 3.  **Stage 2B — Low Energy Branch** (Lyrics-based):
-    *   **Fine-tuned BERT** to classify between **Sad** and **Relaxed**.
+    * **Fine-tuned BERT** to classify between **Sad** and **Relaxed**.
 
 *Libraries: `torch`, `tensorflow_hub`, `transformers`, `librosa`, `scikit-learn`, `mlflow`*
 
@@ -136,14 +136,26 @@ Make sure the following tools are installed on your machine:
 
 ### 2. Quick Start (Automated)
 
+> **[!IMPORTANT]**
+> **TERMINAL & DIRECTORY REQUIREMENTS:**
+> * **Laragon Users:** You **MUST** use the built-in Laragon terminal (Click the **Terminal** button in the Laragon app). Navigate to the `www` folder.
+> * **XAMPP Users:** Open your preferred terminal and navigate to the `htdocs` folder.
+
 **Clone the repository:**
 ```bash
-git clone https://github.com/Xullfikar/roodio.git
+# 1. Navigate to the correct directory first:
+# For Laragon:
+cd C:\laragon\www
+# For XAMPP:
+cd C:\xampp\htdocs
+
+# 2. Clone the repository
+git clone [https://github.com/Xullfikar/roodio.git](https://github.com/Xullfikar/roodio.git)
 cd roodio
 ```
 
 > **[!WARNING]**
-> **CRITICAL:** Before running the setup script, **YOU MUST START YOUR MYSQL SERVER** (e.g., click "Start All" in Laragon, XAMPP, or MAMP). If the database is off, the migration and seeding process will fail.
+> **CRITICAL:** Before running the setup script, **YOU MUST START YOUR MYSQL SERVER** (e.g., click "Start All" in Laragon or XAMPP). If the database is off, the migration and seeding process will fail.
 
 **Run the Setup Script:**
 ```cmd
@@ -157,23 +169,41 @@ bash setup.sh
 
 **Start the Servers:**
 ```cmd
-# Windows
+# Windows (Standard CMD/PowerShell)
 start.bat
 
 # Mac / Linux
 bash start.sh
 ```
 
-Two servers will start:
-*   **Laravel Webapp**: `http://localhost:8000`
-*   **Flask ML API**: `http://localhost:7860`
+> **[!NOTE]**
+> **FOR LARAGON TERMINAL USERS:**
+> If you are using Laragon's built-in terminal, `start.bat` will not work automatically. You must start the servers manually by opening **two separate Laragon terminal tabs/windows**:
+>
+> **Terminal 1 (Laravel WebApp):**
+> ```bash
+> cd webApp
+> php artisan serve
+> ```
+>
+> **Terminal 2 (Python ML API):**
+> ```bash
+> cd machineLearning/api
+> venv\Scripts\activate
+> python app.py
+> ```
+
+If successful, two servers will be running:
+* **Laravel Webapp**: `http://localhost:8000`
+* **Flask ML API**: `http://localhost:7860`
 
 ### 3. Manual Setup (Without Script)
 
-If you prefer to set things up manually, follow these steps in 2 separate terminals:
+If you prefer to set things up manually, follow these steps in 2 separate terminals (Remember to use Laragon's terminal if you are using Laragon):
 
 **Terminal 1 — ML API (Python)**
 ```bash
+# Ensure you are inside the roodio folder (www/roodio or htdocs/roodio)
 cd machineLearning/api
 
 # 1. Create a virtual environment (Recommended)
@@ -194,6 +224,7 @@ python3 app.py          # Mac/Linux
 
 **Terminal 2 — Laravel Webapp**
 ```bash
+# Ensure you are inside the roodio folder (www/roodio or htdocs/roodio)
 cd webApp
 
 # 1. Install dependencies
@@ -216,9 +247,9 @@ php artisan serve
 
 ### 4. Local Environment Details
 
-*   **File Uploads**: Stored locally in `webApp/storage/app/public/` (no Azure credentials needed).
-*   **Emails/OTP**: Emails are NOT sent. OTP codes are logged in `webApp/storage/logs/laravel.log`.
-*   **Database Initial State**: Starts empty (no pre-loaded songs) to save local storage. Admin must upload songs to test the ML API.
+* **File Uploads**: Stored locally in `webApp/storage/app/public/` (no Azure credentials needed).
+* **Emails/OTP**: Emails are NOT sent. OTP codes are logged in `webApp/storage/logs/laravel.log`.
+* **Database Initial State**: Starts empty (no pre-loaded songs) to save local storage. Admin must upload songs to test the ML API.
 
 ### 5. Test Accounts
 
@@ -244,11 +275,11 @@ To fully test the application locally, follow this sequence:
 
 ## 👥 Contributors
 
-*   [Andi Zulfikar](https://github.com/Xullfikar) - **Backend Developer & ML Engineer**
-*   [William Pratama](https://github.com/wp-83) - **Frontend Developer**
-*   [Agnes Gonxha Febriane Sukma](https://github.com/agnesgonxha) - **UI/UX Designer**
-*   [Felicia Wijaya](https://github.com/feliciaHw) - **UI/UX Designer**
-*   [Yoyada Indrayudha](https://github.com/yoyadayudha) - **Quality Assurance**
+* [Andi Zulfikar](https://github.com/Xullfikar) - **Backend Developer & ML Engineer**
+* [William Pratama](https://github.com/wp-83) - **Frontend Developer**
+* [Agnes Gonxha Febriane Sukma](https://github.com/agnesgonxha) - **UI/UX Designer**
+* [Felicia Wijaya](https://github.com/feliciaHw) - **UI/UX Designer**
+* [Yoyada Indrayudha](https://github.com/yoyadayudha) - **Quality Assurance**
 
 ---
     
