@@ -157,7 +157,7 @@ Make sure the following tools are installed on your machine:
 **Clone the repository:**
 
 ```bash
-git clone [https://github.com/Xullfikar/roodio.git](https://github.com/Xullfikar/roodio.git)
+git clone https://github.com/Xullfikar/roodio.git
 cd roodio
 
 ```
