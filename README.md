@@ -1,3 +1,6 @@
+Maaf karena sebelumnya terpotong! Berikut adalah kode *full* `README.md` dari awal sampai akhir di dalam satu blok format, siap untuk kamu salin semua:
+
+```markdown
 # 🎵 Roodio - Smart Mood-Based Music Streaming & Analysis Platform
 
 ![Laravel](https://img.shields.io/badge/Laravel-12.x-FF2D20?style=for-the-badge&logo=laravel)
@@ -9,7 +12,7 @@
 ![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)
 ![HuggingFace](https://img.shields.io/badge/Hugging%20Face-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black)
 
-## 📖 Table of Contents
+## 📑 Table of Contents
 
 1. [Overview](#-overview)
 2. [Deployment & Architecture](#️-deployment--architecture)
@@ -18,10 +21,12 @@
 5. [💻 Local Setup & Testing (For Reviewers)](#-local-setup--testing)
    - [Prerequisites](#1-prerequisites)
    - [Quick Start](#2-quick-start-automated)
+   - [Manual Setup](#3-manual-setup-without-script)
+   - [Local Environment Details](#4-local-environment-details)
    - [Test Accounts](#5-test-accounts)
    - [Recommended Testing Order](#6-recommended-testing-order)
-   - [🔧 Troubleshooting: ML API Errors](#-troubleshooting-ml-api-errors)
 6. [Contributors](#-contributors)
+7. [Disclaimer & License](#️-disclaimer)
 
 ---
 
@@ -106,17 +111,24 @@ Audio Input
 │→Angry/  │ │→Sad/     │
 │  Happy  │ │  Relaxed │
 └─────────┘ └──────────┘
+
 ```
 
-1.  **Stage 1 — Energy Classification** (Audio):
-    * **PyTorch NN** (`AudioClassifier`) classifies songs into **High Energy** or **Low Energy**.
-    * Features: **YAMNet** embeddings (mean, std, max) + **RMS** + **ZCR** = 3,074-dimensional vector.
-2.  **Stage 2A — High Energy Branch** (Audio-only):
-    * **Random Forest + Meta Classifier** (stacking ensemble) to classify between **Angry** and **Happy**.
-3.  **Stage 2B — Low Energy Branch** (Lyrics-based):
-    * **Fine-tuned BERT** to classify between **Sad** and **Relaxed**.
+1. **Stage 1 — Energy Classification** (Audio):
+* **PyTorch NN** (`AudioClassifier`) classifies songs into **High Energy** or **Low Energy**.
+* Features: **YAMNet** embeddings (mean, std, max) + **RMS** + **ZCR** = 3,074-dimensional vector.
 
-*Libraries: `torch`, `tensorflow_hub`, `transformers`, `librosa`, `scikit-learn`, `mlflow`*
+
+2. **Stage 2A — High Energy Branch** (Audio-only):
+* **Random Forest + Meta Classifier** (stacking ensemble) to classify between **Angry** and **Happy**.
+
+
+3. **Stage 2B — Low Energy Branch** (Lyrics-based):
+* **Fine-tuned BERT** to classify between **Sad** and **Relaxed**.
+
+
+
+*Libraries: `torch`, `tensorflow_hub`, `transformers`, `librosa`, `scikit-learn`, `mlflow*`
 
 ---
 
@@ -129,11 +141,11 @@ A complete guide to running Roodio on your local machine. Intended for lecturers
 Make sure the following tools are installed on your machine:
 
 | Tool | Version | Notes (Windows Recommended) |
-|---|---|---|
-| **PHP + MySQL + Composer** | 8.2+ / 8.x | Install **[Laragon](https://laragon.org/download)** (bundles all three) |
-| **Node.js** | 20+ | [Download](https://nodejs.org) |
+| --- | --- | --- |
+| **PHP + MySQL + Composer** | 8.2+ / 8.x | Install **[Laragon](https://laragon.org/download)**. **Required extensions:** `zip`, `mbstring`, `pdo_mysql`, `fileinfo`, `curl` (enable in `php.ini`). |
+| **Node.js** | 20.19+ / 22.12+ | Required by Laravel Vite. [Download](https://nodejs.org) |
 | **Python** | 3.10+ | [Download](https://python.org/downloads) |
-| **Git** | Latest | [Download](https://git-scm.com/downloads) |
+| **Git** | Latest | [Download](https://www.google.com/search?q=https://git-scm.com/downloads) |
 
 ### 2. Quick Start (Automated)
 
@@ -143,67 +155,61 @@ Make sure the following tools are installed on your machine:
 > * **XAMPP Users:** Open your preferred terminal and navigate to the `htdocs` folder.
 
 **Clone the repository:**
-```bash
-# 1. Navigate to the correct directory first:
-# For Laragon:
-cd C:\laragon\www
-# For XAMPP:
-cd C:\xampp\htdocs
 
-# 2. Clone the repository
-git clone https://github.com/Xullfikar/roodio.git
+```bash
+git clone [https://github.com/Xullfikar/roodio.git](https://github.com/Xullfikar/roodio.git)
 cd roodio
+
 ```
 
 > [!WARNING]
 > **CRITICAL:** Before running the setup script, **YOU MUST START YOUR MYSQL SERVER** (e.g., click "Start All" in Laragon or XAMPP). If the database is off, the migration and seeding process will fail.
 
 **Run the Setup Script:**
+If you are on Windows, you must allow scripts to run on your system first. Open your terminal (CMD or PowerShell) as **Administrator** and run:
+
+```powershell
+# Windows Only: Allow script execution
+Set-ExecutionPolicy Bypass -Scope Process -Force
+
+```
+
+Then, run the setup script:
+
 ```cmd
-# Windows (CMD / PowerShell / Double-click)
+# Windows
 setup.bat
 
 # Mac / Linux
 bash setup.sh
+
 ```
-*The setup script automatically: installs Python/Composer/NPM dependencies, configures `.env`, runs migrations/seeders, creates storage symlinks, and builds frontend assets.*
+
+*The setup script automatically: checks extensions, installs Python/Composer/NPM dependencies, configures `.env`, runs migrations/seeders, creates storage symlinks, and builds frontend assets.*
 
 **Start the Servers:**
+
 ```cmd
 # Windows (Standard CMD/PowerShell)
 start.bat
 
 # Mac / Linux
 bash start.sh
+
 ```
 
-> [!NOTE]
-> **FOR LARAGON TERMINAL USERS:**
-> If you are using Laragon's built-in terminal, `start.bat` will not work automatically. You must start the servers manually by opening **two separate Laragon terminal tabs/windows**:
->
-> **Terminal 1 (Laravel WebApp):**
-> ```bash
-> cd webApp
-> php artisan serve
-> ```
->
-> **Terminal 2 (Python ML API):**
-> ```bash
-> cd machineLearning/api
-> venv\Scripts\activate
-> pip install -r requirements.txt
-> python app.py
-> ```
+Three terminal windows will open handling the following local servers:
 
-If successful, two servers will be running:
 * **Laravel Webapp**: `http://localhost:8000`
 * **Flask ML API**: `http://localhost:7860`
+* **Vite HMR Server**: Running in the background for real-time frontend updates.
 
 ### 3. Manual Setup (Without Script)
 
 If you prefer to set things up manually, follow these steps in 2 separate terminals (Remember to use Laragon's terminal if you are using Laragon):
 
 **Terminal 1 — ML API (Python)**
+
 ```bash
 # Ensure you are inside the roodio folder (www/roodio or htdocs/roodio)
 cd machineLearning/api
@@ -222,9 +228,11 @@ pip install -r requirements.txt
 # 4. Start the Flask server
 python app.py           # Windows
 python3 app.py          # Mac/Linux
+
 ```
 
 **Terminal 2 — Laravel Webapp**
+
 ```bash
 # Ensure you are inside the roodio folder (www/roodio or htdocs/roodio)
 cd webApp
@@ -245,6 +253,7 @@ php artisan storage:link
 
 # 5. Start the server
 php artisan serve
+
 ```
 
 ### 4. Local Environment Details
@@ -258,14 +267,15 @@ php artisan serve
 After the setup script finishes, use these seeded accounts:
 
 | Role | Username | Password |
-|---|---|---|
+| --- | --- | --- |
 | **User** | `user` | `password` |
 | **Admin** | `admin` | `password` |
-| **SuperAdmin**| `superadmin`| `password` |
+| **SuperAdmin** | `superadmin` | `password` |
 
 ### 6. Recommended Testing Order
 
 To fully test the application locally, follow this sequence:
+
 1. **Auth**: Test Login, Register (check Laravel log for OTP), and Forgot Password.
 2. **Admin Songs**: Login as `admin`, go to Songs, and **upload a few MP3s**. *The Flask ML API will automatically predict the mood.*
 3. **Admin Playlists**: Create playlists using the uploaded songs.
@@ -329,10 +339,10 @@ python3 app.py  # Mac/Linux
 ## 👥 Contributors
 
 * [Andi Zulfikar](https://github.com/Xullfikar) - **Backend Developer & ML Engineer**
-* [William Pratama](https://github.com/wp-83) - **Frontend Developer**
-* [Agnes Gonxha Febriane Sukma](https://github.com/agnesgonxha) - **UI/UX Designer**
-* [Felicia Wijaya](https://github.com/feliciaHw) - **UI/UX Designer**
-* [Yoyada Indrayudha](https://github.com/yoyadayudha) - **Quality Assurance**
+* [William Pratama](https://www.google.com/search?q=https://github.com/wp-83) - **Frontend Developer**
+* [Agnes Gonxha Febriane Sukma](https://www.google.com/search?q=https://github.com/agnesgonxha) - **UI/UX Designer**
+* [Felicia Wijaya](https://www.google.com/search?q=https://github.com/feliciaHw) - **UI/UX Designer**
+* [Yoyada Indrayudha](https://www.google.com/search?q=https://github.com/yoyadayudha) - **Quality Assurance**
 
 ---
 
